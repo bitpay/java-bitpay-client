@@ -109,9 +109,35 @@ public class BitPay {
     {
         _ecKey = ecKey;
         this.deriveIdentity();
+
+        if (clientName.equals(BITPAY_PLUGIN_INFO))
+        {
+            try {
+                clientName += " on " + java.net.InetAddress.getLocalHost();
+            } catch (UnknownHostException e) {
+                clientName += " on unknown host";
+            }
+        }
+        // Eliminate special characters from the client name (used as a token label).  Trim to 60 chars.
+        _clientName = clientName.replaceAll("[^a-zA-Z0-9_ ]", "_");
+        if (_clientName.length() > 60)
+        {
+            _clientName = _clientName.substring(0, 60);
+        }
+
         _baseUrl = envUrl;
 	    _httpClient = HttpClientBuilder.create().build();
         this.tryGetAccessTokens();
+    }
+
+    public BitPay(ECKey ecKey, String clientName) throws BitPayException
+    {
+        this(ecKey, clientName, BITPAY_URL);
+    }
+
+    public BitPay(ECKey ecKey) throws BitPayException
+    {
+        this(ecKey, BITPAY_PLUGIN_INFO, BITPAY_URL);
     }
 
     public String getIdentity()

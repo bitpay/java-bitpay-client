@@ -16,12 +16,12 @@ json-simple
 Getting Started
 ---------------
 
-Log into your BitPay merchant account and generate a Private Key and SIN. Then all you need to do is instantiate a BitPay object, and pass in your private key and the SIN.
+Log into your BitPay merchant account and generate a Private Key. Then all you need to do is instantiate a BitPay object, and pass in your private key.
 
 ```java
 String privateKey = KeyUtils.readBitcoreKeyFromFile(privateKeyFile);
 ECKey key = KeyUtils.loadKey(privateKey);
-this.bitpay = new BitPay(key, SIN);
+this.bitpay = new BitPay(key);
 ```
 
 ####Create an invoice
