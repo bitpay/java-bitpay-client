@@ -34,16 +34,7 @@ public class Invoice {
 	private String _itemDesc = "";
 	private String _itemCode = "";
 	private boolean _physical = false;
-
-	private String _buyerName = "";
-	private String _buyerAddress1 = "";
-	private String _buyerAddress2 = "";
-	private String _buyerCity = "";
-	private String _buyerState = "";
-	private String _buyerZip = "";
-	private String _buyerCountry = "";
-	private String _buyerEmail = "";
-	private String _buyerPhone = "";
+	private InvoiceBuyer _buyer;
 	
 	private String _id;
 	private String _url;
@@ -244,104 +235,17 @@ public class Invoice {
 		this._physical = _physical;
 	}
 
-    @JsonProperty("buyerName")
+    @JsonProperty("buyer")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerName() {
-		return _buyerName;
-	}
-	
-    @JsonProperty("buyerName")
-	public void setBuyerName(String _buyerName) {
-		this._buyerName = _buyerName;
-	}
+  	public InvoiceBuyer getBuyer() {
+  		return _buyer;
+  	}
+  	
+    @JsonProperty("buyer")
+  	public void setBuyer(InvoiceBuyer _buyer) {
+  		this._buyer = _buyer;
+  	}
 
-    @JsonProperty("buyerAddress1")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerAddress1() {
-		return _buyerAddress1;
-	}
-	
-    @JsonProperty("buyerAddress1")
-	public void setBuyerAddress1(String _buyerAddress1) {
-		this._buyerAddress1 = _buyerAddress1;
-	}
-
-    @JsonProperty("buyerAddress2")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerAddress2() {
-		return _buyerAddress2;
-	}
-	
-    @JsonProperty("buyerAddress2")
-	public void setBuyerAddress2(String _buyerAddress2) {
-		this._buyerAddress2 = _buyerAddress2;
-	}
-
-    @JsonProperty("buyerCity")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerCity() {
-		return _buyerCity;
-	}
-	
-    @JsonProperty("buyerCity")
-	public void setBuyerCity(String _buyerCity) {
-		this._buyerCity = _buyerCity;
-	}
-
-    @JsonProperty("buyerState")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerState() {
-		return _buyerState;
-	}
-	
-    @JsonProperty("buyerState")
-	public void setBuyerState(String _buyerState) {
-		this._buyerState = _buyerState;
-	}
-
-    @JsonProperty("buyerZip")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerZip() {
-		return _buyerZip;
-	}
-	
-    @JsonProperty("buyerZip")
-	public void setBuyerZip(String _buyerZip) {
-		this._buyerZip = _buyerZip;
-	}
-
-    @JsonProperty("buyerCountry")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerCountry() {
-		return _buyerCountry;
-	}
-	
-    @JsonProperty("buyerCountry")
-	public void setBuyerCountry(String _buyerCountry) {
-		this._buyerCountry = _buyerCountry;
-	}
-
-    @JsonProperty("buyerEmail")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerEmail() {
-		return _buyerEmail;
-	}
-	
-    @JsonProperty("buyerEmail")
-	public void setBuyerEmail(String _buyerEmail) {
-		this._buyerEmail = _buyerEmail;
-	}
-
-    @JsonProperty("buyerPhone")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getBuyerPhone() {
-		return _buyerPhone;
-	}
-	
-    @JsonProperty("buyerPhone")
-	public void setBuyerPhone(String _buyerPhone) {
-		this._buyerPhone = _buyerPhone;
-	}
  
     // Response fields
     //
@@ -471,17 +375,17 @@ public class Invoice {
  		return _exceptionStatus;
  	}
  	
-     @JsonProperty("exceptionStatus")
+    @JsonProperty("exceptionStatus")
  	public void setExceptionStatus(String _exceptionStatus) {
  		this._exceptionStatus = _exceptionStatus;
  	}
 
-     @JsonIgnore
+    @JsonIgnore
   	public InvoicePaymentUrls getPaymentUrls() {
   		return _paymentUrls;
   	}
   	
-      @JsonProperty("paymentUrls")
+    @JsonProperty("paymentUrls")
   	public void setPaymentUrls(InvoicePaymentUrls _paymentUrls) {
   		this._paymentUrls = _paymentUrls;
   	}
