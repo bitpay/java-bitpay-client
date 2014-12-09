@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import model.Invoice;
+import model.InvoiceBuyer;
 import model.Rate;
 import model.Rates;
 
@@ -22,7 +23,7 @@ public class BitPayTest {
     private static double BTC_EPSILON = .000000001;
     private static double EPSILON = .001;
 
-    private static String pairingCode = "0u4pyWN";
+    private static String pairingCode = "FbaJTGU";
     private static String clientName = "BitPay Java Library Tester";
 	
 	@Before
@@ -149,9 +150,12 @@ public class BitPayTest {
 	@Test
 	public void testShouldCreateInvoiceWithAdditionalParams() 
 	{
+		InvoiceBuyer buyer = new InvoiceBuyer();
+		buyer.setName("Satoshi");
+		buyer.setEmail("satoshi@bitpay.com");
+		
         Invoice invoice = new Invoice(100.0, "USD");
-        invoice.setBuyerName("Satoshi");
-        invoice.setBuyerEmail("satoshi@bitpay.com");
+        invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
         invoice.setNotificationEmail("satoshi@bitpay.com");
 		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
@@ -163,8 +167,8 @@ public class BitPayTest {
 		assertEquals(Invoice.STATUS_NEW, invoice.getStatus());
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
 		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
-		assertEquals("Satoshi", invoice.getBuyerName());
-		assertEquals("satoshi@bitpay.com", invoice.getBuyerEmail());
+		assertEquals("Satoshi", invoice.getBuyer().getName());
+		assertEquals("satoshi@bitpay.com", invoice.getBuyer().getEmail());
 		assertEquals(true, invoice.getFullNotifications());
 		assertEquals("satoshi@bitpay.com", invoice.getNotificationEmail());
 	}
