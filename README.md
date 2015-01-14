@@ -1,27 +1,80 @@
 java-bitpay-client
 ==================
 
-This is the Java client library for the BitPay Payment Gateway.  This library implements BitPay's new cryptographically-secure API.
+This is the Java client library for the BitPay Payment Gateway.  This library implements BitPay's [Cryptographically Secure RESTful API](https://bitpay.com/api).
 
 Dependencies
 ------------
-BitPay merchant account
-
-ApacheHttpClient
-
-java-json
-
-json-simple
+You must have a BitPay merchant account to use this SDK.  It's free to [sign-up for a BitPay merchant account](https://bitpay.com/start).
 
 Getting Started
 ---------------
 
-Log into your BitPay merchant account and generate a Private Key. Then all you need to do is instantiate a BitPay object, and pass in your private key.
+This SDK provides a convenient abstration of BitPay's [cryptographically-secure API](https://bitpay.com/api) and allows payment gateway developers to focus on payment flow/e-commerce integration rather than on the specific details of client-server interaction using the API.  This SDK optionally provides the flexibility for developers to have control over important details, including the handling of private keys needed for client-server communication.
+
+This SDK implements BitPay's remote client authentication and authorization strategy.  No private or shared-secret information is ever transmitted over the wire.
+
+####Handling your client private key
+Each client paired with the BitPay server requires a ECDSA key.  This key provides the security mechanism for all client interaction with the BitPay server. The public key is used to derive the specific client identity that is displayed on your BitPay dashboard.  The public key is also used for securely signing all API requests from the client.  See the [BitPay API](https://bitpay.com/api) for more information.
+
+The private key should be stored in the client environment such that it cannot be compromised.  If your private key is compromised you should revoke the compromised client identity from the BitPay server and re-pair your client, see the [API tokens](https://bitpay.com/api-tokens) for more information.
+
+This Java SDK provides the capability of internally storing the private key on the client local file system.  If the local file system is secure then this is a good option.  It is also possible to generate the key yourself (using the SDK) and store the key as required.  It is not recommended to transmit the private key over any public or unsecure networks.
 
 ```java
-String privateKey = KeyUtils.readBitcoreKeyFromFile(privateKeyFile);
-ECKey key = KeyUtils.loadKey(privateKey);
+// Let the SDK store the private key on the clients local file system.
+BitPay bitpay = new BitPay();
+```
+
+```java
+// Create the private key using the SDK, store it as required, and inject the private key into the SDK.
+ECKey key = KeyUtils.createEcKey();
 this.bitpay = new BitPay(key);
+```
+
+```java
+// Create the private key external to the SDK, store it in a file, and inject the private key into the SDK.
+String privateKey = KeyUtils.getKeyStringFromFile(privateKeyFile);
+ECKey key = KeyUtils.createEcKeyFromHexString(privateKey);
+this.bitpay = new BitPay(key);
+```
+
+####Pair your client with BitPay
+Your Java client must be paired with the BitPay server.  The pairing initializes authentication and authorization for your client to communicate with BitPay for your specific merchant account.  There are two pairing modes available; client initiated and server initiated.
+
+#####Client initiated pairing
+Pairing is accomplished by having your Java client request a pairing code from the BitPay server.  The pairing code is then entered into the BitPay merchant dashboard for the desired merchant.  Your interactive authentication at https://bitpay.com/login provides the authentication needed to create finalize the client-server pairing request.
+
+```java
+String clientName = "server 1";
+BitPay bitpay = new BitPay(clientName);        
+        
+if (!bitpay.clientIsAuthorized(BitPay.FACADE_POS))
+{
+  // Get POS facade authorization code.
+  String pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_POS);
+  
+  // Signal the device operator that this client needs to be paired with a merchant account.
+  System.out.print("Info: Pair this client with your merchant account using the pairing code: " + pairingCode);
+  throw new BitPayException("Error: client is not authorized for POS facade.");
+}
+```
+
+#####Server initiated pairing
+Pairing is accomplished by obtaining a pairing code from the BitPay server.  The pairing code is then injected into your client (typically during client initialization/configuration).  Your interactive authentication at https://bitpay.com/login provides the authentication needed to create finalize the client-server pairing request.
+
+```java
+// Obtain a pairingCode from your BitPay account administrator. 
+String pairingCode = "xxxxxxx";
+String clientName = "server 1";
+BitPay bitpay = new BitPay(clientName);
+
+// Is this client already authorized to use the POS facade?
+if (!bitpay.clientIsAuthorized(BitPay.FACADE_POS))
+{
+  // Get POS facade authorization.
+  bitpay.authorizeClient(pairingCode);
+}	
 ```
 
 ####Create an invoice
@@ -39,7 +92,7 @@ invoice = bitpay.getInvoice(invoice.getId());
 ```
 ####Exchange Rates
 
-You can also get BitPay's exchange rates.
+You can retrieve BitPay's [BBB exchange rates](https://bitpay.com/bitcoin-exchange-rates).
 ```java
 Rates rates = this.bitpay.getRates();
 
@@ -49,16 +102,19 @@ rates.update();
 ```
 ####Advanced Invoices
 
-You can add additional params to the invoice by passing an InvoiceParams object. You don't have to set all of the advanced parameters. It will only use the ones you do set.
+You can add optional attributes to the invoice.  Atributes that are not set are ignored or given default values.
 ```java
-InvoiceParams params = new InvoiceParams();
+InvoiceBuyer buyer = new InvoiceBuyer();
+buyer.setName("Satoshi");
+buyer.setEmail("satoshi@bitpay.com");
+	
+Invoice invoice = new Invoice(100.0, "USD");
+invoice.setBuyer(buyer);
+invoice.setFullNotifications(true);
+invoice.setNotificationEmail("satoshi@bitpay.com");
+invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
-params.setBuyerName("Satoshi");
-params.setBuyerEmail("satoshi@bitpay.com");
-params.setFullNotifications(true);
-params.setNotificationEmail("satoshi@bitpay.com");
-		
-Invoice invoice = this.bitpay.createInvoice(100, "USD", params);
+invoice = this.bitpay.createInvoice(invoice);
 ```
 
 # Support
@@ -70,7 +126,7 @@ Invoice invoice = this.bitpay.createInvoice(100, "USD", params);
 
 The MIT License (MIT)
 
-Copyright (c) 2014 BitPay, Inc.
+Copyright (c) 2014-2015 BitPay, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
