@@ -10,7 +10,7 @@ You must have a BitPay merchant account to use this SDK.  It's free to [sign-up 
 Getting Started
 ---------------
 
-This SDK provides a convenient abstration of BitPay's [cryptographically-secure API](https://bitpay.com/api) and allows payment gateway developers to focus on payment flow/e-commerce integration rather than on the specific details of client-server interaction using the API.  This SDK optionally provides the flexibility for developers to have control over important details, including the handling of private keys needed for client-server communication.
+This SDK provides a convenient abstraction of BitPay's [cryptographically-secure API](https://bitpay.com/api) and allows payment gateway developers to focus on payment flow/e-commerce integration rather than on the specific details of client-server interaction using the API.  This SDK optionally provides the flexibility for developers to have control over important details, including the handling of private keys needed for client-server communication.
 
 This SDK implements BitPay's remote client authentication and authorization strategy.  No private or shared-secret information is ever transmitted over the wire.
 
@@ -19,7 +19,7 @@ Each client paired with the BitPay server requires a ECDSA key.  This key provid
 
 The private key should be stored in the client environment such that it cannot be compromised.  If your private key is compromised you should revoke the compromised client identity from the BitPay server and re-pair your client, see the [API tokens](https://bitpay.com/api-tokens) for more information.
 
-This Java SDK provides the capability of internally storing the private key on the client local file system.  If the local file system is secure then this is a good option.  It is also possible to generate the key yourself (using the SDK) and store the key as required.  It is not recommended to transmit the private key over any public or unsecure networks.
+This SDK provides the capability of internally storing the private key on the client local file system.  If the local file system is secure then this is a good option.  It is also possible to generate the key yourself (using the SDK) and store the key as required.  It is not recommended to transmit the private key over any public or unsecure networks.
 
 ```java
 // Let the SDK store the private key on the clients local file system.
@@ -40,10 +40,10 @@ this.bitpay = new BitPay(key);
 ```
 
 ####Pair your client with BitPay
-Your Java client must be paired with the BitPay server.  The pairing initializes authentication and authorization for your client to communicate with BitPay for your specific merchant account.  There are two pairing modes available; client initiated and server initiated.
+Your client must be paired with the BitPay server.  The pairing initializes authentication and authorization for your client to communicate with BitPay for your specific merchant account.  There are two pairing modes available; client initiated and server initiated.
 
 #####Client initiated pairing
-Pairing is accomplished by having your Java client request a pairing code from the BitPay server.  The pairing code is then entered into the BitPay merchant dashboard for the desired merchant.  Your interactive authentication at https://bitpay.com/login provides the authentication needed to create finalize the client-server pairing request.
+Pairing is accomplished by having your client request a pairing code from the BitPay server.  The pairing code is then entered into the BitPay merchant dashboard for the desired merchant.  Your interactive authentication at https://bitpay.com/login provides the authentication needed to create finalize the client-server pairing request.
 
 ```java
 String clientName = "server 1";
@@ -86,21 +86,7 @@ String invoiceUrl = invoice.getURL();
 String status = invoice.getStatus();
 ```
 
-####Retreive an invoice
-```java
-invoice = bitpay.getInvoice(invoice.getId());
-```
-####Exchange Rates
-
-You can retrieve BitPay's [BBB exchange rates](https://bitpay.com/bitcoin-exchange-rates).
-```java
-Rates rates = this.bitpay.getRates();
-
-double rate = rates.getRate("USD");
-
-rates.update();
-```
-####Advanced Invoices
+####Create an invoice (extended)
 
 You can add optional attributes to the invoice.  Atributes that are not set are ignored or given default values.
 ```java
@@ -115,6 +101,21 @@ invoice.setNotificationEmail("satoshi@bitpay.com");
 invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
 invoice = this.bitpay.createInvoice(invoice);
+```
+
+####Retreive an invoice
+```java
+invoice = bitpay.getInvoice(invoice.getId());
+```
+####Get exchange Rates
+
+You can retrieve BitPay's [BBB exchange rates](https://bitpay.com/bitcoin-exchange-rates).
+```java
+Rates rates = this.bitpay.getRates();
+
+double rate = rates.getRate("USD");
+
+rates.update();
 ```
 
 # Support
