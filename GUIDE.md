@@ -1,3 +1,4 @@
+# Using BitPay Java Client Library
 ## Prerequisites
 You must have a BitPay merchant account to use this library.  It's free to [sign-up for a BitPay merchant account](https://bitpay.com/start).
 
