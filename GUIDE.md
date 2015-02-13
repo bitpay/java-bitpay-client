@@ -1,6 +1,8 @@
+# Using BitPay Java Client Library
 ## Prerequisites
-
 You must have a BitPay merchant account to use this library.  It's free to [sign-up for a BitPay merchant account](https://bitpay.com/start).
+
+Once you have a BitPay merchant account, you will need [a working BitPay Access Token](/api/getting-access.html) – this can be done either [via the library](#pairing) or manually in [the BitPay Dashboard](https://bitpay.com/tokens).
 
 
 ## Getting Started
@@ -30,8 +32,7 @@ ECKey key = KeyUtils.createEcKeyFromHexString(privateKey);
 this.bitpay = new BitPay(key);
 ```
 
-## Pair your client with BitPay
-
+## Pairing
 Your client must be paired with the BitPay server.  The pairing initializes authentication and authorization for your client to communicate with BitPay for your specific merchant account.  There are two pairing modes available; client initiated and server initiated.
 
 ### Client initiated pairing
