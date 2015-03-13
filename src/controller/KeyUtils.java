@@ -1,3 +1,10 @@
+94.23.113.113
+217.33.146.210
+109.228.20.106
+95.128.43.73
+219.239.230.240
+
+
 package controller;
 
 import java.io.BufferedReader;
@@ -15,15 +22,15 @@ import com.google.bitcoin.core.Sha256Hash;
 import com.google.bitcoin.core.Utils;
 
 public class KeyUtils {
-	
-	final private static char[] hexArray = "0123456789abcdef".toCharArray();
+
+    final private static char[] hexArray = "0123456789abcdef".toCharArray();
     final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
-	
-	public KeyUtils() {}
-	
+    
+    public KeyUtils() {}
+    
     public static boolean privateKeyExists()
     {
-    	return new File(PRIV_KEY_FILENAME).exists();
+        return new File(PRIV_KEY_FILENAME).exists();
     }
 
     public static ECKey createEcKey()
@@ -34,9 +41,10 @@ public class KeyUtils {
 
     public static ECKey createEcKeyFromHexString(String privateKey)
     {
-		BigInteger privKey = new BigInteger(privateKey, 16);
-		ECKey key = new ECKey(privKey, null, true);
-		return key;
+        BigInteger privKey = new BigInteger(privateKey, 16);
+        ECKey key = new ECKey(privKey, null, true);
+
+        return key;
     }
 
     /**
@@ -45,36 +53,47 @@ public class KeyUtils {
     public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException
     {
         String privateKey = getKeyStringFromFile(privKeyFile);
+
         return createEcKeyFromHexString(privateKey);
     }
 
     public static ECKey loadEcKey() throws IOException
     {
-    	FileInputStream fileInputStream = null;
+        FileInputStream fileInputStream = null;
         File file = new File(PRIV_KEY_FILENAME);
-    	byte[] bytes = new byte[(int) file.length()];
-	    fileInputStream = new FileInputStream(file);
-	    fileInputStream.read(bytes);
-	    fileInputStream.close();
+
+        byte[] bytes = new byte[(int) file.length()];
+
+        fileInputStream = new FileInputStream(file);
+        fileInputStream.read(bytes);
+        fileInputStream.close();
+
         ECKey key = ECKey.fromASN1(bytes);
+
         return key;
     }
 
     public static String getKeyStringFromFile(String filename) throws IOException
     {
-		BufferedReader br;
-    	br = new BufferedReader(new FileReader(filename));
+        BufferedReader br;
+
+        br = new BufferedReader(new FileReader(filename));
+
         String line = br.readLine();
+
         br.close();
+
         return line;
     }
 
     public static void saveEcKey(ECKey ecKey) throws IOException
     {
-	    byte[] bytes = ecKey.toASN1();
-	    FileOutputStream output = new FileOutputStream(new File(PRIV_KEY_FILENAME));
-	    output.write(bytes);
-	    output.close();
+        byte[] bytes = ecKey.toASN1();
+
+        FileOutputStream output = new FileOutputStream(new File(PRIV_KEY_FILENAME));
+
+        output.write(bytes);
+        output.close();
     }
     
     public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException
@@ -105,15 +124,18 @@ public class KeyUtils {
 
         return encoded;
     }
-    	
-	public static String sign(ECKey key, String input) {
-		byte[] data = input.getBytes();
+        
+    public static String sign(ECKey key, String input) {
+        byte[] data = input.getBytes();
+
         Sha256Hash hash = Sha256Hash.create(data);
         ECDSASignature sig = key.sign(hash, null);
+
         byte[] bytes = sig.encodeToDER();
+
         return bytesToHex(bytes);
-	}
-	
+    }
+    
     private static int getHexVal(char hex)
     {
         int val = (int)hex;
@@ -122,28 +144,31 @@ public class KeyUtils {
 
     public static byte[] hexToBytes(String hex) throws IllegalArgumentException
     {
-    	char[] hexArray = hex.toCharArray();
-    	
-        if (hex.length() % 2 == 1)
-        {
+        char[] hexArray = hex.toCharArray();
+        
+        if (hex.length() % 2 == 1) {
             throw new IllegalArgumentException("Error: The binary key cannot have an odd number of digits");
         }
+
         byte[] arr = new byte[hex.length() >> 1];
 
-        for (int i = 0; i < hex.length() >> 1; ++i)
-        {
+        for (int i = 0; i < hex.length() >> 1; ++i) {
             arr[i] = (byte)((getHexVal(hexArray[i << 1]) << 4) + (getHexVal(hexArray[(i << 1) + 1])));
         }
+
         return arr;
     }
 
-	public static String bytesToHex(byte[] bytes) {
-	    char[] hexChars = new char[bytes.length * 2];
-	    for ( int j = 0; j < bytes.length; j++ ) {
-	        int v = bytes[j] & 0xFF;
-	        hexChars[j * 2] = hexArray[v >>> 4];
-	        hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-	    }
-	    return new String(hexChars);
-	}
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+
+        return new String(hexChars);
+    }
 }
