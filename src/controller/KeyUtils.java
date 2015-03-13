@@ -1,10 +1,3 @@
-94.23.113.113
-217.33.146.210
-109.228.20.106
-95.128.43.73
-219.239.230.240
-
-
 package controller;
 
 import java.io.BufferedReader;
