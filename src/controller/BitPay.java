@@ -278,7 +278,7 @@ public class BitPay {
 
     public Invoice createInvoice(Invoice invoice) throws BitPayException
     {
-        return this.createInvoice(invoice, FACADE_POS);
+        return this.createInvoice(invoice, FACADE_MERCHANT);
     }
 
     public Invoice getInvoice(String invoiceId) throws BitPayException
