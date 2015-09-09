@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import controller.BitPayException;
 
+@JsonIgnoreProperties(ignoreUnknown=true) 	
 public class Invoice {
 
 	public static final String STATUS_NEW = "new";
