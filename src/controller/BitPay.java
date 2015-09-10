@@ -60,7 +60,7 @@ public class BitPay {
      * Constructor for use if the keys and SIN are managed by this library.
      * @param clientName - The label for this client.
      * @param envUrl - The target server URL.
-     * @throws BitPayException 
+     * @throws BitPayException
      */
     public BitPay(String clientName, String envUrl) throws BitPayException
     {
@@ -383,7 +383,7 @@ public class BitPay {
             // we can map to a hashtable.
             json = json.replaceAll("\\[", "");
             json = json.replaceAll("\\]", "");
-
+            json = json.replaceAll("\\},\\{", ",");
             if (json.length() > 0) {
                 _tokenCache = new ObjectMapper().readValue(json, new TypeReference<Hashtable<String,String>>(){});
             }
@@ -497,7 +497,7 @@ public class BitPay {
         return this.get(uri, null);
     }
 
-    private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException 
+    private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException
     {
         try {            
             HttpPost post = new HttpPost(_baseUrl + uri);
@@ -526,17 +526,17 @@ public class BitPay {
         }
     }
 
-    private HttpResponse post(String uri, String json) throws BitPayException 
+    private HttpResponse post(String uri, String json) throws BitPayException
     {
         return this.post(uri, json, false);
     }
 
-    private HttpResponse postWithSignature(String uri, String json) throws BitPayException 
+    private HttpResponse postWithSignature(String uri, String json) throws BitPayException
     {
         return this.post(uri, json, true);
     }
 
-    private String responseToJsonString(HttpResponse response) throws BitPayException 
+    private String responseToJsonString(HttpResponse response) throws BitPayException
     {
         if (response == null) {
             throw new BitPayException("Error: HTTP response is null");

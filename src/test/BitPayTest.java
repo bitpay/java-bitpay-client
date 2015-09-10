@@ -2,8 +2,10 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.security.interfaces.ECKey;
 import java.util.List;
 
+import controller.KeyUtils;
 import model.Invoice;
 import model.InvoiceBuyer;
 import model.Rate;
@@ -31,8 +33,9 @@ public class BitPayTest {
 	{
         // This scenario qualifies that this (test) client does not have merchant facade access.
 		clientName += " on " + java.net.InetAddress.getLocalHost();
-        bitpay = new BitPay(clientName);
-
+        com.google.bitcoin.core.ECKey key = KeyUtils.createEcKeyFromHexStringFile("locals/key");
+		String testUrl = "https://staging.b-pay.net/";
+        bitpay = new BitPay(key, clientName, testUrl );
         if (!bitpay.clientIsAuthorized(BitPay.FACADE_POS))
         {
             // Get POS facade authorization.
