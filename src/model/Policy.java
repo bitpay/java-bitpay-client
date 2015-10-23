@@ -20,9 +20,9 @@ public class Policy {
     }
 
     @JsonProperty("policy")
-    public void setPolicy(String _policy)
+    public void setPolicy(String policy)
     {
-    	this._policy = _policy;
+    	this._policy = policy;
     }
 
     @JsonIgnore
@@ -32,9 +32,9 @@ public class Policy {
     }
 
     @JsonProperty("method")
-    public void setMethod(String _method)
+    public void setMethod(String method)
     {
-    	this._method = _method;
+    	this._method = method;
     }
 
     @JsonIgnore
@@ -44,8 +44,8 @@ public class Policy {
     }
 
     @JsonProperty("params")
-    public void setParams(List<String> _params)
+    public void setParams(List<String> params)
     {
-    	this._params = _params;
+    	this._params = params;
     }
 }

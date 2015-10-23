@@ -2,14 +2,14 @@ package test;
 
 import static org.junit.Assert.*;
 
-import java.security.interfaces.ECKey;
 import java.util.List;
 
-import controller.KeyUtils;
 import model.Invoice;
 import model.InvoiceBuyer;
 import model.Rate;
 import model.Rates;
+import model.Refund;
+import model.RefundHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,25 +25,51 @@ public class BitPayTest {
     private static double BTC_EPSILON = .000000001;
     private static double EPSILON = .001;
 
-    private static String pairingCode = "FbaJTGU";
     private static String clientName = "BitPay Java Library Tester";
-	
+    private static String pairingCode;
+    	
 	@Before
 	public void setUp() throws Exception 
 	{
         // This scenario qualifies that this (test) client does not have merchant facade access.
 		clientName += " on " + java.net.InetAddress.getLocalHost();
-        com.google.bitcoin.core.ECKey key = KeyUtils.createEcKeyFromHexStringFile("locals/key");
-		String testUrl = "https://staging.b-pay.net/";
-        bitpay = new BitPay(key, clientName, testUrl );
+		bitpay = new BitPay(clientName);		
+
+		// Authorize this client for use with a BitPay merchant account.  This client requires both
+		// POS and MERCHANT facades.
         if (!bitpay.clientIsAuthorized(BitPay.FACADE_POS))
         {
             // Get POS facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate invoices a
             // POS facade is required.
-            bitpay.authorizeClient(pairingCode);
-        }		
+        	
+        	// As an alternative to this client outputting a pairing code, the BitPay account owner
+        	// may interactively generate a pairing code via the BitPay merchant dashboard at
+        	// https://bitpay.com/dashboard/merchant/api-tokens.  This client can subsequently
+        	// accept the pairing code using the following call.
+        	
+            // bitpay.authorizeClient(pairingCode);
+            
+            pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_POS);
+
+            // Signal the device operator that this client needs to be paired with a merchant account.
+            System.out.print("Info: Client is requesting POS facade access. Pair this client with your merchant account using the pairing code: " + pairingCode);
+            throw new BitPayException("Error: client is not authorized.");
+        }
+
+        if (!bitpay.clientIsAuthorized(BitPay.FACADE_MERCHANT))
+        {
+            // Get MERCHANT facade authorization.
+            // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
+            // is created by your administrator it is assigned a facade.  To generate invoices a
+            // POS facade is required.
+            pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_MERCHANT);
+            
+            // Signal the device operator that this client needs to be paired with a merchant account.
+            System.out.print("Info: Client is requesting MERCHANT facade access. Pair this client with your merchant account using the pairing code: " + pairingCode);
+            throw new BitPayException("Error: client is not authorized.");
+        }
 	}
 
 	@After
@@ -59,6 +85,7 @@ public class BitPayTest {
 			basicInvoice = bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertNotNull(basicInvoice.getId());
 	}
@@ -71,6 +98,7 @@ public class BitPayTest {
 			basicInvoice = bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertNotNull(basicInvoice.getUrl());
 	}
@@ -83,6 +111,7 @@ public class BitPayTest {
 			basicInvoice = bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(Invoice.STATUS_NEW, basicInvoice.getStatus());
 	}
@@ -95,6 +124,7 @@ public class BitPayTest {
 			basicInvoice = bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertNotNull(basicInvoice.getBtcPrice());		
 	}
@@ -107,6 +137,7 @@ public class BitPayTest {
 			invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(0.1, invoice.getPrice(), BTC_EPSILON);
 	}
@@ -119,9 +150,9 @@ public class BitPayTest {
 			invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
-		
 	}		
 	
 	@Test
@@ -132,6 +163,7 @@ public class BitPayTest {
 			invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
 	}
@@ -142,10 +174,15 @@ public class BitPayTest {
         Invoice invoice = new Invoice(100.0, "EUR");
 		Invoice retreivedInvoice = null;
 		try {
+			// Create invoice on POS facade.
 			invoice = this.bitpay.createInvoice(invoice);
-			retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
+			//
+			// Must use a merchant token to retrieve this invoice since it was not created on the public facade.
+			String token = this.bitpay.getAccessToken(BitPay.FACADE_MERCHANT);
+			retreivedInvoice = this.bitpay.getInvoice(invoice.getId(), token);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(invoice.getId(), retreivedInvoice.getId());		
 	}
@@ -166,6 +203,7 @@ public class BitPayTest {
 	        invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertEquals(Invoice.STATUS_NEW, invoice.getStatus());
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
@@ -175,7 +213,33 @@ public class BitPayTest {
 		assertEquals(true, invoice.getFullNotifications());
 		assertEquals("satoshi@bitpay.com", invoice.getNotificationEmail());
 	}
-	
+
+	@Test
+	public void testShouldCreateAndCancelRefundRequest()
+	{
+		String invoiceId = "9Hz86CCoAJWdTHGsB6Bra9";
+		String bitcoinAddress = "381rUw3naC9HujBPMyVfPoVsnVCeTQz1m8";
+		
+		boolean canceled = false;
+		try {
+			RefundHelper refundRequest = this.bitpay.requestRefund(invoiceId, bitcoinAddress);
+			
+			assertNotNull(refundRequest.getInvoice().getId());
+			assertNotNull(refundRequest.getRefund().getId());
+			assertEquals(refundRequest.getInvoice().getId(), invoiceId);
+
+			List<Refund> refunds = this.bitpay.getAllRefunds(refundRequest.getInvoice());
+			assertTrue(refunds.size() > 0);
+
+			canceled = this.bitpay.cancelRefundRequest(invoiceId, refundRequest.getRefund().getId());
+			
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertTrue(canceled);
+	}
+
 	@Test
 	public void testShouldGetExchangeRates() 
 	{
@@ -186,6 +250,7 @@ public class BitPayTest {
 			rateList = rates.getRates();		
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertNotNull(rateList);
 	}
@@ -200,6 +265,7 @@ public class BitPayTest {
 			rate = rates.getRate("EUR");
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertTrue(rate != 0);
 	}
@@ -214,6 +280,7 @@ public class BitPayTest {
 			rate = rates.getRate("CNY");
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertTrue(rate != 0);
 	}
@@ -229,6 +296,7 @@ public class BitPayTest {
 			rateList = rates.getRates();
 		} catch (BitPayException e) {
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 		assertNotNull(rateList);
 	}

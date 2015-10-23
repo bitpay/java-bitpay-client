@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.*;
 public class Token {
 	
 	private String _guid;
-	private long _nonce = 0;
 	private String _id = "";
 	private String _pairingCode = "";
 	private long _pairingExpiration;
@@ -29,21 +28,10 @@ public class Token {
 	}
     
     @JsonProperty("guid")
-	public void setGuid(String _guid) {
-		this._guid = _guid;
+	public void setGuid(String guid) {
+		this._guid = guid;
 	}
     
-    @JsonProperty("nonce")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public long getNonce() {
-		return _nonce;
-	}
-    
-    @JsonProperty("nonce")
-	public void setNonce(long _nonce) {
-		this._nonce = _nonce;
-	}
-
     // Required fields
     //
 
@@ -54,8 +42,8 @@ public class Token {
 	}
     
     @JsonProperty("id")
-	public void setId(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this._id = id;
 	}
 
     // Optional fields
@@ -68,8 +56,8 @@ public class Token {
 	}
     
     @JsonProperty("pairingCode")
-	public void setPairingCode(String _pairingCode) {
-		this._pairingCode = _pairingCode;
+	public void setPairingCode(String pairingCode) {
+		this._pairingCode = pairingCode;
 	}
 
     @JsonProperty("facade")
@@ -79,8 +67,8 @@ public class Token {
 	}
 
     @JsonProperty("facade")
-    public void setFacade(String _facade) {
-		this._facade = _facade;
+    public void setFacade(String facade) {
+		this._facade = facade;
 	}
 	
     @JsonProperty("label")
@@ -90,8 +78,8 @@ public class Token {
 	}
 
     @JsonProperty("label")
-    public void setLabel(String _label) {
-		this._label = _label;
+    public void setLabel(String label) {
+		this._label = label;
 	}
 	
     @JsonProperty("count")
@@ -101,8 +89,8 @@ public class Token {
 	}
 
     @JsonProperty("count")
-    public void setCount(int _count) {
-		this._count = _count;
+    public void setCount(int count) {
+		this._count = count;
 	}
 
     // Response fields
@@ -114,8 +102,8 @@ public class Token {
 	}
     
     @JsonProperty("pairingExpiration")
-	public void setPairingExpiration(long _pairingExpiration) {
-		this._pairingExpiration = _pairingExpiration;
+	public void setPairingExpiration(long pairingExpiration) {
+		this._pairingExpiration = pairingExpiration;
 	}
 
     @JsonIgnore
@@ -124,8 +112,8 @@ public class Token {
 	}
         
     @JsonProperty("policies")
-	public void setPolicies(List<Policy> _policies) {
-		this._policies = _policies;
+	public void setPolicies(List<Policy> policies) {
+		this._policies = policies;
 	}
 
     @JsonIgnore
@@ -134,8 +122,8 @@ public class Token {
 	}
     
     @JsonProperty("resource")
-	public void setResource(String _resource) {
-		this._resource = _resource;
+	public void setResource(String resource) {
+		this._resource = resource;
 	}
 	
     @JsonIgnore
@@ -144,8 +132,8 @@ public class Token {
 	}
     
     @JsonProperty("token")
-	public void setValue(String _value) {
-		this._value = _value;
+	public void setValue(String value) {
+		this._value = value;
 	}
 
     @JsonIgnore
@@ -154,8 +142,8 @@ public class Token {
 	}
     
     @JsonProperty("dateCreated")
-	public void setDateCreated(long _dateCreated) {
-		this._dateCreated = _dateCreated;
+	public void setDateCreated(long dateCreated) {
+		this._dateCreated = dateCreated;
 	}
 
 }

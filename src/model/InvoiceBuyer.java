@@ -24,8 +24,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("name")
-	public void setName(String _name) {
-		this._name = _name;
+	public void setName(String name) {
+		this._name = name;
 	}
 
     @JsonProperty("address1")
@@ -35,8 +35,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("address1")
-	public void setAddress1(String _address1) {
-		this._address1 = _address1;
+	public void setAddress1(String address1) {
+		this._address1 = address1;
 	}
 
     @JsonProperty("address2")
@@ -46,8 +46,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("address2")
-	public void setaddress2(String _address2) {
-		this._address2 = _address2;
+	public void setaddress2(String address2) {
+		this._address2 = address2;
 	}
 
     @JsonProperty("locality")
@@ -57,8 +57,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("locality")
-	public void setLocality(String _locality) {
-		this._locality = _locality;
+	public void setLocality(String locality) {
+		this._locality = locality;
 	}
 
     @JsonProperty("region")
@@ -68,8 +68,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("region")
-	public void setRegion(String _region) {
-		this._region = _region;
+	public void setRegion(String region) {
+		this._region = region;
 	}
 
     @JsonProperty("postalCode")
@@ -79,8 +79,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("postalCode")
-	public void setPostalCode(String _postalCode) {
-		this._postalCode = _postalCode;
+	public void setPostalCode(String postalCode) {
+		this._postalCode = postalCode;
 	}
 
     @JsonProperty("country")
@@ -90,8 +90,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("country")
-	public void setCountry(String _country) {
-		this._country = _country;
+	public void setCountry(String country) {
+		this._country = country;
 	}
 
     @JsonProperty("email")
@@ -101,8 +101,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("email")
-	public void setEmail(String _email) {
-		this._email = _email;
+	public void setEmail(String email) {
+		this._email = email;
 	}
 
     @JsonProperty("phone")
@@ -112,8 +112,8 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("phone")
-	public void setPhone(String _phone) {
-		this._phone = _phone;
+	public void setPhone(String phone) {
+		this._phone = phone;
 	}
    
 }
