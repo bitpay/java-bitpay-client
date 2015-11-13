@@ -198,7 +198,7 @@ public class BitPayTest {
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
         invoice.setNotificationEmail("satoshi@bitpay.com");
-		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890šŠŸ");
 		try {
 	        invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
