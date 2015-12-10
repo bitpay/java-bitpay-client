@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import com.google.bitcoin.core.Base58;
@@ -118,8 +119,8 @@ public class KeyUtils {
         return encoded;
     }
         
-    public static String sign(ECKey key, String input) {
-        byte[] data = input.getBytes();
+    public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
+        byte[] data = input.getBytes("UTF8");
 
         Sha256Hash hash = Sha256Hash.create(data);
         ECDSASignature sig = key.sign(hash, null);

@@ -7,7 +7,7 @@ public class Rate {
 	
 	private String _name;
 	private String _code;
-	private double _value;
+	private Double _value;
 	
     public Rate() {}
     
@@ -17,8 +17,8 @@ public class Rate {
 	}
     
     @JsonProperty("name")
-	public void setName(String _name) {
-		this._name = _name;
+	public void setName(String name) {
+		this._name = name;
 	}
 
     @JsonIgnore
@@ -27,18 +27,18 @@ public class Rate {
 	}
     
     @JsonProperty("code")
-	public void setCode(String _code) {
-		this._code = _code;
+	public void setCode(String code) {
+		this._code = code;
 	}
 
     @JsonIgnore
-	public double getValue() {
+	public Double getValue() {
 		return _value;
 	}
     
     @JsonProperty("rate")
-	public void setValue(double _value) {
-		this._value = _value;
+	public void setValue(Double value) {
+		this._value = value;
 	}
 
 }

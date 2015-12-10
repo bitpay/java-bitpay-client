@@ -18,8 +18,8 @@ public class InvoicePaymentUrls {
 	}
         
     @JsonProperty("BIP21")
-	public void setBIP21(String _BIP21) {
-		this._BIP21 = _BIP21;
+	public void setBIP21(String BIP21) {
+		this._BIP21 = BIP21;
 	}
 
     @JsonIgnore
@@ -28,8 +28,8 @@ public class InvoicePaymentUrls {
 	}
         
     @JsonProperty("BIP72")
-	public void setBIP72(String _BIP72) {
-		this._BIP72 = _BIP72;
+	public void setBIP72(String BIP72) {
+		this._BIP72 = BIP72;
 	}
 
     @JsonIgnore
@@ -38,8 +38,8 @@ public class InvoicePaymentUrls {
 	}
         
     @JsonProperty("BIP72b")
-	public void setBIP72b(String _BIP72b) {
-		this._BIP72b = _BIP72b;
+	public void setBIP72b(String BIP72b) {
+		this._BIP72b = BIP72b;
 	}
 
     @JsonIgnore
@@ -48,7 +48,7 @@ public class InvoicePaymentUrls {
 	}
         
     @JsonProperty("BIP73")
-	public void setBIP73(String _BIP73) {
-		this._BIP73 = _BIP73;
+	public void setBIP73(String BIP73) {
+		this._BIP73 = BIP73;
 	}
 }

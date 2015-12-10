@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import controller.BitPayException;
 
-@JsonIgnoreProperties(ignoreUnknown=true) 	
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Invoice {
 
 	public static final String STATUS_NEW = "new";
@@ -19,7 +19,6 @@ public class Invoice {
 	public static final String EXSTATUS_PAID_OVER = "paidOver";
 	public static final String EXSTATUS_PAID_PARTIAL = "paidPartial";
 		
-	private Long _nonce = 0L;
 	private String _guid = "";
 	private String _token = "";
 	
@@ -50,14 +49,23 @@ public class Invoice {
 	private String _rate;
 	private Hashtable<String, String> _exRates;
 	private String _exceptionStatus;
-	private InvoicePaymentUrls _paymentUrls;
+	private InvoicePaymentUrls _paymentUrls = new InvoicePaymentUrls();
+	private InvoiceFlags _flags = new InvoiceFlags();
 	
+    /**
+     * Constructor, create an empty Invoice object.
+     */
     public Invoice() {}
 
-    public Invoice(Double _price, String _currency)
+    /**
+     * Constructor, create a minimal request Invoice object.
+     * @param price The amount for which the invoice will be created.
+     * @param currency The three digit currency type used to compute the invoice bitcoin amount.
+     */
+    public Invoice(Double price, String currency)
     {
-        this._price = _price;
-        this._currency = _currency;
+        this._price = price;
+        this._currency = currency;
     }
 
     // API fields
@@ -72,17 +80,6 @@ public class Invoice {
     @JsonProperty("guid")
 	public void setGuid(String _guid) {
 		this._guid = _guid;
-	}
-
-    @JsonProperty("nonce")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public Long getNonce() {
-		return _nonce;
-	}
-	
-    @JsonProperty("nonce")
-	public void setNonce(Long _nonce) {
-		this._nonce = _nonce;
 	}
 
     @JsonProperty("token")
@@ -390,4 +387,15 @@ public class Invoice {
   	public void setPaymentUrls(InvoicePaymentUrls _paymentUrls) {
   		this._paymentUrls = _paymentUrls;
   	}
+    
+    @JsonIgnore
+  	public InvoiceFlags getFlags() {
+  		return _flags;
+  	}
+  	
+    @JsonProperty("flags")
+  	public void setFlags(InvoiceFlags _flags) {
+  		this._flags = _flags;
+  	}
+
 }
