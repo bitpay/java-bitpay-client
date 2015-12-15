@@ -708,7 +708,9 @@ public class BitPay {
             HttpGet get = new HttpGet(fullURL);
 
             if (parameters != null) {
-                get.setURI(new URI(fullURL+URLEncodedUtils.format(parameters, "UTF-8")));
+                
+                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
+                get.setURI(new URI(fullURL));
             }
             if(signatureRequired) { 
                 get.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
@@ -717,6 +719,7 @@ public class BitPay {
             get.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
             get.addHeader("x-accept-version", BITPAY_API_VERSION);
 
+            
             return _httpClient.execute(get);
 
         } catch (URISyntaxException e) {
@@ -778,8 +781,10 @@ public class BitPay {
             HttpDelete delete = new HttpDelete(fullURL);
 
             if (parameters != null) {
+                
+                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
                
-                delete.setURI(new URI(fullURL+URLEncodedUtils.format(parameters, "UTF-8")));
+                delete.setURI(new URI(fullURL));
 
                 delete.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
                 delete.addHeader("x-accept-version", BITPAY_API_VERSION);
