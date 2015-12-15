@@ -1,3 +1,11 @@
+.DS_Store
+.classpath
+.project
+.settings/
+bin/.gitignore
+lib/.DS_Store
+pom.xml
+target/
 locals/
 *.key
 java-bitpay-client.xml
