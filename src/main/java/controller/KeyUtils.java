@@ -11,16 +11,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.SecureRandom;
 
+import org.bitcoinj.core.Base58;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.Utils;
+
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
     final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
-    private static URI privateKey;
 
-    public KeyUtils() {
-    }
+    public KeyUtils() {}
 
-    public static boolean privateKeyExists() {
+    public static boolean privateKeyExists()
+    {
         return new File(PRIV_KEY_FILENAME).exists();
     }
 
@@ -143,6 +148,9 @@ public class KeyUtils {
         return Base58.encode(unencodedBytes);
     }
 
+        return encoded;
+    }
+
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
         byte[] data = input.getBytes("UTF8");
 
@@ -154,8 +162,9 @@ public class KeyUtils {
         return bytesToHex(bytes);
     }
 
-    private static int getHexVal(char hex) {
-        int val = (int) hex;
+    private static int getHexVal(char hex)
+    {
+        int val = (int)hex;
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
     }
 
