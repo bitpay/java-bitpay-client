@@ -39,7 +39,8 @@ public class BitPay {
 
     private static final String BITPAY_API_VERSION = "2.0.0";
     private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client " + BITPAY_API_VERSION;
-    private static final String BITPAY_URL = "https://bitpay.com/";
+    public static final String BITPAY_URL = "https://bitpay.com/";
+    public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
 
     public static final String FACADE_MERCHANT = "merchant";
     public static final String FACADE_PAYROLL = "payroll";
