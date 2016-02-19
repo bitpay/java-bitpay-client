@@ -9,9 +9,8 @@ To get up and running with our Java library quickly, see the GUIDE here: https:/
 
 ## Support
 
-* https://labs.bitpay.com/c/libraries/java
 * https://github.com/bitpay/java-bitpay-client/issues
-* https://support.bitpay.com/
+* https://help.bitpay.com/
 
 ## Contribute
 
