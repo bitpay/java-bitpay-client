@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
@@ -24,7 +25,17 @@ public class KeyUtils {
 
     public static boolean privateKeyExists()
     {
-        return new File(PRIV_KEY_FILENAME).exists();
+        return getPrivateKeyFile().exists();
+    }
+
+
+    public static File getPrivateKeyFile() {
+        try {
+            return new File(KeyUtils.class.getResource(PRIV_KEY_FILENAME).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static ECKey createEcKey()
@@ -54,7 +65,7 @@ public class KeyUtils {
     public static ECKey loadEcKey() throws IOException
     {
         FileInputStream fileInputStream = null;
-        File file = new File(PRIV_KEY_FILENAME);
+        File file = getPrivateKeyFile();
 
         byte[] bytes = new byte[(int) file.length()];
 
