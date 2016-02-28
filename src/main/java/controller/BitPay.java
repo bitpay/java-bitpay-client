@@ -33,13 +33,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.bitcoin.core.ECKey;
+import org.bitcoinj.core.ECKey;
 
 public class BitPay {
 
     private static final String BITPAY_API_VERSION = "2.0.0";
     private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client " + BITPAY_API_VERSION;
-    private static final String BITPAY_URL = "https://bitpay.com/";
+    public static final String BITPAY_URL = "https://bitpay.com/";
+    public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
 
     public static final String FACADE_MERCHANT = "merchant";
     public static final String FACADE_PAYROLL = "payroll";
@@ -54,7 +55,7 @@ public class BitPay {
     private String _identity = "";
     private String _clientName = "";
     private Hashtable<String, String> _tokenCache; // {facade, token}
-    
+
     /**
      * Constructor for use if the keys and SIN are managed by this library.
      * @param clientName The label for this client.
@@ -101,7 +102,7 @@ public class BitPay {
     {
         this(clientName, BITPAY_URL);
     }
-    
+
     /**
      * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.  Default client name.
      * @throws BitPayException
@@ -188,7 +189,7 @@ public class BitPay {
         token.setGuid(this.getGuid());
         token.setPairingCode(pairingCode);
         token.setLabel(_clientName);
-        
+
         ObjectMapper mapper = new ObjectMapper();
 
         String json;
@@ -200,7 +201,7 @@ public class BitPay {
         }
 
         HttpResponse response = this.post("tokens", json);
-        
+
         List<Token> tokens;
 
         try {
@@ -242,7 +243,7 @@ public class BitPay {
         }
 
         HttpResponse response = this.post("tokens", json);
-        
+
         List<Token> tokens;
 
         try {
@@ -308,7 +309,7 @@ public class BitPay {
             throw new BitPayException("Error - failed to serialize Invoice object : " + e.getMessage());
         }
 
-        HttpResponse response = this.postWithSignature("invoices", json);        
+        HttpResponse response = this.postWithSignature("invoices", json);
 
         try {
             invoice = mapper.readerForUpdating(invoice).readValue(this.responseToJsonString(response));
@@ -356,7 +357,7 @@ public class BitPay {
         Hashtable<String, String> parameters = this.getParams();
 
     	parameters.put("token", token);
-        
+
         HttpResponse response = this.get("invoices/" + invoiceId, parameters);
 
         Invoice i;
@@ -382,7 +383,7 @@ public class BitPay {
     public List<Invoice> getInvoices(String dateStart, String dateEnd) throws BitPayException
     {
         Hashtable<String, String> parameters = this.getParams();
-        
+
         parameters.put("token", this.getAccessToken(FACADE_MERCHANT));
         parameters.put("dateStart", dateStart);
         parameters.put("dateEnd", dateEnd);
@@ -427,7 +428,7 @@ public class BitPay {
     public RefundHelper requestRefund(Invoice invoice, String bitcoinAddress, Double amount, String currency) throws BitPayException
     {
     	if (bitcoinAddress == null && !invoice.getFlags().getRefundable()) {
-            throw new BitPayException("Error - cannot refund an invoice without a refund address");    		
+            throw new BitPayException("Error - cannot refund an invoice without a refund address");
     	}
 
         Refund refund = new Refund();
@@ -436,9 +437,9 @@ public class BitPay {
     	refund.setAmount(amount);
     	refund.setBitcoinAddress(bitcoinAddress);
     	refund.setCurrency(currency);
-    	
+
         ObjectMapper mapper = new ObjectMapper();
-        
+
         String json;
 
         try {
@@ -456,7 +457,7 @@ public class BitPay {
         } catch (IOException e) {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
-        
+
         this.cacheAccessToken(refund.getId(), refund.getToken());
         return new RefundHelper(refund, invoice);
     }
@@ -469,7 +470,7 @@ public class BitPay {
      * @throws BitPayException
      */
     public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException
-    {    	
+    {
     	Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
     	return this.cancelRefundRequest(invoice, refundId);
     }
@@ -482,7 +483,7 @@ public class BitPay {
      * @throws BitPayException
      */
     public boolean cancelRefundRequest(Invoice invoice, String refundId) throws BitPayException
-    {    	
+    {
     	Refund refund = this.getRefund(invoice, refundId);
     	if (refund == null)
     	{
@@ -491,7 +492,7 @@ public class BitPay {
 
         Hashtable<String, String> parameters = this.getParams();
         parameters.put("token", refund.getToken());
-       	
+
         HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, parameters);
         String result = this.responseToJsonString(response);
 
@@ -511,7 +512,7 @@ public class BitPay {
     	Hashtable<String, String> parameters = this.getParams();
 
     	parameters.put("token", invoice.getToken());
-    	
+
         HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, parameters);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -537,9 +538,9 @@ public class BitPay {
     {
         List<Refund> refunds;
     	Hashtable<String, String> parameters = this.getParams();
-    	
+
         parameters.put("token", invoice.getToken());
-    	
+
         HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds", parameters);
 
         try {
@@ -578,7 +579,7 @@ public class BitPay {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     private void initKeys() throws IOException
     {
         if (KeyUtils.privateKeyExists()) {
@@ -592,13 +593,13 @@ public class BitPay {
             KeyUtils.saveEcKey(_ecKey);
         }
     }
-    
+
     private void deriveIdentity() throws IllegalArgumentException
     {
         // Identity in this implementation is defined to be the SIN.
         _identity = KeyUtils.deriveSIN(_ecKey);
     }
-        
+
     private Hashtable<String, String> responseToTokenCache(HttpResponse response) throws BitPayException
     {
         // The response is expected to be an array of key/value pairs (facade name = token).
@@ -621,17 +622,17 @@ public class BitPay {
 
         return _tokenCache;
     }
-    
-    private void clearAccessTokenCache() 
+
+    private void clearAccessTokenCache()
     {
         _tokenCache = new Hashtable<String, String>();
     }
-    
+
     private void cacheAccessToken(String id, String token)
     {
-        _tokenCache.put(id, token);   	
-    }    
-    
+        _tokenCache.put(id, token);
+    }
+
     private boolean tryGetAccessTokens() throws BitPayException
     {
         // Attempt to get access tokens for this client identity.
@@ -660,9 +661,9 @@ public class BitPay {
         this.clearAccessTokenCache();
 
         Hashtable<String, String> parameters = this.getParams();
-        
+
         parameters.put("id", this.getIdentity());
-        
+
         HttpResponse response = this.get("tokens", parameters);
 
         _tokenCache = responseToTokenCache(response);
@@ -670,10 +671,10 @@ public class BitPay {
         return _tokenCache.size();
     }
 
-    private Hashtable<String, String> getParams() 
+    private Hashtable<String, String> getParams()
     {
         Hashtable<String, String> params = new Hashtable<String, String>();
-        
+
         return params;
     }
 
@@ -721,7 +722,7 @@ public class BitPay {
 
     private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException
     {
-        try {            
+        try {
             HttpPost post = new HttpPost(_baseUrl + uri);
 
             post.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
@@ -849,7 +850,7 @@ public class BitPay {
         }
     }
 
-    private String getGuid() 
+    private String getGuid()
     {
         int Min = 0;
         int Max = 99999999;

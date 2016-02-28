@@ -8,23 +8,34 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 
-import com.google.bitcoin.core.Base58;
-import com.google.bitcoin.core.ECKey;
-import com.google.bitcoin.core.ECKey.ECDSASignature;
-import com.google.bitcoin.core.Sha256Hash;
-import com.google.bitcoin.core.Utils;
+import org.bitcoinj.core.Base58;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.Utils;
 
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
-    final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
-    
+    final private static String PRIV_KEY_FILENAME = "/bitpay_private.key";
+
     public KeyUtils() {}
-    
+
     public static boolean privateKeyExists()
     {
-        return new File(PRIV_KEY_FILENAME).exists();
+        return getPrivateKeyFile().exists();
+    }
+
+
+    public static File getPrivateKeyFile() {
+        try {
+            return new File(KeyUtils.class.getResource(PRIV_KEY_FILENAME).toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static ECKey createEcKey()
@@ -54,7 +65,7 @@ public class KeyUtils {
     public static ECKey loadEcKey() throws IOException
     {
         FileInputStream fileInputStream = null;
-        File file = new File(PRIV_KEY_FILENAME);
+        File file = getPrivateKeyFile();
 
         byte[] bytes = new byte[(int) file.length()];
 
@@ -89,11 +100,11 @@ public class KeyUtils {
         output.write(bytes);
         output.close();
     }
-    
+
     public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException
     {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).
-        byte[] pubKeyHash = ecKey.getPubKeyHash(); 
+        byte[] pubKeyHash = ecKey.getPubKeyHash();
 
         // Convert binary pubKeyHash, SINtype and version to Hex
         String version = "0F";
@@ -105,7 +116,7 @@ public class KeyUtils {
 
         // Convert the hex string back to binary and double sha256 hash it leaving in binary both times
         byte[] preSINbyte = hexToBytes(preSIN);
-        byte[] hash2Bytes = Utils.doubleDigest(preSINbyte);
+        byte[] hash2Bytes = Sha256Hash.hashTwice(preSINbyte);
 
         // Convert back to hex and take first four bytes
         String hashString = bytesToHex(hash2Bytes);
@@ -118,7 +129,7 @@ public class KeyUtils {
 
         return encoded;
     }
-        
+
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
         byte[] data = input.getBytes("UTF8");
 
@@ -129,7 +140,7 @@ public class KeyUtils {
 
         return bytesToHex(bytes);
     }
-    
+
     private static int getHexVal(char hex)
     {
         int val = (int)hex;
@@ -139,7 +150,7 @@ public class KeyUtils {
     public static byte[] hexToBytes(String hex) throws IllegalArgumentException
     {
         char[] hexArray = hex.toCharArray();
-        
+
         if (hex.length() % 2 == 1) {
             throw new IllegalArgumentException("Error: The binary key cannot have an odd number of digits");
         }
