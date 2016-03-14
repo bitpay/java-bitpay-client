@@ -51,6 +51,7 @@ public class Invoice {
 	private String _exceptionStatus;
 	private InvoicePaymentUrls _paymentUrls = new InvoicePaymentUrls();
 	private InvoiceFlags _flags = new InvoiceFlags();
+	private boolean _extendedNotifications = false;
 	
     /**
      * Constructor, create an empty Invoice object.
@@ -242,6 +243,17 @@ public class Invoice {
     @JsonProperty("buyer")
   	public void setBuyer(InvoiceBuyer _buyer) {
   		this._buyer = _buyer;
+  	}
+    
+    @JsonProperty("extendedNotifications")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+  	public boolean getExtendedNotifications() {
+  		return _extendedNotifications;
+  	}
+  	
+    @JsonProperty("extendedNotifications")
+  	public void setExtendedNotifications(boolean _extendedNotifications) {
+  		this._extendedNotifications = _extendedNotifications;
   	}
 
  
