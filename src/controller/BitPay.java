@@ -49,6 +49,8 @@ public class BitPay {
     public static final String PUBLIC_NO_TOKEN = "";
 
     private HttpClient _httpClient = null;
+    private int _rateLimiterTimeOut = 0;
+    private ApiRateLimiter _rateLimiter;
     private String _baseUrl = BITPAY_URL;
     private ECKey _ecKey = null;
     private String _identity = "";
@@ -737,7 +739,10 @@ public class BitPay {
             post.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
             post.addHeader("Content-Type","application/json");
 
-            return _httpClient.execute(post);
+            if(this._rateLimiter == null) {
+                this._rateLimiter = new ApiRateLimiter(_rateLimiterTimeOut);
+            }
+            return _rateLimiter.send(post, _httpClient);
 
         } catch (UnsupportedEncodingException e) {
             throw new BitPayException("Error: POST failed\n" + e.getMessage());
@@ -856,4 +861,9 @@ public class BitPay {
 
         return Min + (int)(Math.random() * ((Max - Min) + 1)) + "";
     }
+
+    public void setRateLimiterTimeOut(int timeOut) {
+        this._rateLimiterTimeOut = timeOut;
+    }
+
 }
