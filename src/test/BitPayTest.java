@@ -33,7 +33,7 @@ public class BitPayTest {
 	{
         // This scenario qualifies that this (test) client does not have merchant facade access.
 		clientName += " on " + java.net.InetAddress.getLocalHost();
-		bitpay = new BitPay(clientName);
+		bitpay = new BitPay(clientName, "https://test.bitpay.com/");
 		//if you get "too many requests, try setting this to 2000, 3000 or more
 		bitpay.setRateLimiterTimeOut(3000); //this is in milliseconds
 
@@ -200,7 +200,7 @@ public class BitPayTest {
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
         invoice.setNotificationEmail("satoshi@bitpay.com");
-		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890šŠŸ");
 		try {
 	        invoice = this.bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
@@ -209,7 +209,7 @@ public class BitPayTest {
 		}
 		assertEquals(Invoice.STATUS_NEW, invoice.getStatus());
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
-		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
+		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890šŠŸ", invoice.getPosData());
 		assertEquals("Satoshi", invoice.getBuyer().getName());
 		assertEquals("satoshi@bitpay.com", invoice.getBuyer().getEmail());
 		assertEquals(true, invoice.getFullNotifications());
