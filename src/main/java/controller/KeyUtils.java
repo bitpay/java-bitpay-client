@@ -7,15 +7,7 @@ import org.bitcoinj.core.Sha256Hash;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.SecureRandom;
-
-import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.ECKey.ECDSASignature;
-import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.Utils;
 
 public class KeyUtils {
 
@@ -29,16 +21,20 @@ public class KeyUtils {
         return new File(PRIV_KEY_FILENAME).exists();
     }
 
-    public static ECKey createEcKey() {
+    public static ECKey createEcKey()
+    {
         //Default constructor uses SecureRandom numbers.
         return new ECKey();
     }
 
-    public static ECKey createEcKeyFromHexString(String privateKey) {
+    public static ECKey createEcKeyFromHexString(String privateKey)
+    {
         //if you are going to choose this option, please ensure this string is as random as
         //possible, consider http://world.std.com/~reinhold/diceware.html
         SecureRandom randomSeed = new SecureRandom(privateKey.getBytes());
-        return new ECKey(randomSeed);
+        ECKey key = new ECKey(randomSeed);
+
+        return key;
     }
 
     /**
@@ -48,9 +44,10 @@ public class KeyUtils {
         return createEcKeyFromHexString(getKeyStringFromFile(privKeyFile));
     }
 
-    public static ECKey loadEcKey() throws IOException {
-        FileInputStream fileInputStream;
-        File file;
+    public static ECKey loadEcKey() throws IOException
+    {
+        FileInputStream fileInputStream = null;
+        File file = new File(PRIV_KEY_FILENAME);
 
         if (KeyUtils.privateKey == null) {
             file = new File(PRIV_KEY_FILENAME);
