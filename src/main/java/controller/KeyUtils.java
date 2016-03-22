@@ -1,41 +1,24 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.ECKey.ECDSASignature;
 import org.bitcoinj.core.Sha256Hash;
-import org.bitcoinj.core.Utils;
+
+import java.io.*;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
-    final private static String PRIV_KEY_FILENAME = "/bitpay_private.key";
+    final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
 
     public KeyUtils() {}
 
     public static boolean privateKeyExists()
     {
-        return getPrivateKeyFile().exists();
-    }
-
-
-    public static File getPrivateKeyFile() {
-        try {
-            return new File(KeyUtils.class.getResource(PRIV_KEY_FILENAME).toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new File(PRIV_KEY_FILENAME).exists();
     }
 
     public static ECKey createEcKey()
@@ -46,8 +29,10 @@ public class KeyUtils {
 
     public static ECKey createEcKeyFromHexString(String privateKey)
     {
-        BigInteger privKey = new BigInteger(privateKey, 16);
-        ECKey key = new ECKey(privKey, null, true);
+        //if you are going to choose this option, please ensure this string is as random as
+        //possible, consider http://world.std.com/~reinhold/diceware.html
+        SecureRandom randomSeed = new SecureRandom(privateKey.getBytes());
+        ECKey key = new ECKey(randomSeed);
 
         return key;
     }
@@ -65,7 +50,7 @@ public class KeyUtils {
     public static ECKey loadEcKey() throws IOException
     {
         FileInputStream fileInputStream = null;
-        File file = getPrivateKeyFile();
+        File file = new File(PRIV_KEY_FILENAME);
 
         byte[] bytes = new byte[(int) file.length()];
 
@@ -133,7 +118,7 @@ public class KeyUtils {
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
         byte[] data = input.getBytes("UTF8");
 
-        Sha256Hash hash = Sha256Hash.create(data);
+        Sha256Hash hash = Sha256Hash.of(data);
         ECDSASignature sig = key.sign(hash, null);
 
         byte[] bytes = sig.encodeToDER();
