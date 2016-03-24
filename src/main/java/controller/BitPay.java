@@ -55,6 +55,7 @@ public class BitPay {
      * @param envUrl The target server URL.
      * @throws BitPayException
      */
+    @Deprecated
     public BitPay(String clientName, String envUrl) throws BitPayException
     {
         if (clientName.equals(BITPAY_PLUGIN_INFO)) {
@@ -80,6 +81,9 @@ public class BitPay {
             this.initKeys();
         } catch (IOException e) {
             throw new BitPayException("Error: failed to intialize public/private key pair\n" + e.getMessage());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            throw new BitPayException("Error: " + e.getMessage());
         }
 
         this.deriveIdentity();
@@ -91,6 +95,7 @@ public class BitPay {
      * @param clientName The label for this client.
      * @throws BitPayException
      */
+    @Deprecated
     public BitPay(String clientName) throws BitPayException
     {
         this(clientName, BITPAY_URL);
@@ -100,9 +105,40 @@ public class BitPay {
      * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.  Default client name.
      * @throws BitPayException
      */
+    @Deprecated
     public BitPay() throws BitPayException
     {
         this(BITPAY_PLUGIN_INFO, BITPAY_URL);
+    }
+
+    /**
+     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
+     * @throws BitPayException, IOException
+     */
+    public BitPay(URI privateKey) throws BitPayException, URISyntaxException, IOException {
+        this(KeyUtils.loadEcKey(privateKey), BITPAY_PLUGIN_INFO, BITPAY_URL);
+    }
+
+    /**
+     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
+     * @param clientName The label for this client.
+     * @throws BitPayException, IOException
+     */
+    public BitPay(URI privateKey, String clientName) throws BitPayException, IOException, URISyntaxException {
+        this(KeyUtils.loadEcKey(privateKey), clientName, BITPAY_URL);
+    }
+
+    /**
+     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
+     * @param clientName The label for this client.
+     * @param envUrl The target server URL.
+     * @throws BitPayException, IOException
+     */
+    public BitPay(URI privateKey, String clientName, String envUrl) throws BitPayException, IOException, URISyntaxException {
+        this(KeyUtils.loadEcKey(privateKey), clientName, envUrl);
     }
 
     /**
@@ -262,7 +298,6 @@ public class BitPay {
      * Test whether this client is authorized for a specified level of API access.
      * @param facade Defines the level of API access being requested.
      * @return True if this client is authorized, false otherwise.
-     * @throws BitPayException
      */
     public boolean clientIsAuthorized(String facade)
     {
@@ -273,9 +308,8 @@ public class BitPay {
      * Retrieve a token associated with a known resource. The token is used to access other related resources.
      * @param id The identifier for the desired resource.
      * @return The token associated with resource.
-     * @throws BitPayException
      */
-    public String getAccessToken(String id) throws BitPayException
+    public String getAccessToken(String id)
     {
         return _tokenCache.get(id);
     }
@@ -573,8 +607,7 @@ public class BitPay {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void initKeys() throws IOException
-    {
+    private void initKeys() throws IOException, URISyntaxException {
         if (KeyUtils.privateKeyExists()) {
             _ecKey = KeyUtils.loadEcKey();
 
@@ -666,9 +699,7 @@ public class BitPay {
 
     private Hashtable<String, String> getParams()
     {
-        Hashtable<String, String> params = new Hashtable<String, String>();
-
-        return params;
+        return new Hashtable<String, String>();
     }
 
     private HttpResponse get(String uri, Hashtable<String, String> parameters) throws BitPayException
@@ -718,7 +749,7 @@ public class BitPay {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
 
-            post.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
+            post.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
 
             if (signatureRequired) {
                 String signature = KeyUtils.sign(_ecKey, _baseUrl + uri + json);

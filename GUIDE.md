@@ -15,7 +15,7 @@ Each client paired with the BitPay server requires a public and private key.  Th
 
 The private key should be stored in the client environment such that it cannot be compromised.  If your private key is compromised you should revoke the compromised client identity from the BitPay server and re-pair your client, see the [API tokens](https://bitpay.com/api-tokens) for more information.
 
-This SDK provides the capability of internally storing the private key on the client local file system.  If the local file system is secure then this is a good option.  It is also possible to generate the key yourself (using the SDK) and store the key as required.  It is not recommended to transmit the private key over any public or unsecure networks.
+This SDK provides the capability of internally storing the private key on the client local file system.  If the local file system is secure then this is a good option.  It is also possible to generate the key yourself (using the SDK) and store the key as required.  It is not recommended to transmit the private key over any public or unsecured networks.
 
 ```java
 // Let the SDK store the private key on the clients local file system.
@@ -88,7 +88,7 @@ String status = invoice.getStatus();
 
 ### Create an invoice (extended)
 
-You can add optional attributes to the invoice.  Atributes that are not set are ignored or given default values. For example:
+You can add optional attributes to the invoice.  Attributes that are not set are ignored or given default values. For example:
 
 ```java
 InvoiceBuyer buyer = new InvoiceBuyer();

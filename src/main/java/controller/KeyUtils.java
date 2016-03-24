@@ -7,64 +7,77 @@ import org.bitcoinj.core.Sha256Hash;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
     final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
+    private static URI privateKey;
 
-    public KeyUtils() {}
+    public KeyUtils() {
+    }
 
-    public static boolean privateKeyExists()
-    {
+    public static boolean privateKeyExists() {
         return new File(PRIV_KEY_FILENAME).exists();
     }
 
-    public static ECKey createEcKey()
-    {
+    public static ECKey createEcKey() {
         //Default constructor uses SecureRandom numbers.
         return new ECKey();
     }
 
-    public static ECKey createEcKeyFromHexString(String privateKey)
-    {
+    public static ECKey createEcKeyFromHexString(String privateKey) {
         //if you are going to choose this option, please ensure this string is as random as
         //possible, consider http://world.std.com/~reinhold/diceware.html
         SecureRandom randomSeed = new SecureRandom(privateKey.getBytes());
-        ECKey key = new ECKey(randomSeed);
-
-        return key;
+        return new ECKey(randomSeed);
     }
 
     /**
-     *  Convenience method.
+     * Convenience method.
      */
-    public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException
-    {
-        String privateKey = getKeyStringFromFile(privKeyFile);
-
-        return createEcKeyFromHexString(privateKey);
+    public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException {
+        return createEcKeyFromHexString(getKeyStringFromFile(privKeyFile));
     }
 
-    public static ECKey loadEcKey() throws IOException
-    {
-        FileInputStream fileInputStream = null;
-        File file = new File(PRIV_KEY_FILENAME);
+    public static ECKey loadEcKey() throws IOException {
+        FileInputStream fileInputStream;
+        File file;
+
+        if (KeyUtils.privateKey == null) {
+            file = new File(PRIV_KEY_FILENAME);
+        } else {
+            file = new File(KeyUtils.privateKey);
+        }
 
         byte[] bytes = new byte[(int) file.length()];
 
         fileInputStream = new FileInputStream(file);
-        fileInputStream.read(bytes);
+        int numBytesRead = fileInputStream.read(bytes);
+
         fileInputStream.close();
 
-        ECKey key = ECKey.fromASN1(bytes);
-
-        return key;
+        if (numBytesRead == -1) {
+            throw new IOException("read nothing from the file.");
+        }
+        return ECKey.fromASN1(bytes);
     }
 
-    public static String getKeyStringFromFile(String filename) throws IOException
-    {
+    public static ECKey loadEcKey(URI privateKey) throws IOException, URISyntaxException {
+        KeyUtils.privateKey = privateKey;
+        File file = new File(privateKey);
+        if (!file.exists()) {
+            ECKey key = createEcKey();
+            saveEcKey(key, KeyUtils.privateKey);
+            return key;
+        }
+        return loadEcKey();
+    }
+
+    public static String getKeyStringFromFile(String filename) throws IOException {
         BufferedReader br;
 
         br = new BufferedReader(new FileReader(filename));
@@ -76,18 +89,35 @@ public class KeyUtils {
         return line;
     }
 
-    public static void saveEcKey(ECKey ecKey) throws IOException
-    {
+    public static void saveEcKey(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
+        File file;
 
-        FileOutputStream output = new FileOutputStream(new File(PRIV_KEY_FILENAME));
+        if (KeyUtils.privateKey == null) {
+            file = new File(PRIV_KEY_FILENAME);
+        } else {
+            file = new File(KeyUtils.privateKey);
+        }
+
+        FileOutputStream output = new FileOutputStream(file);
 
         output.write(bytes);
         output.close();
     }
 
-    public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException
-    {
+    public static void saveEcKey(ECKey ecKey, URI privateKey) throws IOException, URISyntaxException {
+        File file = new File(privateKey);
+        //we shan't overwrite an existing file
+
+        if (file.exists()) {
+            return;
+        }
+        KeyUtils.privateKey = privateKey;
+        saveEcKey(ecKey);
+    }
+
+
+    public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).
         byte[] pubKeyHash = ecKey.getPubKeyHash();
 
@@ -110,9 +140,7 @@ public class KeyUtils {
         // Append first four bytes to fully appended SIN string
         String unencoded = preSIN + first4Bytes;
         byte[] unencodedBytes = new BigInteger(unencoded, 16).toByteArray();
-        String encoded = Base58.encode(unencodedBytes);
-
-        return encoded;
+        return Base58.encode(unencodedBytes);
     }
 
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
@@ -126,14 +154,12 @@ public class KeyUtils {
         return bytesToHex(bytes);
     }
 
-    private static int getHexVal(char hex)
-    {
-        int val = (int)hex;
+    private static int getHexVal(char hex) {
+        int val = (int) hex;
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
     }
 
-    public static byte[] hexToBytes(String hex) throws IllegalArgumentException
-    {
+    public static byte[] hexToBytes(String hex) throws IllegalArgumentException {
         char[] hexArray = hex.toCharArray();
 
         if (hex.length() % 2 == 1) {
@@ -143,7 +169,7 @@ public class KeyUtils {
         byte[] arr = new byte[hex.length() >> 1];
 
         for (int i = 0; i < hex.length() >> 1; ++i) {
-            arr[i] = (byte)((getHexVal(hexArray[i << 1]) << 4) + (getHexVal(hexArray[(i << 1) + 1])));
+            arr[i] = (byte) ((getHexVal(hexArray[i << 1]) << 4) + (getHexVal(hexArray[(i << 1) + 1])));
         }
 
         return arr;
