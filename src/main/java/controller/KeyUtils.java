@@ -7,34 +7,33 @@ import org.bitcoinj.core.Sha256Hash;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
     final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
+    private static URI privateKey;
 
-    public KeyUtils() {}
+    public KeyUtils() {
+    }
 
-    public static boolean privateKeyExists()
-    {
+    public static boolean privateKeyExists() {
         return new File(PRIV_KEY_FILENAME).exists();
     }
 
-    public static ECKey createEcKey()
-    {
+    public static ECKey createEcKey() {
         //Default constructor uses SecureRandom numbers.
         return new ECKey();
     }
 
-    public static ECKey createEcKeyFromHexString(String privateKey)
-    {
+    public static ECKey createEcKeyFromHexString(String privateKey) {
         //if you are going to choose this option, please ensure this string is as random as
         //possible, consider http://world.std.com/~reinhold/diceware.html
         SecureRandom randomSeed = new SecureRandom(privateKey.getBytes());
-        ECKey key = new ECKey(randomSeed);
-
-        return key;
+        return new ECKey(randomSeed);
     }
 
     /**
@@ -44,10 +43,9 @@ public class KeyUtils {
         return createEcKeyFromHexString(getKeyStringFromFile(privKeyFile));
     }
 
-    public static ECKey loadEcKey() throws IOException
-    {
-        FileInputStream fileInputStream = null;
-        File file = new File(PRIV_KEY_FILENAME);
+    public static ECKey loadEcKey() throws IOException {
+        FileInputStream fileInputStream;
+        File file;
 
         if (KeyUtils.privateKey == null) {
             file = new File(PRIV_KEY_FILENAME);
@@ -145,9 +143,6 @@ public class KeyUtils {
         return Base58.encode(unencodedBytes);
     }
 
-        return encoded;
-    }
-
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
         byte[] data = input.getBytes("UTF8");
 
@@ -159,9 +154,8 @@ public class KeyUtils {
         return bytesToHex(bytes);
     }
 
-    private static int getHexVal(char hex)
-    {
-        int val = (int)hex;
+    private static int getHexVal(char hex) {
+        int val = (int) hex;
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
     }
 

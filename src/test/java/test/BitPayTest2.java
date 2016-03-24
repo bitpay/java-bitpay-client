@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.net.UnknownHostException;
+
 import static org.junit.Assert.assertNotNull;
 
 import static org.junit.Assert.assertNotNull;
@@ -23,14 +25,14 @@ public class BitPayTest2 {
     }
 
 	@BeforeClass
-	public static void setUpOneTime() throws Exception
+	public static void setUpOneTime() throws UnknownHostException, BitPayException
 	{
 		// If this test has never been run before then this test must be run twice in order to pass.
 		// The first time this test runs it will create an identity and emit a client pairing code.
 		// The pairing code must then be authorized in a BitPay account.  Running the test a second
 		// time should result in the authorized client (this test) running to completion.
 		clientName += " on " + java.net.InetAddress.getLocalHost();
-        BitPay bitpay = new BitPay(clientName, BitPay.BITPAY_TEST_URL);
+        BitPay bitpay = new BitPay(clientName, BitPay.BITPAY_TEST_URL); //this tests the old way of creating keys/clients
         
         if (!bitpay.clientIsAuthorized(BitPay.FACADE_POS))
         {
@@ -55,8 +57,6 @@ public class BitPayTest2 {
         } catch (BitPayException e) {
             e.printStackTrace();
         }
-        System.out.println(invoice.getId());
-        refundInvoiceId = invoice.getId();
         assertNotNull(invoice.getId());
     }
 }
