@@ -11,8 +11,6 @@ import java.net.UnknownHostException;
 
 import static org.junit.Assert.assertNotNull;
 
-import static org.junit.Assert.assertNotNull;
-
 public class BitPayTest2 {
 
     private BitPay bitpay;
