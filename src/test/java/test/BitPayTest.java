@@ -324,16 +324,32 @@ public class BitPayTest {
 
     /*
     To use this test:
-    1. use the testShouldGetInvoiceId to generate an invoice
-    2. manually pay the invoice with testnet coins, the invoice Id get printed to the console
-    3. wait for 6 confirmations (about 1 hour)
-    4. run the test again
-    5. the refund should happen from the api standpoint, but if on testnet/test.bitpay.com, then the actual refund won't
-    happen unless you contact support and ask them to run refunds for test.bitpay.com.
+	You must have a paid/completed invoice in your account (list of invoices) -and-
+	have enough bitcoin to do the refund. The test looks for the first invoice in the "complete"
+	state and attempts to refund this, but does not actually refund the invoice. Instead it cancels the refund request.
+	This means you can re-use the same paid invoice again and again.
     */
     @Test
     public void testShouldCreateAndCancelRefundRequest()
     {
+		List<Invoice> invoices;
+		try {
+			long bitcoinInventedDate = 1230786000000L;
+			Date date = new Date();
+			Date dateBefore = new Date(bitcoinInventedDate);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String today = sdf.format(date);
+			String dateBeforeString = sdf.format(dateBefore);
+			invoices = this.bitpay.getInvoices(dateBeforeString, today);
+			for (Invoice invoice : invoices) {
+				if (invoice.getStatus().equalsIgnoreCase("complete")) {
+					refundInvoiceId = invoice.getId();
+					break;
+				}
+			}
+		} catch (BitPayException e) {
+			e.printStackTrace();
+		}
         assertNotNull(refundInvoiceId);
         String bitcoinAddress = "2MvBKCRCtFBM4G7vN2WNfPh3vTjMAM8kfKb"; //change this to whatever address you want to refund to
 

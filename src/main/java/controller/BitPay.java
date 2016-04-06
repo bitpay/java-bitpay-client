@@ -14,8 +14,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.bitcoinj.core.ECKey;
 
@@ -24,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
@@ -51,13 +54,13 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys and SIN are managed by this library.
+     *
      * @param clientName The label for this client.
-     * @param envUrl The target server URL.
+     * @param envUrl     The target server URL.
      * @throws BitPayException
      */
     @Deprecated
-    public BitPay(String clientName, String envUrl) throws BitPayException
-    {
+    public BitPay(String clientName, String envUrl) throws BitPayException {
         if (clientName.equals(BITPAY_PLUGIN_INFO)) {
             try {
                 clientName += " on " + java.net.InetAddress.getLocalHost();
@@ -92,27 +95,28 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.
+     *
      * @param clientName The label for this client.
      * @throws BitPayException
      */
     @Deprecated
-    public BitPay(String clientName) throws BitPayException
-    {
+    public BitPay(String clientName) throws BitPayException {
         this(clientName, BITPAY_URL);
     }
 
     /**
      * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.  Default client name.
+     *
      * @throws BitPayException
      */
     @Deprecated
-    public BitPay() throws BitPayException
-    {
+    public BitPay() throws BitPayException {
         this(BITPAY_PLUGIN_INFO, BITPAY_URL);
     }
 
     /**
      * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     *
      * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
      * @throws BitPayException, IOException
      */
@@ -122,6 +126,7 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     *
      * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
      * @param clientName The label for this client.
      * @throws BitPayException, IOException
@@ -132,9 +137,10 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
+     *
      * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
      * @param clientName The label for this client.
-     * @param envUrl The target server URL.
+     * @param envUrl     The target server URL.
      * @throws BitPayException, IOException
      */
     public BitPay(URI privateKey, String clientName, String envUrl) throws BitPayException, IOException, URISyntaxException {
@@ -143,13 +149,13 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys and SIN were derived external to this library.
-     * @param ecKey An elliptical curve key.
+     *
+     * @param ecKey      An elliptical curve key.
      * @param clientName The label for this client.
-     * @param envUrl The target server URL.
+     * @param envUrl     The target server URL.
      * @throws BitPayException
      */
-    public BitPay(ECKey ecKey, String clientName, String envUrl) throws BitPayException
-    {
+    public BitPay(ECKey ecKey, String clientName, String envUrl) throws BitPayException {
         _ecKey = ecKey;
 
         this.deriveIdentity();
@@ -178,41 +184,41 @@ public class BitPay {
 
     /**
      * Constructor for use if the keys and SIN were derived external to this library.  Use BitPay production server.
-     * @param ecKey An elliptical curve key.
+     *
+     * @param ecKey      An elliptical curve key.
      * @param clientName The label for this client.
      * @throws BitPayException
      */
-    public BitPay(ECKey ecKey, String clientName) throws BitPayException
-    {
+    public BitPay(ECKey ecKey, String clientName) throws BitPayException {
         this(ecKey, clientName, BITPAY_URL);
     }
 
     /**
      * Constructor for use if the keys and SIN were derived external to this library.  Use BitPay production server.  Default client name.
+     *
      * @param ecKey An elliptical curve key.
      * @throws BitPayException
      */
-    public BitPay(ECKey ecKey) throws BitPayException
-    {
+    public BitPay(ECKey ecKey) throws BitPayException {
         this(ecKey, BITPAY_PLUGIN_INFO, BITPAY_URL);
     }
 
     /**
      * Get the generated client identity.
+     *
      * @return Client identify as a string
      */
-    public String getIdentity()
-    {
+    public String getIdentity() {
         return _identity;
     }
 
     /**
      * Authorize this client for use with the BitPay server.
+     *
      * @param pairingCode A pairing code generated at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException
      */
-    public void authorizeClient(String pairingCode) throws BitPayException
-    {
+    public void authorizeClient(String pairingCode) throws BitPayException {
         Token token = new Token();
         token.setId(_identity);
         token.setGuid(this.getGuid());
@@ -248,12 +254,12 @@ public class BitPay {
 
     /**
      * Request a pairing code from the BitPay server.
+     *
      * @param facade Defines the level of API access being requested
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException
      */
-    public String requestClientAuthorization(String facade) throws BitPayException
-    {
+    public String requestClientAuthorization(String facade) throws BitPayException {
         Token token = new Token();
         token.setId(_identity);
         token.setGuid(this.getGuid());
@@ -296,33 +302,33 @@ public class BitPay {
 
     /**
      * Test whether this client is authorized for a specified level of API access.
+     *
      * @param facade Defines the level of API access being requested.
      * @return True if this client is authorized, false otherwise.
      */
-    public boolean clientIsAuthorized(String facade)
-    {
+    public boolean clientIsAuthorized(String facade) {
         return _tokenCache.containsKey(facade);
     }
 
     /**
      * Retrieve a token associated with a known resource. The token is used to access other related resources.
+     *
      * @param id The identifier for the desired resource.
      * @return The token associated with resource.
      */
-    public String getAccessToken(String id)
-    {
+    public String getAccessToken(String id) {
         return _tokenCache.get(id);
     }
 
     /**
      * Create a BitPay invoice.
+     *
      * @param invoice An Invoice object with request parameters defined.
-     * @param token The resource access token for the request.
+     * @param token   The resource access token for the request.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException
      */
-    public Invoice createInvoice(Invoice invoice, String token) throws BitPayException
-    {
+    public Invoice createInvoice(Invoice invoice, String token) throws BitPayException {
         invoice.setToken(token);
         invoice.setGuid(this.getGuid());
 
@@ -352,43 +358,42 @@ public class BitPay {
 
     /**
      * Create a BitPay invoice using the POS facade.
+     *
      * @param invoice An Invoice object with request parameters defined.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException
      */
-    public Invoice createInvoice(Invoice invoice) throws BitPayException
-    {
+    public Invoice createInvoice(Invoice invoice) throws BitPayException {
         return this.createInvoice(invoice, this.getAccessToken(FACADE_POS));
     }
 
     /**
      * Retrieve a BitPay invoice by invoice id using the public facade.
+     *
      * @param invoiceId The id of the invoice to retrieve.
      * @return A BitPay Invoice object.
      * @throws BitPayException
      */
-    public Invoice getInvoice(String invoiceId) throws BitPayException
-    {
-    	return this.getInvoice(invoiceId, PUBLIC_NO_TOKEN);
+    public Invoice getInvoice(String invoiceId) throws BitPayException {
+        return this.getInvoice(invoiceId, PUBLIC_NO_TOKEN);
     }
 
     /**
      * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade (the public facade requires no authorization).
+     *
      * @param invoiceId The id of the invoice to retrieve.
-     * @param token The facade/invoice token (e.g., pos/invoice) for the invoice.
+     * @param token     The facade/invoice token (e.g., pos/invoice) for the invoice.
      * @return A BitPay Invoice object.
      * @throws BitPayException
      */
-    public Invoice getInvoice(String invoiceId, String token) throws BitPayException
-    {
-        Hashtable<String, String> parameters = this.getParams();
+    public Invoice getInvoice(String invoiceId, String token) throws BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
 
-    	parameters.put("token", token);
-
-        HttpResponse response = this.get("invoices/" + invoiceId, parameters);
+        boolean requireSignature = !PUBLIC_NO_TOKEN.equals(token);
+        HttpResponse response = this.get("invoices/" + invoiceId, params, requireSignature);
 
         Invoice i;
-
         try {
             i = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
         } catch (JsonProcessingException e) {
@@ -402,20 +407,20 @@ public class BitPay {
 
     /**
      * Retrieve a collection of BitPay invoices.
+     *
      * @param dateStart The first date for the query filter.
-     * @param dateEnd The last date for the query filter.
+     * @param dateEnd   The last date for the query filter.
      * @return A list of BitPay Invoice objects.
      * @throws BitPayException
      */
-    public List<Invoice> getInvoices(String dateStart, String dateEnd) throws BitPayException
-    {
-        Hashtable<String, String> parameters = this.getParams();
+    public List<Invoice> getInvoices(String dateStart, String dateEnd) throws BitPayException {
 
-        parameters.put("token", this.getAccessToken(FACADE_MERCHANT));
-        parameters.put("dateStart", dateStart);
-        parameters.put("dateEnd", dateEnd);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+        params.add(new BasicNameValuePair("dateStart", dateStart));
+        params.add(new BasicNameValuePair("dateEnd", dateEnd));
 
-        HttpResponse response = this.get("invoices", parameters);
+        HttpResponse response = this.get("invoices", params);
 
         List<Invoice> invoices;
 
@@ -432,38 +437,38 @@ public class BitPay {
 
     /**
      * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
-     * @param invoiceId The id of the BitPay invoice for which a refund request should be made.
+     *
+     * @param invoiceId      The id of the BitPay invoice for which a refund request should be made.
      * @param bitcoinAddress The bitcoin address to which the refund should will be made. If left empty ("") and the invoice contains a refund address then the request may success, otherwise it will fail.
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
-    public RefundHelper requestRefund(String invoiceId, String bitcoinAddress) throws BitPayException
-    {
-    	Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
-    	return this.requestRefund(invoice, bitcoinAddress, invoice.getPrice(), invoice.getCurrency());
+    public RefundHelper requestRefund(String invoiceId, String bitcoinAddress) throws BitPayException {
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
+        return this.requestRefund(invoice, bitcoinAddress, invoice.getPrice(), invoice.getCurrency());
     }
 
     /**
      * Request a refund for a BitPay invoice.
-     * @param invoice A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
+     *
+     * @param invoice        A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
      * @param bitcoinAddress The bitcoin address to which the refund should will be made.  If left empty ("") and the invoice contains a refund address then the request may success, otherwise it will fail.
-     * @param amount The amount of money to refund. If zero then a request for 100% of the invoice value is created.
-     * @param currency The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
+     * @param amount         The amount of money to refund. If zero then a request for 100% of the invoice value is created.
+     * @param currency       The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
-    public RefundHelper requestRefund(Invoice invoice, String bitcoinAddress, Double amount, String currency) throws BitPayException
-    {
-    	if (bitcoinAddress == null && !invoice.getFlags().getRefundable()) {
+    public RefundHelper requestRefund(Invoice invoice, String bitcoinAddress, Double amount, String currency) throws BitPayException {
+        if (bitcoinAddress == null && !invoice.getFlags().getRefundable()) {
             throw new BitPayException("Error - cannot refund an invoice without a refund address");
-    	}
+        }
 
         Refund refund = new Refund();
-    	refund.setToken(invoice.getToken());
+        refund.setToken(invoice.getToken());
         refund.setGuid(this.getGuid());
-    	refund.setAmount(amount);
-    	refund.setBitcoinAddress(bitcoinAddress);
-    	refund.setCurrency(currency);
+        refund.setAmount(amount);
+        refund.setBitcoinAddress(bitcoinAddress);
+        refund.setCurrency(currency);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -491,36 +496,35 @@ public class BitPay {
 
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
+     *
      * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
-     * @param refundId The refund id for the refund to be canceled.
+     * @param refundId  The refund id for the refund to be canceled.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws BitPayException
      */
-    public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException
-    {
-    	Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
-    	return this.cancelRefundRequest(invoice, refundId);
+    public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException {
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
+        return this.cancelRefundRequest(invoice, refundId);
     }
 
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
-     * @param invoice The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
+     *
+     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
      * @param refundId The refund id for the refund to be canceled.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws BitPayException
      */
-    public boolean cancelRefundRequest(Invoice invoice, String refundId) throws BitPayException
-    {
-    	Refund refund = this.getRefund(invoice, refundId);
-    	if (refund == null)
-    	{
-    		throw new BitPayException("Error - refundId is not associated with specified invoice");
-    	}
+    public boolean cancelRefundRequest(Invoice invoice, String refundId) throws BitPayException {
+        Refund refund = this.getRefund(invoice, refundId);
+        if (refund == null) {
+            throw new BitPayException("Error - refundId is not associated with specified invoice");
+        }
 
-        Hashtable<String, String> parameters = this.getParams();
-        parameters.put("token", refund.getToken());
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", refund.getToken()));
 
-        HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, parameters);
+        HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
         String result = this.responseToJsonString(response);
 
         return (result.equals("\"Success\""));
@@ -528,19 +532,18 @@ public class BitPay {
 
     /**
      * Retrieve a previously made refund request on a BitPay invoice.
-     * @param invoice The BitPay invoice having the associated refund.
+     *
+     * @param invoice  The BitPay invoice having the associated refund.
      * @param refundId The refund id for the refund to be updated with new status.
      * @return A BitPay invoice object with the associated Refund object updated.
      * @throws BitPayException
      */
-    public Refund getRefund(Invoice invoice, String refundId) throws BitPayException
-    {
+    public Refund getRefund(Invoice invoice, String refundId) throws BitPayException {
         Refund refund = new Refund();
-    	Hashtable<String, String> parameters = this.getParams();
 
-    	parameters.put("token", invoice.getToken());
-
-        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, parameters);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", invoice.getToken()));
+        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -557,18 +560,17 @@ public class BitPay {
 
     /**
      * Retrieve all refund requests on a BitPay invoice.
+     *
      * @param invoice The BitPay invoice object having the associated refunds.
      * @return A BitPay invoice object with the associated Refund objects updated.
      * @throws BitPayException
      */
-    public List<Refund> getAllRefunds(Invoice invoice) throws BitPayException
-    {
+    public List<Refund> getAllRefunds(Invoice invoice) throws BitPayException {
         List<Refund> refunds;
-    	Hashtable<String, String> parameters = this.getParams();
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", invoice.getToken()));
 
-        parameters.put("token", invoice.getToken());
-
-        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds", parameters);
+        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds", params);
 
         try {
             refunds = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Refund[].class));
@@ -583,11 +585,11 @@ public class BitPay {
 
     /**
      * Retrieve the exchange rate table maintained by BitPay.  See https://bitpay.com/bitcoin-exchange-rates.
+     *
      * @return A Rates object populated with the BitPay exchange rate table.
      * @throws BitPayException
      */
-    public Rates getRates() throws BitPayException
-    {
+    public Rates getRates() throws BitPayException {
         HttpResponse response = this.get("rates");
 
         List<Rate> rates;
@@ -620,14 +622,12 @@ public class BitPay {
         }
     }
 
-    private void deriveIdentity() throws IllegalArgumentException
-    {
+    private void deriveIdentity() throws IllegalArgumentException {
         // Identity in this implementation is defined to be the SIN.
         _identity = KeyUtils.deriveSIN(_ecKey);
     }
 
-    private Hashtable<String, String> responseToTokenCache(HttpResponse response) throws BitPayException
-    {
+    private Hashtable<String, String> responseToTokenCache(HttpResponse response) throws BitPayException {
         // The response is expected to be an array of key/value pairs (facade name = token).
         String json = this.responseToJsonString(response);
 
@@ -637,7 +637,8 @@ public class BitPay {
             json = json.replaceAll("\\]", "");
             json = json.replaceAll("\\},\\{", ",");
             if (json.length() > 0) {
-                _tokenCache = new ObjectMapper().readValue(json, new TypeReference<Hashtable<String,String>>(){});
+                _tokenCache = new ObjectMapper().readValue(json, new TypeReference<Hashtable<String, String>>() {
+                });
             }
 
         } catch (JsonProcessingException e) {
@@ -649,18 +650,15 @@ public class BitPay {
         return _tokenCache;
     }
 
-    private void clearAccessTokenCache()
-    {
+    private void clearAccessTokenCache() {
         _tokenCache = new Hashtable<String, String>();
     }
 
-    private void cacheAccessToken(String id, String token)
-    {
+    private void cacheAccessToken(String id, String token) {
         _tokenCache.put(id, token);
     }
 
-    private boolean tryGetAccessTokens() throws BitPayException
-    {
+    private boolean tryGetAccessTokens() throws BitPayException {
         // Attempt to get access tokens for this client identity.
 
         try {
@@ -682,51 +680,42 @@ public class BitPay {
         }
     }
 
-    private int getAccessTokens() throws BitPayException
-    {
+    private int getAccessTokens() throws BitPayException {
         this.clearAccessTokenCache();
 
-        Hashtable<String, String> parameters = this.getParams();
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("id", this.getIdentity()));
 
-        parameters.put("id", this.getIdentity());
-
-        HttpResponse response = this.get("tokens", parameters);
+        HttpResponse response = this.get("tokens", params);
 
         _tokenCache = responseToTokenCache(response);
 
         return _tokenCache.size();
     }
 
-    private Hashtable<String, String> getParams()
-    {
-        return new Hashtable<String, String>();
+
+    private HttpResponse get(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
+        return get(uri, parameters, true);
     }
 
-    private HttpResponse get(String uri, Hashtable<String, String> parameters) throws BitPayException
-    {
+    private HttpResponse get(String uri, List<BasicNameValuePair> parameters, boolean signatureRequired) throws BitPayException {
         try {
 
             String fullURL = _baseUrl + uri;
             HttpGet get = new HttpGet(fullURL);
 
             if (parameters != null) {
-                fullURL += "?";
 
-                for (String key : parameters.keySet()) {
-                    fullURL += key + "=" + parameters.get(key) + "&";
-                }
-
-                fullURL = fullURL.substring(0,fullURL.length() - 1);
-
+                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
                 get.setURI(new URI(fullURL));
-
-                String signature = KeyUtils.sign(_ecKey, fullURL);
-
-                get.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
-                get.addHeader("x-accept-version", BITPAY_API_VERSION);
-                get.addHeader("x-signature", signature);
+            }
+            if (signatureRequired) {
+                get.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
                 get.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
+            get.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
+            get.addHeader("x-accept-version", BITPAY_API_VERSION);
+
 
             return _httpClient.execute(get);
 
@@ -739,28 +728,24 @@ public class BitPay {
         }
     }
 
-    private HttpResponse get(String uri) throws BitPayException
-    {
-        return this.get(uri, null);
+    private HttpResponse get(String uri) throws BitPayException {
+        return this.get(uri, null, false);
     }
 
-    private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException
-    {
+    private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
 
             post.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
 
             if (signatureRequired) {
-                String signature = KeyUtils.sign(_ecKey, _baseUrl + uri + json);
-
-                post.addHeader("x-signature", signature);
+                post.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
                 post.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
 
             post.addHeader("x-accept-version", BITPAY_API_VERSION);
             post.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
-            post.addHeader("Content-Type","application/json");
+            post.addHeader("Content-Type", "application/json");
 
             return _httpClient.execute(post);
 
@@ -773,39 +758,29 @@ public class BitPay {
         }
     }
 
-    private HttpResponse post(String uri, String json) throws BitPayException
-    {
+    private HttpResponse post(String uri, String json) throws BitPayException {
         return this.post(uri, json, false);
     }
 
-    private HttpResponse postWithSignature(String uri, String json) throws BitPayException
-    {
+    private HttpResponse postWithSignature(String uri, String json) throws BitPayException {
         return this.post(uri, json, true);
     }
 
-    private HttpResponse delete(String uri, Hashtable<String, String> parameters) throws BitPayException
-    {
+    private HttpResponse delete(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
         try {
 
             String fullURL = _baseUrl + uri;
             HttpDelete delete = new HttpDelete(fullURL);
 
             if (parameters != null) {
-                fullURL += "?";
 
-                for (String key : parameters.keySet()) {
-                    fullURL += key + "=" + parameters.get(key) + "&";
-                }
-
-                fullURL = fullURL.substring(0,fullURL.length() - 1);
+                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
 
                 delete.setURI(new URI(fullURL));
 
-                String signature = KeyUtils.sign(_ecKey, fullURL);
-
                 delete.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
                 delete.addHeader("x-accept-version", BITPAY_API_VERSION);
-                delete.addHeader("x-signature", signature);
+                delete.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
                 delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
 
@@ -820,8 +795,7 @@ public class BitPay {
         }
     }
 
-    private String responseToJsonString(HttpResponse response) throws BitPayException
-    {
+    private String responseToJsonString(HttpResponse response) throws BitPayException {
         if (response == null) {
             throw new BitPayException("Error: HTTP response is null");
         }
@@ -874,11 +848,10 @@ public class BitPay {
         }
     }
 
-    private String getGuid()
-    {
+    private String getGuid() {
         int Min = 0;
         int Max = 99999999;
 
-        return Min + (int)(Math.random() * ((Max - Min) + 1)) + "";
+        return Min + (int) (Math.random() * ((Max - Min) + 1)) + "";
     }
 }

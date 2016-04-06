@@ -5,3 +5,5 @@ java-bitpay-client.properties
 untitled folder/
 .idea/
 target
+out
+lib
