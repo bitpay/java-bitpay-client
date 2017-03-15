@@ -46,7 +46,7 @@ public class InvoiceBuyer {
 	}
 	
     @JsonProperty("address2")
-	public void setaddress2(String address2) {
+	public void setAddress2(String address2) {
 		this._address2 = address2;
 	}
 

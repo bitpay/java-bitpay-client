@@ -33,7 +33,9 @@ import java.util.List;
 
 public class BitPay {
 
-    private static final String BITPAY_API_VERSION = "2.0.0";
+	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.ERR);
+
+	private static final String BITPAY_API_VERSION = "2.0.0";
     private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client " + BITPAY_API_VERSION;
     public static final String BITPAY_URL = "https://bitpay.com/";
     public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
@@ -156,7 +158,7 @@ public class BitPay {
      * @throws BitPayException
      */
     public BitPay(ECKey ecKey, String clientName, String envUrl) throws BitPayException {
-        _ecKey = ecKey;
+    	_ecKey = ecKey;
 
         this.deriveIdentity();
 
@@ -605,6 +607,120 @@ public class BitPay {
         return new Rates(rates, this);
     }
 
+    /**
+     * Submit a BitPay Payout batch.
+     *
+     * @param batch A PayoutBatch object with request parameters defined.
+     * @return A BitPay generated PayoutBatch object.
+     * @throws BitPayException
+     */
+    public PayoutBatch submitPayoutBatch(PayoutBatch batch) throws BitPayException {
+        String token = this.getAccessToken(FACADE_PAYROLL);
+        batch.setToken(token);
+        batch.setGuid(this.getGuid());
+        
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(batch);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to serialize PayoutBatch object : " + e.getMessage());
+        }
+
+        HttpResponse response = this.postWithSignature("payouts", json);
+
+        try {
+            batch = mapper.readerForUpdating(batch).readValue(this.responseToJsonString(response));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        }
+
+        this.cacheAccessToken(batch.getId(), batch.getToken());
+        return batch;
+    }
+
+    /**
+     * Retrieve a collection of BitPay payout batches.
+     *
+     * @return A list of BitPay PayoutBatch objects.
+     * @throws BitPayException
+     */
+    public List<PayoutBatch> getPayoutBatches() throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_PAYROLL)));
+
+        HttpResponse response = this.get("payouts", params);
+
+        List<PayoutBatch> batches;
+
+        try {
+        	batches = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        }
+
+        return batches;
+    }
+    
+    /**
+     * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payroll facade.
+     *
+     * @param batchId The id of the batch to retrieve.
+     * @return A BitPay PayoutBatch object.
+     * @throws BitPayException
+     */
+    public PayoutBatch getPayoutBatch(String batchId) throws BitPayException {
+        String token = this.getAccessToken(FACADE_PAYROLL);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
+
+        HttpResponse response = this.get("payouts/" + batchId, params, true);
+
+        PayoutBatch b;
+        try {
+            b = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch.class);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        }
+
+        return b;
+    }
+
+    /**
+     * Cancel a BitPay Payout batch.
+     *
+     * @param batchId The id of the batch to cancel.
+     * @return A BitPay generated PayoutBatch object.
+     * @throws BitPayException
+     */
+    public PayoutBatch cancelPayoutBatch(String batchId) throws BitPayException {
+        String token = this.getAccessToken(FACADE_PAYROLL);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
+
+        HttpResponse response = this.delete("payouts/" + batchId, params);
+
+        PayoutBatch b;
+        try {
+            b = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch.class);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        }
+
+        return b;
+    }
+    
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -717,6 +833,7 @@ public class BitPay {
             get.addHeader("x-accept-version", BITPAY_API_VERSION);
 
 
+            _log.info(get.toString());
             return _httpClient.execute(get);
 
         } catch (URISyntaxException e) {
@@ -747,6 +864,7 @@ public class BitPay {
             post.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
             post.addHeader("Content-Type", "application/json");
 
+        	_log.info(post.toString());
             return _httpClient.execute(post);
 
         } catch (UnsupportedEncodingException e) {
@@ -784,6 +902,7 @@ public class BitPay {
                 delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
 
+        	_log.info(delete.toString());
             return _httpClient.execute(delete);
 
         } catch (URISyntaxException e) {
@@ -807,6 +926,7 @@ public class BitPay {
             String jsonString;
 
             jsonString = EntityUtils.toString(entity, "UTF-8");
+            _log.info("RESPONSE: " + jsonString);
 
             ObjectMapper mapper = new ObjectMapper();
 
@@ -854,4 +974,5 @@ public class BitPay {
 
         return Min + (int) (Math.random() * ((Max - Min) + 1)) + "";
     }
+
 }
