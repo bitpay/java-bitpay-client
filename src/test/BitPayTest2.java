@@ -2,6 +2,7 @@ package test;
 
 import controller.BitPay;
 import controller.BitPayException;
+import controller.BitPayLogger;
 import model.Invoice;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -12,6 +13,8 @@ import java.net.UnknownHostException;
 import static org.junit.Assert.assertNotNull;
 
 public class BitPayTest2 {
+
+	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
 
     private BitPay bitpay;
     private static String clientName = "BitPay Java Library Tester2";
@@ -41,7 +44,7 @@ public class BitPayTest2 {
             String pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_POS);
             
             // Signal the device operator that this client needs to be paired with a merchant account.
-            System.out.print("Info: Pair this client with your merchant account using the pairing code: " + pairingCode);
+            _log.info("Client is requesting POS facade access. Go to " + BitPay.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             throw new BitPayException("Error: client is not authorized.");
         }
 	}
