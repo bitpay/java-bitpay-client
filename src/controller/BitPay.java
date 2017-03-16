@@ -33,7 +33,7 @@ import java.util.List;
 
 public class BitPay {
 
-	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.ERR);
+	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
 
 	private static final String BITPAY_API_VERSION = "2.0.0";
     private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client " + BITPAY_API_VERSION;
@@ -61,7 +61,6 @@ public class BitPay {
      * @param envUrl     The target server URL.
      * @throws BitPayException
      */
-    @Deprecated
     public BitPay(String clientName, String envUrl) throws BitPayException {
         if (clientName.equals(BITPAY_PLUGIN_INFO)) {
             try {
@@ -101,7 +100,6 @@ public class BitPay {
      * @param clientName The label for this client.
      * @throws BitPayException
      */
-    @Deprecated
     public BitPay(String clientName) throws BitPayException {
         this(clientName, BITPAY_URL);
     }
@@ -111,7 +109,6 @@ public class BitPay {
      *
      * @throws BitPayException
      */
-    @Deprecated
     public BitPay() throws BitPayException {
         this(BITPAY_PLUGIN_INFO, BITPAY_URL);
     }
@@ -702,14 +699,13 @@ public class BitPay {
      * @return A BitPay generated PayoutBatch object.
      * @throws BitPayException
      */
-    public PayoutBatch cancelPayoutBatch(String batchId) throws BitPayException {
-        String token = this.getAccessToken(FACADE_PAYROLL);
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", token));
+    public PayoutBatch cancelPayoutBatch(String batchId) throws BitPayException {    	
+        PayoutBatch b = getPayoutBatch(batchId);
+    	final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", b.getToken()));
 
         HttpResponse response = this.delete("payouts/" + batchId, params);
 
-        PayoutBatch b;
         try {
             b = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch.class);
         } catch (JsonProcessingException e) {

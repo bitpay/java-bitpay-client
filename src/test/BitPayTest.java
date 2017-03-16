@@ -2,6 +2,7 @@ package test;
 
 import controller.BitPay;
 import controller.BitPayException;
+import controller.BitPayLogger;
 import controller.KeyUtils;
 import model.*;
 import org.bitcoinj.core.ECKey;
@@ -19,6 +20,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class BitPayTest {
+
+	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
 
     private BitPay bitpay;
     private Invoice basicInvoice;
@@ -74,7 +77,7 @@ public class BitPayTest {
             pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_POS);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
-            System.out.println("Info: Client is requesting POS facade access. Pair this client with your merchant account using the pairing code: " + pairingCode);
+            _log.info("Client is requesting POS facade access. Go to " + BitPay.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             dumpOut = true;
             //we already failed to authorize for a POS token, therefore we must sleep a bit to try to authorize for any other facade (rate limiter on the api side)
             Thread.sleep(10000);
@@ -89,7 +92,7 @@ public class BitPayTest {
             pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_MERCHANT);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
-            System.out.println("Info: Client is requesting MERCHANT facade access. Pair this client with your merchant account using the pairing code: " + pairingCode);
+            _log.info("Client is requesting MERCHANT facade access. Go to " + BitPay.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             dumpOut = true;
         }
 

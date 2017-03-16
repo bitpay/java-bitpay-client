@@ -8,6 +8,14 @@ This SDK implements BitPay's remote client authentication and authorization stra
 
 You must have a BitPay merchant account to use this SDK.  It's free to [sign-up for a BitPay merchant account](https://bitpay.com/start).
 
+### Usage
+
+This library was built and tested using the Eclipse IDE; the source code tree is directly compatible with Eclipse.
+Library dependencies can be downloaded by executing the following command at the root of the library:
+
+```
+mvn clean dependency:copy-dependencies -DoutputDirectory=./lib
+```
 
 ### Handling your client private key
 

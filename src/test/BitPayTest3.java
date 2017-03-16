@@ -2,6 +2,7 @@ package test;
 
 import controller.BitPay;
 import controller.BitPayException;
+import controller.BitPayLogger;
 import model.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,12 +19,14 @@ import static org.junit.Assert.*;
 
 public class BitPayTest3 {
 
+	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
+
     private BitPay bitpay;
 
     private static String clientName = "BitPay Java Library Tester3";
     private static String pairingCode;
     private static URI myKeyFile;
-
+    
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
@@ -67,7 +70,7 @@ public class BitPayTest3 {
             pairingCode = bitpay.requestClientAuthorization(BitPay.FACADE_PAYROLL);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
-            System.out.println("Info: Client is requesting PAYROLL facade access. Pair this client with your merchant account using the pairing code: " + pairingCode);
+            _log.info("Client is requesting PAYROLL facade access. Go to " + BitPay.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             dumpOut = true;
             //we already failed to authorize for a PAYROLL token, therefore we must sleep a bit to try to authorize for any other facade (rate limiter on the api side)
             Thread.sleep(10000);
@@ -79,8 +82,7 @@ public class BitPayTest3 {
 	}
 
 	@Test
-	public void testShouldSubmitPayoutBatch()
-	{
+	public void testShouldSubmitPayoutBatch() {
         Date date = new Date();
         Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
 		
@@ -96,12 +98,48 @@ public class BitPayTest3 {
 		PayoutBatch batch = new PayoutBatch(currency, effectiveDate, bankTransferId, reference, instructions);
 		try {
 			batch = this.bitpay.submitPayoutBatch(batch);
+
+			assertNotNull(batch.getId());
+			assertTrue(batch.getInstructions().size() == 2);
+		
 		} catch (BitPayException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-        assertNotNull(batch.getId());
-		assertTrue(batch.getInstructions().size() == 2);
+	}
+
+	@Test
+	public void testShouldSubmitGetAndDeletePayoutBatch() {
+        Date date = new Date();
+        Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
+		
+		long effectiveDate = threeDaysFromNow.getTime();
+		String reference = "My test batch";
+		String bankTransferId = "My bank transfer id";
+		String currency = "USD";
+		List<PayoutInstruction> instructions = Arrays.asList(
+			new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u", "Alice"),
+			new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A", "Bob")
+		);
+		
+		PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, bankTransferId, reference, instructions);
+		try {
+			batch0 = this.bitpay.submitPayoutBatch(batch0);
+
+			assertNotNull(batch0.getId());
+			assertTrue(batch0.getInstructions().size() == 2);
+
+			PayoutBatch batch1 = this.bitpay.getPayoutBatch(batch0.getId());
+
+			assertEquals(batch1.getId(), batch0.getId());
+			assertTrue(batch1.getInstructions().size() == 2);
+
+			this.bitpay.cancelPayoutBatch(batch0.getId());
+
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 }
