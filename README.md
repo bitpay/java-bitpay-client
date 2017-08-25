@@ -7,6 +7,54 @@ This is the Java client library for the BitPay Payment Gateway.  This library im
 
 To get up and running with our Java library quickly, see the GUIDE here: https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md
 
+## Eclipse Project Setup
+
+1. Import the project from git repository.
+
+```
+From Project Explorer > Import > Projects from Git ...
+```
+
+2. Convert project to a Java project - locate and edit the .project file in your Eclipse workspace directory to include the following.
+
+```xml
+<buildSpec>
+    <buildCommand>
+        <name>org.eclipse.jdt.core.javabuilder</name>
+        <arguments>
+        </arguments>
+    </buildCommand>
+</buildSpec>
+<natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+</natures>
+```
+
+3. Download project dependencies using maven.
+
+```
+cd <root directory of project>
+mvn dependency:copy-dependencies -DoutputDirectory=lib
+```
+
+4. Add dependencies - add external JAR files downloaded by maven to the Eclipse project.
+
+```
+Project > Properties > Java Build Path > Libraries > Add External JARs > (choose all JARs in lib directory)
+```
+
+5. Add JUnit Library to the project.
+
+```
+Project > Properties > Java Build Path > Libraries > Add Library > Unit > Unit 4
+```
+
+6. Run tests.
+
+```
+src/test/BitPayTest.java > Run As > JUnit Test
+```
+
 ## Support
 
 * https://github.com/bitpay/java-bitpay-client/issues
