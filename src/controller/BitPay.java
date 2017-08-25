@@ -806,11 +806,11 @@ public class BitPay {
     }
 
 
-    private HttpResponse get(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
+    public HttpResponse get(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
         return get(uri, parameters, true);
     }
 
-    private HttpResponse get(String uri, List<BasicNameValuePair> parameters, boolean signatureRequired) throws BitPayException {
+    public HttpResponse get(String uri, List<BasicNameValuePair> parameters, boolean signatureRequired) throws BitPayException {
         try {
 
             String fullURL = _baseUrl + uri;
@@ -841,11 +841,11 @@ public class BitPay {
         }
     }
 
-    private HttpResponse get(String uri) throws BitPayException {
+    public HttpResponse get(String uri) throws BitPayException {
         return this.get(uri, null, false);
     }
 
-    private HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException {
+    public HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
 
@@ -872,11 +872,11 @@ public class BitPay {
         }
     }
 
-    private HttpResponse post(String uri, String json) throws BitPayException {
+    public HttpResponse post(String uri, String json) throws BitPayException {
         return this.post(uri, json, false);
     }
 
-    private HttpResponse postWithSignature(String uri, String json) throws BitPayException {
+    public HttpResponse postWithSignature(String uri, String json) throws BitPayException {
         return this.post(uri, json, true);
     }
 
@@ -910,7 +910,7 @@ public class BitPay {
         }
     }
 
-    private String responseToJsonString(HttpResponse response) throws BitPayException {
+    public String responseToJsonString(HttpResponse response) throws BitPayException {
         if (response == null) {
             throw new BitPayException("Error: HTTP response is null");
         }
