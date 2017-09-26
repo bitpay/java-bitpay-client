@@ -224,12 +224,12 @@ public class BitPayTest {
 	{
 		InvoiceBuyer buyer = new InvoiceBuyer();
 		buyer.setName("Satoshi");
-		buyer.setEmail("satoshi@bitpay.com");
+		buyer.setEmail("satoshi@buyeremaildomain.com");
 		
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
-        invoice.setNotificationEmail("satoshi@bitpay.com");
+        invoice.setNotificationEmail("satoshi@merchantemaildomain.com");
 		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 		try {
 	        invoice = this.bitpay.createInvoice(invoice);
@@ -241,9 +241,9 @@ public class BitPayTest {
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
 		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
 		assertEquals("Satoshi", invoice.getBuyer().getName());
-		assertEquals("satoshi@bitpay.com", invoice.getBuyer().getEmail());
+		assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
 		assertEquals(true, invoice.getFullNotifications());
-		assertEquals("satoshi@bitpay.com", invoice.getNotificationEmail());
+		assertEquals("satoshi@merchantemaildomain.com", invoice.getNotificationEmail());
 	}
 
 	@Test
