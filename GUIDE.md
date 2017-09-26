@@ -8,6 +8,14 @@ This SDK implements BitPay's remote client authentication and authorization stra
 
 You must have a BitPay merchant account to use this SDK.  It's free to [sign-up for a BitPay merchant account](https://bitpay.com/start).
 
+If you need a test account, please visit https://test.bitpay.com/dashboard/signup and register for a BitPay merchant test account. Please fill in all questions, so you get a fully working test account.
+If you are looking for a testnet bitcoin wallet to test with, please visit https://bitpay.com/wallet and
+create a new wallet.
+If you need testnet bitcoin please visit a testnet faucet, e.g. https://testnet.coinfaucet.eu/en/ or http://tpfaucet.appspot.com/
+
+For more information about testing, please see https://bitpay.com/docs/testing
+
+
 ### Usage
 
 This library was built and tested using the Eclipse IDE; the source code tree is directly compatible with Eclipse.
@@ -43,7 +51,7 @@ ECKey key = KeyUtils.createEcKeyFromHexString(privateKey);
 this.bitpay = new BitPay(key);
 ```
 
-###Pair your client with BitPay
+### Pair your client with BitPay
 
 Your client must be paired with the BitPay server.  The pairing initializes authentication and authorization for your client to communicate with BitPay for your specific merchant account.  There are two pairing modes available; client initiated and server initiated.
 
@@ -101,12 +109,12 @@ You can add optional attributes to the invoice.  Attributes that are not set are
 ```java
 InvoiceBuyer buyer = new InvoiceBuyer();
 buyer.setName("Satoshi");
-buyer.setEmail("satoshi@bitpay.com");
+buyer.setEmail("satoshi@emaildomainyourwebsite.com");
 	
 Invoice invoice = new Invoice(100.0, "USD");
 invoice.setBuyer(buyer);
 invoice.setFullNotifications(true);
-invoice.setNotificationEmail("satoshi@bitpay.com");
+invoice.setNotificationEmail("yourmerchant@emaildomainyourwebsite.com");
 invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
 invoice = this.bitpay.createInvoice(invoice);
