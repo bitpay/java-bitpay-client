@@ -10,6 +10,7 @@ public class RefundParams {
 	private String _currency = "";
 	private Double _amount = 0.0;
 	private String _bitcoinAddress = "";
+	private String _refundEmail = "";
 	private String _invoiceId = "";
 	
     public RefundParams() {}
@@ -62,6 +63,16 @@ public class RefundParams {
     @JsonProperty("bitcoinAddress")
 	public void setBitcoinAddress(String bitcoinAddress) {
 		this._bitcoinAddress = bitcoinAddress;
+	}
+
+	@JsonIgnore
+	public String getRefundEmail() {
+		return _refundEmail;
+	}
+        
+    @JsonProperty("refundEmail")
+	public void setRefundEmail(String refundEmail) {
+		this._refundEmail = refundEmail;
 	}
 
     @JsonIgnore

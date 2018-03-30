@@ -433,40 +433,58 @@ public class BitPay {
 
         return invoices;
     }
+    /**
+     * Checks whether a BitPay invoice has been paid in full.
+     * Returns true if the amountPaid >= paymentTotals, returns false otherwise
+     *
+     * @param Invoice       A Bitpay invoice object
+     * @return true if the amountPaid >= paymentTotals, returns false otherwise
+     */
+
+    public boolean isFullyPaid(Invoice invoice) {
+        long amountPaid = invoice.getAmountPaid();
+        String transactionCurrency = invoice.getTransactionCurrency();
+        // first check if invoice has a transactionCurrency. If not, this means the invoice has not been paid
+        if (transactionCurrency == null){
+            return false;
+        }
+        Hashtable <String, Long> paymentTotals = invoice.getPaymentTotals();
+        if (amountPaid < paymentTotals.get(transactionCurrency)){
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
      *
-     * @param invoiceId      The id of the BitPay invoice for which a refund request should be made.
-     * @param bitcoinAddress The bitcoin address to which the refund should will be made. If left empty ("") and the invoice contains a refund address then the request may success, otherwise it will fail.
+     * @param invoiceId     The id of the BitPay invoice for which a refund request should be made.
+     * @param refundEmail   The email of the buyer to which the refund email will be sent
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
-    public RefundHelper requestRefund(String invoiceId, String bitcoinAddress) throws BitPayException {
+    public RefundHelper requestRefund(String invoiceId, String refundEmail) throws BitPayException {
         Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
-        return this.requestRefund(invoice, bitcoinAddress, invoice.getPrice(), invoice.getCurrency());
+        return this.requestRefund(invoice, refundEmail, invoice.getPrice(), invoice.getCurrency());
     }
 
     /**
      * Request a refund for a BitPay invoice.
      *
      * @param invoice        A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
-     * @param bitcoinAddress The bitcoin address to which the refund should will be made.  If left empty ("") and the invoice contains a refund address then the request may success, otherwise it will fail.
+     * @param refundEmail   The email of the buyer to which the refund email will be sent
      * @param amount         The amount of money to refund. If zero then a request for 100% of the invoice value is created.
      * @param currency       The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
-    public RefundHelper requestRefund(Invoice invoice, String bitcoinAddress, Double amount, String currency) throws BitPayException {
-        if (bitcoinAddress == null && !invoice.getFlags().getRefundable()) {
-            throw new BitPayException("Error - cannot refund an invoice without a refund address");
-        }
-
+    public RefundHelper requestRefund(Invoice invoice, String refundEmail, Double amount, String currency) throws BitPayException {
+        
         Refund refund = new Refund();
         refund.setToken(invoice.getToken());
         refund.setGuid(this.getGuid());
         refund.setAmount(amount);
-        refund.setBitcoinAddress(bitcoinAddress);
+        refund.setRefundEmail(refundEmail);
         refund.setCurrency(currency);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -489,7 +507,13 @@ public class BitPay {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
 
-        this.cacheAccessToken(refund.getId(), refund.getToken());
+        try {
+            this.cacheAccessToken(refund.getId(), refund.getToken());
+        } catch (java.lang.NullPointerException e) {
+            // When using the email address to refund, BitPay does not instantly return a request id
+            // Instead BitPay returns 'success':'true'.
+            // BitPay only returns a supportRequestId when the customer has entered his BTC/BCH refund address
+        }
         return new RefundHelper(refund, invoice);
     }
 

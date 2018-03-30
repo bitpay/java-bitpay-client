@@ -39,19 +39,20 @@ public class Invoice {
 	private String _id;
 	private String _url;
 	private String _status;
-	private String _btcPrice;
 	private String _invoiceTime;
 	private long _expirationTime;
 	private long _currentTime;
-	private String _btcPaid;
-	private String _btcDue;
 	private List<InvoiceTransaction> _transactions;
-	private String _rate;
-	private Hashtable<String, String> _exRates;
 	private String _exceptionStatus;
 	private InvoicePaymentUrls _paymentUrls = new InvoicePaymentUrls();
-	private InvoiceFlags _flags = new InvoiceFlags();
 	private boolean _extendedNotifications = false;
+
+	private String _transactionCurrency;
+	private long _amountPaid;
+	private Hashtable<String, Hashtable <String, String> > _exchangeRates;
+	private Hashtable<String, Long> _paymentTotals;
+	private Hashtable<String, Long> _paymentSubtotals;
+
 	
     /**
      * Constructor, create an empty Invoice object.
@@ -291,16 +292,6 @@ public class Invoice {
 	}
 
     @JsonIgnore
-	public String getBtcPrice() {
-		return _btcPrice;
-	}
-	
-    @JsonProperty("btcPrice")
-	public void setBtcPrice(String _btcPrice) {
-		this._btcPrice = _btcPrice;
-	}
-
-    @JsonIgnore
 	public String getInvoiceTime() {
 		return _invoiceTime;
 	}
@@ -331,26 +322,6 @@ public class Invoice {
 	}
 
     @JsonIgnore
-	public String getBtcPaid() {
-		return _btcPaid;
-	}
-	
-    @JsonProperty("btcPaid")
-	public void setBtcPaid(String _btcPaid) {
-		this._btcPaid = _btcPaid;
-	}
-
-    @JsonIgnore
-	public String getBtcDue() {
-		return _btcDue;
-	}
-	
-    @JsonProperty("btcDue")
-	public void setBtcDue(String _btcDue) {
-		this._btcDue = _btcDue;
-	}
-
-    @JsonIgnore
 	public List<InvoiceTransaction> getTransactions() {
 		return _transactions;
 	}
@@ -358,26 +329,6 @@ public class Invoice {
     @JsonProperty("transactions")
 	public void setTransactions(List<InvoiceTransaction> _transactions) {
 		this._transactions = _transactions;
-	}
-
-    @JsonIgnore
-	public String getRate() {
-		return _rate;
-	}
-	
-    @JsonProperty("rate")
-	public void setRate(String _rate) {
-		this._rate = _rate;
-	}
-
-    @JsonIgnore
-	public Hashtable<String, String> getExRates() {
-		return _exRates;
-	}
-	
-    @JsonProperty("exRates")
-	public void setExRates(Hashtable<String, String> _exRates) {
-		this._exRates = _exRates;
 	}
 
     @JsonIgnore
@@ -399,15 +350,56 @@ public class Invoice {
   	public void setPaymentUrls(InvoicePaymentUrls _paymentUrls) {
   		this._paymentUrls = _paymentUrls;
   	}
-    
-    @JsonIgnore
-  	public InvoiceFlags getFlags() {
-  		return _flags;
+
+	@JsonIgnore
+  	public String getTransactionCurrency() {
+  		return _transactionCurrency;
   	}
   	
-    @JsonProperty("flags")
-  	public void setFlags(InvoiceFlags _flags) {
-  		this._flags = _flags;
+    @JsonProperty("transactionCurrency")
+  	public void setTransactionCurrency(String _transactionCurrency) {
+  		this._transactionCurrency = _transactionCurrency;
   	}
+  	
+  	@JsonIgnore
+  	public long getAmountPaid() {
+  		return _amountPaid;
+  	}
+  	
+    @JsonProperty("amountPaid")
+  	public void setAmountPaid(long _amountPaid) {
+  		this._amountPaid = _amountPaid;
+  	}
+
+	@JsonIgnore
+	public Hashtable<String, Hashtable <String, String> > getExchangeRates() {
+		return _exchangeRates;
+	}
+	
+    @JsonProperty("exchangeRates")
+	public void setExchangeRates(Hashtable<String, Hashtable <String, String> > _exchangeRates) {
+		this._exchangeRates = _exchangeRates;
+	}
+
+	@JsonIgnore
+	public Hashtable<String, Long> getPaymentTotals() {
+		return _paymentTotals;
+	}
+	
+    @JsonProperty("paymentTotals")
+	public void setPaymentTotals(Hashtable<String, Long> _paymentTotals) {
+		this._paymentTotals = _paymentTotals;
+	}
+
+	@JsonIgnore
+	public Hashtable<String, Long> getPaymentSubtotals() {
+		return _paymentSubtotals;
+	}
+	
+    @JsonProperty("paymentSubtotals")
+	public void setPaymentSubtotals(Hashtable<String, Long> _paymentSubtotals) {
+		this._paymentSubtotals = _paymentSubtotals;
+	}
+
 
 }
