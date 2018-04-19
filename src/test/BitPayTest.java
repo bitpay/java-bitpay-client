@@ -149,19 +149,6 @@ public class BitPayTest {
 	}
 
 	@Test
-	public void testShouldGetInvoiceBTCPrice() 
-	{
-        Invoice invoice = new Invoice(50.0, "USD");
-		try {
-			basicInvoice = bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicInvoice.getBtcPrice());		
-	}
-
-	@Test
 	public void testShouldCreateInvoiceOneTenthBTC() 
 	{
         Invoice invoice = new Invoice(0.1, "BTC");
@@ -327,13 +314,11 @@ public class BitPayTest {
 
     /*
     To use this test:
-	You must have a paid/completed invoice in your account (list of invoices) -and-
-	have enough bitcoin to do the refund. The test looks for the first invoice in the "complete"
-	state and attempts to refund this, but does not actually refund the invoice. Instead it cancels the refund request.
-	This means you can re-use the same paid invoice again and again.
+	You must have a paid/completed invoice in your account (list of invoices). The test looks for the first invoice in the "complete"
+	state and authorises a refund. The actual refund will not be executed until the email receiver enters his bitcoin refund address.
     */
     @Test
-    public void testShouldCreateAndCancelRefundRequest()
+    public void testShouldCreateRefundRequest()
     {
 		List<Invoice> invoices;
 		try {
@@ -354,26 +339,20 @@ public class BitPayTest {
 			e.printStackTrace();
 		}
         assertNotNull(refundInvoiceId);
-        String bitcoinAddress = "2MvBKCRCtFBM4G7vN2WNfPh3vTjMAM8kfKb"; //change this to whatever address you want to refund to
+        String refundEmail = "youremail@yourdomain.com"; //change this to whatever address you want to refund to
 
-        boolean canceled = false;
         try {
-            RefundHelper refundRequest = this.bitpay.requestRefund(refundInvoiceId, bitcoinAddress);
+            RefundHelper refundRequest = this.bitpay.requestRefund(refundInvoiceId, refundEmail);
 
             assertNotNull(refundRequest.getInvoice().getId());
-            assertNotNull(refundRequest.getRefund().getId());
             assertEquals(refundRequest.getInvoice().getId(), refundInvoiceId);
 
             List<Refund> refunds = this.bitpay.getAllRefunds(refundRequest.getInvoice());
-            assertTrue(refunds.size() > 0);
-
-            canceled = this.bitpay.cancelRefundRequest(refundInvoiceId, refundRequest.getRefund().getId());
-
+            
         } catch (BitPayException e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        assertTrue(canceled);
     }
 
 }
