@@ -31,12 +31,20 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * @author Antonio Buedo
+ * @date 4.26.2019
+ * @version 2.1.1904
+ *
+ * See bitpay.com/api for more information.
+ */
+
 public class BitPay {
 
 	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
 
 	private static final String BITPAY_API_VERSION = "2.0.0";
-    private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client " + BITPAY_API_VERSION;
+    private static final String BITPAY_PLUGIN_INFO = "BitPay Java Client v2.1.1904";
     public static final String BITPAY_URL = "https://bitpay.com/";
     public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
 
