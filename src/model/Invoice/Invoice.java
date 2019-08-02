@@ -1,4 +1,4 @@
-package model;
+package model.Invoice;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -6,24 +6,17 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.*;
 
 import controller.BitPayException;
+import model.Currency;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class Invoice {
 
-	public static final String STATUS_NEW = "new";
-	public static final String STATUS_PAID = "paid";
-	public static final String STATUS_CONFIRMED = "confirmed";
-	public static final String STATUS_COMPLETE = "complete";
-	public static final String STATUS_INVALID = "invalid";
-	public static final String EXSTATUS_FALSE = "false";
-	public static final String EXSTATUS_PAID_OVER = "paidOver";
-	public static final String EXSTATUS_PAID_PARTIAL = "paidPartial";
-		
+	private String _currency;
+
 	private String _guid = "";
 	private String _token = "";
-	
+
 	private Double _price;
-	private String _currency;
 	private String _posData = "";
 	private String _notificationURL = "";
 	private String _transactionSpeed = "";
@@ -34,26 +27,34 @@ public class Invoice {
 	private String _itemDesc = "";
 	private String _itemCode = "";
 	private boolean _physical = false;
-	private InvoiceBuyer _buyer;
-	
+	private List<String> _paymentCurrencies;
+	private long _acceptanceWindow;
+	private Buyer _buyer;
+
 	private String _id;
 	private String _url;
 	private String _status;
+	private String _lowFeeDetected;
 	private String _invoiceTime;
 	private long _expirationTime;
 	private long _currentTime;
 	private List<InvoiceTransaction> _transactions;
 	private String _exceptionStatus;
-	private InvoicePaymentUrls _paymentUrls = new InvoicePaymentUrls();
+	private String _refundAddressRequestPending;
+	private InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
+	private SupportedTransactionCurrencies _supportedTransactionCurrencies = new SupportedTransactionCurrencies();
+	private MinerFees _minerFees = new MinerFees();
+	private PaymentCodes _paymentCodes = new PaymentCodes();
 	private boolean _extendedNotifications = false;
 
 	private String _transactionCurrency;
 	private long _amountPaid;
 	private Hashtable<String, Hashtable <String, String> > _exchangeRates;
-	private Hashtable<String, Long> _paymentTotals;
-	private Hashtable<String, Long> _paymentSubtotals;
+	private PaymentTotal _paymentTotals;
+	private PaymentTotal _paymentSubtotals;
+	private PaymentTotal _paymentDisplayTotals;
+	private PaymentTotal _paymentDisplaySubTotals;
 
-	
     /**
      * Constructor, create an empty Invoice object.
      */
@@ -115,10 +116,9 @@ public class Invoice {
 	
     @JsonProperty("currency")
 	public void setCurrency(String _currency) throws BitPayException {
-        if (_currency.length() != 3)
-        {
-            throw new BitPayException("Error: currency code must be exactly three characters");
-        }
+        if (!Currency.isValid(_currency))
+			throw new BitPayException("Error: currency code must be a type of Model.Currency");
+
 		this._currency = _currency;
 	}
 
@@ -202,6 +202,17 @@ public class Invoice {
 		this._fullNotifications = _fullNotifications;
 	}
 
+	@JsonProperty("extendedNotifications")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	public boolean getExtendedNotifications() {
+		return _extendedNotifications;
+	}
+
+	@JsonProperty("extendedNotifications")
+	public void setExtendedNotifications(boolean _extendedNotifications) {
+		this._extendedNotifications = _extendedNotifications;
+	}
+
     @JsonProperty("notificationEmail")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getNotificationEmail() {
@@ -235,29 +246,42 @@ public class Invoice {
 		this._physical = _physical;
 	}
 
+	@JsonProperty("paymentCurrencies")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	public List<String> getPaymentCurrencies() {
+		return _paymentCurrencies;
+	}
+
+	@JsonProperty("paymentCurrencies")
+	public void setPaymentCurrencies(List<String> _paymentCurrencies) {
+		this._paymentCurrencies = _paymentCurrencies;
+	}
+
+	@JsonProperty("acceptanceWindow")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	public long getAcceptanceWindow() {
+		return _acceptanceWindow;
+	}
+
+	@JsonProperty("acceptanceWindow")
+	public void setAcceptanceWindow(long _acceptanceWindow) {
+		this._acceptanceWindow = _acceptanceWindow;
+	}
+
+	// Buyer data
+	//
+
     @JsonProperty("buyer")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-  	public InvoiceBuyer getBuyer() {
+  	public Buyer getBuyer() {
   		return _buyer;
   	}
   	
     @JsonProperty("buyer")
-  	public void setBuyer(InvoiceBuyer _buyer) {
+  	public void setBuyer(Buyer _buyer) {
   		this._buyer = _buyer;
   	}
-    
-    @JsonProperty("extendedNotifications")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-  	public boolean getExtendedNotifications() {
-  		return _extendedNotifications;
-  	}
-  	
-    @JsonProperty("extendedNotifications")
-  	public void setExtendedNotifications(boolean _extendedNotifications) {
-  		this._extendedNotifications = _extendedNotifications;
-  	}
 
- 
     // Response fields
     //
 
@@ -281,15 +305,21 @@ public class Invoice {
 		this._url = _url;
 	}
 
-    @JsonIgnore
+	@JsonIgnore
 	public String getStatus() {
 		return _status;
 	}
-	
-    @JsonProperty("status")
+
+	@JsonProperty("status")
 	public void setStatus(String _status) {
 		this._status = _status;
 	}
+
+	@JsonIgnore
+	public String getLowFeeDetected() { return _lowFeeDetected;	}
+
+	@JsonProperty("lowFeeDetected")
+	public void setLowFeeDetected(String _lowFeeDetected) { this._lowFeeDetected = _lowFeeDetected; }
 
     @JsonIgnore
 	public String getInvoiceTime() {
@@ -341,65 +371,123 @@ public class Invoice {
  		this._exceptionStatus = _exceptionStatus;
  	}
 
-    @JsonIgnore
-  	public InvoicePaymentUrls getPaymentUrls() {
-  		return _paymentUrls;
-  	}
-  	
-    @JsonProperty("paymentUrls")
-  	public void setPaymentUrls(InvoicePaymentUrls _paymentUrls) {
-  		this._paymentUrls = _paymentUrls;
-  	}
+	@JsonIgnore
+	public String getRefundAddressRequestPending() {
+		return _refundAddressRequestPending;
+	}
+
+	@JsonProperty("refundAddressRequestPending")
+	public void setRefundAddressRequestPending(String _refundAddressRequestPending) {
+		this._refundAddressRequestPending = _refundAddressRequestPending;
+	}
 
 	@JsonIgnore
-  	public String getTransactionCurrency() {
-  		return _transactionCurrency;
-  	}
-  	
-    @JsonProperty("transactionCurrency")
-  	public void setTransactionCurrency(String _transactionCurrency) {
-  		this._transactionCurrency = _transactionCurrency;
-  	}
-  	
-  	@JsonIgnore
-  	public long getAmountPaid() {
-  		return _amountPaid;
-  	}
-  	
-    @JsonProperty("amountPaid")
-  	public void setAmountPaid(long _amountPaid) {
-  		this._amountPaid = _amountPaid;
-  	}
+	public InvoiceBuyerProvidedInfo getInvoiceBuyerProvidedInfo() {
+		return _invoiceBuyerProvidedInfo;
+	}
+
+	@JsonProperty("invoiceBuyerProvidedInfo")
+	public void setInvoiceBuyerProvidedInfo(InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo) {
+		this._invoiceBuyerProvidedInfo = _invoiceBuyerProvidedInfo;
+	}
+
+	@JsonIgnore
+	public SupportedTransactionCurrencies getSupportedTransactionCurrencies() {
+		return _supportedTransactionCurrencies;
+	}
+
+	@JsonProperty("supportedTransactionCurrencies")
+	public void setSupportedTransactionCurrencies(SupportedTransactionCurrencies _supportedTransactionCurrencies) {
+		this._supportedTransactionCurrencies = _supportedTransactionCurrencies;
+	}
+
+	@JsonIgnore
+	public MinerFees getMinerFees() {
+		return _minerFees;
+	}
+
+	@JsonProperty("minerFees")
+	public void setMinerFees(MinerFees _minerFees) {
+		this._minerFees = _minerFees;
+	}
+
+	@JsonIgnore
+	public String getTransactionCurrency() {
+		return _transactionCurrency;
+	}
+
+	@JsonProperty("transactionCurrency")
+	public void setTransactionCurrency(String _transactionCurrency) {
+		this._transactionCurrency = _transactionCurrency;
+	}
+
+	@JsonIgnore
+	public PaymentCodes getPaymentCodes() {
+		return _paymentCodes;
+	}
+
+	@JsonProperty("paymentCodes")
+	public void setPaymentCodes(PaymentCodes _paymentCodes) {
+		this._paymentCodes = _paymentCodes;
+	}
+
+	@JsonIgnore
+	public PaymentTotal getPaymentSubtotals() {
+		return _paymentSubtotals;
+	}
+
+	@JsonProperty("paymentSubtotals")
+	public void setPaymentSubtotals(PaymentTotal _paymentSubtotals) {
+		this._paymentSubtotals = _paymentSubtotals;
+	}
+
+	@JsonIgnore
+	public PaymentTotal getPaymentTotals() {
+		return _paymentTotals;
+	}
+
+	@JsonProperty("paymentTotals")
+	public void setPaymentTotals(PaymentTotal _paymentTotals) {
+		this._paymentTotals = _paymentTotals;
+	}
+
+	@JsonIgnore
+	public PaymentTotal getPaymentDisplayTotals() {
+		return _paymentDisplayTotals;
+	}
+
+	@JsonProperty("paymentDisplayTotals")
+	public void setPaymentDisplayTotals(PaymentTotal _paymentDisplayTotals) {
+		this._paymentDisplayTotals = _paymentDisplayTotals;
+	}
+
+	@JsonIgnore
+	public PaymentTotal getPaymentDisplaySubTotals() {
+		return _paymentDisplaySubTotals;
+	}
+
+	@JsonProperty("paymentDisplaySubTotals")
+	public void setPaymentDisplaySubTotals(PaymentTotal _paymentDisplaySubTotals) {
+		this._paymentDisplaySubTotals = _paymentDisplaySubTotals;
+	}
+
+	@JsonIgnore
+	public long getAmountPaid() {
+		return _amountPaid;
+	}
+
+	@JsonProperty("amountPaid")
+	public void setAmountPaid(long _amountPaid) {
+		this._amountPaid = _amountPaid;
+	}
 
 	@JsonIgnore
 	public Hashtable<String, Hashtable <String, String> > getExchangeRates() {
 		return _exchangeRates;
 	}
-	
-    @JsonProperty("exchangeRates")
+
+	@JsonProperty("exchangeRates")
 	public void setExchangeRates(Hashtable<String, Hashtable <String, String> > _exchangeRates) {
 		this._exchangeRates = _exchangeRates;
 	}
-
-	@JsonIgnore
-	public Hashtable<String, Long> getPaymentTotals() {
-		return _paymentTotals;
-	}
-	
-    @JsonProperty("paymentTotals")
-	public void setPaymentTotals(Hashtable<String, Long> _paymentTotals) {
-		this._paymentTotals = _paymentTotals;
-	}
-
-	@JsonIgnore
-	public Hashtable<String, Long> getPaymentSubtotals() {
-		return _paymentSubtotals;
-	}
-	
-    @JsonProperty("paymentSubtotals")
-	public void setPaymentSubtotals(Hashtable<String, Long> _paymentSubtotals) {
-		this._paymentSubtotals = _paymentSubtotals;
-	}
-
-
 }

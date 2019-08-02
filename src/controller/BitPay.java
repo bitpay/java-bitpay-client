@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.*;
+import model.Invoice.Invoice;
+import model.Invoice.PaymentTotal;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -445,7 +447,7 @@ public class BitPay {
      * Checks whether a BitPay invoice has been paid in full.
      * Returns true if the amountPaid >= paymentTotals, returns false otherwise
      *
-     * @param Invoice       A Bitpay invoice object
+     * @param invoice       A Bitpay invoice object
      * @return true if the amountPaid >= paymentTotals, returns false otherwise
      */
 
@@ -456,9 +458,16 @@ public class BitPay {
         if (transactionCurrency == null){
             return false;
         }
-        Hashtable <String, Long> paymentTotals = invoice.getPaymentTotals();
-        if (amountPaid < paymentTotals.get(transactionCurrency)){
-            return false;
+        PaymentTotal paymentTotals = invoice.getPaymentTotals();
+        if (transactionCurrency.equals("BTC")) {
+            if (amountPaid < paymentTotals.getBTC()) {
+                return false;
+            }
+        }
+        else if (transactionCurrency.equals("BCH")) {
+            if (amountPaid < paymentTotals.getBCH()) {
+                return false;
+            }
         }
         return true;
     }
