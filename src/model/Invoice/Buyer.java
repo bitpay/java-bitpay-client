@@ -1,21 +1,22 @@
-package model;
+package model.Invoice;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class InvoiceBuyer {
+public class Buyer {
 
-	private String _name = "";
-	private String _address1 = "";
-	private String _address2 = "";
-	private String _locality = "";
-	private String _region = "";
-	private String _postalCode = "";
-	private String _country = "";
-	private String _email = "";
-	private String _phone = "";
+	private String _name;
+	private String _address1;
+	private String _address2;
+	private String _locality;
+	private String _region;
+	private String _postalCode;
+	private String _country;
+	private String _email;
+	private String _phone;
+	private boolean _notify;
 
-    public InvoiceBuyer() {}    
+    public Buyer() {}
     
     @JsonProperty("name")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -105,15 +106,26 @@ public class InvoiceBuyer {
 		this._email = email;
 	}
 
-    @JsonProperty("phone")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	@JsonProperty("phone")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getPhone() {
 		return _phone;
 	}
-	
-    @JsonProperty("phone")
+
+	@JsonProperty("phone")
 	public void setPhone(String phone) {
 		this._phone = phone;
+	}
+
+	@JsonProperty("notify")
+	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+	public boolean getNotify() {
+		return _notify;
+	}
+
+	@JsonProperty("notify")
+	public void setNotify(boolean notify) {
+		this._notify = notify;
 	}
    
 }

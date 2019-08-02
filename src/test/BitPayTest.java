@@ -5,6 +5,9 @@ import controller.BitPayException;
 import controller.BitPayLogger;
 import controller.KeyUtils;
 import model.*;
+import model.Invoice.Invoice;
+import model.Invoice.Buyer;
+import model.Invoice.InvoiceStatus;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -138,14 +141,14 @@ public class BitPayTest {
 	@Test
 	public void testShouldGetInvoiceStatus() 
 	{
-        Invoice invoice = new Invoice(50.0, "USD");
+        Invoice invoice = new Invoice(2.0, "EUR");
 		try {
 			basicInvoice = bitpay.createInvoice(invoice);
 		} catch (BitPayException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-		assertEquals(Invoice.STATUS_NEW, basicInvoice.getStatus());
+		assertEquals(InvoiceStatus.New, basicInvoice.getStatus());
 	}
 
 	@Test
@@ -209,7 +212,7 @@ public class BitPayTest {
 	@Test
 	public void testShouldCreateInvoiceWithAdditionalParams() 
 	{
-		InvoiceBuyer buyer = new InvoiceBuyer();
+		Buyer buyer = new Buyer();
 		buyer.setName("Satoshi");
 		buyer.setEmail("satoshi@buyeremaildomain.com");
 		
@@ -224,7 +227,7 @@ public class BitPayTest {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
-		assertEquals(Invoice.STATUS_NEW, invoice.getStatus());
+		assertEquals(InvoiceStatus.New, invoice.getStatus());
 		assertEquals(100.0, invoice.getPrice(), EPSILON);
 		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
 		assertEquals("Satoshi", invoice.getBuyer().getName());

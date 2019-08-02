@@ -1,4 +1,4 @@
-package model;
+package model.Invoice;
 
 import java.util.Date;
 
@@ -36,16 +36,6 @@ public class InvoiceTransaction {
 	}
 
     @JsonIgnore
-	public Date getTime() {
-		return _time;
-	}
-    
-    @JsonProperty("time")
-	public void setTime(Date time) {
-		this._time = time;
-	}
-
-    @JsonIgnore
 	public Date getReceivedTime() {
 		return _receivedTime;
 	}
@@ -63,6 +53,16 @@ public class InvoiceTransaction {
     @JsonProperty("txid")
 	public void setTransactionId(String txid) {
 		this._txid = txid;
+	}
+
+	@JsonIgnore
+	public Date getTime() {
+		return _time;
+	}
+
+	@JsonProperty("time")
+	public void setTime(Date time) {
+		this._time = time;
 	}
 
 }

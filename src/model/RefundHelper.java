@@ -1,5 +1,7 @@
 package model;
 
+import model.Invoice.Invoice;
+
 public class RefundHelper {
 	
 	private Refund _refund;
