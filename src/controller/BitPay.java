@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import model.*;
 import model.Invoice.Invoice;
 import model.Invoice.PaymentTotal;
+import model.Ledger.Ledger;
+import model.Ledger.LedgerEntry;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -643,6 +645,64 @@ public class BitPay {
         }
 
         return new Rates(rates, this);
+    }
+
+    /**
+     * Retrieve a list of ledgers by date range using the merchant facade.
+     *
+     * @param currency The three digit currency string for the ledger to retrieve.
+     * @param dateStart The first date for the query filter.
+     * @param dateEnd   The last date for the query filter.
+     * @return A Ledger object populated with the BitPay ledger entries list.
+     * @throws BitPayException
+     */
+    public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+        params.add(new BasicNameValuePair("startDate", dateStart));
+        params.add(new BasicNameValuePair("endDate", dateEnd));
+
+        HttpResponse response = this.get("ledgers/" + currency, params);
+
+        List<LedgerEntry> ledgerEntries;
+        Ledger ledger = new Ledger();
+
+        try {
+            ledgerEntries = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), LedgerEntry[].class));
+            ledger.setEntries(ledgerEntries);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        }
+
+        return ledger;
+    }
+
+    /**
+     * Retrieve a list of ledgers using the merchant facade.
+     *
+     * @return A list of Ledger objects populated with the currency and current balance of each one.
+     * @throws BitPayException
+     */
+    public List<Ledger> getLedgers() throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+
+        HttpResponse response = this.get("ledgers", params);
+
+        List<Ledger> ledgers;
+        try {
+            ledgers = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Ledger[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        }
+
+        return ledgers;
     }
 
     /**
