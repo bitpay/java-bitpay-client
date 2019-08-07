@@ -681,6 +681,31 @@ public class BitPay {
     }
 
     /**
+     * Retrieve a list of ledgers using the merchant facade.
+     *
+     * @return A list of Ledger objects populated with the currency and current balance of each one.
+     * @throws BitPayException
+     */
+    public List<Ledger> getLedgers() throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+
+        HttpResponse response = this.get("ledgers", params);
+
+        List<Ledger> ledgers;
+        try {
+            ledgers = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Ledger[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+        }
+
+        return ledgers;
+    }
+
+    /**
      * Submit a BitPay Payout batch.
      *
      * @param batch A PayoutBatch object with request parameters defined.

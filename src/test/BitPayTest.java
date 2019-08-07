@@ -335,24 +335,36 @@ public class BitPayTest {
 		assertTrue(ledger.getEntries().size() > 0);
 	}
 
-	@Test
-	public void testShouldGetLedgerUsd() {
-		Ledger ledger = null;
-		try {
-			//check within the last few days
-			Date date = new Date();
-			Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
-			Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String tomorrow = sdf.format(dateTomorrow);
-			String sevenDaysAgo = sdf.format(dateBefore);
-			ledger = this.bitpay.getLedger(Currency.USD ,sevenDaysAgo, tomorrow);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-		}
-		assert ledger.getEntries() != null;
-		assertTrue(ledger.getEntries().size() > 0);
-	}
+    @Test
+    public void testShouldGetLedgerUsd() {
+        Ledger ledger = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tomorrow = sdf.format(dateTomorrow);
+            String sevenDaysAgo = sdf.format(dateBefore);
+            ledger = this.bitpay.getLedger(Currency.USD ,sevenDaysAgo, tomorrow);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assert ledger.getEntries() != null;
+        assertTrue(ledger.getEntries().size() > 0);
+    }
+
+    @Test
+    public void testShouldGetLedgers() {
+        List<Ledger> ledgers = null;
+        try {
+            ledgers = this.bitpay.getLedgers();
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assert ledgers != null;
+        assertTrue(ledgers.size() > 0);
+    }
 
     /*
     To use this test:

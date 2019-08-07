@@ -1,11 +1,9 @@
 package model.Ledger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LedgerEntry {
-
 
     private String _type;
     private String _amount;
@@ -20,7 +18,6 @@ public class LedgerEntry {
     private String _invoiceCurrency;
     private String _transactionCurrency;
     private String _id;
-
 
     public LedgerEntry() {}
 
@@ -38,9 +35,7 @@ public class LedgerEntry {
     }
 
     @JsonProperty("amount")
-    public void setAmount(String amount) {
-        this._amount = amount;
-    }
+    public void setAmount(String amount) { this._amount = amount; }
 
     @JsonIgnore
     public String getCode() {
@@ -68,9 +63,7 @@ public class LedgerEntry {
     }
 
     @JsonProperty("timestamp")
-    public void setTimestamp(String timestamp) {
-        this._timestamp = timestamp;
-    }
+    public void setTimestamp(String timestamp) { this._timestamp = timestamp; }
 
     @JsonIgnore
     public String getTxType() {
