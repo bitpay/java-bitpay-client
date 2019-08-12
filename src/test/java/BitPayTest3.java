@@ -3,6 +3,7 @@ package test;
 import com.bitpay.Client;
 import com.bitpay.BitPayException;
 import com.bitpay.BitPayLogger;
+import com.bitpay.model.Facade;
 import com.bitpay.model.PayoutBatch;
 import com.bitpay.model.PayoutInstruction;
 import org.junit.Before;
@@ -54,7 +55,7 @@ public class BitPayTest3 {
 
 		// Authorize this client for use with a BitPay merchant account.  This client requires a
 		// PAYROLL facades.
-        if (!bitpay.clientIsAuthorized(Client.FACADE_PAYROLL))
+        if (!bitpay.clientIsAuthorized(Facade.PointOfSale))
         {
             // Get PAYROLL facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
@@ -68,7 +69,7 @@ public class BitPayTest3 {
 
             // bitpay.authorizeClient(pairingCode);
 
-            pairingCode = bitpay.requestClientAuthorization(Client.FACADE_PAYROLL);
+            pairingCode = bitpay.requestClientAuthorization(Facade.PointOfSale);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
             _log.info("Client is requesting PAYROLL facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);

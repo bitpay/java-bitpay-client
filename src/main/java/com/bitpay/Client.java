@@ -6,16 +6,19 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.bitpay.model.Bill.Bill;
+import com.bitpay.model.Facade;
 import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.PaymentTotal;
 import com.bitpay.model.Ledger.Ledger;
 import com.bitpay.model.Ledger.LedgerEntry;
 import com.bitpay.model.PayoutBatch;
-import com.bitpay.model.Refund;
-import com.bitpay.model.RefundHelper;
 import com.bitpay.model.Rate;
 import com.bitpay.model.Rates;
+import com.bitpay.model.Refund;
+import com.bitpay.model.RefundHelper;
 import com.bitpay.model.Token;
+
 import com.bitpay.util.DateDeserializer;
 import com.bitpay.util.KeyUtils;
 import com.bitpay.BitPayLogger;
@@ -29,6 +32,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -41,10 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Antonio Buedo
@@ -62,11 +63,6 @@ public class Client {
     private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.1.1904";
     public static final String BITPAY_URL = "https://bitpay.com/";
     public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
-
-    public static final String FACADE_MERCHANT = "merchant";
-    public static final String FACADE_PAYROLL = "payroll";
-    public static final String FACADE_POS = "pos";
-    public static final String FACADE_USER = "user";
 
     public static final String PUBLIC_NO_TOKEN = "";
 
@@ -386,7 +382,7 @@ public class Client {
      * @throws BitPayException
      */
     public Invoice createInvoice(Invoice invoice) throws BitPayException {
-        return this.createInvoice(invoice, this.getAccessToken(FACADE_POS));
+        return this.createInvoice(invoice, this.getAccessToken(Facade.PointOfSale));
     }
 
     /**
@@ -438,7 +434,7 @@ public class Client {
     public List<Invoice> getInvoices(String dateStart, String dateEnd) throws BitPayException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
         params.add(new BasicNameValuePair("dateStart", dateStart));
         params.add(new BasicNameValuePair("dateEnd", dateEnd));
 
@@ -456,6 +452,212 @@ public class Client {
 
         return invoices;
     }
+
+    /**
+     * Create a BitPay Bill.
+     *
+     * @param bill A Bill object with request parameters defined.
+     * @param facade The facade used to create it.
+     * @return A BitPay generated Bill object.
+     * @throws BitPayException
+     */
+    public Bill createBill(Bill bill, String facade, boolean signRequest) throws BitPayException {
+        String token = this.getAccessToken(facade);
+        bill.setToken(token);
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(bill);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to serialize Bill object : " + e.getMessage());
+        }
+
+        HttpResponse response = this.post("bills", json, signRequest);
+
+        try {
+            bill = mapper.readerForUpdating(bill).readValue(this.responseToJsonString(response));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        }
+
+        this.cacheAccessToken(bill.getId(), bill.getToken());
+        return bill;
+    }
+
+    /**
+     * Create a BitPay bill using the POS facade.
+     *
+     * @param bill An Bill object with request parameters defined.
+     * @return A BitPay generated Bill object.
+     * @throws BitPayException
+     */
+    public Bill createBill(Bill bill) throws BitPayException {
+        return this.createBill(bill, Facade.Merchant, true);
+    }
+
+    /**
+     * Retrieve a BitPay bill by bill id using the specified facade.
+     *
+     * @param billId The id of the bill to retrieve.
+     * @param facade The facade used to retrieve it.
+     * @return A BitPay Bill object.
+     * @throws BitPayException
+     */
+    public Bill getBill(String billId, String facade, boolean signRequest) throws BitPayException {
+        String token = this.getAccessToken(facade);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
+
+        HttpResponse response = this.get("bills/" + billId, params, signRequest);
+
+        Bill bill;
+        try {
+            bill = new ObjectMapper().readValue(this.responseToJsonString(response), Bill.class);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        }
+
+        return bill;
+    }
+
+    /**
+     * Retrieve a BitPay bill by bill id using the public facade.
+     *
+     * @param billId The id of the bill to retrieve.
+     * @return A BitPay Bill object.
+     * @throws BitPayException
+     */
+    public Bill getBill(String billId) throws BitPayException {
+        return this.getBill(billId, Facade.Merchant, true);
+    }
+
+    /**
+     * Update a BitPay Bill.
+     *
+     * @param bill A Bill object with the parameters to update defined.
+     * @param billId The Id of the Bill to udpate.
+     * @return An updated Bill object.
+     * @throws BitPayException
+     */
+    public Bill updateBill(Bill bill, String billId) throws BitPayException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        try {
+            json = mapper.writeValueAsString(bill);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to serialize Bill object : " + e.getMessage());
+        }
+
+        HttpResponse response = this.update("bills/" + billId, json);
+
+        try {
+            bill = mapper.readerForUpdating(bill).readValue(this.responseToJsonString(response));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+        }
+
+        this.cacheAccessToken(bill.getId(), bill.getToken());
+        return bill;
+    }
+
+    /**
+     * Retrieve a collection of BitPay bills.
+     *
+     * @param status The status to filter the bills.
+     * @return A list of BitPay Bill objects.
+     * @throws BitPayException
+     */
+    public List<Bill> getBills(String status) throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("status", status));
+
+        HttpResponse response = this.get("bills", params);
+
+        List<Bill> bills;
+
+        try {
+            bills = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Bill[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+        }
+
+        return bills;
+    }
+
+    /**
+     * Retrieve a collection of BitPay bills.
+     *
+     * @return A list of BitPay Bill objects.
+     * @throws BitPayException
+     */
+    public List<Bill> getBills() throws BitPayException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+
+        HttpResponse response = this.get("bills", params);
+
+        List<Bill> bills;
+
+        try {
+            bills = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Bill[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+        }
+
+        return bills;
+    }
+
+    /**
+     * Deliver a BitPay Bill.
+     *
+     * @param billId The id of the requested bill.
+     * @param billToken The token of the requested bill.
+     * @param signRequest Allow unsigned request
+     * @returns A response status returned from the API.
+     * @throws BitPayException
+     */
+    public String deliverBill(String billId, String billToken, boolean signRequest) throws BitPayException {
+        Map<String, String> map = new HashMap<>();
+        map.put("token", billToken);
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to serialize Bill object : " + e.getMessage());
+        }
+        HttpResponse response = this.post("bills/" + billId + "/deliveries", json, true);
+        String result = this.responseToJsonString(response).replace("\"", "");
+
+        return result;
+    }
+
+    /**
+     * Deliver a BitPay Bill.
+     *
+     * @param billId The id of the requested bill.
+     * @param billToken The token of the requested bill.
+     * @returns A response status returned from the API.
+     * @throws BitPayException
+     */
+    public String deliverBill(String billId, String billToken) throws BitPayException {
+        return this.deliverBill(billId, billToken, true);
+    }
+
     /**
      * Checks whether a BitPay invoice has been paid in full.
      * Returns true if the amountPaid >= paymentTotals, returns false otherwise
@@ -494,7 +696,7 @@ public class Client {
      * @throws BitPayException
      */
     public RefundHelper requestRefund(String invoiceId, String refundEmail) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
         return this.requestRefund(invoice, refundEmail, invoice.getPrice(), invoice.getCurrency());
     }
 
@@ -556,7 +758,7 @@ public class Client {
      * @throws BitPayException
      */
     public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(FACADE_MERCHANT));
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
         return this.cancelRefundRequest(invoice, refundId);
     }
 
@@ -670,7 +872,7 @@ public class Client {
     public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
         params.add(new BasicNameValuePair("startDate", dateStart));
         params.add(new BasicNameValuePair("endDate", dateEnd));
 
@@ -702,7 +904,7 @@ public class Client {
     public List<Ledger> getLedgers() throws BitPayException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
 
         HttpResponse response = this.get("ledgers", params);
 
@@ -726,7 +928,7 @@ public class Client {
      * @throws BitPayException
      */
     public PayoutBatch submitPayoutBatch(PayoutBatch batch) throws BitPayException {
-        String token = this.getAccessToken(FACADE_PAYROLL);
+        String token = this.getAccessToken(Facade.Payroll);
         batch.setToken(token);
         batch.setGuid(this.getGuid());
         
@@ -763,7 +965,7 @@ public class Client {
     public List<PayoutBatch> getPayoutBatches() throws BitPayException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(FACADE_PAYROLL)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payroll)));
 
         HttpResponse response = this.get("payouts", params);
 
@@ -788,7 +990,7 @@ public class Client {
      * @throws BitPayException
      */
     public PayoutBatch getPayoutBatch(String batchId) throws BitPayException {
-        String token = this.getAccessToken(FACADE_PAYROLL);
+        String token = this.getAccessToken(Facade.Payroll);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
 
@@ -992,6 +1194,30 @@ public class Client {
 
     public HttpResponse postWithSignature(String uri, String json) throws BitPayException {
         return this.post(uri, json, true);
+    }
+
+    public HttpResponse update(String uri, String json) throws BitPayException {
+        try {
+            HttpPut put = new HttpPut(_baseUrl + uri);
+
+            put.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
+
+            put.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
+            put.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
+            put.addHeader("x-accept-version", BITPAY_API_VERSION);
+            put.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
+            put.addHeader("Content-Type", "application/json");
+
+            _log.info(put.toString());
+            return _httpClient.execute(put);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new BitPayException("Error: PUT failed\n" + e.getMessage());
+        } catch (ClientProtocolException e) {
+            throw new BitPayException("Error: PUT failed\n" + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error: PUT failed\n" + e.getMessage());
+        }
     }
 
     private HttpResponse delete(String uri, List<BasicNameValuePair> parameters) throws BitPayException {

@@ -3,6 +3,7 @@ package test;
 import com.bitpay.Client;
 import com.bitpay.BitPayException;
 import com.bitpay.BitPayLogger;
+import com.bitpay.model.Facade;
 import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Currency;
 import org.junit.Before;
@@ -37,13 +38,13 @@ public class BitPayTest2 {
 		clientName += " on " + java.net.InetAddress.getLocalHost();
         Client bitpay = new Client(clientName, Client.BITPAY_TEST_URL); //this tests the old way of creating keys/clients
 
-        if (!bitpay.clientIsAuthorized(Client.FACADE_POS))
+        if (!bitpay.clientIsAuthorized(Facade.PointOfSale))
         {
             // Get POS facade authorization code.
             // Obtain a pairingCode from the BitPay server.  The pairingCode must be emitted from
         	// this device and input into and approved by the desired merchant account.  To
         	// generate invoices a POS facade is required.
-            String pairingCode = bitpay.requestClientAuthorization(Client.FACADE_POS);
+            String pairingCode = bitpay.requestClientAuthorization(Facade.PointOfSale);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
             _log.info("Client is requesting POS facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
