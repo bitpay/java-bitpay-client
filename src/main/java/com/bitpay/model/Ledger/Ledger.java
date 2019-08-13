@@ -3,9 +3,8 @@ package com.bitpay.model.Ledger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.*;
-import com.bitpay.model.Ledger.Buyer;
-import com.bitpay.model.Ledger.LedgerEntry;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {
@@ -14,7 +13,8 @@ public class Ledger {
     private String _currency;
     private Double _balance;
 
-    public Ledger() {}
+    public Ledger() {
+    }
 
     @JsonIgnore
     public List<LedgerEntry> getEntries() {

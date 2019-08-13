@@ -8,7 +8,8 @@ public class PaymentCode {
     private String _bip72b;
     private String _bip73;
 
-    public PaymentCode() {}
+    public PaymentCode() {
+    }
 
     @JsonIgnore
     public String getBip72b() {

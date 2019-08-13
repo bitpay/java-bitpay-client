@@ -7,7 +7,8 @@ public class SupportedTransactionCurrency {
 
     private boolean _enabled;
 
-    public SupportedTransactionCurrency() {}
+    public SupportedTransactionCurrency() {
+    }
 
     @JsonIgnore
     public boolean getEnabled() {

@@ -2,20 +2,20 @@ package com.bitpay.model;
 
 public class PayoutInstructionBtcSummary {
 
-	private Double _paid;
-	private Double _unpaid;
-	
+    private Double _paid;
+    private Double _unpaid;
+
     public PayoutInstructionBtcSummary(Double paid, Double unpaid) {
-    	this._paid = paid;
-    	this._unpaid = unpaid;
+        this._paid = paid;
+        this._unpaid = unpaid;
     }
-    
-	public Double getPaid() {
-		return _paid;
-	}
-    
-	public Double getUnpaid() {
-		return _unpaid;
-	}
+
+    public Double getPaid() {
+        return _paid;
+    }
+
+    public Double getUnpaid() {
+        return _unpaid;
+    }
 
 }

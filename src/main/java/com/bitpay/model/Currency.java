@@ -182,14 +182,12 @@ public class Currency {
     public static final String ZMW = "ZMW";
     public static final String ZWL = "ZWL";
 
-    public static boolean isValid(String value)
-    {
+    public static boolean isValid(String value) {
         try {
             Class<?> currencyClass = Currency.class;
             Field symbol = currencyClass.getField(value);
-            return symbol!=null;
-        }
-        catch (Exception ex) {
+            return symbol != null;
+        } catch (Exception ex) {
             return false;
         }
     }

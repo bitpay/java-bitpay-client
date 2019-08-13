@@ -3,7 +3,6 @@ package com.bitpay.model.Ledger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.bitpay.model.Ledger.Buyer;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LedgerEntry {
@@ -22,10 +21,13 @@ public class LedgerEntry {
     private String _transactionCurrency;
     private String _id;
 
-    public LedgerEntry() {}
+    public LedgerEntry() {
+    }
 
     @JsonIgnore
-    public String getType() { return _type; }
+    public String getType() {
+        return _type;
+    }
 
     @JsonProperty("type")
     public void setType(String type) {
@@ -38,7 +40,9 @@ public class LedgerEntry {
     }
 
     @JsonProperty("amount")
-    public void setAmount(String amount) { this._amount = amount; }
+    public void setAmount(String amount) {
+        this._amount = amount;
+    }
 
     @JsonIgnore
     public String getCode() {
@@ -66,7 +70,9 @@ public class LedgerEntry {
     }
 
     @JsonProperty("timestamp")
-    public void setTimestamp(String timestamp) { this._timestamp = timestamp; }
+    public void setTimestamp(String timestamp) {
+        this._timestamp = timestamp;
+    }
 
     @JsonIgnore
     public String getTxType() {

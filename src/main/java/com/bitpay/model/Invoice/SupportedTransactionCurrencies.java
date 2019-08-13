@@ -8,7 +8,8 @@ public class SupportedTransactionCurrencies {
     private SupportedTransactionCurrency _btc = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency _bch = new SupportedTransactionCurrency();
 
-    public SupportedTransactionCurrencies() {}
+    public SupportedTransactionCurrencies() {
+    }
 
     @JsonIgnore
     public SupportedTransactionCurrency getBtc() {
