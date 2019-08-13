@@ -174,7 +174,7 @@ public class BitPayTest {
 
     @Test
     public void testShouldCreateInvoice100EUR() {
-        Invoice invoice = new Invoice(328.12, "EUR");
+        Invoice invoice = new Invoice(100.0, "EUR");
         try {
             invoice = this.bitpay.createInvoice(invoice);
         } catch (BitPayException e) {
