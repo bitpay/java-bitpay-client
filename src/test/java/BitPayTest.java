@@ -4,7 +4,11 @@ import com.bitpay.Client;
 import com.bitpay.BitPayException;
 import com.bitpay.BitPayLogger;
 import com.bitpay.util.KeyUtils;
+import com.bitpay.model.Bill.Bill;
+import com.bitpay.model.Bill.Item;
+import com.bitpay.model.Bill.BillStatus;
 import com.bitpay.model.Currency;
+import com.bitpay.model.Facade;
 import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.Buyer;
 import com.bitpay.model.Invoice.PaymentTotal;
@@ -21,6 +25,7 @@ import com.bitpay.util.DateDeserializer;
 import com.bitpay.util.KeyUtils;
 import com.bitpay.BitPayLogger;
 import com.bitpay.BitPayException;
+import org.apache.http.message.BasicNameValuePair;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -30,6 +35,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +82,7 @@ public class BitPayTest {
 
 		// Authorize this client for use with a BitPay merchant account.  This client requires both
 		// POS and MERCHANT facades.
-        if (!bitpay.clientIsAuthorized(Client.FACADE_POS))
+        if (!bitpay.clientIsAuthorized(Facade.PointOfSale))
         {
             // Get POS facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
@@ -90,7 +96,7 @@ public class BitPayTest {
 
             // bitpay.authorizeClient(pairingCode);
 
-            pairingCode = bitpay.requestClientAuthorization(Client.FACADE_POS);
+            pairingCode = bitpay.requestClientAuthorization(Facade.PointOfSale);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
             _log.info("Client is requesting POS facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
@@ -99,13 +105,13 @@ public class BitPayTest {
             Thread.sleep(10000);
         }
 
-        if (!bitpay.clientIsAuthorized(Client.FACADE_MERCHANT))
+        if (!bitpay.clientIsAuthorized(Facade.Merchant))
         {
             // Get MERCHANT facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate invoices a
             // POS facade is required.
-            pairingCode = bitpay.requestClientAuthorization(Client.FACADE_MERCHANT);
+            pairingCode = bitpay.requestClientAuthorization(Facade.Merchant);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
             _log.info("Client is requesting MERCHANT facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
@@ -213,7 +219,7 @@ public class BitPayTest {
 			invoice = this.bitpay.createInvoice(invoice);
 			//
 			// Must use a merchant token to retrieve this invoice since it was not created on the public facade.
-			String token = this.bitpay.getAccessToken(Client.FACADE_MERCHANT);
+			String token = this.bitpay.getAccessToken(Facade.Merchant);
 			retreivedInvoice = this.bitpay.getInvoice(invoice.getId(), token);
 		} catch (BitPayException e) {
 			e.printStackTrace();
@@ -247,6 +253,188 @@ public class BitPayTest {
 		assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
 		assertEquals(true, invoice.getFullNotifications());
 		assertEquals("satoshi@merchantemaildomain.com", invoice.getNotificationEmail());
+	}
+
+	@Test
+	public void TestShouldCreateBillUSD()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertNotNull(basicBill.getId());
+	}
+
+	@Test
+	public void TestShouldCreateBillEUR()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.EUR, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertNotNull(basicBill.getId());
+	}
+
+	@Test
+	public void TestShouldGetBillUrl()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertNotNull(basicBill.getUrl());
+	}
+
+	@Test
+	public void TestShouldGetBillStatus()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertEquals(BillStatus.Draft, basicBill.getStatus());
+	}
+
+	@Test
+	public void TestShouldGetBill()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		Bill retrievedBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+			retrievedBill = this.bitpay.getBill(basicBill.getId());
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertEquals(basicBill.getId(), retrievedBill.getId());
+	}
+
+	@Test
+	public void TestShouldGetAndUpdateBill()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		Bill retrievedBill = null;
+		Bill updatedBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+			retrievedBill = this.bitpay.getBill(basicBill.getId());
+			retrievedBill.setCurrency(Currency.EUR);
+			retrievedBill.setName("updatedBill");
+			retrievedBill.getItems().add(new Item(){{setPrice(60.0); setQuantity(7); setDescription("product-added");}});
+			updatedBill = this.bitpay.updateBill(retrievedBill, retrievedBill.getId());
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertEquals(basicBill.getId(), retrievedBill.getId());
+		assertEquals(retrievedBill.getId(), updatedBill.getId());
+		assertEquals(updatedBill.getCurrency(), Currency.EUR);
+		assertEquals(updatedBill.getName(), "updatedBill");
+	}
+
+	@Test
+	public void TestShouldDeliverBill()
+	{
+		List<Item> items = new ArrayList<Item>();
+		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
+		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
+		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
+		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+
+		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+		Bill basicBill = null;
+		String result = "";
+		Bill retrievedBill = null;
+		try {
+			basicBill = this.bitpay.createBill(bill);
+			result = this.bitpay.deliverBill(basicBill.getId(), basicBill.getToken());
+			retrievedBill = this.bitpay.getBill(basicBill.getId());
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertEquals("Success", result);
+	}
+
+	@Test
+	public void TestShouldGetBills()
+	{
+		List<Bill> bills = null;
+		try {
+			bills = this.bitpay.getBills();
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertTrue (bills.size() > 0);
+	}
+
+	@Test
+	public void TestShouldGetBillsByStatus()
+	{
+		List<Bill> bills = null;
+		try {
+			bills = this.bitpay.getBills(BillStatus.Draft);
+		} catch (BitPayException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertTrue (bills.size() > 0);
 	}
 
 	@Test
