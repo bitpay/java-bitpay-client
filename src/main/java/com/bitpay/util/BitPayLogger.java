@@ -1,4 +1,4 @@
-package com.bitpay;
+package com.bitpay.util;
 
 public class BitPayLogger {
 

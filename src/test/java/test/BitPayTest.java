@@ -1,7 +1,7 @@
 package test;
 
 import com.bitpay.BitPayException;
-import com.bitpay.BitPayLogger;
+import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
 import com.bitpay.model.Bill.Bill;
 import com.bitpay.model.Bill.BillStatus;
@@ -174,7 +174,7 @@ public class BitPayTest {
 
     @Test
     public void testShouldCreateInvoice100EUR() {
-        Invoice invoice = new Invoice(100.0, "EUR");
+        Invoice invoice = new Invoice(328.12, "EUR");
         try {
             invoice = this.bitpay.createInvoice(invoice);
         } catch (BitPayException e) {

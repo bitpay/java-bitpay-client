@@ -1,7 +1,7 @@
 package test;
 
 import com.bitpay.BitPayException;
-import com.bitpay.BitPayLogger;
+import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
 import com.bitpay.model.Facade;
 import com.bitpay.model.PayoutBatch;

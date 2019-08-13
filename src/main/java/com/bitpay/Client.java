@@ -6,6 +6,7 @@ import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.PaymentTotal;
 import com.bitpay.model.Ledger.Ledger;
 import com.bitpay.model.Ledger.LedgerEntry;
+import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
