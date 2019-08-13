@@ -8,7 +8,8 @@ public class PaymentCodes {
     private PaymentCode _btc = new PaymentCode();
     private PaymentCode _bch = new PaymentCode();
 
-    public PaymentCodes() {}
+    public PaymentCodes() {
+    }
 
     @JsonIgnore
     public PaymentCode getBtc() {

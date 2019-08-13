@@ -9,6 +9,7 @@ import java.io.*;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
 public class KeyUtils {
@@ -144,7 +145,7 @@ public class KeyUtils {
     }
 
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
-        byte[] data = input.getBytes("UTF8");
+        byte[] data = input.getBytes(StandardCharsets.UTF_8);
 
         Sha256Hash hash = Sha256Hash.of(data);
         ECDSASignature sig = key.sign(hash, null);
@@ -155,7 +156,7 @@ public class KeyUtils {
     }
 
     private static int getHexVal(char hex) {
-        int val = (int) hex;
+        int val = hex;
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
     }
 

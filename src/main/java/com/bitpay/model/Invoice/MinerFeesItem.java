@@ -8,7 +8,8 @@ public class MinerFeesItem {
     private Double _satoshisPerByte;
     private Double _totalFee;
 
-    public MinerFeesItem() {}
+    public MinerFeesItem() {
+    }
 
     @JsonIgnore
     public Double getSatoshisPerByte() {

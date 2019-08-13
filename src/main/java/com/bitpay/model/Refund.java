@@ -1,26 +1,28 @@
 package com.bitpay.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
-import com.bitpay.model.RefundParams;
 
-import com.fasterxml.jackson.annotation.*;
-
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Refund {
 
-	private String _guid = "";
-	private String _token = "";
-	// _token is used for both the invoice resource token (during the request) and the refund resource token (for the response).
+    private String _guid = "";
+    private String _token = "";
+    // _token is used for both the invoice resource token (during the request) and the refund resource token (for the response).
 
-	private Double _amount = 0.0;
-	private String _bitcoinAddress = "";
-	private String _refundEmail = "";
-	private String _currency = "";
-	
-	private String _id;
-	private Date _requestDate;
-	private String _status;
-	private RefundParams _params = new RefundParams();
+    private Double _amount = 0.0;
+    private String _bitcoinAddress = "";
+    private String _refundEmail = "";
+    private String _currency = "";
+
+    private String _id;
+    private Date _requestDate;
+    private String _status;
+    private RefundParams _params = new RefundParams();
 
 	
 /*
@@ -38,125 +40,126 @@ public class Refund {
 		 	},
 		 	"token":"6a33WsLwD68kGjoGk4NiL2WX8b1ZfGJdB5LBNSJ8z5nJWr6QgtMaGMqJiwUL9B8xzL"
 		}		
-*/	
-	
-	
-    public Refund() {}
+*/
+
+
+    public Refund() {
+    }
 
     // API fields
     //
-	
+
     @JsonProperty("guid")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getGuid() {
-		return _guid;
-	}
-	
+    public String getGuid() {
+        return _guid;
+    }
+
     @JsonProperty("guid")
-	public void setGuid(String guid) {
-		this._guid = guid;
-	}
+    public void setGuid(String guid) {
+        this._guid = guid;
+    }
 
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public String getToken() {
-		return _token;
-	}
-	
+    public String getToken() {
+        return _token;
+    }
+
     @JsonProperty("token")
-	public void setToken(String token) {
-		this._token = token;
-	}
+    public void setToken(String token) {
+        this._token = token;
+    }
 
     // Request fields
     //
 
     @JsonProperty("amount")
-	public Double getAmount() {
-		return _amount;
-	}
-    
+    public Double getAmount() {
+        return _amount;
+    }
+
     @JsonProperty("amount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public void setAmount(Double amount) {
-		this._amount = amount;
-	}
+    public void setAmount(Double amount) {
+        this._amount = amount;
+    }
 
     @JsonProperty("bitcoinAddress")
-	public String getBitcoinAddress() {
-		return _bitcoinAddress;
-	}
-    
+    public String getBitcoinAddress() {
+        return _bitcoinAddress;
+    }
+
     @JsonProperty("bitcoinAddress")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public void setBitcoinAddress(String bitcoinAddress) {
-		this._bitcoinAddress = bitcoinAddress;
-	}
+    public void setBitcoinAddress(String bitcoinAddress) {
+        this._bitcoinAddress = bitcoinAddress;
+    }
 
-	@JsonProperty("refundEmail")
-	public String getRefundEmail() {
-		return _refundEmail;
-	}
-    
+    @JsonProperty("refundEmail")
+    public String getRefundEmail() {
+        return _refundEmail;
+    }
+
     @JsonProperty("refundEmail")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public void setRefundEmail(String refundEmail) {
-		this._refundEmail = refundEmail;
-	}
+    public void setRefundEmail(String refundEmail) {
+        this._refundEmail = refundEmail;
+    }
 
 
     @JsonProperty("currency")
-	public String getCurrency() {
-		return _currency;
-	}
-    
+    public String getCurrency() {
+        return _currency;
+    }
+
     @JsonProperty("currency")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	public void setCurrency(String currency) {
-		this._currency = currency;
-	}
+    public void setCurrency(String currency) {
+        this._currency = currency;
+    }
 
     // Response fields
     //
 
     @JsonIgnore
-	public String getId() {
-		return _id;
-	}
-	
+    public String getId() {
+        return _id;
+    }
+
     @JsonProperty("id")
-	public void setId(String id) {
-		this._id = id;
-	}
+    public void setId(String id) {
+        this._id = id;
+    }
 
     @JsonIgnore
-	public Date getRequestDate() {
-		return _requestDate;
-	}
-	
+    public Date getRequestDate() {
+        return _requestDate;
+    }
+
     @JsonProperty("requestDate")
-	public void setRequestDate(Date requestDate) {
-		this._requestDate = requestDate;
-	}
+    public void setRequestDate(Date requestDate) {
+        this._requestDate = requestDate;
+    }
 
     @JsonIgnore
-	public String getStatus() {
-		return _status;
-	}
-	
+    public String getStatus() {
+        return _status;
+    }
+
     @JsonProperty("status")
-	public void setStatus(String status) {
-		this._status = status;
-	}
+    public void setStatus(String status) {
+        this._status = status;
+    }
 
     @JsonIgnore
-  	public RefundParams getParams() {
-  		return _params;
-  	}
-  	
+    public RefundParams getParams() {
+        return _params;
+    }
+
     @JsonProperty("params")
-  	public void setPaymentUrls(RefundParams refundParams) {
-  		this._params = refundParams;
-  	}
-    
+    public void setPaymentUrls(RefundParams refundParams) {
+        this._params = refundParams;
+    }
+
 }

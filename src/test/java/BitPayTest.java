@@ -1,31 +1,17 @@
 package test;
 
-import com.bitpay.Client;
 import com.bitpay.BitPayException;
 import com.bitpay.BitPayLogger;
-import com.bitpay.util.KeyUtils;
+import com.bitpay.Client;
 import com.bitpay.model.Bill.Bill;
-import com.bitpay.model.Bill.Item;
 import com.bitpay.model.Bill.BillStatus;
-import com.bitpay.model.Currency;
-import com.bitpay.model.Facade;
-import com.bitpay.model.Invoice.Invoice;
+import com.bitpay.model.Bill.Item;
+import com.bitpay.model.*;
 import com.bitpay.model.Invoice.Buyer;
-import com.bitpay.model.Invoice.PaymentTotal;
+import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.InvoiceStatus;
 import com.bitpay.model.Ledger.Ledger;
-import com.bitpay.model.Ledger.LedgerEntry;
-import com.bitpay.model.PayoutBatch;
-import com.bitpay.model.Refund;
-import com.bitpay.model.RefundHelper;
-import com.bitpay.model.Rate;
-import com.bitpay.model.Rates;
-import com.bitpay.model.Token;
-import com.bitpay.util.DateDeserializer;
 import com.bitpay.util.KeyUtils;
-import com.bitpay.BitPayLogger;
-import com.bitpay.BitPayException;
-import org.apache.http.message.BasicNameValuePair;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -43,26 +29,18 @@ import static org.junit.Assert.*;
 
 public class BitPayTest {
 
-	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-
-    private Client bitpay;
-    private Invoice basicInvoice;
-	private final static double BTC_EPSILON = .000000001;
+    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
+    private final static double BTC_EPSILON = .000000001;
     private final static double EPSILON = .001;
-
     private static String clientName = "BitPay Java Library Tester";
     private static String pairingCode;
     private static String refundInvoiceId = null;
     private static URI myKeyFile;
+    private Client bitpay;
+    private Invoice basicInvoice;
 
-    @Before
-    public void setUp() throws BitPayException, IOException, URISyntaxException {
-        //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-        bitpay = new Client(myKeyFile, clientName, Client.BITPAY_TEST_URL);
-    }
-    	
-	@BeforeClass
-	public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
+    @BeforeClass
+    public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
         boolean dumpOut = false;
 
         //create a key, if a file does exist at the uri, myKeyfile, a new key will be created in the construction of the client
@@ -77,22 +55,21 @@ public class BitPayTest {
         //KeyUtils.saveEcKey(myKey, myKeyFile);
 
         // This scenario qualifies that this (test) client does not have merchant facade access.
-		clientName += " on " + java.net.InetAddress.getLocalHost();
-		Client bitpay = new Client(myKeyFile, clientName, Client.BITPAY_TEST_URL);
+        clientName += " on " + java.net.InetAddress.getLocalHost();
+        Client bitpay = new Client(myKeyFile, clientName, Client.BITPAY_TEST_URL);
 
-		// Authorize this client for use with a BitPay merchant account.  This client requires both
-		// POS and MERCHANT facades.
-        if (!bitpay.clientIsAuthorized(Facade.PointOfSale))
-        {
+        // Authorize this client for use with a BitPay merchant account.  This client requires both
+        // POS and MERCHANT facades.
+        if (!bitpay.clientIsAuthorized(Facade.PointOfSale)) {
             // Get POS facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate invoices a
             // POS facade is required.
 
-        	// As an alternative to this client outputting a pairing code, the BitPay account owner
-        	// may interactively generate a pairing code via the BitPay merchant dashboard at
-        	// https://[test].bitpay.com/dashboard/merchant/api-tokens.  This client can subsequently
-        	// accept the pairing code using the following call.
+            // As an alternative to this client outputting a pairing code, the BitPay account owner
+            // may interactively generate a pairing code via the BitPay merchant dashboard at
+            // https://[test].bitpay.com/dashboard/merchant/api-tokens.  This client can subsequently
+            // accept the pairing code using the following call.
 
             // bitpay.authorizeClient(pairingCode);
 
@@ -105,8 +82,7 @@ public class BitPayTest {
             Thread.sleep(10000);
         }
 
-        if (!bitpay.clientIsAuthorized(Facade.Merchant))
-        {
+        if (!bitpay.clientIsAuthorized(Facade.Merchant)) {
             // Get MERCHANT facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate invoices a
@@ -121,419 +97,519 @@ public class BitPayTest {
         if (dumpOut) {
             throw new BitPayException("Error: client is not authorized.");
         }
-	}
+    }
+
+    @Before
+    public void setUp() throws BitPayException, IOException, URISyntaxException {
+        //ensure the second argument (api url) is the same as the one used in setUpOneTime()
+        bitpay = new Client(myKeyFile, clientName, Client.BITPAY_TEST_URL);
+    }
 
     @Test
-    public void testCreateECKeyFromSeedString()
-    {
+    public void testCreateECKeyFromSeedString() {
         String randomSeedString = "LB1vBiLP1Bu6d1VUcwCUdp";
         ECKey key = KeyUtils.createEcKeyFromHexString(randomSeedString); //this will result in a runtime error if anything goes wrong
         assertNotNull(key);
     }
 
-	@Test
-	public void testShouldGetInvoiceId() 
-	{
+    @Test
+    public void testShouldGetInvoiceId() {
         Invoice invoice = new Invoice(50.0, "USD");
-		try {
-			basicInvoice = bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicInvoice.getId());
-	}
-	
-	@Test
-	public void testShouldGetInvoiceURL() 
-	{
-        Invoice invoice = new Invoice(50.0, "USD");
-		try {
-			basicInvoice = bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicInvoice.getUrl());
-	}
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
+    }
 
-	@Test
-	public void testShouldGetInvoiceStatus() 
-	{
+    @Test
+    public void testShouldGetInvoiceURL() {
+        Invoice invoice = new Invoice(50.0, "USD");
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getUrl());
+    }
+
+    @Test
+    public void testShouldGetInvoiceStatus() {
         Invoice invoice = new Invoice(2.0, "EUR");
-		try {
-			basicInvoice = bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(InvoiceStatus.New, basicInvoice.getStatus());
-	}
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(InvoiceStatus.New, basicInvoice.getStatus());
+    }
 
-	@Test
-	public void testShouldCreateInvoiceOneTenthBTC() 
-	{
+    @Test
+    public void testShouldCreateInvoiceOneTenthBTC() {
         Invoice invoice = new Invoice(0.1, "BTC");
-		try {
-			invoice = this.bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(0.1, invoice.getPrice(), BTC_EPSILON);
-	}
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(0.1, invoice.getPrice(), BTC_EPSILON);
+    }
 
-	@Test
-	public void testShouldCreateInvoice100USD() 
-	{
+    @Test
+    public void testShouldCreateInvoice100USD() {
         Invoice invoice = new Invoice(100.0, "USD");
-		try {
-			invoice = this.bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(100.0, invoice.getPrice(), EPSILON);
-	}		
-	
-	@Test
-	public void testShouldCreateInvoice100EUR() 
-	{
-        Invoice invoice = new Invoice(100.0, "EUR");
-		try {
-			invoice = this.bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(100.0, invoice.getPrice(), EPSILON);
-	}
-	
-	@Test
-	public void testShouldGetInvoice() 
-	{
-        Invoice invoice = new Invoice(100.0, "EUR");
-		Invoice retreivedInvoice = null;
-		try {
-			// Create invoice on POS facade.
-			invoice = this.bitpay.createInvoice(invoice);
-			//
-			// Must use a merchant token to retrieve this invoice since it was not created on the public facade.
-			String token = this.bitpay.getAccessToken(Facade.Merchant);
-			retreivedInvoice = this.bitpay.getInvoice(invoice.getId(), token);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(invoice.getId(), retreivedInvoice.getId());		
-	}
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(100.0, invoice.getPrice(), EPSILON);
+    }
 
-	@Test
-	public void testShouldCreateInvoiceWithAdditionalParams() 
-	{
-		Buyer buyer = new Buyer();
-		buyer.setName("Satoshi");
-		buyer.setEmail("satoshi@buyeremaildomain.com");
-		
+    @Test
+    public void testShouldCreateInvoice100EUR() {
+        Invoice invoice = new Invoice(100.0, "EUR");
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(100.0, invoice.getPrice(), EPSILON);
+    }
+
+    @Test
+    public void testShouldGetInvoice() {
+        Invoice invoice = new Invoice(100.0, "EUR");
+        Invoice retreivedInvoice = null;
+        try {
+            // Create invoice on POS facade.
+            invoice = this.bitpay.createInvoice(invoice);
+            //
+            // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
+            String token = this.bitpay.getAccessToken(Facade.Merchant);
+            retreivedInvoice = this.bitpay.getInvoice(invoice.getId(), token);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(invoice.getId(), retreivedInvoice.getId());
+    }
+
+    @Test
+    public void testShouldCreateInvoiceWithAdditionalParams() {
+        Buyer buyer = new Buyer();
+        buyer.setName("Satoshi");
+        buyer.setEmail("satoshi@buyeremaildomain.com");
+
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
         invoice.setNotificationEmail("satoshi@merchantemaildomain.com");
-		invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
-		try {
-	        invoice = this.bitpay.createInvoice(invoice);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(InvoiceStatus.New, invoice.getStatus());
-		assertEquals(100.0, invoice.getPrice(), EPSILON);
-		assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
-		assertEquals("Satoshi", invoice.getBuyer().getName());
-		assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
-		assertEquals(true, invoice.getFullNotifications());
-		assertEquals("satoshi@merchantemaildomain.com", invoice.getNotificationEmail());
-	}
+        invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(InvoiceStatus.New, invoice.getStatus());
+        assertEquals(100.0, invoice.getPrice(), EPSILON);
+        assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
+        assertEquals("Satoshi", invoice.getBuyer().getName());
+        assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
+        assertEquals(true, invoice.getFullNotifications());
+        assertEquals("satoshi@merchantemaildomain.com", invoice.getNotificationEmail());
+    }
 
-	@Test
-	public void TestShouldCreateBillUSD()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldCreateBillUSD() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicBill.getId());
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicBill.getId());
+    }
 
-	@Test
-	public void TestShouldCreateBillEUR()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldCreateBillEUR() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.EUR, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicBill.getId());
-	}
+        Bill bill = new Bill("7", Currency.EUR, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicBill.getId());
+    }
 
-	@Test
-	public void TestShouldGetBillUrl()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldGetBillUrl() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(basicBill.getUrl());
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicBill.getUrl());
+    }
 
-	@Test
-	public void TestShouldGetBillStatus()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldGetBillStatus() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(BillStatus.Draft, basicBill.getStatus());
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(BillStatus.Draft, basicBill.getStatus());
+    }
 
-	@Test
-	public void TestShouldGetBill()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldGetBill() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		Bill retrievedBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-			retrievedBill = this.bitpay.getBill(basicBill.getId());
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(basicBill.getId(), retrievedBill.getId());
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        Bill retrievedBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+            retrievedBill = this.bitpay.getBill(basicBill.getId());
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(basicBill.getId(), retrievedBill.getId());
+    }
 
-	@Test
-	public void TestShouldGetAndUpdateBill()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldGetAndUpdateBill() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		Bill retrievedBill = null;
-		Bill updatedBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-			retrievedBill = this.bitpay.getBill(basicBill.getId());
-			retrievedBill.setCurrency(Currency.EUR);
-			retrievedBill.setName("updatedBill");
-			retrievedBill.getItems().add(new Item(){{setPrice(60.0); setQuantity(7); setDescription("product-added");}});
-			updatedBill = this.bitpay.updateBill(retrievedBill, retrievedBill.getId());
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals(basicBill.getId(), retrievedBill.getId());
-		assertEquals(retrievedBill.getId(), updatedBill.getId());
-		assertEquals(updatedBill.getCurrency(), Currency.EUR);
-		assertEquals(updatedBill.getName(), "updatedBill");
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        Bill retrievedBill = null;
+        Bill updatedBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+            retrievedBill = this.bitpay.getBill(basicBill.getId());
+            retrievedBill.setCurrency(Currency.EUR);
+            retrievedBill.setName("updatedBill");
+            retrievedBill.getItems().add(new Item() {{
+                setPrice(60.0);
+                setQuantity(7);
+                setDescription("product-added");
+            }});
+            updatedBill = this.bitpay.updateBill(retrievedBill, retrievedBill.getId());
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(basicBill.getId(), retrievedBill.getId());
+        assertEquals(retrievedBill.getId(), updatedBill.getId());
+        assertEquals(updatedBill.getCurrency(), Currency.EUR);
+        assertEquals(updatedBill.getName(), "updatedBill");
+    }
 
-	@Test
-	public void TestShouldDeliverBill()
-	{
-		List<Item> items = new ArrayList<Item>();
-		items.add(new Item(){{setPrice(30.0); setQuantity(9); setDescription("product-a");}});
-		items.add(new Item(){{setPrice(14.0); setQuantity(16); setDescription("product-b");}});
-		items.add(new Item(){{setPrice(3.90); setQuantity(42); setDescription("product-c");}});
-		items.add(new Item(){{setPrice(6.99); setQuantity(12); setDescription("product-d");}});
+    @Test
+    public void TestShouldDeliverBill() {
+        List<Item> items = new ArrayList<Item>();
+        items.add(new Item() {{
+            setPrice(30.0);
+            setQuantity(9);
+            setDescription("product-a");
+        }});
+        items.add(new Item() {{
+            setPrice(14.0);
+            setQuantity(16);
+            setDescription("product-b");
+        }});
+        items.add(new Item() {{
+            setPrice(3.90);
+            setQuantity(42);
+            setDescription("product-c");
+        }});
+        items.add(new Item() {{
+            setPrice(6.99);
+            setQuantity(12);
+            setDescription("product-d");
+        }});
 
-		Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
-		Bill basicBill = null;
-		String result = "";
-		Bill retrievedBill = null;
-		try {
-			basicBill = this.bitpay.createBill(bill);
-			result = this.bitpay.deliverBill(basicBill.getId(), basicBill.getToken());
-			retrievedBill = this.bitpay.getBill(basicBill.getId());
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertEquals("Success", result);
-	}
+        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill basicBill = null;
+        String result = "";
+        Bill retrievedBill = null;
+        try {
+            basicBill = this.bitpay.createBill(bill);
+            result = this.bitpay.deliverBill(basicBill.getId(), basicBill.getToken());
+            retrievedBill = this.bitpay.getBill(basicBill.getId());
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals("Success", result);
+    }
 
-	@Test
-	public void TestShouldGetBills()
-	{
-		List<Bill> bills = null;
-		try {
-			bills = this.bitpay.getBills();
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertTrue (bills.size() > 0);
-	}
+    @Test
+    public void TestShouldGetBills() {
+        List<Bill> bills = null;
+        try {
+            bills = this.bitpay.getBills();
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(bills.size() > 0);
+    }
 
-	@Test
-	public void TestShouldGetBillsByStatus()
-	{
-		List<Bill> bills = null;
-		try {
-			bills = this.bitpay.getBills(BillStatus.Draft);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertTrue (bills.size() > 0);
-	}
+    @Test
+    public void TestShouldGetBillsByStatus() {
+        List<Bill> bills = null;
+        try {
+            bills = this.bitpay.getBills(BillStatus.Draft);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(bills.size() > 0);
+    }
 
-	@Test
-	public void testShouldGetExchangeRates() 
-	{
-		Rates rates;
-		List<Rate> rateList = null;
-		try {
-			rates = this.bitpay.getRates();
-			rateList = rates.getRates();		
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(rateList);
-	}
-	
-	@Test
-	public void testShouldGetEURExchangeRate() 
-	{
-		Rates rates;
-		double rate = 0.0;
-		try {
-			rates = this.bitpay.getRates();
-			rate = rates.getRate("EUR");
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertTrue(rate != 0);
-	}
-	
-	@Test
-	public void testShouldGetCNYExchangeRate() 
-	{
-		Rates rates;
-		double rate = 0.0;
-		try {
-			rates = this.bitpay.getRates();
-			rate = rates.getRate("CNY");
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertTrue(rate != 0);
-	}
+    @Test
+    public void testShouldGetExchangeRates() {
+        Rates rates;
+        List<Rate> rateList = null;
+        try {
+            rates = this.bitpay.getRates();
+            rateList = rates.getRates();
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(rateList);
+    }
 
-	@Test
-	public void testShouldUpdateExchangeRates() 
-	{
-		Rates rates;
-		List<Rate> rateList = null;
-		try {
-			rates = this.bitpay.getRates();
-			rates.update();
-			rateList = rates.getRates();
-		} catch (BitPayException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		assertNotNull(rateList);
-	}
+    @Test
+    public void testShouldGetEURExchangeRate() {
+        Rates rates;
+        double rate = 0.0;
+        try {
+            rates = this.bitpay.getRates();
+            rate = rates.getRate("EUR");
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(rate != 0);
+    }
 
-	@Test
-	public void testShouldGetInvoices() {
-		List<Invoice> invoices = null;
-		try {
+    @Test
+    public void testShouldGetCNYExchangeRate() {
+        Rates rates;
+        double rate = 0.0;
+        try {
+            rates = this.bitpay.getRates();
+            rate = rates.getRate("CNY");
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(rate != 0);
+    }
+
+    @Test
+    public void testShouldUpdateExchangeRates() {
+        Rates rates;
+        List<Rate> rateList = null;
+        try {
+            rates = this.bitpay.getRates();
+            rates.update();
+            rateList = rates.getRates();
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(rateList);
+    }
+
+    @Test
+    public void testShouldGetInvoices() {
+        List<Invoice> invoices = null;
+        try {
             //check within the last few days
             Date date = new Date();
             Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
-			invoices = this.bitpay.getInvoices(sevenDaysAgo, today);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-		}
-		assert invoices != null;
-		assertTrue(invoices.size() > 0);
-	}
+            invoices = this.bitpay.getInvoices(sevenDaysAgo, today);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assert invoices != null;
+        assertTrue(invoices.size() > 0);
+    }
 
-	@Test
-	public void testShouldGetLedgerBtc() {
-		Ledger ledger = null;
-		try {
-			//check within the last few days
-			Date date = new Date();
-			Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
-			Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String tomorrow = sdf.format(dateTomorrow);
-			String sevenDaysAgo = sdf.format(dateBefore);
-			ledger = this.bitpay.getLedger(Currency.BTC ,sevenDaysAgo, tomorrow);
-		} catch (BitPayException e) {
-			e.printStackTrace();
-		}
-		assert ledger.getEntries() != null;
-		assertTrue(ledger.getEntries().size() > 0);
-	}
+    @Test
+    public void testShouldGetLedgerBtc() {
+        Ledger ledger = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String tomorrow = sdf.format(dateTomorrow);
+            String sevenDaysAgo = sdf.format(dateBefore);
+            ledger = this.bitpay.getLedger(Currency.BTC, sevenDaysAgo, tomorrow);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assert ledger.getEntries() != null;
+        assertTrue(ledger.getEntries().size() > 0);
+    }
 
     @Test
     public void testShouldGetLedgerUsd() {
@@ -546,7 +622,7 @@ public class BitPayTest {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String tomorrow = sdf.format(dateTomorrow);
             String sevenDaysAgo = sdf.format(dateBefore);
-            ledger = this.bitpay.getLedger(Currency.USD ,sevenDaysAgo, tomorrow);
+            ledger = this.bitpay.getLedger(Currency.USD, sevenDaysAgo, tomorrow);
         } catch (BitPayException e) {
             e.printStackTrace();
         }
@@ -572,26 +648,25 @@ public class BitPayTest {
 	state and authorises a refund. The actual refund will not be executed until the email receiver enters his bitcoin refund address.
     */
     @Test
-    public void testShouldCreateRefundRequest()
-    {
-		List<Invoice> invoices;
-		try {
-			long bitcoinInventedDate = 1230786000000L;
-			Date date = new Date();
-			Date dateBefore = new Date(bitcoinInventedDate);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			String today = sdf.format(date);
-			String dateBeforeString = sdf.format(dateBefore);
-			invoices = this.bitpay.getInvoices(dateBeforeString, today);
-			for (Invoice invoice : invoices) {
-				if (invoice.getStatus().equalsIgnoreCase("complete")) {
-					refundInvoiceId = invoice.getId();
-					break;
-				}
-			}
-		} catch (BitPayException e) {
-			e.printStackTrace();
-		}
+    public void testShouldCreateRefundRequest() {
+        List<Invoice> invoices;
+        try {
+            long bitcoinInventedDate = 1230786000000L;
+            Date date = new Date();
+            Date dateBefore = new Date(bitcoinInventedDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date);
+            String dateBeforeString = sdf.format(dateBefore);
+            invoices = this.bitpay.getInvoices(dateBeforeString, today);
+            for (Invoice invoice : invoices) {
+                if (invoice.getStatus().equalsIgnoreCase("complete")) {
+                    refundInvoiceId = invoice.getId();
+                    break;
+                }
+            }
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
         assertNotNull(refundInvoiceId);
         String refundEmail = "youremail@yourdomain.com"; //change this to whatever address you want to refund to
 
@@ -602,7 +677,7 @@ public class BitPayTest {
             assertEquals(refundRequest.getInvoice().getId(), refundInvoiceId);
 
             List<Refund> refunds = this.bitpay.getAllRefunds(refundRequest.getInvoice());
-            
+
         } catch (BitPayException e) {
             e.printStackTrace();
             fail(e.getMessage());

@@ -8,7 +8,8 @@ public class PaymentTotal {
     private Double _btc;
     private Double _bch;
 
-    public PaymentTotal() {}
+    public PaymentTotal() {
+    }
 
     @JsonIgnore
     public Double getBTC() {

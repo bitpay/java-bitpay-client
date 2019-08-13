@@ -1,29 +1,17 @@
 package com.bitpay;
 
+import com.bitpay.model.Bill.Bill;
+import com.bitpay.model.*;
+import com.bitpay.model.Invoice.Invoice;
+import com.bitpay.model.Invoice.PaymentTotal;
+import com.bitpay.model.Ledger.Ledger;
+import com.bitpay.model.Ledger.LedgerEntry;
+import com.bitpay.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.bitpay.model.Bill.Bill;
-import com.bitpay.model.Facade;
-import com.bitpay.model.Invoice.Invoice;
-import com.bitpay.model.Invoice.PaymentTotal;
-import com.bitpay.model.Ledger.Ledger;
-import com.bitpay.model.Ledger.LedgerEntry;
-import com.bitpay.model.PayoutBatch;
-import com.bitpay.model.Rate;
-import com.bitpay.model.Rates;
-import com.bitpay.model.Refund;
-import com.bitpay.model.RefundHelper;
-import com.bitpay.model.Token;
-
-import com.bitpay.util.DateDeserializer;
-import com.bitpay.util.KeyUtils;
-import com.bitpay.BitPayLogger;
-import com.bitpay.BitPayException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -45,27 +33,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @date 4.26.2019
  * @version 2.1.1904
- *
  * See bitpay.com/api for more information.
+ * @date 4.26.2019
  */
 
 public class Client {
 
-	private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-
-	private static final String BITPAY_API_VERSION = "2.0.0";
-    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.1.1904";
     public static final String BITPAY_URL = "https://bitpay.com/";
     public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
-
     public static final String PUBLIC_NO_TOKEN = "";
-
+    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
+    private static final String BITPAY_API_VERSION = "2.0.0";
+    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.1.1904";
     private HttpClient _httpClient = null;
     private String _baseUrl = BITPAY_URL;
     private ECKey _ecKey = null;
@@ -174,7 +159,7 @@ public class Client {
      * @throws BitPayException
      */
     public Client(ECKey ecKey, String clientName, String envUrl) throws BitPayException {
-    	_ecKey = ecKey;
+        _ecKey = ecKey;
 
         this.deriveIdentity();
 
@@ -456,7 +441,7 @@ public class Client {
     /**
      * Create a BitPay Bill.
      *
-     * @param bill A Bill object with request parameters defined.
+     * @param bill   A Bill object with request parameters defined.
      * @param facade The facade used to create it.
      * @return A BitPay generated Bill object.
      * @throws BitPayException
@@ -539,7 +524,7 @@ public class Client {
     /**
      * Update a BitPay Bill.
      *
-     * @param bill A Bill object with the parameters to update defined.
+     * @param bill   A Bill object with the parameters to update defined.
      * @param billId The Id of the Bill to udpate.
      * @return An updated Bill object.
      * @throws BitPayException
@@ -624,11 +609,11 @@ public class Client {
     /**
      * Deliver a BitPay Bill.
      *
-     * @param billId The id of the requested bill.
-     * @param billToken The token of the requested bill.
+     * @param billId      The id of the requested bill.
+     * @param billToken   The token of the requested bill.
      * @param signRequest Allow unsigned request
-     * @returns A response status returned from the API.
      * @throws BitPayException
+     * @returns A response status returned from the API.
      */
     public String deliverBill(String billId, String billToken, boolean signRequest) throws BitPayException {
         Map<String, String> map = new HashMap<>();
@@ -649,10 +634,10 @@ public class Client {
     /**
      * Deliver a BitPay Bill.
      *
-     * @param billId The id of the requested bill.
+     * @param billId    The id of the requested bill.
      * @param billToken The token of the requested bill.
-     * @returns A response status returned from the API.
      * @throws BitPayException
+     * @returns A response status returned from the API.
      */
     public String deliverBill(String billId, String billToken) throws BitPayException {
         return this.deliverBill(billId, billToken, true);
@@ -662,7 +647,7 @@ public class Client {
      * Checks whether a BitPay invoice has been paid in full.
      * Returns true if the amountPaid >= paymentTotals, returns false otherwise
      *
-     * @param invoice       A Bitpay invoice object
+     * @param invoice A Bitpay invoice object
      * @return true if the amountPaid >= paymentTotals, returns false otherwise
      */
 
@@ -670,19 +655,14 @@ public class Client {
         long amountPaid = invoice.getAmountPaid();
         String transactionCurrency = invoice.getTransactionCurrency();
         // first check if invoice has a transactionCurrency. If not, this means the invoice has not been paid
-        if (transactionCurrency == null){
+        if (transactionCurrency == null) {
             return false;
         }
         PaymentTotal paymentTotals = invoice.getPaymentTotals();
         if (transactionCurrency.equals("BTC")) {
-            if (amountPaid < paymentTotals.getBTC()) {
-                return false;
-            }
-        }
-        else if (transactionCurrency.equals("BCH")) {
-            if (amountPaid < paymentTotals.getBCH()) {
-                return false;
-            }
+            return amountPaid >= paymentTotals.getBTC();
+        } else if (transactionCurrency.equals("BCH")) {
+            return amountPaid >= paymentTotals.getBCH();
         }
         return true;
     }
@@ -690,8 +670,8 @@ public class Client {
     /**
      * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
      *
-     * @param invoiceId     The id of the BitPay invoice for which a refund request should be made.
-     * @param refundEmail   The email of the buyer to which the refund email will be sent
+     * @param invoiceId   The id of the BitPay invoice for which a refund request should be made.
+     * @param refundEmail The email of the buyer to which the refund email will be sent
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
@@ -703,15 +683,15 @@ public class Client {
     /**
      * Request a refund for a BitPay invoice.
      *
-     * @param invoice        A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
-     * @param refundEmail   The email of the buyer to which the refund email will be sent
-     * @param amount         The amount of money to refund. If zero then a request for 100% of the invoice value is created.
-     * @param currency       The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
+     * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
+     * @param refundEmail The email of the buyer to which the refund email will be sent
+     * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
+     * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
      * @return A BitPay RefundRequest object with the new Refund object.
      * @throws BitPayException
      */
     public RefundHelper requestRefund(Invoice invoice, String refundEmail, Double amount, String currency) throws BitPayException {
-        
+
         Refund refund = new Refund();
         refund.setToken(invoice.getToken());
         refund.setGuid(this.getGuid());
@@ -863,7 +843,7 @@ public class Client {
     /**
      * Retrieve a list of ledgers by date range using the merchant facade.
      *
-     * @param currency The three digit currency string for the ledger to retrieve.
+     * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
      * @return A Ledger object populated with the BitPay ledger entries list.
@@ -931,7 +911,7 @@ public class Client {
         String token = this.getAccessToken(Facade.Payroll);
         batch.setToken(token);
         batch.setGuid(this.getGuid());
-        
+
         ObjectMapper mapper = new ObjectMapper();
 
         String json;
@@ -972,7 +952,7 @@ public class Client {
         List<PayoutBatch> batches;
 
         try {
-        	batches = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
+            batches = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
         } catch (JsonProcessingException e) {
             throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         } catch (IOException e) {
@@ -981,7 +961,7 @@ public class Client {
 
         return batches;
     }
-    
+
     /**
      * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payroll facade.
      *
@@ -1015,9 +995,9 @@ public class Client {
      * @return A BitPay generated PayoutBatch object.
      * @throws BitPayException
      */
-    public PayoutBatch cancelPayoutBatch(String batchId) throws BitPayException {    	
+    public PayoutBatch cancelPayoutBatch(String batchId) throws BitPayException {
         PayoutBatch b = getPayoutBatch(batchId);
-    	final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", b.getToken()));
 
         HttpResponse response = this.delete("payouts/" + batchId, params);
@@ -1032,7 +1012,7 @@ public class Client {
 
         return b;
     }
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1165,7 +1145,7 @@ public class Client {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
 
-            post.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
+            post.setEntity(new ByteArrayEntity(json.getBytes(StandardCharsets.UTF_8)));
 
             if (signatureRequired) {
                 post.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
@@ -1176,7 +1156,7 @@ public class Client {
             post.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
             post.addHeader("Content-Type", "application/json");
 
-        	_log.info(post.toString());
+            _log.info(post.toString());
             return _httpClient.execute(post);
 
         } catch (UnsupportedEncodingException e) {
@@ -1200,7 +1180,7 @@ public class Client {
         try {
             HttpPut put = new HttpPut(_baseUrl + uri);
 
-            put.setEntity(new ByteArrayEntity(json.getBytes("UTF8")));
+            put.setEntity(new ByteArrayEntity(json.getBytes(StandardCharsets.UTF_8)));
 
             put.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
             put.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
@@ -1238,7 +1218,7 @@ public class Client {
                 delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
 
-        	_log.info(delete.toString());
+            _log.info(delete.toString());
             return _httpClient.execute(delete);
 
         } catch (URISyntaxException e) {

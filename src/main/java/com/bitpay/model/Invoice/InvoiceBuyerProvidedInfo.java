@@ -8,7 +8,8 @@ public class InvoiceBuyerProvidedInfo {
     private String _phoneNumber;
     private String _emailAddress;
 
-    public InvoiceBuyerProvidedInfo() {}
+    public InvoiceBuyerProvidedInfo() {
+    }
 
     @JsonIgnore
     public String getName() {

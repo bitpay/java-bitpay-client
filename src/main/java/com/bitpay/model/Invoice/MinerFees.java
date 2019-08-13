@@ -8,7 +8,8 @@ public class MinerFees {
     private MinerFeesItem _btc = new MinerFeesItem();
     private MinerFeesItem _bch = new MinerFeesItem();
 
-    public MinerFees() {}
+    public MinerFees() {
+    }
 
     @JsonIgnore
     public MinerFeesItem getBtc() {
