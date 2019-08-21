@@ -1,4 +1,4 @@
-package com.bitpay.model;
+package com.bitpay.model.Rate;
 
 import com.bitpay.BitPayException;
 import com.bitpay.Client;

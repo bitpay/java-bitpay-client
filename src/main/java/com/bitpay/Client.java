@@ -7,6 +7,8 @@ import com.bitpay.model.Invoice.PaymentTotal;
 import com.bitpay.model.Ledger.Ledger;
 import com.bitpay.model.Ledger.LedgerEntry;
 import com.bitpay.model.Payout.PayoutBatch;
+import com.bitpay.model.Rate.Rate;
+import com.bitpay.model.Rate.Rates;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -646,13 +648,34 @@ public class Client {
     }
 
     /**
+     * Retrieve the exchange rate table maintained by BitPay.  See https://bitpay.com/bitcoin-exchange-rates.
+     *
+     * @return A Rates object populated with the BitPay exchange rate table.
+     * @throws BitPayException
+     */
+    public Rates getRates() throws BitPayException {
+        HttpResponse response = this.get("rates");
+
+        List<Rate> rates;
+
+        try {
+            rates = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Rate[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        }
+
+        return new Rates(rates, this);
+    }
+
+    /**
      * Checks whether a BitPay invoice has been paid in full.
      * Returns true if the amountPaid >= paymentTotals, returns false otherwise
      *
      * @param invoice A Bitpay invoice object
      * @return true if the amountPaid >= paymentTotals, returns false otherwise
      */
-
     public boolean isFullyPaid(Invoice invoice) {
         long amountPaid = invoice.getAmountPaid();
         String transactionCurrency = invoice.getTransactionCurrency();
@@ -669,6 +692,7 @@ public class Client {
         return true;
     }
 
+    // TODO refactor when resource is available
     /**
      * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
      *
@@ -819,28 +843,7 @@ public class Client {
 
         return refunds;
     }
-
-    /**
-     * Retrieve the exchange rate table maintained by BitPay.  See https://bitpay.com/bitcoin-exchange-rates.
-     *
-     * @return A Rates object populated with the BitPay exchange rate table.
-     * @throws BitPayException
-     */
-    public Rates getRates() throws BitPayException {
-        HttpResponse response = this.get("rates");
-
-        List<Rate> rates;
-
-        try {
-            rates = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Rate[].class));
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Rates) : " + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Rates) : " + e.getMessage());
-        }
-
-        return new Rates(rates, this);
-    }
+    // TODO refactor the above when resource is available
 
     /**
      * Retrieve a list of ledgers by date range using the merchant facade.
