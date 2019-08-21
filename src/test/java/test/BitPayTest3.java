@@ -1,11 +1,12 @@
 package test;
 
 import com.bitpay.BitPayException;
+import com.bitpay.model.Payout.PayoutStatus;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
 import com.bitpay.model.Facade;
-import com.bitpay.model.PayoutBatch;
-import com.bitpay.model.PayoutInstruction;
+import com.bitpay.model.Payout.PayoutBatch;
+import com.bitpay.model.Payout.PayoutInstruction;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class BitPayTest3 {
 
         // Authorize this client for use with a BitPay merchant account.  This client requires a
         // PAYROLL facades.
-        if (!bitpay.clientIsAuthorized(Facade.PointOfSale)) {
+        if (!bitpay.clientIsAuthorized(Facade.Payroll)) {
             // Get PAYROLL facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate payout batches a
@@ -60,7 +61,7 @@ public class BitPayTest3 {
 
             // bitpay.authorizeClient(pairingCode);
 
-            pairingCode = bitpay.requestClientAuthorization(Facade.PointOfSale);
+            pairingCode = bitpay.requestClientAuthorization(Facade.Payroll);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
             _log.info("Client is requesting PAYROLL facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
@@ -86,15 +87,13 @@ public class BitPayTest3 {
         Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
 
         long effectiveDate = threeDaysFromNow.getTime();
-        String reference = "My test batch";
-        String bankTransferId = "My bank transfer id";
         String currency = "USD";
         List<PayoutInstruction> instructions = Arrays.asList(
-                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u", "Alice"),
-                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A", "Bob")
+                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u"),
+                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A")
         );
 
-        PayoutBatch batch = new PayoutBatch(currency, effectiveDate, bankTransferId, reference, instructions);
+        PayoutBatch batch = new PayoutBatch(currency, effectiveDate, instructions);
         try {
             batch = this.bitpay.submitPayoutBatch(batch);
 
@@ -113,15 +112,13 @@ public class BitPayTest3 {
         Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
 
         long effectiveDate = threeDaysFromNow.getTime();
-        String reference = "My test batch";
-        String bankTransferId = "My bank transfer id";
         String currency = "USD";
         List<PayoutInstruction> instructions = Arrays.asList(
-                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u", "Alice"),
-                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A", "Bob")
+                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u"),
+                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A")
         );
 
-        PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, bankTransferId, reference, instructions);
+        PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, instructions);
         try {
             batch0 = this.bitpay.submitPayoutBatch(batch0);
 
@@ -141,4 +138,25 @@ public class BitPayTest3 {
         }
     }
 
+    @Test
+    public void testShouldGetPayoutBatches() {
+        try {
+            List<PayoutBatch> batches = this.bitpay.getPayoutBatches();
+            assertTrue(batches.size() > 0);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testShouldGetPayoutBatchesByStatus() {
+        try {
+            List<PayoutBatch> batches = this.bitpay.getPayoutBatches(PayoutStatus.New);
+            assertTrue(batches.size() > 0);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.bitpay.model;
+package com.bitpay.model.Payout;
 
 public class PayoutInstructionBtcSummary {
 

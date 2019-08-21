@@ -1,4 +1,4 @@
-package com.bitpay.model;
+package com.bitpay.model.Payout;
 
 import com.bitpay.util.PayoutInstructionBtcSummaryDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,9 +18,9 @@ public class PayoutInstruction {
     private String _label = "";
 
     private String _id;
-    private String _status;
     private PayoutInstructionBtcSummary _btc;
     private List<PayoutInstructionTransaction> _transactions;
+    private String _status;
 
     /**
      * Constructor, create an empty PayoutInstruction object.
@@ -33,12 +33,10 @@ public class PayoutInstruction {
      *
      * @param amount  BTC amount.
      * @param address Bitcoin address.
-     * @param label   Label.
      */
-    public PayoutInstruction(Double amount, String address, String label) {
+    public PayoutInstruction(Double amount, String address) {
         this._amount = amount;
         this._address = address;
-        this._label = label;
     }
 
     @JsonProperty("amount")
@@ -83,18 +81,8 @@ public class PayoutInstruction {
     }
 
     @JsonProperty("id")
-    public void setId(String _id) {
-        this._id = _id;
-    }
-
-    @JsonIgnore
-    public String getStatus() {
-        return _status;
-    }
-
-    @JsonProperty("status")
-    public void setStatus(String _status) {
-        this._status = _status;
+    public void setId(String id) {
+        this._id = id;
     }
 
     @JsonIgnore
@@ -104,8 +92,8 @@ public class PayoutInstruction {
 
     @JsonProperty("btc")
     @JsonDeserialize(using = PayoutInstructionBtcSummaryDeserializer.class)
-    public void setBtc(PayoutInstructionBtcSummary _btc) {
-        this._btc = _btc;
+    public void setBtc(PayoutInstructionBtcSummary btc) {
+        this._btc = btc;
     }
 
     @JsonIgnore
@@ -114,8 +102,17 @@ public class PayoutInstruction {
     }
 
     @JsonProperty("transactions")
-    public void setTransactions(List<PayoutInstructionTransaction> _transactions) {
-        this._transactions = _transactions;
+    public void setTransactions(List<PayoutInstructionTransaction> transactions) {
+        this._transactions = transactions;
     }
 
+    @JsonIgnore
+    public String getStatus() {
+        return _status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(String status) {
+        this._status = status;
+    }
 }
