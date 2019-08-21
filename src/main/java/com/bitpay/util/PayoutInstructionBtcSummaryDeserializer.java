@@ -1,8 +1,7 @@
 package com.bitpay.util;
 
-import com.bitpay.model.PayoutInstructionBtcSummary;
+import com.bitpay.model.Payout.PayoutInstructionBtcSummary;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
