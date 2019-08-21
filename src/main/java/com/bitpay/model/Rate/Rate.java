@@ -1,4 +1,4 @@
-package com.bitpay.model;
+package com.bitpay.model.Rate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

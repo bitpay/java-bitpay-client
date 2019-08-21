@@ -1,6 +1,8 @@
 package test;
 
 import com.bitpay.BitPayException;
+import com.bitpay.model.Rate.Rate;
+import com.bitpay.model.Rate.Rates;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
 import com.bitpay.model.Bill.Bill;
