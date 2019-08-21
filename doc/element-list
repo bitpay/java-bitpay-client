@@ -3,5 +3,6 @@ com.bitpay.model
 com.bitpay.model.Bill
 com.bitpay.model.Invoice
 com.bitpay.model.Ledger
+com.bitpay.model.Payout
 com.bitpay.util
 test
