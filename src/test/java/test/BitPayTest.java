@@ -3,6 +3,7 @@ package test;
 import com.bitpay.BitPayException;
 import com.bitpay.model.Rate.Rate;
 import com.bitpay.model.Rate.Rates;
+import com.bitpay.model.Settlement.Settlement;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
 import com.bitpay.model.Bill.Bill;
@@ -686,4 +687,71 @@ public class BitPayTest {
         }
     }
 
+    @Test
+    public void TestGetSettlements() {
+        List<Settlement> settlements = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date);
+            String oneMonthAgo = sdf.format(dateBefore);
+
+            // make sure we get a ledger with a not null Entries property
+            settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assert settlements != null;
+        assertTrue(settlements.size() > 0);
+    }
+
+    @Test
+    public void TestGetSettlement() {
+        List<Settlement> settlements = null;
+        Settlement settlement = null;
+        Settlement firstSettlement = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date);
+            String oneMonthAgo = sdf.format(dateBefore);
+
+            // make sure we get a ledger with a not null Entries property
+            settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
+            firstSettlement = settlements.get(0);
+            settlement = this.bitpay.getSettlement(firstSettlement.getId());
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(settlement.getId());
+        assertEquals(firstSettlement.getId(), settlement.getId());
+    }
+
+    @Test
+    public void TestGetSettlementReconciliationReport() {
+        List<Settlement> settlements = null;
+        Settlement settlement = null;
+        Settlement firstSettlement = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date);
+            String oneMonthAgo = sdf.format(dateBefore);
+
+            // make sure we get a ledger with a not null Entries property
+            settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
+            firstSettlement = settlements.get(0);
+            settlement = this.bitpay.getSettlementReconciliationReport(firstSettlement);
+        } catch (BitPayException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(settlement.getId());
+        assertEquals(firstSettlement.getId(), settlement.getId());
+    }
 }
