@@ -9,6 +9,7 @@ import com.bitpay.model.Ledger.LedgerEntry;
 import com.bitpay.model.Payout.PayoutBatch;
 import com.bitpay.model.Rate.Rate;
 import com.bitpay.model.Rate.Rates;
+import com.bitpay.model.Settlement.Settlement;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -670,182 +671,6 @@ public class Client {
     }
 
     /**
-     * Checks whether a BitPay invoice has been paid in full.
-     * Returns true if the amountPaid >= paymentTotals, returns false otherwise
-     *
-     * @param invoice A Bitpay invoice object
-     * @return true if the amountPaid >= paymentTotals, returns false otherwise
-     */
-    public boolean isFullyPaid(Invoice invoice) {
-        long amountPaid = invoice.getAmountPaid();
-        String transactionCurrency = invoice.getTransactionCurrency();
-        // first check if invoice has a transactionCurrency. If not, this means the invoice has not been paid
-        if (transactionCurrency == null) {
-            return false;
-        }
-        PaymentTotal paymentTotals = invoice.getPaymentTotals();
-        if (transactionCurrency.equals("BTC")) {
-            return amountPaid >= paymentTotals.getBTC();
-        } else if (transactionCurrency.equals("BCH")) {
-            return amountPaid >= paymentTotals.getBCH();
-        }
-        return true;
-    }
-
-    // TODO refactor when resource is available
-    /**
-     * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
-     *
-     * @param invoiceId   The id of the BitPay invoice for which a refund request should be made.
-     * @param refundEmail The email of the buyer to which the refund email will be sent
-     * @return A BitPay RefundRequest object with the new Refund object.
-     * @throws BitPayException
-     */
-    public RefundHelper requestRefund(String invoiceId, String refundEmail) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
-        return this.requestRefund(invoice, refundEmail, invoice.getPrice(), invoice.getCurrency());
-    }
-
-    /**
-     * Request a refund for a BitPay invoice.
-     *
-     * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
-     * @param refundEmail The email of the buyer to which the refund email will be sent
-     * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
-     * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
-     * @return A BitPay RefundRequest object with the new Refund object.
-     * @throws BitPayException
-     */
-    public RefundHelper requestRefund(Invoice invoice, String refundEmail, Double amount, String currency) throws BitPayException {
-
-        Refund refund = new Refund();
-        refund.setToken(invoice.getToken());
-        refund.setGuid(this.getGuid());
-        refund.setAmount(amount);
-        refund.setRefundEmail(refundEmail);
-        refund.setCurrency(currency);
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String json;
-
-        try {
-            json = mapper.writeValueAsString(refund);
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to serialize Refund object : " + e.getMessage());
-        }
-
-        HttpResponse response = this.postWithSignature("invoices/" + invoice.getId() + "/refunds", json);
-
-        try {
-            refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        }
-
-        try {
-            this.cacheAccessToken(refund.getId(), refund.getToken());
-        } catch (java.lang.NullPointerException e) {
-            // When using the email address to refund, BitPay does not instantly return a request id
-            // Instead BitPay returns 'success':'true'.
-            // BitPay only returns a supportRequestId when the customer has entered his BTC/BCH refund address
-        }
-        return new RefundHelper(refund, invoice);
-    }
-
-    /**
-     * Cancel a previously submitted refund request on a BitPay invoice.
-     *
-     * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
-     * @param refundId  The refund id for the refund to be canceled.
-     * @return True if the refund was successfully canceled, false otherwise.
-     * @throws BitPayException
-     */
-    public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
-        return this.cancelRefundRequest(invoice, refundId);
-    }
-
-    /**
-     * Cancel a previously submitted refund request on a BitPay invoice.
-     *
-     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
-     * @param refundId The refund id for the refund to be canceled.
-     * @return True if the refund was successfully canceled, false otherwise.
-     * @throws BitPayException
-     */
-    public boolean cancelRefundRequest(Invoice invoice, String refundId) throws BitPayException {
-        Refund refund = this.getRefund(invoice, refundId);
-        if (refund == null) {
-            throw new BitPayException("Error - refundId is not associated with specified invoice");
-        }
-
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", refund.getToken()));
-
-        HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
-        String result = this.responseToJsonString(response);
-
-        return (result.equals("\"Success\""));
-    }
-
-    /**
-     * Retrieve a previously made refund request on a BitPay invoice.
-     *
-     * @param invoice  The BitPay invoice having the associated refund.
-     * @param refundId The refund id for the refund to be updated with new status.
-     * @return A BitPay invoice object with the associated Refund object updated.
-     * @throws BitPayException
-     */
-    public Refund getRefund(Invoice invoice, String refundId) throws BitPayException {
-        Refund refund = new Refund();
-
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", invoice.getToken()));
-        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        }
-
-        return refund;
-    }
-
-    /**
-     * Retrieve all refund requests on a BitPay invoice.
-     *
-     * @param invoice The BitPay invoice object having the associated refunds.
-     * @return A BitPay invoice object with the associated Refund objects updated.
-     * @throws BitPayException
-     */
-    public List<Refund> getAllRefunds(Invoice invoice) throws BitPayException {
-        List<Refund> refunds;
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", invoice.getToken()));
-
-        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds", params);
-
-        try {
-            refunds = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Refund[].class));
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        }
-
-        return refunds;
-    }
-    // TODO refactor the above when resource is available
-
-    /**
      * Retrieve a list of ledgers by date range using the merchant facade.
      *
      * @param currency  The three digit currency string for the ledger to retrieve.
@@ -1044,6 +869,276 @@ public class Client {
 
         return batch;
     }
+
+    /**
+     *  Retrieves settlement reports for the calling merchant filtered by query.
+     * The `limit` and `offset` parameters
+     * specify pages for large query sets.
+     *
+     * @param currency The three digit currency string for the ledger to retrieve.
+     * @param dateStart The start date for the query.
+     * @param dateEnd The end date for the query.
+     * @param status Can be `processing`, `completed`, or `failed`.
+     * @param limit Maximum number of settlements to retrieve.
+     * @param offset Offset for paging.
+     * @return A list of BitPay Settlement objects.
+     * @throws BitPayException
+     */
+    public List<Settlement> getSettlements(String currency, String  dateStart, String  dateEnd, String status,Integer limit, Integer offset) throws BitPayException {
+        status = status != null ? status : "";
+        limit = limit != null ? limit : 100;
+        offset = offset != null ? offset : 0;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("dateStart", dateStart));
+        params.add(new BasicNameValuePair("dateEnd", dateEnd));
+        params.add(new BasicNameValuePair("currency", currency));
+        params.add(new BasicNameValuePair("status", status));
+        params.add(new BasicNameValuePair("limit", limit.toString()));
+        params.add(new BasicNameValuePair("offset", offset.toString()));
+
+        HttpResponse response = this.get("settlements", params);
+
+        List<Settlement> settlements;
+
+        try {
+            settlements = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Settlement[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+        }
+
+        return settlements;
+    }
+
+    /**
+     * Retrieves a summary of the specified settlement.
+     *
+     * @param settlementId Settlement Id.
+     * @return A BitPay Settlement object.
+     * @throws BitPayException
+     */
+    public Settlement getSettlement(String settlementId) throws BitPayException {
+        String token = this.getAccessToken(Facade.Merchant);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
+
+        HttpResponse response = this.get("settlements/" + settlementId, params);
+
+        Settlement settlement;
+        try {
+            settlement = new ObjectMapper().readValue(this.responseToJsonString(response), Settlement.class);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+        }
+
+        return settlement;
+    }
+
+    /**
+     * Gets a detailed reconciliation report of the activity within the settlement period.
+     *
+     * @param settlement Settlement to generate report for.
+     * @return A detailed BitPay Settlement object.
+     * @throws BitPayException
+     */
+    public Settlement getSettlementReconciliationReport(Settlement settlement) throws BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", settlement.getToken()));
+
+        HttpResponse response = this.get("settlements/" + settlement.getId() + "/reconciliationReport", params);
+
+        Settlement reconciliationReport;
+        try {
+            reconciliationReport = new ObjectMapper().readValue(this.responseToJsonString(response), Settlement.class);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (ReconciliationReport) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (ReconciliationReport) : " + e.getMessage());
+        }
+
+        return reconciliationReport;
+    }
+
+    /**
+     * Checks whether a BitPay invoice has been paid in full.
+     * Returns true if the amountPaid >= paymentTotals, returns false otherwise
+     *
+     * @param invoice A Bitpay invoice object
+     * @return true if the amountPaid >= paymentTotals, returns false otherwise
+     */
+    public boolean isFullyPaid(Invoice invoice) {
+        long amountPaid = invoice.getAmountPaid();
+        String transactionCurrency = invoice.getTransactionCurrency();
+        // first check if invoice has a transactionCurrency. If not, this means the invoice has not been paid
+        if (transactionCurrency == null) {
+            return false;
+        }
+        PaymentTotal paymentTotals = invoice.getPaymentTotals();
+        if (transactionCurrency.equals("BTC")) {
+            return amountPaid >= paymentTotals.getBTC();
+        } else if (transactionCurrency.equals("BCH")) {
+            return amountPaid >= paymentTotals.getBCH();
+        }
+        return true;
+    }
+
+    // TODO refactor when resource is available
+    /**
+     * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
+     *
+     * @param invoiceId   The id of the BitPay invoice for which a refund request should be made.
+     * @param refundEmail The email of the buyer to which the refund email will be sent
+     * @return A BitPay RefundRequest object with the new Refund object.
+     * @throws BitPayException
+     */
+    public RefundHelper requestRefund(String invoiceId, String refundEmail) throws BitPayException {
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
+        return this.requestRefund(invoice, refundEmail, invoice.getPrice(), invoice.getCurrency());
+    }
+
+    /**
+     * Request a refund for a BitPay invoice.
+     *
+     * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
+     * @param refundEmail The email of the buyer to which the refund email will be sent
+     * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
+     * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
+     * @return A BitPay RefundRequest object with the new Refund object.
+     * @throws BitPayException
+     */
+    public RefundHelper requestRefund(Invoice invoice, String refundEmail, Double amount, String currency) throws BitPayException {
+
+        Refund refund = new Refund();
+        refund.setToken(invoice.getToken());
+        refund.setGuid(this.getGuid());
+        refund.setAmount(amount);
+        refund.setRefundEmail(refundEmail);
+        refund.setCurrency(currency);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(refund);
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to serialize Refund object : " + e.getMessage());
+        }
+
+        HttpResponse response = this.postWithSignature("invoices/" + invoice.getId() + "/refunds", json);
+
+        try {
+            refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        try {
+            this.cacheAccessToken(refund.getId(), refund.getToken());
+        } catch (java.lang.NullPointerException e) {
+            // When using the email address to refund, BitPay does not instantly return a request id
+            // Instead BitPay returns 'success':'true'.
+            // BitPay only returns a supportRequestId when the customer has entered his BTC/BCH refund address
+        }
+        return new RefundHelper(refund, invoice);
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
+     * @param refundId  The refund id for the refund to be canceled.
+     * @return True if the refund was successfully canceled, false otherwise.
+     * @throws BitPayException
+     */
+    public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException {
+        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
+        return this.cancelRefundRequest(invoice, refundId);
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
+     * @param refundId The refund id for the refund to be canceled.
+     * @return True if the refund was successfully canceled, false otherwise.
+     * @throws BitPayException
+     */
+    public boolean cancelRefundRequest(Invoice invoice, String refundId) throws BitPayException {
+        Refund refund = this.getRefund(invoice, refundId);
+        if (refund == null) {
+            throw new BitPayException("Error - refundId is not associated with specified invoice");
+        }
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", refund.getToken()));
+
+        HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
+        String result = this.responseToJsonString(response);
+
+        return (result.equals("\"Success\""));
+    }
+
+    /**
+     * Retrieve a previously made refund request on a BitPay invoice.
+     *
+     * @param invoice  The BitPay invoice having the associated refund.
+     * @param refundId The refund id for the refund to be updated with new status.
+     * @return A BitPay invoice object with the associated Refund object updated.
+     * @throws BitPayException
+     */
+    public Refund getRefund(Invoice invoice, String refundId) throws BitPayException {
+        Refund refund = new Refund();
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", invoice.getToken()));
+        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Retrieve all refund requests on a BitPay invoice.
+     *
+     * @param invoice The BitPay invoice object having the associated refunds.
+     * @return A BitPay invoice object with the associated Refund objects updated.
+     * @throws BitPayException
+     */
+    public List<Refund> getAllRefunds(Invoice invoice) throws BitPayException {
+        List<Refund> refunds;
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", invoice.getToken()));
+
+        HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds", params);
+
+        try {
+            refunds = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Refund[].class));
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refunds;
+    }
+    // TODO refactor the above when resource is available
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
