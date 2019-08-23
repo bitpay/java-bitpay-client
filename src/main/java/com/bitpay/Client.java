@@ -43,9 +43,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 2.1.1904
+ * @version 2.4.1908
  * See bitpay.com/api for more information.
- * @date 4.26.2019
+ * @date 23.08.2019
  */
 
 public class Client {
@@ -55,7 +55,7 @@ public class Client {
     public static final String PUBLIC_NO_TOKEN = "";
     private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
     private static final String BITPAY_API_VERSION = "2.0.0";
-    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.1.1904";
+    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.4.1908";
     private HttpClient _httpClient = null;
     private String _baseUrl = BITPAY_URL;
     private ECKey _ecKey = null;
