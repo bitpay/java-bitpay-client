@@ -33,7 +33,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.bitcoinj.core.ECKey;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -41,13 +40,12 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 2.4.1908
+ * @version 3.0.1908
  * See bitpay.com/api for more information.
  * @date 23.08.2019
  */
@@ -73,7 +71,7 @@ public class Client {
     public static final String PUBLIC_NO_TOKEN = "";
     private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
     private static final String BITPAY_API_VERSION = "2.0.0";
-    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.4.1908";
+    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v3.0.1908";
     private String _clientName = "";
 
     /**
