@@ -33,12 +33,16 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.bitcoinj.core.ECKey;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -50,18 +54,27 @@ import java.util.*;
 
 public class Client {
 
+    private Config _configuration;
+    private String _env;
+    private Hashtable<String, String> _tokenCache; // {facade, token}
+    private String _configFilePath;
+    private String _baseUrl;
+    private ECKey _ecKey;
+
+    private HttpClient _httpClient = null;
+
+    /**
+     * Return the identity of this client (i.e. the public key).
+     */
+    private String _identity;
+
     public static final String BITPAY_URL = "https://bitpay.com/";
     public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
     public static final String PUBLIC_NO_TOKEN = "";
     private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
     private static final String BITPAY_API_VERSION = "2.0.0";
     private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v2.4.1908";
-    private HttpClient _httpClient = null;
-    private String _baseUrl = BITPAY_URL;
-    private ECKey _ecKey = null;
-    private String _identity = "";
     private String _clientName = "";
-    private Hashtable<String, String> _tokenCache; // {facade, token}
 
     /**
      * Constructor for use if the keys and SIN are managed by this library.
@@ -101,16 +114,6 @@ public class Client {
 
         this.deriveIdentity();
         this.tryGetAccessTokens();
-    }
-
-    /**
-     * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.
-     *
-     * @param clientName The label for this client.
-     * @throws BitPayException
-     */
-    public Client(String clientName) throws BitPayException {
-        this(clientName, BITPAY_URL);
     }
 
     /**
@@ -209,6 +212,27 @@ public class Client {
      */
     public Client(ECKey ecKey) throws BitPayException {
         this(ecKey, BITPAY_PLUGIN_INFO, BITPAY_URL);
+    }
+
+    /**
+     * Constructor for use if the keys and SIN are managed by this library.
+     *
+     * @param configFilePath The path to the configuration file.
+     * @throws BitPayException
+     */
+    public Client(String configFilePath) throws BitPayException {
+        try {
+            this._configFilePath = configFilePath;
+            this.GetConfig();
+            this.initKeys();
+            this.init();
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
+        } catch (URISyntaxException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
+        }
     }
 
     /**
@@ -365,14 +389,14 @@ public class Client {
     }
 
     /**
-     * Create a BitPay invoice using the POS facade.
+     * Create a BitPay invoice using the Merchant facade.
      *
      * @param invoice An Invoice object with request parameters defined.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException
      */
     public Invoice createInvoice(Invoice invoice) throws BitPayException {
-        return this.createInvoice(invoice, this.getAccessToken(Facade.PointOfSale));
+        return this.createInvoice(invoice, this.getAccessToken(Facade.Merchant));
     }
 
     /**
@@ -1144,13 +1168,33 @@ public class Client {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * Initialize this object with the client name and the environment Url.
+     *
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    private void init() throws BitPayException {
+        try
+        {
+            this._baseUrl = this._env.equals(Env.Test) ? Env.TestUrl : Env.ProdUrl;
+            _httpClient = HttpClientBuilder.create().build();
+            deriveIdentity();
+            LoadAccessTokens();
+        } catch (Exception e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Token array) : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Initialize the public/private key pair by either loading the existing one or by creating a new one.
+     *
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     private void initKeys() throws IOException, URISyntaxException {
-        if (KeyUtils.privateKeyExists()) {
+        if (KeyUtils.privateKeyExists(this._configuration.getEnvConfig(this._env).path("PrivateKeyPath").toString().replace("\"", ""))) {
             _ecKey = KeyUtils.loadEcKey();
-
-            // Alternatively, load your private key from a location you specify.
-            // _ecKey = KeyUtils.createEcKeyFromHexStringFile("C:\\Users\\key.priv");
-
         } else {
             _ecKey = KeyUtils.createEcKey();
             KeyUtils.saveEcKey(_ecKey);
@@ -1226,6 +1270,23 @@ public class Client {
         _tokenCache = responseToTokenCache(response);
 
         return _tokenCache.size();
+    }
+
+    private void LoadAccessTokens() throws BitPayException {
+        try
+        {
+            this.clearAccessTokenCache();
+
+            Iterator<Map.Entry<String, JsonNode>> tokens = this._configuration.getEnvConfig(this._env).path("ApiTokens").fields();
+            while (tokens.hasNext()) {
+                Map.Entry<String, JsonNode> next = tokens.next();
+                if (!next.getValue().asText().isEmpty()) {
+                    _tokenCache.put(next.getKey(), next.getValue().asText());
+                }
+            }
+        } catch (Exception e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Token array) : " + e.getMessage());
+        }
     }
 
 
@@ -1418,4 +1479,25 @@ public class Client {
         return Min + (int) (Math.random() * ((Max - Min) + 1)) + "";
     }
 
+    /**
+     * Loads the configuration file (JSON)
+     *
+     * @throws BitPayException
+     */
+    public void GetConfig() throws BitPayException {
+        try {
+            byte[] jsonData = Files.readAllBytes(Paths.get(this._configFilePath));
+            //create ObjectMapper instance
+            ObjectMapper mapper = new ObjectMapper();
+            //read JSON like DOM Parser
+            JsonNode rootNode = mapper.readTree(jsonData);
+            JsonNode bitPayConfiguration = rootNode.path("BitPayConfiguration");
+            this._configuration = new ObjectMapper().readValue(bitPayConfiguration.toString(), Config.class);
+            this._env = this._configuration.getEnvironment();
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to read configuration file : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to read configuration file : " + e.getMessage());
+        }
+    }
 }

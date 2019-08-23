@@ -15,14 +15,16 @@ import java.security.SecureRandom;
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
-    final private static String PRIV_KEY_FILENAME = "bitpay_private.key";
+    private static String PrivateKeyFile;
     private static URI privateKey;
 
     public KeyUtils() {
     }
 
-    public static boolean privateKeyExists() {
-        return new File(PRIV_KEY_FILENAME).exists();
+    public static boolean privateKeyExists(String privateKeyFile) {
+        PrivateKeyFile = privateKeyFile;
+
+        return new File(privateKeyFile).exists();
     }
 
     public static ECKey createEcKey() {
@@ -49,7 +51,7 @@ public class KeyUtils {
         File file;
 
         if (KeyUtils.privateKey == null) {
-            file = new File(PRIV_KEY_FILENAME);
+            file = new File(PrivateKeyFile);
         } else {
             file = new File(KeyUtils.privateKey);
         }
@@ -95,7 +97,7 @@ public class KeyUtils {
         File file;
 
         if (KeyUtils.privateKey == null) {
-            file = new File(PRIV_KEY_FILENAME);
+            file = new File(PrivateKeyFile);
         } else {
             file = new File(KeyUtils.privateKey);
         }
