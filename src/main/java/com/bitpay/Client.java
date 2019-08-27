@@ -12,11 +12,11 @@ import com.bitpay.model.Rate.Rates;
 import com.bitpay.model.Settlement.Settlement;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
@@ -33,11 +33,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.bitcoinj.core.ECKey;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -47,7 +47,7 @@ import java.util.*;
  * @author Antonio Buedo
  * @version 3.0.1908
  * See bitpay.com/api for more information.
- * @date 23.08.2019
+ * @date 27.08.2019
  */
 
 public class Client {
@@ -58,6 +58,7 @@ public class Client {
     private String _configFilePath;
     private String _baseUrl;
     private ECKey _ecKey;
+    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
 
     private HttpClient _httpClient = null;
 
@@ -66,150 +67,27 @@ public class Client {
      */
     private String _identity;
 
-    public static final String BITPAY_URL = "https://bitpay.com/";
-    public static final String BITPAY_TEST_URL = "https://test.bitpay.com/";
-    public static final String PUBLIC_NO_TOKEN = "";
-    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-    private static final String BITPAY_API_VERSION = "2.0.0";
-    private static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v3.0.1908";
-    private String _clientName = "";
-
     /**
      * Constructor for use if the keys and SIN are managed by this library.
      *
-     * @param clientName The label for this client.
-     * @param envUrl     The target server URL.
+     * @param environment Target environment. Options: Env.Test / Env.Prod
+     * @param privateKeyPath Private Key file path.
+     * @param tokens Env.Tokens containing the available tokens.
      * @throws BitPayException
      */
-    public Client(String clientName, String envUrl) throws BitPayException {
-        if (clientName.equals(BITPAY_PLUGIN_INFO)) {
-            try {
-                clientName += " on " + java.net.InetAddress.getLocalHost();
-            } catch (UnknownHostException e) {
-                clientName += " on unknown host";
-            }
-        }
-
-        // Eliminate special characters from the client
-        // name (used as a token label).  Trim to 60 chars.
-        _clientName = clientName.replaceAll("[^a-zA-Z0-9_ ]", "_");
-
-        if (_clientName.length() > 60) {
-            _clientName = _clientName.substring(0, 60);
-        }
-
-        _baseUrl = envUrl;
-        _httpClient = HttpClientBuilder.create().build();
-
+    public Client(String environment, String privateKeyPath, Env.Tokens tokens) throws BitPayException {
         try {
+            this._env = environment;
+            this.BuildConfig(privateKeyPath, tokens);
             this.initKeys();
-        } catch (IOException e) {
-            throw new BitPayException("Error: failed to intialize public/private key pair\n" + e.getMessage());
+            this.init();
+        } catch (JsonProcessingException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (URISyntaxException e) {
-            e.printStackTrace();
-            throw new BitPayException("Error: " + e.getMessage());
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error - failed to deserialize BitPay server response (Config) : " + e.getMessage());
         }
-
-        this.deriveIdentity();
-        this.tryGetAccessTokens();
-    }
-
-    /**
-     * Constructor for use if the keys and SIN are managed by this library.  Use BitPay production server.  Default client name.
-     *
-     * @throws BitPayException
-     */
-    public Client() throws BitPayException {
-        this(BITPAY_PLUGIN_INFO, BITPAY_URL);
-    }
-
-    /**
-     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
-     *
-     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
-     * @throws BitPayException, IOException
-     */
-    public Client(URI privateKey) throws BitPayException, URISyntaxException, IOException {
-        this(KeyUtils.loadEcKey(privateKey), BITPAY_PLUGIN_INFO, BITPAY_URL);
-    }
-
-    /**
-     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
-     *
-     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
-     * @param clientName The label for this client.
-     * @throws BitPayException, IOException
-     */
-    public Client(URI privateKey, String clientName) throws BitPayException, IOException, URISyntaxException {
-        this(KeyUtils.loadEcKey(privateKey), clientName, BITPAY_URL);
-    }
-
-    /**
-     * Constructor for use if the keys derived external to this library.  Use BitPay production server.  Default client name.
-     *
-     * @param privateKey A URI object representing the compressed, DER-encoded ASN.1 private key
-     * @param clientName The label for this client.
-     * @param envUrl     The target server URL.
-     * @throws BitPayException, IOException
-     */
-    public Client(URI privateKey, String clientName, String envUrl) throws BitPayException, IOException, URISyntaxException {
-        this(KeyUtils.loadEcKey(privateKey), clientName, envUrl);
-    }
-
-    /**
-     * Constructor for use if the keys and SIN were derived external to this library.
-     *
-     * @param ecKey      An elliptical curve key.
-     * @param clientName The label for this client.
-     * @param envUrl     The target server URL.
-     * @throws BitPayException
-     */
-    public Client(ECKey ecKey, String clientName, String envUrl) throws BitPayException {
-        _ecKey = ecKey;
-
-        this.deriveIdentity();
-
-        if (clientName.equals(BITPAY_PLUGIN_INFO)) {
-            try {
-                clientName += " on " + java.net.InetAddress.getLocalHost();
-            } catch (UnknownHostException e) {
-                clientName += " on unknown host";
-            }
-        }
-
-        // Eliminate special characters from the client
-        // name (used as a token label).  Trim to 60 chars.
-        _clientName = clientName.replaceAll("[^a-zA-Z0-9_ ]", "_");
-
-        if (_clientName.length() > 60) {
-            _clientName = _clientName.substring(0, 60);
-        }
-
-        _baseUrl = envUrl;
-        _httpClient = HttpClientBuilder.create().build();
-
-        this.tryGetAccessTokens();
-    }
-
-    /**
-     * Constructor for use if the keys and SIN were derived external to this library.  Use BitPay production server.
-     *
-     * @param ecKey      An elliptical curve key.
-     * @param clientName The label for this client.
-     * @throws BitPayException
-     */
-    public Client(ECKey ecKey, String clientName) throws BitPayException {
-        this(ecKey, clientName, BITPAY_URL);
-    }
-
-    /**
-     * Constructor for use if the keys and SIN were derived external to this library.  Use BitPay production server.  Default client name.
-     *
-     * @param ecKey An elliptical curve key.
-     * @throws BitPayException
-     */
-    public Client(ECKey ecKey) throws BitPayException {
-        this(ecKey, BITPAY_PLUGIN_INFO, BITPAY_URL);
     }
 
     /**
@@ -234,18 +112,9 @@ public class Client {
     }
 
     /**
-     * Get the generated client identity.
+     * Authorize (pair) this client with the server using the specified pairing code.
      *
-     * @return Client identify as a string
-     */
-    public String getIdentity() {
-        return _identity;
-    }
-
-    /**
-     * Authorize this client for use with the BitPay server.
-     *
-     * @param pairingCode A pairing code generated at https://bitpay.com/dashboard/merchant/api-tokens.
+     * @param pairingCode A code obtained from the server; typically from bitpay.com/api-tokens.
      * @throws BitPayException
      */
     public void authorizeClient(String pairingCode) throws BitPayException {
@@ -253,7 +122,6 @@ public class Client {
         token.setId(_identity);
         token.setGuid(this.getGuid());
         token.setPairingCode(pairingCode);
-        token.setLabel(_clientName);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -295,7 +163,6 @@ public class Client {
         token.setGuid(this.getGuid());
         token.setFacade(facade);
         token.setCount(1);
-        token.setLabel(_clientName);
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -331,35 +198,51 @@ public class Client {
     }
 
     /**
-     * Test whether this client is authorized for a specified level of API access.
+     * Specified whether the client has authorization (a token) for the specified facade.
      *
-     * @param facade Defines the level of API access being requested.
+     * @param facade The facade name for which authorization is tested.
      * @return True if this client is authorized, false otherwise.
      */
-    public boolean clientIsAuthorized(String facade) {
+    public boolean tokenExist(String facade) {
         return _tokenCache.containsKey(facade);
     }
 
     /**
-     * Retrieve a token associated with a known resource. The token is used to access other related resources.
+     * Returns the token for the specified facade.
      *
-     * @param id The identifier for the desired resource.
-     * @return The token associated with resource.
+     * @param facade The facade name for which the token is requested.
+     * @return The token for the given facade.
      */
-    public String getAccessToken(String id) {
-        return _tokenCache.get(id);
+    public String GetTokenByFacade(String facade)
+    {
+        if (!_tokenCache.containsKey(facade))
+            return "";
+
+        return _tokenCache.get(facade);
+    }
+
+    /**
+     * Create a BitPay invoice using the Merchant facade.
+     *
+     * @param invoice An Invoice object with request parameters defined.
+     * @return A BitPay generated Invoice object.
+     * @throws BitPayException
+     */
+    public Invoice createInvoice(Invoice invoice) throws BitPayException {
+        return this.createInvoice(invoice, Facade.Merchant, true);
     }
 
     /**
      * Create a BitPay invoice.
      *
      * @param invoice An Invoice object with request parameters defined.
-     * @param token   The resource access token for the request.
+     * @param facade The facade used to create it.
+     * @param signRequest Signed request.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException
      */
-    public Invoice createInvoice(Invoice invoice, String token) throws BitPayException {
-        invoice.setToken(token);
+    public Invoice createInvoice(Invoice invoice, String facade, Boolean signRequest) throws BitPayException {
+        invoice.setToken(this.getAccessToken(facade));
         invoice.setGuid(this.getGuid());
 
         ObjectMapper mapper = new ObjectMapper();
@@ -372,7 +255,7 @@ public class Client {
             throw new BitPayException("Error - failed to serialize Invoice object : " + e.getMessage());
         }
 
-        HttpResponse response = this.postWithSignature("invoices", json);
+        HttpResponse response = this.post("invoices", json, signRequest);
 
         try {
             invoice = mapper.readerForUpdating(invoice).readValue(this.responseToJsonString(response));
@@ -382,19 +265,8 @@ public class Client {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
-        this.cacheAccessToken(invoice.getId(), invoice.getToken());
+        this.cacheToken(invoice.getId(), invoice.getToken());
         return invoice;
-    }
-
-    /**
-     * Create a BitPay invoice using the Merchant facade.
-     *
-     * @param invoice An Invoice object with request parameters defined.
-     * @return A BitPay generated Invoice object.
-     * @throws BitPayException
-     */
-    public Invoice createInvoice(Invoice invoice) throws BitPayException {
-        return this.createInvoice(invoice, this.getAccessToken(Facade.Merchant));
     }
 
     /**
@@ -405,34 +277,34 @@ public class Client {
      * @throws BitPayException
      */
     public Invoice getInvoice(String invoiceId) throws BitPayException {
-        return this.getInvoice(invoiceId, PUBLIC_NO_TOKEN);
+        return this.getInvoice(invoiceId, Facade.Merchant, true);
     }
 
     /**
      * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade (the public facade requires no authorization).
      *
      * @param invoiceId The id of the invoice to retrieve.
-     * @param token     The facade/invoice token (e.g., pos/invoice) for the invoice.
+     * @param facade The facade used to create it.
+     * @param signRequest Signed request.
      * @return A BitPay Invoice object.
      * @throws BitPayException
      */
-    public Invoice getInvoice(String invoiceId, String token) throws BitPayException {
+    public Invoice getInvoice(String invoiceId, String facade, Boolean signRequest) throws BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", token));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(facade)));
 
-        boolean requireSignature = !PUBLIC_NO_TOKEN.equals(token);
-        HttpResponse response = this.get("invoices/" + invoiceId, params, requireSignature);
+        HttpResponse response = this.get("invoices/" + invoiceId, params, signRequest);
 
-        Invoice i;
+        Invoice invoice;
         try {
-            i = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
         } catch (JsonProcessingException e) {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         } catch (IOException e) {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
-        return i;
+        return invoice;
     }
 
     /**
@@ -470,6 +342,7 @@ public class Client {
      *
      * @param bill   A Bill object with request parameters defined.
      * @param facade The facade used to create it.
+     * @param signRequest Signed request.
      * @return A BitPay generated Bill object.
      * @throws BitPayException
      */
@@ -495,7 +368,7 @@ public class Client {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.cacheAccessToken(bill.getId(), bill.getToken());
+        this.cacheToken(bill.getId(), bill.getToken());
         return bill;
     }
 
@@ -575,7 +448,7 @@ public class Client {
             throw new BitPayException("Error - failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.cacheAccessToken(bill.getId(), bill.getToken());
+        this.cacheToken(bill.getId(), bill.getToken());
         return bill;
     }
 
@@ -772,7 +645,7 @@ public class Client {
             throw new BitPayException("Error - failed to serialize PayoutBatch object : " + e.getMessage());
         }
 
-        HttpResponse response = this.postWithSignature("payouts", json);
+        HttpResponse response = this.post("payouts", json, true);
 
         try {
             batch = mapper.readerForUpdating(batch).readValue(this.responseToJsonString(response));
@@ -782,7 +655,7 @@ public class Client {
             throw new BitPayException("Error - failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         }
 
-        this.cacheAccessToken(batch.getId(), batch.getToken());
+        this.cacheToken(batch.getId(), batch.getToken());
 
         return batch;
     }
@@ -1019,7 +892,7 @@ public class Client {
      * @throws BitPayException
      */
     public RefundHelper requestRefund(String invoiceId, String refundEmail) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
+        Invoice invoice = this.getInvoice(invoiceId);
         return this.requestRefund(invoice, refundEmail, invoice.getPrice(), invoice.getCurrency());
     }
 
@@ -1052,7 +925,7 @@ public class Client {
             throw new BitPayException("Error - failed to serialize Refund object : " + e.getMessage());
         }
 
-        HttpResponse response = this.postWithSignature("invoices/" + invoice.getId() + "/refunds", json);
+        HttpResponse response = this.post("invoices/" + invoice.getId() + "/refunds", json, true);
 
         try {
             refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
@@ -1063,7 +936,7 @@ public class Client {
         }
 
         try {
-            this.cacheAccessToken(refund.getId(), refund.getToken());
+            this.cacheToken(refund.getId(), refund.getToken());
         } catch (java.lang.NullPointerException e) {
             // When using the email address to refund, BitPay does not instantly return a request id
             // Instead BitPay returns 'success':'true'.
@@ -1081,7 +954,7 @@ public class Client {
      * @throws BitPayException
      */
     public boolean cancelRefundRequest(String invoiceId, String refundId) throws BitPayException {
-        Invoice invoice = this.getInvoice(invoiceId, this.getAccessToken(Facade.Merchant));
+        Invoice invoice = this.getInvoice(invoiceId);
         return this.cancelRefundRequest(invoice, refundId);
     }
 
@@ -1204,70 +1077,51 @@ public class Client {
         _identity = KeyUtils.deriveSIN(_ecKey);
     }
 
-    private Hashtable<String, String> responseToTokenCache(HttpResponse response) throws BitPayException {
-        // The response is expected to be an array of key/value pairs (facade name = token).
-        String json = this.responseToJsonString(response);
-
-        try {
-            // Remove the array context so we can map to a hashtable.
-            json = json.replaceAll("\\[", "");
-            json = json.replaceAll("\\]", "");
-            json = json.replaceAll("\\},\\{", ",");
-            if (json.length() > 0) {
-                _tokenCache = new ObjectMapper().readValue(json, new TypeReference<Hashtable<String, String>>() {
-                });
-            }
-
-        } catch (JsonProcessingException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Token array) : " + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Token array) : " + e.getMessage());
-        }
-
-        return _tokenCache;
-    }
-
     private void clearAccessTokenCache() {
         _tokenCache = new Hashtable<String, String>();
     }
 
-    private void cacheAccessToken(String id, String token) {
-        _tokenCache.put(id, token);
-    }
-
-    private boolean tryGetAccessTokens() throws BitPayException {
-        // Attempt to get access tokens for this client identity.
-
-        try {
-            // Success if at least one access token was returned.
-            return this.getAccessTokens() > 0;
-
-        } catch (BitPayException ex) {
-
-            // If the error states that the identity is
-            // invalid then this client has not been
-            // registered with the BitPay account.
-            if (ex.getMessage().contains("Unauthorized sin")) {
-                this.clearAccessTokenCache();
-                return false;
-            } else {
-                // Propagate all other errors.
-                throw ex;
-            }
+    /**
+     * Add this token to the token cache.
+     *
+     * @param key The token type.
+     * @param token The token value.
+     * @return The token associated with resource.
+     */
+    private void cacheToken(String key, String token) throws BitPayException
+    {
+        // we add the token to the runtime dictionary
+        if (tokenExist(key))
+        {
+            _tokenCache.replace(key, token);
         }
+        else
+        {
+            _tokenCache.put(key, token);
+        }
+
+        // we also persist the token
+        WriteTokenCache();
     }
 
-    private int getAccessTokens() throws BitPayException {
-        this.clearAccessTokenCache();
-
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("id", this.getIdentity()));
-
-        HttpResponse response = this.get("tokens", params);
-
-        _tokenCache = responseToTokenCache(response);
-
-        return _tokenCache.size();
+    /**
+     * Persist the token cache to disk.
+     *
+     * @return BitPayException
+     */
+    private void WriteTokenCache() throws BitPayException {
+        try
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode envConfig = this._configuration.getEnvConfig(this._env);
+            JsonNode tokens = mapper.valueToTree(this._tokenCache);
+            ((ObjectNode) envConfig).replace("ApiTokens", tokens);
+            this._configuration.setEnvConfig(envConfig);
+        }
+        catch (Exception e)
+        {
+            throw new BitPayException("Error - When trying to load the tokens : " + e.getMessage());
+        }
     }
 
     private void LoadAccessTokens() throws BitPayException {
@@ -1283,7 +1137,22 @@ public class Client {
                 }
             }
         } catch (Exception e) {
-            throw new BitPayException("Error - failed to deserialize BitPay server response (Token array) : " + e.getMessage());
+            throw new BitPayException("Error - When trying to load the tokens : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieve a token associated with a known resource. The token is used to access other related resources.
+     *
+     * @param key The identifier for the desired resource.
+     * @return The token associated with resource.
+     */
+    public String getAccessToken(String key) throws BitPayException {
+        try
+        {
+            return _tokenCache.get(key);
+        } catch (Exception e) {
+            throw new BitPayException("Error - There is no token for the specified key : " + e.getMessage());
         }
     }
 
@@ -1307,8 +1176,8 @@ public class Client {
                 get.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
                 get.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
-            get.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
-            get.addHeader("x-accept-version", BITPAY_API_VERSION);
+            get.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+            get.addHeader("x-accept-version", Env.BitpayApiVersion);
 
 
             _log.info(get.toString());
@@ -1327,6 +1196,40 @@ public class Client {
         return this.get(uri, null, false);
     }
 
+    private HttpResponse delete(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
+        try {
+
+            String fullURL = _baseUrl + uri;
+            HttpDelete delete = new HttpDelete(fullURL);
+
+            if (parameters != null) {
+
+                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
+
+                delete.setURI(new URI(fullURL));
+
+                delete.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+                delete.addHeader("x-accept-version", Env.BitpayApiVersion);
+                delete.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
+                delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
+            }
+
+            _log.info(delete.toString());
+            return _httpClient.execute(delete);
+
+        } catch (URISyntaxException e) {
+            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
+        } catch (ClientProtocolException e) {
+            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
+        } catch (IOException e) {
+            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
+        }
+    }
+
+    public HttpResponse post(String uri, String json) throws BitPayException {
+        return this.post(uri, json, false);
+    }
+
     public HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
@@ -1338,8 +1241,8 @@ public class Client {
                 post.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
 
-            post.addHeader("x-accept-version", BITPAY_API_VERSION);
-            post.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
+            post.addHeader("x-accept-version", Env.BitpayApiVersion);
+            post.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
             post.addHeader("Content-Type", "application/json");
 
             _log.info(post.toString());
@@ -1354,14 +1257,6 @@ public class Client {
         }
     }
 
-    public HttpResponse post(String uri, String json) throws BitPayException {
-        return this.post(uri, json, false);
-    }
-
-    public HttpResponse postWithSignature(String uri, String json) throws BitPayException {
-        return this.post(uri, json, true);
-    }
-
     public HttpResponse update(String uri, String json) throws BitPayException {
         try {
             HttpPut put = new HttpPut(_baseUrl + uri);
@@ -1370,8 +1265,8 @@ public class Client {
 
             put.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
             put.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
-            put.addHeader("x-accept-version", BITPAY_API_VERSION);
-            put.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
+            put.addHeader("x-accept-version", Env.BitpayApiVersion);
+            put.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
             put.addHeader("Content-Type", "application/json");
 
             _log.info(put.toString());
@@ -1383,36 +1278,6 @@ public class Client {
             throw new BitPayException("Error: PUT failed\n" + e.getMessage());
         } catch (IOException e) {
             throw new BitPayException("Error: PUT failed\n" + e.getMessage());
-        }
-    }
-
-    private HttpResponse delete(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
-        try {
-
-            String fullURL = _baseUrl + uri;
-            HttpDelete delete = new HttpDelete(fullURL);
-
-            if (parameters != null) {
-
-                fullURL += "?" + URLEncodedUtils.format(parameters, "UTF-8");
-
-                delete.setURI(new URI(fullURL));
-
-                delete.addHeader("x-bitpay-plugin-info", BITPAY_PLUGIN_INFO);
-                delete.addHeader("x-accept-version", BITPAY_API_VERSION);
-                delete.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
-                delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
-            }
-
-            _log.info(delete.toString());
-            return _httpClient.execute(delete);
-
-        } catch (URISyntaxException e) {
-            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
-        } catch (ClientProtocolException e) {
-            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
-        } catch (IOException e) {
-            throw new BitPayException("Error: DELETE failed\n" + e.getMessage());
         }
     }
 
@@ -1496,6 +1361,37 @@ public class Client {
             throw new BitPayException("Error - failed to read configuration file : " + e.getMessage());
         } catch (IOException e) {
             throw new BitPayException("Error - failed to read configuration file : " + e.getMessage());
+        }
+    }
+
+    /**
+     * Builds the configuration object
+     *
+     * @throws BitPayException
+     */
+    public void BuildConfig(String privateKeyPath, Env.Tokens tokens) throws BitPayException {
+        try {
+            File privateKeyFile = new File(privateKeyPath);
+            if (!privateKeyFile.exists())
+            {
+                throw new BitPayException("Private Key file not found");
+            }
+            Config config = new Config();
+            config.setEnvironment(this._env);
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode ApiTokens = mapper.valueToTree(tokens);
+
+            ObjectNode envConfig = mapper.createObjectNode();
+            envConfig.put("PrivateKeyPath", privateKeyPath).put("ApiTokens", ApiTokens);
+
+            ObjectNode envTarget = mapper.createObjectNode();
+            envTarget.put(this._env, envConfig);
+
+            config.setEnvConfig(envTarget);
+            this._configuration = config;
+        } catch (Exception e) {
+            throw new BitPayException("Error - failed to process configuration : " + e.getMessage());
         }
     }
 }

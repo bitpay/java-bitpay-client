@@ -1,6 +1,7 @@
 package test;
 
 import com.bitpay.BitPayException;
+import com.bitpay.Env;
 import com.bitpay.model.Rate.Rate;
 import com.bitpay.model.Rate.Rates;
 import com.bitpay.model.Settlement.Settlement;
@@ -46,9 +47,18 @@ public class BitPayTest {
     public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
         boolean dumpOut = false;
 
-        Client bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        Client bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+        Client bitpay = new Client(
+                Env.Test,
+                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
+                new Env.Tokens(){{
+                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
+                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+                    payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+                }}
+        );
 
-        if (!bitpay.clientIsAuthorized(Facade.Merchant)) {
+        if (!bitpay.tokenExist(Facade.Merchant)) {
             // Get MERCHANT facade authorization.
             // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
             // is created by your administrator it is assigned a facade.  To generate invoices a
@@ -56,7 +66,7 @@ public class BitPayTest {
             pairingCode = bitpay.requestClientAuthorization(Facade.Merchant);
 
             // Signal the device operator that this client needs to be paired with a merchant account.
-            _log.info("Client is requesting MERCHANT facade access. Go to " + Client.BITPAY_TEST_URL + " and pair this client with your merchant account using the pairing code: " + pairingCode);
+            _log.info("Client is requesting MERCHANT facade access. Go to " + Env.TestUrl + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             dumpOut = true;
         }
 
@@ -68,8 +78,16 @@ public class BitPayTest {
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client(myKeyFile, clientName, Client.BITPAY_TEST_URL);
-        bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+        bitpay = new Client(
+            Env.Test,
+            "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
+            new Env.Tokens(){{
+                pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
+                merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+                payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+            }}
+        );
     }
 
     @Test
@@ -161,7 +179,7 @@ public class BitPayTest {
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice(invoice.getId(), token);
+            retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
         } catch (BitPayException e) {
             e.printStackTrace();
             fail(e.getMessage());
