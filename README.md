@@ -1,64 +1,18 @@
-java-bitpay-client
-==================
+<img src="https://bitpay.com/_nuxt/img/1c0494b.svg" width="150">
 
-This is the Java client library for the BitPay Payment Gateway.  This library implements BitPay's [Cryptographically Secure RESTful API](https://bitpay.com/api).
+# BitPay Java client
+[![License](https://img.shields.io/github/license/bitpay/java-bitpay-client.svg?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bitpay/java-bitpay-client/master/LICENSE)
 
-## Quick Start Guide
+Full implementation of the BitPay Payment Gateway. This library implements BitPay's [Cryptographically Secure RESTful API](https://bitpay.com/api).
 
-To get up and running with our Java library quickly, see the GUIDE here: https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md
+## Getting Started
 
-## Eclipse Project Setup
-
-1. Import the project from git repository.
-
-```
-From Project Explorer > Import > Projects from Git ...
-```
-
-2. Convert project to a Java project - locate and edit the .project file in your Eclipse workspace directory to include the following.
-
-```xml
-<buildSpec>
-    <buildCommand>
-        <name>org.eclipse.jdt.core.javabuilder</name>
-        <arguments>
-        </arguments>
-    </buildCommand>
-</buildSpec>
-<natures>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-</natures>
-```
-
-3. Download project dependencies using maven.
-
-```
-cd <root directory of project>
-mvn dependency:copy-dependencies -DoutputDirectory=lib
-```
-
-4. Add dependencies - add external JAR files downloaded by maven to the Eclipse project.
-
-```
-Project > Properties > Java Build Path > Libraries > Add External JARs > (choose all JARs in lib directory)
-```
-
-5. Add JUnit Library to the project.
-
-```
-Project > Properties > Java Build Path > Libraries > Add Library > Unit > Unit 4
-```
-
-6. Run tests.
-
-```
-src/test/BitPayTest.java > Run As > JUnit Test
-```
+To get up and running with our C# library quickly, follow [The GUIDE](https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md)
 
 ## Support
 
 * https://github.com/bitpay/java-bitpay-client/issues
-* https://help.bitpay.com/
+* https://support.bitpay.com
 
 ## Contribute
 
@@ -66,9 +20,9 @@ To contribute to this project, please fork and submit a pull request.
 
 ## License
 
-The MIT License (MIT)
+MIT License
 
-Copyright (c) 2014-2018 BitPay, Inc.
+Copyright (c) 2019 BitPay
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
