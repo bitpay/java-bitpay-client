@@ -1109,12 +1109,10 @@ public class Client {
     private void WriteTokenCache() throws BitPayException {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode envConfig = this._configuration.getEnvConfig(this._env);
             JsonNode tokens = mapper.valueToTree(this._tokenCache);
-            ((ObjectNode) envConfig).replace("ApiTokens", tokens);
-            this._configuration.setEnvConfig(envConfig);
+            ((ObjectNode) this._configuration.getEnvConfig(this._env)).put("ApiTokens", tokens);
         } catch (Exception e) {
-            throw new BitPayException("Error - When trying to load the tokens : " + e.getMessage());
+            throw new BitPayException("Error - When trying to write the tokens : " + e.getMessage());
         }
     }
 
