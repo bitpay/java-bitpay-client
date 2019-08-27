@@ -1,13 +1,13 @@
 package test;
 
 import com.bitpay.BitPayException;
-import com.bitpay.Env;
-import com.bitpay.model.Payout.PayoutStatus;
-import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
+import com.bitpay.Env;
 import com.bitpay.model.Facade;
 import com.bitpay.model.Payout.PayoutBatch;
 import com.bitpay.model.Payout.PayoutInstruction;
+import com.bitpay.model.Payout.PayoutStatus;
+import com.bitpay.util.BitPayLogger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,11 +33,11 @@ public class BitPayTest3 {
     public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
         boolean dumpOut = false;
 
-//        Client bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        Client bitpay = new Client("BitPay.config.json");
         Client bitpay = new Client(
                 Env.Test,
-                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
-                new Env.Tokens(){{
+                "bitpay_private_test.key",
+                new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
@@ -76,15 +76,15 @@ public class BitPayTest3 {
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        bitpay = new Client("BitPay.config.json");
         bitpay = new Client(
-            Env.Test,
-            "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
-            new Env.Tokens(){{
-                pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
-            }}
+                Env.Test,
+                "bitpay_private_test.key",
+                new Env.Tokens() {{
+                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
+                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+                    payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
+                }}
         );
     }
 

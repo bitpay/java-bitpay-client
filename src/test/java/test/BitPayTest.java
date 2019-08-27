@@ -1,20 +1,23 @@
 package test;
 
 import com.bitpay.BitPayException;
-import com.bitpay.Env;
-import com.bitpay.model.Rate.Rate;
-import com.bitpay.model.Rate.Rates;
-import com.bitpay.model.Settlement.Settlement;
-import com.bitpay.util.BitPayLogger;
 import com.bitpay.Client;
+import com.bitpay.Env;
 import com.bitpay.model.Bill.Bill;
 import com.bitpay.model.Bill.BillStatus;
 import com.bitpay.model.Bill.Item;
-import com.bitpay.model.*;
+import com.bitpay.model.Currency;
+import com.bitpay.model.Facade;
 import com.bitpay.model.Invoice.Buyer;
 import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.InvoiceStatus;
 import com.bitpay.model.Ledger.Ledger;
+import com.bitpay.model.Rate.Rate;
+import com.bitpay.model.Rate.Rates;
+import com.bitpay.model.Refund;
+import com.bitpay.model.RefundHelper;
+import com.bitpay.model.Settlement.Settlement;
+import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
@@ -47,11 +50,11 @@ public class BitPayTest {
     public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
         boolean dumpOut = false;
 
-//        Client bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        Client bitpay = new Client("BitPay.config.json");
         Client bitpay = new Client(
                 Env.Test,
-                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
-                new Env.Tokens(){{
+                "bitpay_private_test.key",
+                new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
@@ -78,15 +81,15 @@ public class BitPayTest {
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/BitPay.config.json");
+//        bitpay = new Client("BitPay.config.json");
         bitpay = new Client(
-            Env.Test,
-            "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/bitpay_private_test.key",
-            new Env.Tokens(){{
-                pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-            }}
+                Env.Test,
+                "bitpay_private_test.key",
+                new Env.Tokens() {{
+                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
+                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+                    payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+                }}
         );
     }
 
@@ -237,7 +240,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -272,7 +275,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.EUR, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.EUR, "", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -307,7 +310,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -342,7 +345,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -377,7 +380,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         try {
@@ -414,7 +417,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         Bill updatedBill = null;
@@ -463,7 +466,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "agallardo+java190812@bitpay.com", items);
+        Bill bill = new Bill("7", Currency.USD, "", items);
         Bill basicBill = null;
         String result = "";
         Bill retrievedBill = null;
