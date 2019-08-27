@@ -58,8 +58,8 @@ public class PayoutBatch {
     /**
      * Constructor, create an instruction-full request PayoutBatch object.
      *
-     * @param effectiveDate  Date when request is effective. Note that the time of day will automatically be set to 09:00:00.000 UTC time for the given day. Only requests submitted before 09:00:00.000 UTC are guaranteed to be processed on the same day.
-     * @param instructions   Payout instructions.
+     * @param effectiveDate Date when request is effective. Note that the time of day will automatically be set to 09:00:00.000 UTC time for the given day. Only requests submitted before 09:00:00.000 UTC are guaranteed to be processed on the same day.
+     * @param instructions  Payout instructions.
      */
     public PayoutBatch(String currency, long effectiveDate, List<PayoutInstruction> instructions) {
         this._currency = currency;

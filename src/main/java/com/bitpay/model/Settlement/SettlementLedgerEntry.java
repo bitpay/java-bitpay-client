@@ -73,7 +73,9 @@ public class SettlementLedgerEntry {
     }
 
     @JsonIgnore
-    public String getReference() { return _reference; }
+    public String getReference() {
+        return _reference;
+    }
 
     @JsonProperty("reference")
     public void setReference(String reference) {

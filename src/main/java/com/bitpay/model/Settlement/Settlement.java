@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -49,7 +50,9 @@ public class Settlement {
     }
 
     @JsonProperty("accountId")
-    public void setAccountId(String accountId) { this._accountId = accountId; }
+    public void setAccountId(String accountId) {
+        this._accountId = accountId;
+    }
 
     @JsonIgnore
     public String getCurrency() {
@@ -57,7 +60,9 @@ public class Settlement {
     }
 
     @JsonProperty("currency")
-    public void setCurrency(String currency) { this._currency = currency; }
+    public void setCurrency(String currency) {
+        this._currency = currency;
+    }
 
     @JsonIgnore
     public PayoutInfo getPayoutInfo() {
@@ -65,7 +70,9 @@ public class Settlement {
     }
 
     @JsonProperty("payoutInfo")
-    public void setPayoutInfo(PayoutInfo payoutInfo) { this._payoutInfo = payoutInfo; }
+    public void setPayoutInfo(PayoutInfo payoutInfo) {
+        this._payoutInfo = payoutInfo;
+    }
 
     @JsonIgnore
     public String getStatus() {
@@ -73,7 +80,9 @@ public class Settlement {
     }
 
     @JsonProperty("status")
-    public void setStatus(String status) { this._status = status; }
+    public void setStatus(String status) {
+        this._status = status;
+    }
 
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
@@ -166,7 +175,9 @@ public class Settlement {
     }
 
     @JsonIgnore
-    public Float getWithHoldingsSum() { return _withHoldingsSum; }
+    public Float getWithHoldingsSum() {
+        return _withHoldingsSum;
+    }
 
     @JsonProperty("withHoldingsSum")
     public void setWithHoldingsSum(Float withHoldingsSum) {
@@ -174,7 +185,9 @@ public class Settlement {
     }
 
     @JsonIgnore
-    public Float getTotalAmount() { return _totalAmount; }
+    public Float getTotalAmount() {
+        return _totalAmount;
+    }
 
     @JsonProperty("totalAmount")
     public void setTotalAmount(Float totalAmount) {
@@ -197,5 +210,7 @@ public class Settlement {
     }
 
     @JsonProperty("token")
-    public void setToken(String token) { this._token = token; }
+    public void setToken(String token) {
+        this._token = token;
+    }
 }

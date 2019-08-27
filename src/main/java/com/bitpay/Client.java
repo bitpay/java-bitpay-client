@@ -1,7 +1,7 @@
 package com.bitpay;
 
 import com.bitpay.model.Bill.Bill;
-import com.bitpay.model.*;
+import com.bitpay.model.Facade;
 import com.bitpay.model.Invoice.Invoice;
 import com.bitpay.model.Invoice.PaymentTotal;
 import com.bitpay.model.Ledger.Ledger;
@@ -9,10 +9,13 @@ import com.bitpay.model.Ledger.LedgerEntry;
 import com.bitpay.model.Payout.PayoutBatch;
 import com.bitpay.model.Rate.Rate;
 import com.bitpay.model.Rate.Rates;
+import com.bitpay.model.Refund;
+import com.bitpay.model.RefundHelper;
 import com.bitpay.model.Settlement.Settlement;
+import com.bitpay.model.Token;
 import com.bitpay.util.BitPayLogger;
 import com.bitpay.util.KeyUtils;
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,14 +55,13 @@ import java.util.*;
 
 public class Client {
 
+    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
     private Config _configuration;
     private String _env;
     private Hashtable<String, String> _tokenCache; // {facade, token}
     private String _configFilePath;
     private String _baseUrl;
     private ECKey _ecKey;
-    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-
     private HttpClient _httpClient = null;
 
     /**
@@ -70,9 +72,9 @@ public class Client {
     /**
      * Constructor for use if the keys and SIN are managed by this library.
      *
-     * @param environment Target environment. Options: Env.Test / Env.Prod
+     * @param environment    Target environment. Options: Env.Test / Env.Prod
      * @param privateKeyPath Private Key file path.
-     * @param tokens Env.Tokens containing the available tokens.
+     * @param tokens         Env.Tokens containing the available tokens.
      * @throws BitPayException
      */
     public Client(String environment, String privateKeyPath, Env.Tokens tokens) throws BitPayException {
@@ -213,8 +215,7 @@ public class Client {
      * @param facade The facade name for which the token is requested.
      * @return The token for the given facade.
      */
-    public String GetTokenByFacade(String facade)
-    {
+    public String GetTokenByFacade(String facade) {
         if (!_tokenCache.containsKey(facade))
             return "";
 
@@ -235,8 +236,8 @@ public class Client {
     /**
      * Create a BitPay invoice.
      *
-     * @param invoice An Invoice object with request parameters defined.
-     * @param facade The facade used to create it.
+     * @param invoice     An Invoice object with request parameters defined.
+     * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException
@@ -283,8 +284,8 @@ public class Client {
     /**
      * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade (the public facade requires no authorization).
      *
-     * @param invoiceId The id of the invoice to retrieve.
-     * @param facade The facade used to create it.
+     * @param invoiceId   The id of the invoice to retrieve.
+     * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay Invoice object.
      * @throws BitPayException
@@ -340,8 +341,8 @@ public class Client {
     /**
      * Create a BitPay Bill.
      *
-     * @param bill   A Bill object with request parameters defined.
-     * @param facade The facade used to create it.
+     * @param bill        A Bill object with request parameters defined.
+     * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay generated Bill object.
      * @throws BitPayException
@@ -766,20 +767,20 @@ public class Client {
     }
 
     /**
-     *  Retrieves settlement reports for the calling merchant filtered by query.
+     * Retrieves settlement reports for the calling merchant filtered by query.
      * The `limit` and `offset` parameters
      * specify pages for large query sets.
      *
-     * @param currency The three digit currency string for the ledger to retrieve.
+     * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The start date for the query.
-     * @param dateEnd The end date for the query.
-     * @param status Can be `processing`, `completed`, or `failed`.
-     * @param limit Maximum number of settlements to retrieve.
-     * @param offset Offset for paging.
+     * @param dateEnd   The end date for the query.
+     * @param status    Can be `processing`, `completed`, or `failed`.
+     * @param limit     Maximum number of settlements to retrieve.
+     * @param offset    Offset for paging.
      * @return A list of BitPay Settlement objects.
      * @throws BitPayException
      */
-    public List<Settlement> getSettlements(String currency, String  dateStart, String  dateEnd, String status,Integer limit, Integer offset) throws BitPayException {
+    public List<Settlement> getSettlements(String currency, String dateStart, String dateEnd, String status, Integer limit, Integer offset) throws BitPayException {
         status = status != null ? status : "";
         limit = limit != null ? limit : 100;
         offset = offset != null ? offset : 0;
@@ -883,6 +884,7 @@ public class Client {
     }
 
     // TODO refactor when resource is available
+
     /**
      * Request a full refund for a BitPay invoice.  The invoice full price and currency type are used in the request.
      *
@@ -1046,8 +1048,7 @@ public class Client {
      * @throws URISyntaxException
      */
     private void init() throws BitPayException {
-        try
-        {
+        try {
             this._baseUrl = this._env.equals(Env.Test) ? Env.TestUrl : Env.ProdUrl;
             _httpClient = HttpClientBuilder.create().build();
             deriveIdentity();
@@ -1084,19 +1085,15 @@ public class Client {
     /**
      * Add this token to the token cache.
      *
-     * @param key The token type.
+     * @param key   The token type.
      * @param token The token value.
      * @return The token associated with resource.
      */
-    private void cacheToken(String key, String token) throws BitPayException
-    {
+    private void cacheToken(String key, String token) throws BitPayException {
         // we add the token to the runtime dictionary
-        if (tokenExist(key))
-        {
+        if (tokenExist(key)) {
             _tokenCache.replace(key, token);
-        }
-        else
-        {
+        } else {
             _tokenCache.put(key, token);
         }
 
@@ -1110,23 +1107,19 @@ public class Client {
      * @return BitPayException
      */
     private void WriteTokenCache() throws BitPayException {
-        try
-        {
+        try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode envConfig = this._configuration.getEnvConfig(this._env);
             JsonNode tokens = mapper.valueToTree(this._tokenCache);
             ((ObjectNode) envConfig).replace("ApiTokens", tokens);
             this._configuration.setEnvConfig(envConfig);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new BitPayException("Error - When trying to load the tokens : " + e.getMessage());
         }
     }
 
     private void LoadAccessTokens() throws BitPayException {
-        try
-        {
+        try {
             this.clearAccessTokenCache();
 
             Iterator<Map.Entry<String, JsonNode>> tokens = this._configuration.getEnvConfig(this._env).path("ApiTokens").fields();
@@ -1148,8 +1141,7 @@ public class Client {
      * @return The token associated with resource.
      */
     public String getAccessToken(String key) throws BitPayException {
-        try
-        {
+        try {
             return _tokenCache.get(key);
         } catch (Exception e) {
             throw new BitPayException("Error - There is no token for the specified key : " + e.getMessage());
@@ -1372,8 +1364,7 @@ public class Client {
     public void BuildConfig(String privateKeyPath, Env.Tokens tokens) throws BitPayException {
         try {
             File privateKeyFile = new File(privateKeyPath);
-            if (!privateKeyFile.exists())
-            {
+            if (!privateKeyFile.exists()) {
                 throw new BitPayException("Private Key file not found");
             }
             Config config = new Config();
