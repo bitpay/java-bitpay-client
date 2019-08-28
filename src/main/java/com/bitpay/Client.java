@@ -1092,8 +1092,6 @@ public class Client {
     private void cacheToken(String key, String token) throws BitPayException {
         // we add the token to the runtime dictionary
         if (tokenExist(key)) {
-            _tokenCache.replace(key, token);
-        } else {
             _tokenCache.put(key, token);
         }
 
