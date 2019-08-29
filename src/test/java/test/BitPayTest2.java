@@ -1,12 +1,12 @@
 package test;
 
-import com.bitpay.BitPayException;
-import com.bitpay.Client;
-import com.bitpay.Env;
-import com.bitpay.model.Currency;
-import com.bitpay.model.Facade;
-import com.bitpay.model.Invoice.Invoice;
-import com.bitpay.util.BitPayLogger;
+import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.Client;
+import com.bitpay.sdk.Env;
+import com.bitpay.sdk.model.Currency;
+import com.bitpay.sdk.model.Facade;
+import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.util.BitPayLogger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
