@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Hashtable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class refundInfo {
+public class RefundInfo {
 
     private String _supportRequest;
     private String _currency;
     private Hashtable<String, Double> _amounts;
 
-    public refundInfo() {
+    public RefundInfo() {
     }
 
     @JsonIgnore
