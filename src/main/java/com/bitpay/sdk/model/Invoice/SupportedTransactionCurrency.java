@@ -16,7 +16,7 @@ public class SupportedTransactionCurrency {
     }
 
     @JsonProperty("enabled")
-    public void setNotify(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this._enabled = enabled;
     }
 }

@@ -7,7 +7,7 @@ Full implementation of the BitPay Payment Gateway. This library implements BitPa
 
 ## Getting Started
 
-To get up and running with our C# library quickly, follow [The GUIDE](https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md)
+To get up and running with our Java library quickly, follow [The GUIDE](https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md)
 
 ## Support
 

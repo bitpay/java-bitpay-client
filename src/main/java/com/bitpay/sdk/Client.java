@@ -1074,6 +1074,7 @@ public class Client {
     private void initKeys() throws IOException, URISyntaxException {
         if (KeyUtils.privateKeyExists(this._configuration.getEnvConfig(this._env).path("PrivateKeyPath").toString().replace("\"", ""))) {
             _ecKey = KeyUtils.loadEcKey();
+            _ecKey.getPrivateKeyAsHex();
         } else {
             _ecKey = KeyUtils.createEcKey();
             KeyUtils.saveEcKey(_ecKey);
