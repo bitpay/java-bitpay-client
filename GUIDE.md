@@ -70,7 +70,7 @@ Once you have the environment file (JSON previously generated) you can initializ
 ```Java
 // Provide the full path to the env file which you have previously stored securely.
 
-Client bitpay = new Client("[FULL_PATH_TO_THE_PRIVATE_KEY]");
+Client bitpay = new Client("[FULL_PATH_TO_THE_CONFIG_FILE]");
 ```
 
 ```Java

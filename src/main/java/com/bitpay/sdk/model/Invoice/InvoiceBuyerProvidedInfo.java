@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class InvoiceBuyerProvidedInfo {
     private String _name;
     private String _phoneNumber;
+    private String _selectedTransactionCurrency;
     private String _emailAddress;
 
     public InvoiceBuyerProvidedInfo() {
@@ -29,6 +30,16 @@ public class InvoiceBuyerProvidedInfo {
     @JsonProperty("phoneNumber")
     public void setPhoneNumber(String phoneNumber) {
         this._phoneNumber = phoneNumber;
+    }
+
+    @JsonIgnore
+    public String getSelectedTransactionCurrency() {
+        return _selectedTransactionCurrency;
+    }
+
+    @JsonProperty("selectedTransactionCurrency")
+    public void setSelectedTransactionCurrency(String selectedTransactionCurrency) {
+        this._selectedTransactionCurrency = selectedTransactionCurrency;
     }
 
     @JsonIgnore
