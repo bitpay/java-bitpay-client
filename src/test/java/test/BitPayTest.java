@@ -105,7 +105,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(50.0, "USD");
         try {
             basicInvoice = bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -117,7 +117,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(50.0, "USD");
         try {
             basicInvoice = bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -129,7 +129,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(2.0, "EUR");
         try {
             basicInvoice = bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -141,7 +141,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(0.1, "BTC");
         try {
             invoice = this.bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -153,7 +153,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(100.0, "USD");
         try {
             invoice = this.bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -165,7 +165,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(100.0, "EUR");
         try {
             invoice = this.bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -183,7 +183,7 @@ public class BitPayTest {
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
             retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -203,7 +203,7 @@ public class BitPayTest {
         invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
         try {
             invoice = this.bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -244,7 +244,7 @@ public class BitPayTest {
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -279,7 +279,7 @@ public class BitPayTest {
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -314,7 +314,7 @@ public class BitPayTest {
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -349,7 +349,7 @@ public class BitPayTest {
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -386,7 +386,7 @@ public class BitPayTest {
         try {
             basicBill = this.bitpay.createBill(bill);
             retrievedBill = this.bitpay.getBill(basicBill.getId());
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -432,7 +432,7 @@ public class BitPayTest {
                 setDescription("product-added");
             }});
             updatedBill = this.bitpay.updateBill(retrievedBill, retrievedBill.getId());
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -474,7 +474,7 @@ public class BitPayTest {
             basicBill = this.bitpay.createBill(bill);
             result = this.bitpay.deliverBill(basicBill.getId(), basicBill.getToken());
             retrievedBill = this.bitpay.getBill(basicBill.getId());
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -486,7 +486,7 @@ public class BitPayTest {
         List<Bill> bills = null;
         try {
             bills = this.bitpay.getBills();
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -498,7 +498,7 @@ public class BitPayTest {
         List<Bill> bills = null;
         try {
             bills = this.bitpay.getBills(BillStatus.Draft);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -512,7 +512,7 @@ public class BitPayTest {
         try {
             rates = this.bitpay.getRates();
             rateList = rates.getRates();
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -526,7 +526,7 @@ public class BitPayTest {
         try {
             rates = this.bitpay.getRates();
             rate = rates.getRate("EUR");
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -540,7 +540,7 @@ public class BitPayTest {
         try {
             rates = this.bitpay.getRates();
             rate = rates.getRate("CNY");
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -555,7 +555,7 @@ public class BitPayTest {
             rates = this.bitpay.getRates();
             rates.update();
             rateList = rates.getRates();
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -573,7 +573,7 @@ public class BitPayTest {
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
             invoices = this.bitpay.getInvoices(sevenDaysAgo, today);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert invoices != null;
@@ -592,7 +592,7 @@ public class BitPayTest {
             String tomorrow = sdf.format(dateTomorrow);
             String sevenDaysAgo = sdf.format(dateBefore);
             ledger = this.bitpay.getLedger(Currency.BTC, sevenDaysAgo, tomorrow);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert ledger.getEntries() != null;
@@ -611,7 +611,7 @@ public class BitPayTest {
             String tomorrow = sdf.format(dateTomorrow);
             String sevenDaysAgo = sdf.format(dateBefore);
             ledger = this.bitpay.getLedger(Currency.USD, sevenDaysAgo, tomorrow);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert ledger.getEntries() != null;
@@ -623,7 +623,7 @@ public class BitPayTest {
         List<Ledger> ledgers = null;
         try {
             ledgers = this.bitpay.getLedgers();
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert ledgers != null;
@@ -652,7 +652,7 @@ public class BitPayTest {
                     break;
                 }
             }
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(refundInvoiceId);
@@ -666,7 +666,7 @@ public class BitPayTest {
 
             List<Refund> refunds = this.bitpay.getAllRefunds(refundRequest.getInvoice());
 
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -685,7 +685,7 @@ public class BitPayTest {
 
             // make sure we get a ledger with a not null Entries property
             settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert settlements != null;
@@ -709,7 +709,7 @@ public class BitPayTest {
             settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
             firstSettlement = settlements.get(0);
             settlement = this.bitpay.getSettlement(firstSettlement.getId());
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(settlement.getId());
@@ -733,7 +733,7 @@ public class BitPayTest {
             settlements = this.bitpay.getSettlements(Currency.USD, oneMonthAgo, today, null, null, null);
             firstSettlement = settlements.get(0);
             settlement = this.bitpay.getSettlementReconciliationReport(firstSettlement);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(settlement.getId());

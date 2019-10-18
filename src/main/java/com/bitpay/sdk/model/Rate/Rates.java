@@ -1,7 +1,7 @@
 package com.bitpay.sdk.model.Rate;
 
-import com.bitpay.sdk.BitPayException;
 import com.bitpay.sdk.Client;
+import com.bitpay.sdk.exceptions.RateQueryException;
 
 import java.util.List;
 
@@ -19,8 +19,12 @@ public class Rates {
         return _rates;
     }
 
-    public void update() throws BitPayException {
-        _rates = _bp.getRates().getRates();
+    public void update() throws RateQueryException {
+        try {
+            _rates = _bp.getRates().getRates();
+        } catch (Exception e) {
+            throw new RateQueryException(e.getMessage());
+        }
     }
 
     public double getRate(String currencyCode) {
