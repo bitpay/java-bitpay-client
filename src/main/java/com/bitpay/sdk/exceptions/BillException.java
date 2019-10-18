@@ -4,7 +4,7 @@ public class BillException extends BitPayException {
     /**
      * Construct the BillException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public BillException(String message) {
         super(BuildMessage(message));

@@ -4,7 +4,7 @@ public class BitPayException extends Exception {
     /**
      * Construct the BitPayException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public BitPayException(String message) {
         super(BuildMessage(message));

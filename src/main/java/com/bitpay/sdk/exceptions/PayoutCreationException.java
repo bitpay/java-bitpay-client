@@ -4,7 +4,7 @@ public class PayoutCreationException extends BitPayException {
     /**
      * Construct the PayoutCreationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public PayoutCreationException(String message) {
         super(BuildMessage(message));

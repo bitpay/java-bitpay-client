@@ -4,7 +4,7 @@ public class SettlementQueryException extends SettlementException {
     /**
      * Construct the SettlementQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public SettlementQueryException(String message) {
         super(BuildMessage(message));

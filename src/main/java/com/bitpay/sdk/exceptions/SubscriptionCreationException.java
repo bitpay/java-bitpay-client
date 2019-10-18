@@ -4,7 +4,7 @@ public class SubscriptionCreationException extends SubscriptionException {
     /**
      * Construct the SubscriptionCreationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public SubscriptionCreationException(String message) {
         super(BuildMessage(message));

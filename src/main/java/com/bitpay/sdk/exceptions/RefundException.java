@@ -4,7 +4,7 @@ public class RefundException extends BitPayException {
     /**
      * Construct the RefundException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public RefundException(String message) {
         super(BuildMessage(message));

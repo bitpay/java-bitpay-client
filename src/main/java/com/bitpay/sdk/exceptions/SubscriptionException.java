@@ -4,7 +4,7 @@ public class SubscriptionException extends BitPayException {
     /**
      * Construct the SubscriptionException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public SubscriptionException(String message) {
         super(BuildMessage(message));

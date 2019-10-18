@@ -4,7 +4,7 @@ public class PayoutQueryException extends PayoutException {
     /**
      * Construct the PayoutQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public PayoutQueryException(String message) {
         super(BuildMessage(message));

@@ -4,7 +4,7 @@ public class RateQueryException extends RateException {
     /**
      * Construct the RateQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public RateQueryException(String message) {
         super(BuildMessage(message));

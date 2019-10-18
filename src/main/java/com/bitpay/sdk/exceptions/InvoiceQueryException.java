@@ -4,7 +4,7 @@ public class InvoiceQueryException extends InvoiceException {
     /**
      * Construct the InvoiceQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public InvoiceQueryException(String message) {
         super(BuildMessage(message));

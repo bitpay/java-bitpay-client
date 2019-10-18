@@ -4,7 +4,7 @@ public class InvoiceCreationException extends InvoiceException {
     /**
      * Construct the InvoiceCreationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public InvoiceCreationException(String message) {
         super(BuildMessage(message));

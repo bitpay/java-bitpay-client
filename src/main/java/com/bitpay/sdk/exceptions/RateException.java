@@ -4,7 +4,7 @@ public class RateException extends BitPayException {
     /**
      * Construct the RateException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public RateException(String message) {
         super(BuildMessage(message));

@@ -4,7 +4,7 @@ public class RefundQueryException extends RefundException {
     /**
      * Construct the RefundQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public RefundQueryException(String message) {
         super(BuildMessage(message));

@@ -4,7 +4,7 @@ public class LedgerException extends BitPayException {
     /**
      * Construct the LedgerException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public LedgerException(String message) {
         super(BuildMessage(message));

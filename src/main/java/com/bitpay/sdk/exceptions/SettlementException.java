@@ -4,7 +4,7 @@ public class SettlementException extends BitPayException {
     /**
      * Construct the SettlementException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public SettlementException(String message) {
         super(BuildMessage(message));

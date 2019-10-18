@@ -4,7 +4,7 @@ public class BillUpdateException extends BillException {
     /**
      * Construct the BillUpdateException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public BillUpdateException(String message) {
         super(BuildMessage(message));

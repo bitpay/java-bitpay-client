@@ -4,7 +4,7 @@ public class LedgerQueryException extends LedgerException {
     /**
      * Construct the LedgerQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public LedgerQueryException(String message) {
         super(BuildMessage(message));

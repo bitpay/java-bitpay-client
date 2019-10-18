@@ -4,7 +4,7 @@ public class BillCreationException extends BillException {
     /**
      * Construct the BillCreationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public BillCreationException(String message) {
         super(BuildMessage(message));

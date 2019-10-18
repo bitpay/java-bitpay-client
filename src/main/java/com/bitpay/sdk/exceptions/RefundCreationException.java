@@ -4,7 +4,7 @@ public class RefundCreationException extends RefundException {
     /**
      * Construct the RefundCreationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public RefundCreationException(String message) {
         super(BuildMessage(message));

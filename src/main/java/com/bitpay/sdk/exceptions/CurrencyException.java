@@ -4,7 +4,7 @@ public class CurrencyException extends BitPayException {
     /**
      * Construct the CurrencyException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public CurrencyException(String message) {
         super(BuildMessage(message));

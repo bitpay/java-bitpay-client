@@ -4,7 +4,7 @@ public class InvoiceException extends BitPayException {
     /**
      * Construct the InvoiceException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public InvoiceException(String message) {
         super(BuildMessage(message));

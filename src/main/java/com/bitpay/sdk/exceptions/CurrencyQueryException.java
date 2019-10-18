@@ -4,7 +4,7 @@ public class CurrencyQueryException extends CurrencyException {
     /**
      * Construct the CurrencyQueryException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public CurrencyQueryException(String message) {
         super(BuildMessage(message));

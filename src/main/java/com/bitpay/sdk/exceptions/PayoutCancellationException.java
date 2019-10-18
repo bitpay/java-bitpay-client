@@ -4,7 +4,7 @@ public class PayoutCancellationException extends PayoutException {
     /**
      * Construct the PayoutCancellationException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public PayoutCancellationException(String message) {
         super(BuildMessage(message));

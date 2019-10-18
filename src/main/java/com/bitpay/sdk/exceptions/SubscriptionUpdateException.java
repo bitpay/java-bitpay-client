@@ -4,7 +4,7 @@ public class SubscriptionUpdateException extends SubscriptionException {
     /**
      * Construct the SubscriptionUpdateException.
      *
-     * @param @message String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message to throw.
      */
     public SubscriptionUpdateException(String message) {
         super(BuildMessage(message));
