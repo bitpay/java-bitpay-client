@@ -107,7 +107,7 @@ public class BitPayTest3 {
             assertNotNull(batch.getId());
             assertTrue(batch.getInstructions().size() == 2);
 
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -139,7 +139,7 @@ public class BitPayTest3 {
 
             this.bitpay.cancelPayoutBatch(batch0.getId());
 
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -150,7 +150,7 @@ public class BitPayTest3 {
         try {
             List<PayoutBatch> batches = this.bitpay.getPayoutBatches();
             assertTrue(batches.size() > 0);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -161,7 +161,7 @@ public class BitPayTest3 {
         try {
             List<PayoutBatch> batches = this.bitpay.getPayoutBatches(PayoutStatus.New);
             assertTrue(batches.size() > 0);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }

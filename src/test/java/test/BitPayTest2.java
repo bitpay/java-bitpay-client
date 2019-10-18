@@ -68,7 +68,7 @@ public class BitPayTest2 {
         Invoice invoice = new Invoice(1.00, "USD");
         try {
             invoice = bitpay.createInvoice(invoice);
-        } catch (BitPayException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(invoice.getId());

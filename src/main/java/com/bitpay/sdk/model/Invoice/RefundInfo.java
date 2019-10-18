@@ -5,6 +5,7 @@ import com.bitpay.sdk.model.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Hashtable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

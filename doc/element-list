@@ -1,4 +1,5 @@
 com.bitpay.sdk
+com.bitpay.sdk.exceptions
 com.bitpay.sdk.model
 com.bitpay.sdk.model.Bill
 com.bitpay.sdk.model.Invoice
