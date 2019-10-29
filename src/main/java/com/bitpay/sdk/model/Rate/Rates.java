@@ -2,9 +2,11 @@ package com.bitpay.sdk.model.Rate;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.RateQueryException;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Rates {
 
     private Client _bp;

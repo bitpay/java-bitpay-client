@@ -14,8 +14,7 @@ import com.bitpay.sdk.model.Invoice.InvoiceStatus;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
-import com.bitpay.sdk.model.Refund;
-import com.bitpay.sdk.model.RefundHelper;
+import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
@@ -29,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -41,7 +41,6 @@ public class BitPayTest {
     private final static double EPSILON = .001;
     private static String clientName = "BitPay Java Library Tester";
     private static String pairingCode;
-    private static String refundInvoiceId = null;
     private static URI myKeyFile;
     private Client bitpay;
     private Invoice basicInvoice;
@@ -103,6 +102,7 @@ public class BitPayTest {
     @Test
     public void testShouldGetInvoiceId() {
         Invoice invoice = new Invoice(50.0, "USD");
+        invoice.setPaymentCurrencies(Arrays.asList(Currency.BTC));
         try {
             basicInvoice = bitpay.createInvoice(invoice);
         } catch (Exception e) {
@@ -572,7 +572,7 @@ public class BitPayTest {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(sevenDaysAgo, today);
+            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -636,40 +636,45 @@ public class BitPayTest {
 	state and authorises a refund. The actual refund will not be executed until the email receiver enters his bitcoin refund address.
     */
     @Test
-    public void testShouldCreateRefundRequest() {
+    public void testShouldCreateGetCancelRefundRequest() {
         List<Invoice> invoices;
+        Invoice firstInvoice = null;
+        Refund firstRefund = null;
+        Refund retrievedRefund = null;
+        List<Refund> retrievedRefunds = null;
+        Boolean createdRefund = false;
+        Boolean cancelled = false;
         try {
-            long bitcoinInventedDate = 1230786000000L;
+            //check within the last few days
             Date date = new Date();
-            Date dateBefore = new Date(bitcoinInventedDate);
+            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
-            String dateBeforeString = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(dateBeforeString, today);
-            for (Invoice invoice : invoices) {
-                if (invoice.getStatus().equalsIgnoreCase("complete")) {
-                    refundInvoiceId = invoice.getId();
-                    break;
-                }
-            }
+            String sevenDaysAgo = sdf.format(dateBefore);
+            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
+            firstInvoice = invoices.get(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertNotNull(refundInvoiceId);
-        String refundEmail = "youremail@yourdomain.com"; //change this to whatever address you want to refund to
+        assertNotNull(firstInvoice);
+        String refundEmail = "";
 
         try {
-            RefundHelper refundRequest = this.bitpay.requestRefund(refundInvoiceId, refundEmail);
-
-            assertNotNull(refundRequest.getInvoice().getId());
-            assertEquals(refundRequest.getInvoice().getId(), refundInvoiceId);
-
-            List<Refund> refunds = this.bitpay.getAllRefunds(refundRequest.getInvoice());
-
+            createdRefund = this.bitpay.createRefund(firstInvoice, refundEmail, firstInvoice.getPrice(), firstInvoice.getCurrency());
+            retrievedRefunds = this.bitpay.getRefunds(firstInvoice);
+            firstRefund = retrievedRefunds.get(0);
+            retrievedRefund = this.bitpay.getRefund(firstInvoice, firstRefund.getId());
+            cancelled = this.bitpay.cancelRefund(firstInvoice, firstRefund.getId());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
+
+        assertTrue(createdRefund);
+        assertTrue(retrievedRefunds.size() > 0);
+        assertNotNull(firstRefund);
+        assertNotNull(retrievedRefund);
+        assertTrue(cancelled);
     }
 
     @Test
