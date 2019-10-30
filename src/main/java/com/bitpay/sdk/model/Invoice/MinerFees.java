@@ -9,6 +9,7 @@ public class MinerFees {
 
     private MinerFeesItem _btc = new MinerFeesItem();
     private MinerFeesItem _bch = new MinerFeesItem();
+    private MinerFeesItem _eth = new MinerFeesItem();
 
     public MinerFees() {
     }
@@ -31,5 +32,15 @@ public class MinerFees {
     @JsonProperty("BCH")
     public void setBch(MinerFeesItem bch) {
         this._bch = bch;
+    }
+
+    @JsonIgnore
+    public MinerFeesItem getEth() {
+        return _eth;
+    }
+
+    @JsonProperty("ETH")
+    public void setEth(MinerFeesItem eth) {
+        this._eth = eth;
     }
 }

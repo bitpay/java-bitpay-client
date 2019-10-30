@@ -3,15 +3,18 @@ package com.bitpay.sdk.model.Settlement;
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {
     private String _orderId;
     private Long _date;
     private Float _price;
     private String _currency;
+    private String _transactionCurrency;
     private Float _overPaidAmount;
     private Double _payoutPercentage;
     private Float _btcPrice;
@@ -60,6 +63,16 @@ public class InvoiceData {
     @JsonProperty("currency")
     public void setCurrency(String currency) {
         this._currency = currency;
+    }
+
+    @JsonIgnore
+    public String getTransactionCurrency() {
+        return _transactionCurrency;
+    }
+
+    @JsonProperty("transactionCurrency")
+    public void setTransactionCurrency(String transactionCurrency) {
+        this._transactionCurrency = transactionCurrency;
     }
 
     @JsonIgnore

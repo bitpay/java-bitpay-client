@@ -1,5 +1,8 @@
 package com.bitpay.sdk.model.Payout;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstructionBtcSummary {
 
     private Double _paid;

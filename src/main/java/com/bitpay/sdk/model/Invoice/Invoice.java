@@ -44,7 +44,7 @@ public class Invoice {
     private String _exceptionStatus;
     private long _targetConfirmations;
     private List<InvoiceTransaction> _transactions;
-    private List<String> _refundAddresses;
+    private List<Hashtable<String, Hashtable<String, String>>> _refundAddresses;
     private boolean _refundAddressRequestPending;
     private String _buyerProvidedEmail;
     private InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
@@ -396,12 +396,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public List<String> getRefundAddresses() {
+    public List<Hashtable<String, Hashtable<String, String>>> getRefundAddresses() {
         return _refundAddresses;
     }
 
     @JsonProperty("refundAddresses")
-    public void setRefundAddresses(List<String> _refundAddresses) {
+    public void setRefundAddresses(List<Hashtable<String, Hashtable<String, String>>> _refundAddresses) {
         this._refundAddresses = _refundAddresses;
     }
 
