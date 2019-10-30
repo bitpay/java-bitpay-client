@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Hashtable;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
     private String _supportRequest;
     private String _currency;
-    private RefundAmount _amounts;
+    private Hashtable<String, Double> _amounts;
 
     public RefundInfo() {
     }
@@ -34,12 +36,12 @@ public class RefundInfo {
     }
 
     @JsonIgnore
-    public RefundAmount getAmount() {
+    public Hashtable<String, Double> getAmount() {
         return _amounts;
     }
 
     @JsonProperty("amounts")
-    public void setAmount(RefundAmount amounts) {
+    public void setAmount(Hashtable<String, Double> amounts) {
         this._amounts = amounts;
     }
 }

@@ -14,6 +14,7 @@ public class InvoiceData {
     private Long _date;
     private Float _price;
     private String _currency;
+    private String _transactionCurrency;
     private Float _overPaidAmount;
     private Double _payoutPercentage;
     private Float _btcPrice;
@@ -62,6 +63,16 @@ public class InvoiceData {
     @JsonProperty("currency")
     public void setCurrency(String currency) {
         this._currency = currency;
+    }
+
+    @JsonIgnore
+    public String getTransactionCurrency() {
+        return _transactionCurrency;
+    }
+
+    @JsonProperty("transactionCurrency")
+    public void setTransactionCurrency(String transactionCurrency) {
+        this._transactionCurrency = transactionCurrency;
     }
 
     @JsonIgnore

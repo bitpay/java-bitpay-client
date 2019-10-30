@@ -113,6 +113,45 @@ public class BitPayTest {
     }
 
     @Test
+    public void testShouldCreateInvoiceBTC() {
+        Invoice invoice = new Invoice(50.0, "USD");
+        invoice.setPaymentCurrencies(Arrays.asList(Currency.BTC));
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
+    }
+
+    @Test
+    public void testShouldCreateInvoiceBCH() {
+        Invoice invoice = new Invoice(50.0, "USD");
+        invoice.setPaymentCurrencies(Arrays.asList(Currency.BCH));
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
+    }
+
+    @Test
+    public void testShouldCreateInvoiceETH() {
+        Invoice invoice = new Invoice(50.0, "USD");
+        invoice.setPaymentCurrencies(Arrays.asList(Currency.ETH));
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
+    }
+
+    @Test
     public void testShouldGetInvoiceURL() {
         Invoice invoice = new Invoice(50.0, "USD");
         try {
