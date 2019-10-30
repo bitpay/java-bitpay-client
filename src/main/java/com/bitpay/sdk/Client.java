@@ -1086,9 +1086,11 @@ public class Client {
             }
             PaymentTotal paymentTotals = invoice.getPaymentTotals();
             if (transactionCurrency.equals("BTC")) {
-                return amountPaid >= paymentTotals.getBTC();
+                return amountPaid >= paymentTotals.getBtc();
             } else if (transactionCurrency.equals("BCH")) {
-                return amountPaid >= paymentTotals.getBCH();
+                return amountPaid >= paymentTotals.getBch();
+            } else if (transactionCurrency.equals("ETH")) {
+                return amountPaid >= paymentTotals.getEth();
             }
         } catch (Exception e) {
             throw new BitPayException("failed to check whether a BitPay invoice has been paid in full : " + e.getMessage());
