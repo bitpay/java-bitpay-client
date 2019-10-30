@@ -369,7 +369,6 @@ public class Client {
      * @param amount      The amount of money to refund. If zero then a request for 100% of the invoice value is created.
      * @param currency    The three digit currency code specifying the exchange rate to use when calculating the refund bitcoin amount. If this value is "BTC" then no exchange rate calculation is performed.
      * @return True if the refund was successfully canceled, false otherwise.
-     * @throws BitPayException BitPayException class
      * @throws RefundCreationException RefundCreationException class
      */
     public Boolean createRefund(Invoice invoice, String refundEmail, Double amount, String currency) throws RefundCreationException {
@@ -482,6 +481,7 @@ public class Client {
      */
     public Boolean cancelRefund(Invoice invoice, String refundId) throws RefundCancellationException {
         Refund refund;
+        Boolean result;
 
         try {
             refund = this.getRefund(invoice, refundId);
@@ -495,17 +495,9 @@ public class Client {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", refund.getToken()));
 
-        ObjectMapper mapper = new ObjectMapper();
-        Boolean result;
-
         try {
             HttpResponse response = this.delete("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
-            String jsonString = this.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
-            JsonNode node = rootNode.get("success");
-            result = node.toString().equals("true");
-        } catch (JsonProcessingException e) {
-            throw new RefundCancellationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+            result = this.responseToJsonString(response).replace("\"", "").equals("Success");
         } catch (Exception e) {
             throw new RefundCancellationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
@@ -530,12 +522,7 @@ public class Client {
 
         try {
             HttpResponse response = this.delete("invoices/" + invoiceId + "/refunds/" + refund.getId(), params);
-            String jsonString = this.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
-            JsonNode node = rootNode.get("success");
-            result = node.toString().equals("true");
-        } catch (JsonProcessingException e) {
-            throw new RefundCancellationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+            result = this.responseToJsonString(response).replace("\"", "").equals("Success");
         } catch (Exception e) {
             throw new RefundCancellationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
