@@ -47,7 +47,7 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 3.1.1910
+ * @version 3.3.1910
  * See bitpay.com/api for more information.
  * date 16.10.2019
  */
