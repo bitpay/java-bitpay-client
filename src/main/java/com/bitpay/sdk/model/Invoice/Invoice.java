@@ -2,7 +2,6 @@ package com.bitpay.sdk.model.Invoice;
 
 import com.bitpay.sdk.BitPayException;
 import com.bitpay.sdk.model.Currency;
-import com.bitpay.sdk.model.Settlement.RefundInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
