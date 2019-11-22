@@ -1,7 +1,7 @@
-import com.bitpay.SDK.Client;
-import com.bitpay.SDK.Env;
-import com.bitpay.SDK.model.Facade;
-import com.bitpay.SDK.util.KeyUtils;
+import com.bitpay.sdk.Client;
+import com.bitpay.sdk.Env;
+import com.bitpay.sdk.model.Facade;
+import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

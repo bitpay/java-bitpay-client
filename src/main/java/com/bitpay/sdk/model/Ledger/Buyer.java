@@ -10,15 +10,13 @@ public class Buyer {
     private String _name;
     private String _address1;
     private String _address2;
-    private String _locality;
-    private String _region;
-    private String _postalCode;
+    private String _city;
+    private String _state;
+    private String _zip;
     private String _country;
     private String _phone;
     private boolean _notify;
-    private String _state;
-    private String _zip;
-    private String _city;
+    private String _email;
 
     public Buyer() {
     }
@@ -51,36 +49,6 @@ public class Buyer {
     @JsonProperty("buyerAddress2")
     public void setAddress2(String address2) {
         this._address2 = address2;
-    }
-
-    @JsonIgnore
-    public String getLocality() {
-        return _locality;
-    }
-
-    @JsonProperty("buyerLocality")
-    public void setLocality(String locality) {
-        this._locality = locality;
-    }
-
-    @JsonIgnore
-    public String getRegion() {
-        return _region;
-    }
-
-    @JsonProperty("buyerRegion")
-    public void setRegion(String region) {
-        this._region = region;
-    }
-
-    @JsonIgnore
-    public String getPostalCode() {
-        return _postalCode;
-    }
-
-    @JsonProperty("buyerPostalCode")
-    public void setPostalCode(String postalCode) {
-        this._postalCode = postalCode;
     }
 
     @JsonIgnore
@@ -143,5 +111,13 @@ public class Buyer {
         this._city = city;
     }
 
+    @JsonIgnore
+    public String getEmail() {
+        return _email;
+    }
 
+    @JsonProperty("buyerEmail")
+    public void setEmail(String email) {
+        this._email = email;
+    }
 }
