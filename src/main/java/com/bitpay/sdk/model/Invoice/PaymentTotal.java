@@ -10,6 +10,9 @@ public class PaymentTotal {
     private Double _btc;
     private Double _bch;
     private Double _eth;
+    private Double _usdc;
+    private Double _gusd;
+    private Double _pax;
 
     public PaymentTotal() {
     }
@@ -41,4 +44,22 @@ public class PaymentTotal {
     public void setEth(Double eth) {
         this._eth = eth;
     }
+
+    @JsonIgnore
+    public Double getUsdc() { return _usdc; }
+
+    @JsonProperty("USDC")
+    public void setUsdc(Double usdc) { this._usdc = usdc; }
+
+    @JsonIgnore
+    public Double getGusd() { return _gusd; }
+
+    @JsonProperty("GUSD")
+    public void setPax(Double gusd) { this._gusd = gusd; }
+
+    @JsonIgnore
+    public Double getPax() { return _pax; }
+
+    @JsonProperty("PAX")
+    public void set(Double pax) { this._pax = pax; }
 }

@@ -10,6 +10,9 @@ public class SupportedTransactionCurrencies {
     private SupportedTransactionCurrency _btc = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency _bch = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency _eth = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency _usdc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency _gusd = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency _pax = new SupportedTransactionCurrency();
 
     public SupportedTransactionCurrencies() {
     }
@@ -41,4 +44,22 @@ public class SupportedTransactionCurrencies {
     public void setEth(SupportedTransactionCurrency eth) {
         this._eth = eth;
     }
+
+    @JsonIgnore
+    public SupportedTransactionCurrency getUsdc() { return _usdc; }
+
+    @JsonProperty("USDC")
+    public void setUsdc(SupportedTransactionCurrency usdc) { this._usdc = usdc; }
+
+    @JsonIgnore
+    public SupportedTransactionCurrency getGusd() { return _gusd; }
+
+    @JsonProperty("GUSD")
+    public void setPax(SupportedTransactionCurrency gusd) { this._gusd = gusd; }
+
+    @JsonIgnore
+    public SupportedTransactionCurrency getPax() { return _pax; }
+
+    @JsonProperty("PAX")
+    public void set(SupportedTransactionCurrency pax) { this._pax = pax; }
 }
