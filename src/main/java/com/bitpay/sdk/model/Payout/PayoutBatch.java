@@ -1,6 +1,7 @@
 package com.bitpay.sdk.model.Payout;
 
 import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.Client;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -13,6 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutBatch {
@@ -73,11 +77,15 @@ public class PayoutBatch {
     //
 
     private void _computeAndSetAmount() {
+        Map currencyInfo = Client.getCurrencyInfo("USD");
+        Integer precision = currencyInfo.isEmpty() ? 2 : Integer.valueOf(currencyInfo.get("precision").toString());
+
         Double amount = 0.0;
         for (PayoutInstruction instruction : this._instructions) {
             amount += instruction.getAmount();
         }
-        this._amount = amount;
+
+        this._amount = new BigDecimal(amount).setScale(precision, RoundingMode.HALF_UP).doubleValue();
     }
 
     // API fields

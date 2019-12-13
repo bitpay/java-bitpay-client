@@ -6,7 +6,7 @@
 
     <groupId>com.bitpay</groupId>
     <artifactId>bitpay_sdk</artifactId>
-    <version>4.1.1911</version>
+    <version>4.2.1912</version>
     <packaging>jar</packaging>
 
     <name>BitPay</name>
@@ -35,6 +35,11 @@
             <id>anbugal</id>
         </developer>
     </developers>
+
+    <organization>
+        <name>BitPay</name>
+        <url>https://bitpay.com</url>
+    </organization>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
