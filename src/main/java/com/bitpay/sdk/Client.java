@@ -47,9 +47,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.1.1911
+ * @version 4.2.1912
  * See bitpay.com/api for more information.
- * date 22.11.2019
+ * date 13.12.2019
  */
 
 public class Client {
@@ -62,6 +62,7 @@ public class Client {
     private String _baseUrl;
     private ECKey _ecKey;
     private HttpClient _httpClient = null;
+    public static ArrayList<Object> _currenciesInfo = null;
 
     /**
      * Return the identity of this client (i.e. the public key).
@@ -1115,6 +1116,7 @@ public class Client {
             _httpClient = HttpClientBuilder.create().build();
             deriveIdentity();
             LoadAccessTokens();
+            loadCurrencies();
         } catch (Exception e) {
             throw new BitPayException("failed to deserialize BitPay server response (Token array) : " + e.getMessage());
         }
@@ -1450,5 +1452,39 @@ public class Client {
         } catch (Exception e) {
             throw new BitPayException("failed to process configuration : " + e.getMessage());
         }
+    }
+
+    /**
+     * Load currencies info.
+     *
+     * @throws BitPayException BitPayException class
+     */
+    private void loadCurrencies() throws BitPayException {
+        try {
+            HttpResponse response = this.get("currencies/");
+            _currenciesInfo = new ArrayList(Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Object[].class)));
+        } catch (Exception e) {
+            // No action required
+        }
+    }
+
+    /**
+     * Gets info for specific currency.
+     *
+     * @param currencyCode String Currency code for which the info will be retrieved.
+     *
+     * @return Map|null
+     */
+    public static Map getCurrencyInfo(String currencyCode)
+    {
+        for(int i = 0; i < _currenciesInfo.size(); i++) {
+            Map currencyInfo = new ObjectMapper().convertValue(_currenciesInfo.get(i), Map.class);
+
+            if (currencyInfo.get("code").toString().equals(currencyCode)) {
+                return currencyInfo;
+            }
+        }
+
+        return null;
     }
 }

@@ -9,6 +9,8 @@ public class PaymentCode {
 
     private String _bip72b;
     private String _bip73;
+    private String _eip681;
+    private String _eip681b;
 
     public PaymentCode() {
     }
@@ -31,5 +33,25 @@ public class PaymentCode {
     @JsonProperty("BIP73")
     public void setBip73(String bip73) {
         this._bip73 = bip73;
+    }
+
+    @JsonIgnore
+    public String getEip681() {
+        return _eip681;
+    }
+
+    @JsonProperty("EIP681")
+    public void setEip681(String eip681) {
+        this._eip681 = eip681;
+    }
+
+    @JsonIgnore
+    public String getEip681b() {
+        return _eip681b;
+    }
+
+    @JsonProperty("EIP681b")
+    public void setEip681b(String eip681b) {
+        this._eip681b = eip681b;
     }
 }
