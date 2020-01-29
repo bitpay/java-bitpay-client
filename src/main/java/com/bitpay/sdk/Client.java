@@ -5,12 +5,12 @@ import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.PaymentTotal;
+import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.PayoutBatch;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
-import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Token;
 import com.bitpay.sdk.util.BitPayLogger;
@@ -72,15 +72,15 @@ public class Client {
     /**
      * Constructor for use if the keys and SIN are managed by this library.
      *
-     * @param environment    Target environment. Options: Env.Test / Env.Prod
-     * @param privateKeyPath Private Key file path.
-     * @param tokens         Env.Tokens containing the available tokens.
+     * @param environment Target environment. Options: Env.Test / Env.Prod
+     * @param privateKey  The full path to the securely located private key or the HEX key value.
+     * @param tokens      Env.Tokens containing the available tokens.
      * @throws BitPayException BitPayException class
      */
-    public Client(String environment, String privateKeyPath, Env.Tokens tokens) throws BitPayException {
+    public Client(String environment, String privateKey, Env.Tokens tokens) throws BitPayException {
         try {
             this._env = environment;
-            this.BuildConfig(privateKeyPath, tokens);
+            this.BuildConfig(privateKey, tokens);
             this.initKeys();
             this.init();
         } catch (JsonProcessingException e) {
@@ -476,7 +476,7 @@ public class Client {
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
-     * @param refundId The refund id for the refund to be canceled.
+     * @param refundId The refund Id for the refund to be canceled.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws RefundCancellationException RefundCancellationException class
      */
@@ -509,8 +509,8 @@ public class Client {
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
-     * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
-     * @param refund  The refund id for the refund to be canceled.
+     * @param invoiceId The BitPay invoice Id having the associated refund to be canceled.
+     * @param refund    The BitPay refund for the refund to be canceled.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws RefundCancellationException RefundCancellationException class
      */
@@ -1129,11 +1129,19 @@ public class Client {
      * @throws URISyntaxException
      */
     private void initKeys() throws Exception, URISyntaxException {
-        if (KeyUtils.privateKeyExists(this._configuration.getEnvConfig(this._env).path("PrivateKeyPath").toString().replace("\"", ""))) {
-            _ecKey = KeyUtils.loadEcKey();
-        } else {
-            _ecKey = KeyUtils.createEcKey();
-            KeyUtils.saveEcKey(_ecKey);
+        if (_ecKey == null) {
+            try {
+                if (KeyUtils.privateKeyExists(this._configuration.getEnvConfig(this._env).path("PrivateKeyPath").toString().replace("\"", ""))) {
+                    _ecKey = KeyUtils.loadEcKey();
+                } else {
+                    String keyHex = this._configuration.getEnvConfig(this._env).path("PrivateKey").toString().replace("\"", "");
+                    if (!keyHex.isEmpty()) {
+                        _ecKey = KeyUtils.createEcKeyFromHexString(keyHex);
+                    }
+                }
+            } catch (Exception e) {
+                throw new BitPayException("When trying to load private key : " + e.getMessage());
+            }
         }
     }
 
@@ -1425,16 +1433,29 @@ public class Client {
     /**
      * Builds the configuration object
      *
-     * @param privateKeyPath The full path to the securely located private key.
-     * @param tokens         Env.Tokens object containing the BitPay's API tokens.
+     * @param privateKey The full path to the securely located private key.
+     * @param tokens     Env.Tokens object containing the BitPay's API tokens.
      * @throws BitPayException BitPayException class
      */
-    public void BuildConfig(String privateKeyPath, Env.Tokens tokens) throws BitPayException {
+    public void BuildConfig(String privateKey, Env.Tokens tokens) throws BitPayException {
         try {
-            File privateKeyFile = new File(privateKeyPath);
+            String keyHex = "", keyFile = "";
+            File privateKeyFile = new File(privateKey);
             if (!privateKeyFile.exists()) {
-                throw new BitPayException("Private Key file not found");
+                try {
+                    _ecKey = KeyUtils.createEcKeyFromHexString(privateKey);
+                    keyHex = privateKey;
+                } catch (Exception e) {
+                    throw new BitPayException("Private Key file not found");
+                }
+            } else {
+                try {
+                    keyFile = privateKey;
+                } catch (Exception e) {
+                    throw new BitPayException("Could not read private Key file");
+                }
             }
+
             Config config = new Config();
             config.setEnvironment(this._env);
 
@@ -1442,7 +1463,9 @@ public class Client {
             JsonNode ApiTokens = mapper.valueToTree(tokens);
 
             ObjectNode envConfig = mapper.createObjectNode();
-            envConfig.put("PrivateKeyPath", privateKeyPath).put("ApiTokens", ApiTokens);
+            envConfig.put("PrivateKeyPath", keyFile);
+            envConfig.put("PrivateKey", keyHex);
+            envConfig.put("ApiTokens", ApiTokens);
 
             ObjectNode envTarget = mapper.createObjectNode();
             envTarget.put(this._env, envConfig);
@@ -1472,12 +1495,10 @@ public class Client {
      * Gets info for specific currency.
      *
      * @param currencyCode String Currency code for which the info will be retrieved.
-     *
      * @return Map|null
      */
-    public static Map getCurrencyInfo(String currencyCode)
-    {
-        for(int i = 0; i < _currenciesInfo.size(); i++) {
+    public static Map getCurrencyInfo(String currencyCode) {
+        for (int i = 0; i < _currenciesInfo.size(); i++) {
             Map currencyInfo = new ObjectMapper().convertValue(_currenciesInfo.get(i), Map.class);
 
             if (currencyInfo.get("code").toString().equals(currencyCode)) {
