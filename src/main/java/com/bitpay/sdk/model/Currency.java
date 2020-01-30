@@ -11,6 +11,7 @@ public class Currency {
     public static final String USDC = "USDC";
     public static final String GUSD = "GUSD";
     public static final String PAX = "PAX";
+    public static final String XRP = "XRP";
 
     // FIAT
     public static final String AED = "AED";

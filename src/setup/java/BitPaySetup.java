@@ -18,7 +18,8 @@ import java.util.concurrent.atomic.AtomicReference;
 class BitPaySetup {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String opt, env, envUrl, privateKeyPath, pairingCodeMerchant, pairingCodePayroll;
+        String opt, env, privateKeyPath = "", privateKeyAsHex = "", pairingCodeMerchant, pairingCodePayroll, privateKey = "";
+        int keyType; // 1 = in file, 2 = as text
         Client bitpay;
 
         do {
@@ -29,29 +30,49 @@ class BitPaySetup {
 
         if (opt.toLowerCase().equals("t")) {
             env = Env.Test;
-            envUrl = Env.TestUrl;
         } else {
             env = Env.Prod;
-            envUrl = Env.ProdUrl;
         }
 
-        privateKeyPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/output/bitpay_private_" + env.toLowerCase() + ".key";
+        do {
+            System.out.println("Select the way you want your private key:");
+            System.out.println("Press F for binary in a text file or T for plain text in your config file:");
+            opt = scanner.next();
+        } while (opt.toLowerCase().equals("f") && opt.toLowerCase().equals("t"));
+
+        if (opt.toLowerCase().equals("f")) {
+            keyType = 1;
+        } else {
+            keyType = 2;
+        }
 
         System.out.println("Generating private key... ");
+
         try {
             File directory = new File(Paths.get(".").toAbsolutePath().normalize().toString() + "/output");
             if (!directory.exists()) {
                 directory.mkdir();
             }
 
-            if (!KeyUtils.privateKeyExists(privateKeyPath)) {
+            if (keyType == 1) {
+                privateKeyPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/output/bitpay_private_" + env.toLowerCase() + ".key";
+                if (!KeyUtils.privateKeyExists(privateKeyPath)) {
+                    ECKey _ecKey = KeyUtils.createEcKey();
+                    KeyUtils.saveEcKey(_ecKey);
+                    KeyUtils.createEcKey();
+                    System.out.println("Private key generated successfully with public key:");
+                    System.out.println(_ecKey.getPublicKeyAsHex());
+                } else {
+                    KeyUtils.loadEcKey();
+                }
+                privateKey = privateKeyPath;
+            }
+            else {
                 ECKey _ecKey = KeyUtils.createEcKey();
-                KeyUtils.saveEcKey(_ecKey);
-                KeyUtils.createEcKey();
+                privateKeyAsHex = KeyUtils.loadEcKeyAsHex(_ecKey);
                 System.out.println("Private key generated successfully with public key:");
                 System.out.println(_ecKey.getPublicKeyAsHex());
-            } else {
-                KeyUtils.loadEcKey();
+                privateKey = privateKeyAsHex;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -62,7 +83,7 @@ class BitPaySetup {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            bitpay = new Client(env, privateKeyPath, new Env.Tokens());
+            bitpay = new Client(env, privateKey, new Env.Tokens());
             pairingCodeMerchant = bitpay.requestClientAuthorization(Facade.Merchant);
             pairingCodePayroll = bitpay.requestClientAuthorization(Facade.Payroll);
 
@@ -72,7 +93,9 @@ class BitPaySetup {
             AtomicReference<JsonNode> ApiTokens = new AtomicReference<>(mapper.valueToTree(tokens));
 
             ObjectNode envConfig = mapper.createObjectNode();
-            envConfig.put("PrivateKeyPath", privateKeyPath).put("ApiTokens", ApiTokens.get());
+            envConfig.put("PrivateKeyPath", privateKeyPath);
+            envConfig.put("PrivateKey", privateKeyAsHex);
+            envConfig.put("ApiTokens", ApiTokens.get());
 
             ObjectNode envTarget = mapper.createObjectNode();
             envTarget.put(env, envConfig);

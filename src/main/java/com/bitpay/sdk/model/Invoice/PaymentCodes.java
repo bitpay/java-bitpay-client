@@ -13,6 +13,7 @@ public class PaymentCodes {
     private PaymentCode _usdc = new PaymentCode();
     private PaymentCode _gusd = new PaymentCode();
     private PaymentCode _pax = new PaymentCode();
+    private PaymentCode _xrp = new PaymentCode();
 
     public PaymentCodes() {
     }
@@ -57,11 +58,17 @@ public class PaymentCodes {
     public PaymentCode getGusd() { return _gusd; }
 
     @JsonProperty("GUSD")
-    public void setPax(PaymentCode gusd) { this._gusd = gusd; }
+    public void setGusd(PaymentCode gusd) { this._gusd = gusd; }
 
     @JsonIgnore
     public PaymentCode getPax() { return _pax; }
 
     @JsonProperty("PAX")
-    public void set(PaymentCode pax) { this._pax = pax; }
+    public void setPax(PaymentCode pax) { this._pax = pax; }
+
+    @JsonIgnore
+    public PaymentCode getXrp() { return _xrp; }
+
+    @JsonProperty("XRP")
+    public void setXrp(PaymentCode xrp) { this._xrp = xrp; }
 }

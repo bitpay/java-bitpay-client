@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 
 public class KeyUtils {
 
@@ -33,10 +32,10 @@ public class KeyUtils {
     }
 
     public static ECKey createEcKeyFromHexString(String privateKey) {
-        //if you are going to choose this option, please ensure this string is as random as
-        //possible, consider http://world.std.com/~reinhold/diceware.html
-        SecureRandom randomSeed = new SecureRandom(privateKey.getBytes());
-        return new ECKey(randomSeed);
+        byte[] bytes = hexToBytes(privateKey);
+        ECKey ecKey = ECKey.fromASN1(bytes);
+
+        return ecKey;
     }
 
     public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException {
@@ -105,6 +104,28 @@ public class KeyUtils {
         output.close();
     }
 
+    public static void saveEcKeyAsHex(ECKey ecKey) throws IOException {
+        byte[] bytes = ecKey.toASN1();
+        PrintWriter file;
+
+        if (KeyUtils.privateKey == null) {
+            file = new PrintWriter(PrivateKeyFile);
+        } else {
+            file = new PrintWriter(String.valueOf(KeyUtils.privateKey));
+        }
+
+        String keyHex = bytesToHex(bytes);
+        file.println(keyHex);
+        file.close();
+    }
+
+    public static String loadEcKeyAsHex(ECKey ecKey) throws IOException {
+        byte[] bytes = ecKey.toASN1();
+        String keyHex = bytesToHex(bytes);
+
+        return keyHex;
+    }
+
     public static void saveEcKey(ECKey ecKey, URI privateKey) throws IOException, URISyntaxException {
         File file = new File(privateKey);
         //we shan't overwrite an existing file
@@ -115,7 +136,6 @@ public class KeyUtils {
         KeyUtils.privateKey = privateKey;
         saveEcKey(ecKey);
     }
-
 
     public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).

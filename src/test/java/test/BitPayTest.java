@@ -50,46 +50,63 @@ public class BitPayTest {
         boolean dumpOut = false;
 
 //        Client bitpay = new Client("BitPay.config.json");
-        Client bitpay = new Client(
-                Env.Test,
-                "bitpay_private_test.key",
-                new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-                }}
-        );
+//        Client bitpay = new Client(
+//                Env.Test,
+//                "bitpay_private_test.key",
+//                new Env.Tokens() {{
+//                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
+//                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+//                    payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+//                }}
+//        );
+//        Client bitpay = new Client(
+//                Env.Prod,
+//                "bitpay_private_prod.key",
+//                new Env.Tokens() {{
+//                    pos = "";
+//                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
+//                    payroll = "";
+//                }}
+//        );
+//
+//        if (!bitpay.tokenExist(Facade.Merchant)) {
+//            // Get MERCHANT facade authorization.
+//            // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
+//            // is created by your administrator it is assigned a facade.  To generate invoices a
+//            // POS facade is required.
+//            pairingCode = bitpay.requestClientAuthorization(Facade.Merchant);
+//
+//            // Signal the device operator that this client needs to be paired with a merchant account.
+//            _log.info("Client is requesting MERCHANT facade access. Go to " + Env.TestUrl + " and pair this client with your merchant account using the pairing code: " + pairingCode);
+//            dumpOut = true;
+//        }
 
-        if (!bitpay.tokenExist(Facade.Merchant)) {
-            // Get MERCHANT facade authorization.
-            // Obtain a pairingCode from your BitPay account administrator.  When the pairingCode
-            // is created by your administrator it is assigned a facade.  To generate invoices a
-            // POS facade is required.
-            pairingCode = bitpay.requestClientAuthorization(Facade.Merchant);
-
-            // Signal the device operator that this client needs to be paired with a merchant account.
-            _log.info("Client is requesting MERCHANT facade access. Go to " + Env.TestUrl + " and pair this client with your merchant account using the pairing code: " + pairingCode);
-            dumpOut = true;
-        }
-
-        if (dumpOut) {
-            throw new BitPayException("Error: client is not authorized.");
-        }
+//        if (dumpOut) {
+//            throw new BitPayException("Error: client is not authorized.");
+//        }
     }
 
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("BitPay.config.json");
-        bitpay = new Client(
-                Env.Test,
-                "bitpay_private_test.key",
-                new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-                }}
-        );
+        bitpay = new Client("/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/BitPay.config.json");
+//        bitpay = new Client(
+//                Env.Test,
+//                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
+//                new Env.Tokens() {{
+//                    merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
+//                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
+//                }}
+//        );
+//        bitpay = new Client(
+//                Env.Prod,
+//                "bitpay_private_prod.key",
+//                new Env.Tokens() {{
+//                    pos = "";
+//                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
+//                    payroll = "";
+//                }}
+//        );
     }
 
     @Test
@@ -102,7 +119,7 @@ public class BitPayTest {
     @Test
     public void testShouldGetInvoiceId() {
         Invoice invoice = new Invoice(50.0, "USD");
-        invoice.setPaymentCurrencies(Arrays.asList(Currency.BTC));
+//        invoice.setPaymentCurrencies(Arrays.asList(Currency.BTC));
         try {
             basicInvoice = bitpay.createInvoice(invoice);
         } catch (Exception e) {
@@ -140,7 +157,7 @@ public class BitPayTest {
 
     @Test
     public void testShouldCreateInvoiceETH() {
-        Invoice invoice = new Invoice(50.0, "USD");
+        Invoice invoice = new Invoice(5.0, "USD");
         invoice.setPaymentCurrencies(Arrays.asList(Currency.ETH));
         try {
             basicInvoice = bitpay.createInvoice(invoice);
@@ -213,7 +230,7 @@ public class BitPayTest {
 
     @Test
     public void testShouldGetInvoice() {
-        Invoice invoice = new Invoice(100.0, "EUR");
+        Invoice invoice = new Invoice(27.50, "USD");
         Invoice retreivedInvoice = null;
         try {
             // Create invoice on POS facade.
@@ -221,7 +238,7 @@ public class BitPayTest {
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
+            retreivedInvoice = this.bitpay.getInvoice("FUfs9crxMuuJLUL1f4hxHf");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -233,7 +250,7 @@ public class BitPayTest {
     public void testShouldCreateInvoiceWithAdditionalParams() {
         Buyer buyer = new Buyer();
         buyer.setName("Satoshi");
-        buyer.setEmail("satoshi@buyeremaildomain.com");
+//        buyer.setEmail("satoshi@buyeremaildomain.com");
 
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
@@ -279,7 +296,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -314,7 +331,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.EUR, "", items);
+        Bill bill = new Bill("7", Currency.EUR, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -349,7 +366,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -384,7 +401,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -419,7 +436,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         try {
@@ -456,7 +473,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         Bill updatedBill = null;
@@ -505,7 +522,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "agallardo@bitmail.com", items);
         Bill basicBill = null;
         String result = "";
         Bill retrievedBill = null;
@@ -644,7 +661,7 @@ public class BitPayTest {
         try {
             //check within the last few days
             Date date = new Date();
-            Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
+            Date dateTomorrow = new Date(date.getTime() + 100 * 24 * 3600 * 1000);
             Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String tomorrow = sdf.format(dateTomorrow);
