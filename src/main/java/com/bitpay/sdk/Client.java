@@ -47,9 +47,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.2.1912
+ * @version 4.3.2001
  * See bitpay.com/api for more information.
- * date 13.12.2019
+ * date 30.01.2020
  */
 
 public class Client {
@@ -1140,7 +1140,7 @@ public class Client {
                     }
                 }
             } catch (Exception e) {
-                throw new BitPayException("When trying to load private key : " + e.getMessage());
+                throw new BitPayException("When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " + e.getMessage());
             }
         }
     }
