@@ -4,7 +4,6 @@ import com.bitpay.sdk.exceptions.*;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.model.Invoice.PaymentTotal;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
@@ -1069,35 +1068,12 @@ public class Client {
         return reconciliationReport;
     }
 
-    /**
-     * Checks whether a BitPay invoice has been paid in full.
-     * Returns true if the amountPaid higher or equal to paymentTotals, returns false otherwise
-     *
-     * @param invoice A Bitpay invoice object
-     * @return true if the amountPaid higher or equal to paymentTotals, returns false otherwise
-     * @throws BitPayException BitPayException class
+    /* @deprecated As of release 4.3.2001, not replaced
+     * Check the Invoice Status when receiving the IPN
      */
+    @Deprecated
     public boolean isFullyPaid(Invoice invoice) throws BitPayException {
-        try {
-            long amountPaid = invoice.getAmountPaid();
-            String transactionCurrency = invoice.getTransactionCurrency();
-            // first check if invoice has a transactionCurrency. If not, this means the invoice has not been paid
-            if (transactionCurrency == null) {
-                return false;
-            }
-            PaymentTotal paymentTotals = invoice.getPaymentTotals();
-            if (transactionCurrency.equals("BTC")) {
-                return amountPaid >= paymentTotals.getBtc();
-            } else if (transactionCurrency.equals("BCH")) {
-                return amountPaid >= paymentTotals.getBch();
-            } else if (transactionCurrency.equals("ETH")) {
-                return amountPaid >= paymentTotals.getEth();
-            }
-        } catch (Exception e) {
-            throw new BitPayException("failed to check whether a BitPay invoice has been paid in full : " + e.getMessage());
-        }
-
-        return true;
+        throw new BitPayException("The isFullyPaid method has been deprecated, please base this check on the Invoice Status when receiving the IPN");
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

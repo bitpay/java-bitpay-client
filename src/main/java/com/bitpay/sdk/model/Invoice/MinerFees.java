@@ -13,6 +13,7 @@ public class MinerFees {
     private MinerFeesItem _usdc = new MinerFeesItem();
     private MinerFeesItem _gusd = new MinerFeesItem();
     private MinerFeesItem _pax = new MinerFeesItem();
+    private MinerFeesItem _xrp = new MinerFeesItem();
 
     public MinerFees() {
     }
@@ -57,11 +58,17 @@ public class MinerFees {
     public MinerFeesItem getGusd() { return _gusd; }
 
     @JsonProperty("GUSD")
-    public void setPax(MinerFeesItem gusd) { this._gusd = gusd; }
+    public void setGusd(MinerFeesItem gusd) { this._gusd = gusd; }
 
     @JsonIgnore
     public MinerFeesItem getPax() { return _pax; }
 
     @JsonProperty("PAX")
-    public void set(MinerFeesItem pax) { this._pax = pax; }
+    public void setPax(MinerFeesItem pax) { this._pax = pax; }
+
+    @JsonIgnore
+    public MinerFeesItem getXrp() { return _xrp; }
+
+    @JsonProperty("XRP")
+    public void setXrp(MinerFeesItem xrp) { this._xrp = xrp; }
 }
