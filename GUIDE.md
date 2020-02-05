@@ -77,7 +77,7 @@ Once you have the environment file (JSON previously generated) you can initializ
 ```Java
 // Provide the full path to the env file which you have previously stored securely.
 
-Client bitpay = new Client("[FULL_PATH_TO_THE_CONFIG_FILE]");
+Client bitpay = new Client("[FULL_PATH_TO_THE_CONFIG_FILE]", null); //as second argument, Pass a HttpHost object for proxy usage or NULL to ignore
 ```
 
 ```Java
@@ -85,12 +85,13 @@ Client bitpay = new Client("[FULL_PATH_TO_THE_CONFIG_FILE]");
 
 Client bitpay = new Client(
     Env.Test,
-    "[FULL_PATH_TO_THE_PRIVATE_KEY]",
+    "[FULL_PATH_TO_THE_PRIVATE_KEY_|OR|_PRIVATE_KEY_AS-PLAIN_TEXT]",
     new Env.Tokens(){{
         pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
         merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
         payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-    }}
+    }},
+    null //Pass a HttpHost object for proxy usage or NULL to ignore
 );
 ```
 

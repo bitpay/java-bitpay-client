@@ -24,7 +24,7 @@ public class BitPayTest2 {
 
     @BeforeClass
     public static void setUpOneTime() throws UnknownHostException, BitPayException {
-//        Client bitpay = new Client("BitPay.config.json");
+//        Client bitpay = new Client("BitPay.config.json", null);
         Client bitpay = new Client(
                 Env.Test,
                 "bitpay_private_test.key",
@@ -32,7 +32,8 @@ public class BitPayTest2 {
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-                }}
+                }},
+                null
         );
 
         if (!bitpay.tokenExist(Facade.PointOfSale)) {
@@ -51,7 +52,7 @@ public class BitPayTest2 {
     @Before
     public void setUp() throws BitPayException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("BitPay.config.json");
+//        bitpay = new Client("BitPay.config.json", null);
         bitpay = new Client(
                 Env.Test,
                 "bitpay_private_test.key",
@@ -59,7 +60,8 @@ public class BitPayTest2 {
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-                }}
+                }},
+                null
         );
     }
 
