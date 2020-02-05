@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -46,9 +47,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.3.2001
+ * @version 4.4.2002
  * See bitpay.com/api for more information.
- * date 30.01.2020
+ * date 05.02.2020
  */
 
 public class Client {
@@ -74,14 +75,15 @@ public class Client {
      * @param environment Target environment. Options: Env.Test / Env.Prod
      * @param privateKey  The full path to the securely located private key or the HEX key value.
      * @param tokens      Env.Tokens containing the available tokens.
+     * @param proxy       HttpHost Optional Proxy setting (set to NULL to ignore)
      * @throws BitPayException BitPayException class
      */
-    public Client(String environment, String privateKey, Env.Tokens tokens) throws BitPayException {
+    public Client(String environment, String privateKey, Env.Tokens tokens, HttpHost proxy) throws BitPayException {
         try {
             this._env = environment;
             this.BuildConfig(privateKey, tokens);
             this.initKeys();
-            this.init();
+            this.init(proxy);
         } catch (JsonProcessingException e) {
             throw new BitPayException("failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (URISyntaxException e) {
@@ -95,14 +97,15 @@ public class Client {
      * Constructor for use if the keys and SIN are managed by this library.
      *
      * @param configFilePath The path to the configuration file.
+     * @param proxy          HttpHost Optional Proxy setting (set to NULL to ignore)
      * @throws BitPayException BitPayException class
      */
-    public Client(String configFilePath) throws BitPayException {
+    public Client(String configFilePath, HttpHost proxy) throws BitPayException {
         try {
             this._configFilePath = configFilePath;
             this.GetConfig();
             this.initKeys();
-            this.init();
+            this.init(proxy);
         } catch (JsonProcessingException e) {
             throw new BitPayException("failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (URISyntaxException e) {
@@ -1083,13 +1086,18 @@ public class Client {
     /**
      * Initialize this object with the client name and the environment Url.
      *
+     * @param proxyDetails HttpHost Optional Proxy setting
      * @throws Exception
      * @throws URISyntaxException
      */
-    private void init() throws BitPayException {
+    private void init(HttpHost proxyDetails) throws BitPayException {
         try {
             this._baseUrl = this._env.equals(Env.Test) ? Env.TestUrl : Env.ProdUrl;
-            _httpClient = HttpClientBuilder.create().build();
+            if (proxyDetails != null) {
+                _httpClient = HttpClientBuilder.create().setProxy(proxyDetails).build();
+            } else {
+                _httpClient = HttpClientBuilder.create().build();
+            }
             deriveIdentity();
             LoadAccessTokens();
             loadCurrencies();

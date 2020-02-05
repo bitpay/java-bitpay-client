@@ -66,8 +66,7 @@ class BitPaySetup {
                     KeyUtils.loadEcKey();
                 }
                 privateKey = privateKeyPath;
-            }
-            else {
+            } else {
                 ECKey _ecKey = KeyUtils.createEcKey();
                 privateKeyAsHex = KeyUtils.loadEcKeyAsHex(_ecKey);
                 System.out.println("Private key generated successfully with public key:");
@@ -83,7 +82,7 @@ class BitPaySetup {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            bitpay = new Client(env, privateKey, new Env.Tokens());
+            bitpay = new Client(env, privateKey, new Env.Tokens(), null);
             pairingCodeMerchant = bitpay.requestClientAuthorization(Facade.Merchant);
             pairingCodePayroll = bitpay.requestClientAuthorization(Facade.Payroll);
 
