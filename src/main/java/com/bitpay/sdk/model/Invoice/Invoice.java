@@ -52,15 +52,25 @@ public class Invoice {
     private Shopper _shopper = new Shopper();
     private String _billId;
     private RefundInfo _refundInfo;
-    private PaymentCodes _paymentCodes = new PaymentCodes();
+
+    @Deprecated //TODO remove in version 5.0
+    private PaymentCodes _paymentCodes = null;
     private boolean _extendedNotifications = false;
 
     private String _transactionCurrency;
     private long _amountPaid;
     private Hashtable<String, Hashtable<String, String>> _exchangeRates;
+
+    @Deprecated //TODO remove in version 5.0
     private PaymentTotal _paymentTotals;
+
+    @Deprecated //TODO remove in version 5.0
     private PaymentTotal _paymentSubtotals;
+
+    @Deprecated //TODO remove in version 5.0
     private PaymentTotal _paymentDisplayTotals;
+
+    @Deprecated //TODO remove in version 5.0
     private PaymentTotal _paymentDisplaySubTotals;
 
     /**
@@ -494,54 +504,64 @@ public class Invoice {
         this._transactionCurrency = _transactionCurrency;
     }
 
+    @Deprecated //TODO remove in version 5.0
     @JsonIgnore
     public PaymentCodes getPaymentCodes() {
         return _paymentCodes;
     }
 
+    @Deprecated //TODO remove in version 5.0
     @JsonProperty("paymentCodes")
     public void setPaymentCodes(PaymentCodes _paymentCodes) {
-        this._paymentCodes = _paymentCodes;
+        this._paymentCodes = null;
     }
 
     @JsonIgnore
+    @Deprecated //TODO remove in version 5.0
     public PaymentTotal getPaymentSubtotals() {
         return _paymentSubtotals;
     }
 
     @JsonProperty("paymentSubtotals")
+    @Deprecated //TODO remove in version 5.0
     public void setPaymentSubtotals(PaymentTotal _paymentSubtotals) {
-        this._paymentSubtotals = _paymentSubtotals;
+        this._paymentSubtotals = null;
     }
 
     @JsonIgnore
+    @Deprecated //TODO remove in version 5.0
     public PaymentTotal getPaymentTotals() {
         return _paymentTotals;
     }
 
     @JsonProperty("paymentTotals")
+    @Deprecated //TODO remove in version 5.0
     public void setPaymentTotals(PaymentTotal _paymentTotals) {
-        this._paymentTotals = _paymentTotals;
+        this._paymentTotals = null;
     }
 
     @JsonIgnore
+    @Deprecated //TODO remove in version 5.0
     public PaymentTotal getPaymentDisplayTotals() {
         return _paymentDisplayTotals;
     }
 
     @JsonProperty("paymentDisplayTotals")
+    @Deprecated //TODO remove in version 5.0
     public void setPaymentDisplayTotals(PaymentTotal _paymentDisplayTotals) {
-        this._paymentDisplayTotals = _paymentDisplayTotals;
+        this._paymentDisplayTotals = null;
     }
 
     @JsonIgnore
+    @Deprecated //TODO remove in version 5.0
     public PaymentTotal getPaymentDisplaySubTotals() {
         return _paymentDisplaySubTotals;
     }
 
     @JsonProperty("paymentDisplaySubTotals")
+    @Deprecated //TODO remove in version 5.0
     public void setPaymentDisplaySubTotals(PaymentTotal _paymentDisplaySubTotals) {
-        this._paymentDisplaySubTotals = _paymentDisplaySubTotals;
+        this._paymentDisplaySubTotals = null;
     }
 
     @JsonIgnore

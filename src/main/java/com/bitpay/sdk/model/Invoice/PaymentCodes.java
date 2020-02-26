@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Deprecated //TODO remove in version 5.0
 public class PaymentCodes {
 
     private PaymentCode _btc = new PaymentCode();
@@ -49,26 +50,42 @@ public class PaymentCodes {
     }
 
     @JsonIgnore
-    public PaymentCode getUsdc() { return _usdc; }
+    public PaymentCode getUsdc() {
+        return _usdc;
+    }
 
     @JsonProperty("USDC")
-    public void setUsdc(PaymentCode usdc) { this._usdc = usdc; }
+    public void setUsdc(PaymentCode usdc) {
+        this._usdc = usdc;
+    }
 
     @JsonIgnore
-    public PaymentCode getGusd() { return _gusd; }
+    public PaymentCode getGusd() {
+        return _gusd;
+    }
 
     @JsonProperty("GUSD")
-    public void setGusd(PaymentCode gusd) { this._gusd = gusd; }
+    public void setGusd(PaymentCode gusd) {
+        this._gusd = gusd;
+    }
 
     @JsonIgnore
-    public PaymentCode getPax() { return _pax; }
+    public PaymentCode getPax() {
+        return _pax;
+    }
 
     @JsonProperty("PAX")
-    public void setPax(PaymentCode pax) { this._pax = pax; }
+    public void setPax(PaymentCode pax) {
+        this._pax = pax;
+    }
 
     @JsonIgnore
-    public PaymentCode getXrp() { return _xrp; }
+    public PaymentCode getXrp() {
+        return _xrp;
+    }
 
     @JsonProperty("XRP")
-    public void setXrp(PaymentCode xrp) { this._xrp = xrp; }
+    public void setXrp(PaymentCode xrp) {
+        this._xrp = xrp;
+    }
 }
