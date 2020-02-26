@@ -47,9 +47,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.4.2002
+ * @version 4.5.2002
  * See bitpay.com/api for more information.
- * date 05.02.2020
+ * date 26.02.2020
  */
 
 public class Client {
@@ -1226,8 +1226,10 @@ public class Client {
                 get.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
                 get.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
-            get.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+            get.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
             get.addHeader("x-accept-version", Env.BitpayApiVersion);
+            get.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
+            get.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
 
 
             _log.info(get.toString());
@@ -1258,8 +1260,10 @@ public class Client {
 
                 delete.setURI(new URI(fullURL));
 
-                delete.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+                delete.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
                 delete.addHeader("x-accept-version", Env.BitpayApiVersion);
+                delete.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
+                delete.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
                 delete.addHeader("x-signature", KeyUtils.sign(_ecKey, fullURL));
                 delete.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             }
@@ -1292,7 +1296,9 @@ public class Client {
             }
 
             post.addHeader("x-accept-version", Env.BitpayApiVersion);
-            post.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+            post.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
+            post.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+            post.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
             post.addHeader("Content-Type", "application/json");
 
             _log.info(post.toString());
@@ -1316,8 +1322,10 @@ public class Client {
             put.addHeader("x-signature", KeyUtils.sign(_ecKey, _baseUrl + uri + json));
             put.addHeader("x-identity", KeyUtils.bytesToHex(_ecKey.getPubKey()));
             put.addHeader("x-accept-version", Env.BitpayApiVersion);
-            put.addHeader("x-bitpay-plugin-info", Env.BitpayPluginInfo);
+            put.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
             put.addHeader("Content-Type", "application/json");
+            put.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
+            put.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
 
             _log.info(put.toString());
             return _httpClient.execute(put);
