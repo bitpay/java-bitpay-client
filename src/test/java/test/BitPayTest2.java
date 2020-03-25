@@ -47,6 +47,7 @@ public class BitPayTest2 {
             _log.info("Client is requesting POS facade access. Go to " + Env.TestUrl + " and pair this client with your merchant account using the pairing code: " + pairingCode);
             throw new BitPayException("Error: client is not authorized.");
         }
+        bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
 
     @Before

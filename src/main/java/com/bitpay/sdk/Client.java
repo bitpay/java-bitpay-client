@@ -47,14 +47,14 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.5.2002
+ * @version 4.6.2003
  * See bitpay.com/api for more information.
- * date 26.02.2020
+ * date 25.03.2020
  */
 
 public class Client {
 
-    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
+    private static BitPayLogger _log = new BitPayLogger(BitPayLogger.OFF);
     private Config _configuration;
     private String _env;
     private Hashtable<String, String> _tokenCache; // {facade, token}
@@ -1499,5 +1499,14 @@ public class Client {
         }
 
         return null;
+    }
+
+    /**
+     * Sets the logger level of reporting.
+     *
+     * @param loggerLevel int BitPayLogger constant (OFF, INFO, WARN, ERR, DEBUG)
+     */
+    public void setLoggerLevel(int loggerLevel) {
+        _log = new BitPayLogger(loggerLevel);
     }
 }

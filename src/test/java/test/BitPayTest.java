@@ -36,7 +36,6 @@ import static org.junit.Assert.*;
 
 public class BitPayTest {
 
-    private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
     private final static double BTC_EPSILON = .000000001;
     private final static double EPSILON = .001;
     private static String clientName = "BitPay Java Library Tester";
@@ -68,6 +67,7 @@ public class BitPayTest {
 //                }},
 ////              null
 //        );
+        bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
 
     @Test

@@ -88,6 +88,7 @@ public class BitPayTest3 {
                 }},
                 null
         );
+        bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
 
     @Test
