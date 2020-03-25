@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class Invoice {
     private String _exceptionStatus;
     private long _targetConfirmations;
     private List<InvoiceTransaction> _transactions;
-    private List<Hashtable<String, Hashtable<String, String>>> _refundAddresses;
+    private ArrayList _refundAddresses;
     private boolean _refundAddressRequestPending;
     private String _buyerProvidedEmail;
     private InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
@@ -405,12 +406,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public List<Hashtable<String, Hashtable<String, String>>> getRefundAddresses() {
+    public ArrayList getRefundAddresses() {
         return _refundAddresses;
     }
 
     @JsonProperty("refundAddresses")
-    public void setRefundAddresses(List<Hashtable<String, Hashtable<String, String>>> _refundAddresses) {
+    public void setRefundAddresses(ArrayList _refundAddresses) {
         this._refundAddresses = _refundAddresses;
     }
 
