@@ -58,6 +58,17 @@ public class BitPayTest {
                 }},
                 null
         );
+        // STAGGING
+//        bitpay = new Client(
+//                Env.Test,
+//                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
+//                new Env.Tokens() {{
+//                    merchant = "7CuhG8QTn27HWyhtjiVBFdoh73srzeWRVpMdb6BuyTK";
+//                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
+//                }},
+//                null
+//        );
+
 //        bitpay = new Client(
 //                Env.Prod,
 //                "bitpay_private_prod.key",
@@ -79,7 +90,10 @@ public class BitPayTest {
 
     @Test
     public void testShouldGetInvoiceId() {
-        Invoice invoice = new Invoice(50.0, "USD");
+        Invoice invoice = new Invoice(1.0, "USD");
+        invoice.setNotificationURL("https://hookb.in/QJlE0MeyM7hZ7jrRNdoB");
+        invoice.setFullNotifications(true);
+        invoice.setExtendedNotifications(true);
         try {
             basicInvoice = bitpay.createInvoice(invoice);
         } catch (Exception e) {
@@ -88,7 +102,7 @@ public class BitPayTest {
         }
         assertNotNull(basicInvoice.getId());
     }
-
+//5092.26
     @Test
     public void testShouldCreateInvoiceBTC() {
         Invoice invoice = new Invoice(50.0, "USD");
@@ -194,16 +208,16 @@ public class BitPayTest {
         Invoice retreivedInvoice = null;
         try {
             // Create invoice on POS facade.
-            invoice = this.bitpay.createInvoice(invoice);
+//            invoice = this.bitpay.createInvoice(invoice);
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
-            String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice("FUfs9crxMuuJLUL1f4hxHf");
+//            String token = this.bitpay.getAccessToken(Facade.Merchant);
+            retreivedInvoice = this.bitpay.getInvoice("6q9QTcrg8DdQSj8WiAZHPD");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        assertEquals(invoice.getId(), retreivedInvoice.getId());
+        assertEquals("6q9QTcrg8DdQSj8WiAZHPD", retreivedInvoice.getId());
     }
 
     @Test
