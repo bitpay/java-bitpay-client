@@ -2,11 +2,9 @@ package com.bitpay.sdk.model.Invoice;
 
 import com.bitpay.sdk.BitPayException;
 import com.bitpay.sdk.model.Currency;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -52,14 +50,14 @@ public class Invoice {
     private MinerFees _minerFees = new MinerFees();
     private Shopper _shopper = new Shopper();
     private String _billId;
-    private RefundInfo _refundInfo;
+    private ArrayList<RefundInfo> _refundInfo;
 
     @Deprecated //TODO remove in version 5.0
     private PaymentCodes _paymentCodes = null;
     private boolean _extendedNotifications = false;
 
     private String _transactionCurrency;
-    private long _amountPaid;
+    private BigDecimal _amountPaid;
     private Hashtable<String, Hashtable<String, String>> _exchangeRates;
 
     @Deprecated //TODO remove in version 5.0
@@ -486,12 +484,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public RefundInfo getRefundInfo() {
+    public ArrayList<RefundInfo> getRefundInfo() {
         return _refundInfo;
     }
 
     @JsonProperty("refundInfo")
-    public void setRefundInfo(RefundInfo _refundInfo) {
+    public void setRefundInfo(ArrayList<RefundInfo> _refundInfo) {
         this._refundInfo = _refundInfo;
     }
 
@@ -566,12 +564,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public long getAmountPaid() {
+    public BigDecimal getAmountPaid() {
         return _amountPaid;
     }
 
     @JsonProperty("amountPaid")
-    public void setAmountPaid(long _amountPaid) {
+    public void setAmountPaid(BigDecimal _amountPaid) {
         this._amountPaid = _amountPaid;
     }
 

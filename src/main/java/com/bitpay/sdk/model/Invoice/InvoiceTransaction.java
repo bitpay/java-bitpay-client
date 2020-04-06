@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceTransaction {
 
-    private Double _amount;
+    private BigDecimal _amount;
     private int _confirmations;
     private Date _time;
     private Date _receivedTime;
@@ -19,12 +20,12 @@ public class InvoiceTransaction {
     }
 
     @JsonIgnore
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return _amount;
     }
 
     @JsonProperty("amount")
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this._amount = amount;
     }
 
