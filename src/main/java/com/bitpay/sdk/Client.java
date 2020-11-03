@@ -47,9 +47,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 4.7.2004
+ * @version 5.0.2011
  * See bitpay.com/api for more information.
- * date 06.04.2020
+ * date 03.11.2020
  */
 
 public class Client {
@@ -341,11 +341,11 @@ public class Client {
             params.add(new BasicNameValuePair("orderId", orderId));
         }
         ;
-        if (orderId != null) {
+        if (limit != null) {
             params.add(new BasicNameValuePair("limit", limit.toString()));
         }
         ;
-        if (limit != null) {
+        if (offset != null) {
             params.add(new BasicNameValuePair("offset", offset.toString()));
         }
         ;

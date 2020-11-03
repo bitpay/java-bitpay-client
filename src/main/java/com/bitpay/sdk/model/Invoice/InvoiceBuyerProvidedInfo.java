@@ -10,6 +10,7 @@ public class InvoiceBuyerProvidedInfo {
     private String _phoneNumber;
     private String _selectedTransactionCurrency;
     private String _emailAddress;
+    private String _selectedWallet;
 
     public InvoiceBuyerProvidedInfo() {
     }
@@ -52,5 +53,15 @@ public class InvoiceBuyerProvidedInfo {
     @JsonProperty("emailAddress")
     public void setEmailAddress(String emailAddress) {
         this._emailAddress = emailAddress;
+    }
+
+    @JsonIgnore
+    public String getSelectedWallet() {
+        return _selectedWallet;
+    }
+
+    @JsonProperty("selectedWallet")
+    public void setSelectedWallet(String selectedWallet) {
+        this._selectedWallet = selectedWallet;
     }
 }
