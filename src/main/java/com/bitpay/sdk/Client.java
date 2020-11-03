@@ -183,7 +183,6 @@ public class Client {
         List<Token> tokens;
 
         try {
-            String tokenss = this.responseToJsonString(response);
             tokens = Arrays.asList(mapper.readValue(this.responseToJsonString(response), Token[].class));
 
             // Expecting a single token resource.
@@ -448,8 +447,7 @@ public class Client {
         try {
             HttpResponse response = this.get("invoices/" + invoice.getId() + "/refunds/" + refundId, params);
             ObjectMapper mapper = new ObjectMapper();
-            String jsonString = "{\"id\":\"SgNXo9DJbVTsisua7x5qzc\",\"requestDate\":\"2020-01-27T12:07:35.691Z\",\"status\":\"success\",\"results\":{\"id\":\"5oACoLiz3NLK5WwiNRWFtK\",\"type\":\"partial\",\"refundTransactionCurrency\":\"ETH\",\"adhoc\":false,\"bitcoinPayouts\":[{\"bitcoinAddress\":\"0x2D21469a39FAA0011F18722c672607C0F0042cd3\",\"invoiceSatoshis\":32747000000000000,\"refundSatoshis\":32747000000000000,\"refundFee\":0,\"exRates\":{\"ETH\":1,\"EUR\":152.6856309,\"BTC\":0.019354950002587558,\"USD\":168.3,\"BCH\":0.4549878345498784,\"GUSD\":168.3,\"PAX\":168.3,\"USDC\":168.3,\"XRP\":731.357552581262},\"amountFiat\":5,\"fiatCurrency\":\"EUR\",\"amountUSD\":5.51,\"requestAmount\":5,\"requestCurrency\":\"EUR\",\"ledgerAmount\":5.51,\"ledgerFeeAmount\":0,\"ledgerCurrency\":\"USD\",\"txid\":\"0x5e3c32b8f66b67c9d410044f0b767ec1cac82bfb5fb730026b112537a923f1c3\"}],\"before\":{\"status\":\"paidFull\",\"btcPaid\":\"0.065768\",\"btcDue\":\"0.000000\",\"price\":10,\"currency\":\"EUR\",\"balances\":{\"BTC\":0.029277,\"USD\":3488.11,\"EUR\":0,\"CAD\":0,\"MXN\":0,\"JPY\":0,\"GBP\":0,\"AUD\":0,\"NZD\":0,\"ZAR\":0}},\"after\":{\"status\":\"paidFull\",\"btcPaid\":\"0.065768\",\"btcDue\":\"0.000000\",\"price\":10,\"currency\":\"EUR\"},\"numericId\":\"789949\",\"merchantName\":\"Test Account\",\"checks\":[\"ValidBitcoinAddress\",\"InvoiceSufficientBalance\",\"6Confirmations\",\"NotBitPayAddress\",\"LedgerSufficientBalance\"]},\"params\":{\"requesterType\":\"purchaser\",\"requesterEmail\":\"fox.mulder@trustno.one\",\"amount\":5,\"currency\":\"EUR\",\"email\":\"fox.mulder@trustno.one\",\"purchaserNotifyEmail\":\"lyric.brenham@uola.org\",\"destinationTag\":null,\"refundAddress\":\"0x2D21469a39FAA0011F18722c672607C0F0042cd3\",\"commit\":false,\"doit\":false,\"supportRequestEid\":\"SgNXo9DJbVTsisua7x5qzc\",\"txid\":\"0x5e3c32b8f66b67c9d410044f0b767ec1cac82bfb5fb730026b112537a923f1c3\",\"effects\":{\"id\":\"5oACoLiz3NLK5WwiNRWFtK\",\"type\":\"partial\",\"refundTransactionCurrency\":\"ETH\",\"adhoc\":false,\"bitcoinPayouts\":[{\"bitcoinAddress\":\"0x2D21469a39FAA0011F18722c672607C0F0042cd3\",\"invoiceSatoshis\":32747000000000000,\"refundSatoshis\":32747000000000000,\"refundFee\":0,\"exRates\":{\"ETH\":1,\"EUR\":152.6856309,\"BTC\":0.019354950002587558,\"USD\":168.3,\"BCH\":0.4549878345498784,\"GUSD\":168.3,\"PAX\":168.3,\"USDC\":168.3,\"XRP\":731.357552581262},\"amountFiat\":5,\"fiatCurrency\":\"EUR\",\"amountUSD\":5.51,\"requestAmount\":5,\"requestCurrency\":\"EUR\",\"ledgerAmount\":5.51,\"ledgerFeeAmount\":0,\"ledgerCurrency\":\"USD\"}],\"before\":{\"status\":\"paidFull\",\"btcPaid\":\"0.065768\",\"btcDue\":\"0.000000\",\"price\":10,\"currency\":\"EUR\",\"balances\":{\"BTC\":0.029277,\"USD\":3488.11,\"EUR\":0,\"CAD\":0,\"MXN\":0,\"JPY\":0,\"GBP\":0,\"AUD\":0,\"NZD\":0,\"ZAR\":0}},\"after\":{\"status\":\"paidFull\",\"btcPaid\":\"0.065768\",\"btcDue\":\"0.000000\",\"price\":10,\"currency\":\"EUR\"},\"numericId\":\"789949\",\"merchantName\":\"Test Account\",\"checks\":[\"ValidBitcoinAddress\",\"InvoiceSufficientBalance\",\"6Confirmations\",\"NotBitPayAddress\",\"LedgerSufficientBalance\"]}},\"token\":\"2vM2Jiw9Ed4YmGx66BBXjUebSfGDUieZuPGyWjpnV7oXYJJGg2nhyEFFZAsGP6s8bT\"}";
-            refund = mapper.readerForUpdating(refund).readValue(jsonString);
+            refund = mapper.readerForUpdating(refund).readValue(this.responseToJsonString(response));
         } catch (JsonProcessingException e) {
             throw new RefundQueryException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         } catch (Exception e) {
@@ -1119,7 +1117,6 @@ public class Client {
             try {
                 if (KeyUtils.privateKeyExists(this._configuration.getEnvConfig(this._env).path("PrivateKeyPath").toString().replace("\"", ""))) {
                     _ecKey = KeyUtils.loadEcKey();
-                    String temp1 = _ecKey.getPrivateKeyAsHex();
                 } else {
                     String keyHex = this._configuration.getEnvConfig(this._env).path("PrivateKey").toString().replace("\"", "");
                     if (!keyHex.isEmpty()) {
@@ -1303,7 +1300,6 @@ public class Client {
             post.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
             post.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
             post.addHeader("Content-Type", "application/json");
-            _log.info(json);
 
             _log.info(post.toString());
             return _httpClient.execute(post);
@@ -1441,9 +1437,6 @@ public class Client {
                 try {
                     _ecKey = KeyUtils.createEcKeyFromHexString(privateKey);
                     keyHex = privateKey;
-                    String pub = _ecKey.getPublicKeyAsHex();
-                    String sin = KeyUtils.deriveSIN(_ecKey);
-                    String sin1 = KeyUtils.deriveSIN(_ecKey);
                 } catch (Exception e) {
                     throw new BitPayException("Private Key file not found");
                 }
