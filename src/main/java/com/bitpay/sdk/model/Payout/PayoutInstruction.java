@@ -1,5 +1,6 @@
 package com.bitpay.sdk.model.Payout;
 
+import com.bitpay.sdk.exceptions.PayoutCreationException;
 import com.bitpay.sdk.util.PayoutInstructionBtcSummaryDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,15 +12,14 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstruction {
-
-    public static final String STATUS_PAID = "paid";
-    public static final String STATUS_UNPAID = "unpaid";
-
     private Double _amount;
-    private String _address;
+    private String _email;
+    private String _recipientId;
+    private String _shopperId;
     private String _label = "";
-
+    private String _walletProvider;
     private String _id;
+
     private PayoutInstructionBtcSummary _btc;
     private List<PayoutInstructionTransaction> _transactions;
     private String _status;
@@ -33,12 +33,26 @@ public class PayoutInstruction {
     /**
      * Constructor, create a PayoutInstruction object.
      *
-     * @param amount  BTC amount.
-     * @param address Bitcoin address.
+     * @param amount      float BTC amount.
+     * @param method      int Method used to target the recipient.
+     * @param methodValue string value for the choosen target method.
+     * @throws PayoutCreationException BitPayException class
      */
-    public PayoutInstruction(Double amount, String address) {
+    public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutCreationException {
         this._amount = amount;
-        this._address = address;
+        switch (method) {
+            case RecipientReferenceMethod.EMAIL:
+                this._email = methodValue;
+                break;
+            case RecipientReferenceMethod.RECIPIENT_ID:
+                this._recipientId = methodValue;
+                break;
+            case RecipientReferenceMethod.SHOPPER_ID:
+                this._shopperId = methodValue;
+                break;
+            default:
+                throw new PayoutCreationException("method code must be a type of RecipientReferenceMethod");
+        }
     }
 
     @JsonProperty("amount")
@@ -52,15 +66,37 @@ public class PayoutInstruction {
         this._amount = amount;
     }
 
-    @JsonProperty("address")
+    @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getAddress() {
-        return _address;
+    public String getEmail() {
+        return _email;
     }
 
-    @JsonProperty("address")
-    public void setAddress(String address) {
-        this._address = address;
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this._email = email;
+    }
+
+    @JsonProperty("recipientId")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getRecipientId() {
+        return _recipientId;
+    }
+
+    @JsonProperty("recipientId")
+    public void setRecipientId(String recipientId) {
+        this._recipientId = recipientId;
+    }
+
+    @JsonProperty("shopperId")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getShopperId() {
+        return _shopperId;
+    }
+
+    @JsonProperty("shopperId")
+    public void setShopperId(String shopperId) {
+        this._shopperId = shopperId;
     }
 
     @JsonProperty("label")
@@ -72,6 +108,17 @@ public class PayoutInstruction {
     @JsonProperty("label")
     public void setLabel(String label) {
         this._label = label;
+    }
+
+    @JsonProperty("walletProvider")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getWalletProvider() {
+        return _walletProvider;
+    }
+
+    @JsonProperty("walletProvider")
+    public void setWalletProvider(String walletProvider) {
+        this._walletProvider = walletProvider;
     }
 
     // Response fields

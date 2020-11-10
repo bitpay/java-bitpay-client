@@ -3,10 +3,9 @@ package test;
 import com.bitpay.sdk.BitPayException;
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.Env;
+import com.bitpay.sdk.exceptions.PayoutCreationException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Payout.PayoutBatch;
-import com.bitpay.sdk.model.Payout.PayoutInstruction;
-import com.bitpay.sdk.model.Payout.PayoutStatus;
+import com.bitpay.sdk.model.Payout.*;
 import com.bitpay.sdk.util.BitPayLogger;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,7 +23,7 @@ import static org.junit.Assert.*;
 public class BitPayTest3 {
 
     private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-    private static String clientName = "BitPay Java Library Tester3";
+    private static final String clientName = "BitPay Java Library Tester3";
     private static String pairingCode;
     private static URI myKeyFile;
     private Client bitpay;
@@ -92,24 +91,28 @@ public class BitPayTest3 {
     }
 
     @Test
-    public void testShouldSubmitPayoutBatch() {
-        Date date = new Date();
-        Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
-
-        long effectiveDate = threeDaysFromNow.getTime();
-        String currency = "USD";
-        List<PayoutInstruction> instructions = Arrays.asList(
-                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u"),
-                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A")
+    public void testShouldSubmitPayoutRecipients() {
+        List<PayoutRecipient> recipientsList = Arrays.asList(
+                new PayoutRecipient(
+                        "sandbox+recipient1@bitpay.com",
+                        "recipient1",
+                        "https://hookb.in/wNDlQMV7WMFz88VDyGnJ"),
+                new PayoutRecipient(
+                        "sandbox+recipient2@bitpay.com",
+                        "recipient2",
+                        "https://hookb.in/QJOPBdMgRkukpp2WO60o"),
+                new PayoutRecipient(
+                        "sandbox+recipient3@bitpay.com",
+                        "recipient3",
+                        "https://hookb.in/QJOPBdMgRkukpp2WO60o")
         );
 
-        PayoutBatch batch = new PayoutBatch(currency, effectiveDate, instructions);
+        PayoutRecipients recipientsObj = new PayoutRecipients(recipientsList);
         try {
-            batch = this.bitpay.submitPayoutBatch(batch);
+            List<PayoutRecipient> recipients = this.bitpay.submitPayoutRecipients(recipientsObj);
 
-            assertNotNull(batch.getId());
-            assertTrue(batch.getInstructions().size() == 2);
-
+            assertNotNull(recipients);
+            assertTrue(recipients.size() == 2);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -117,15 +120,57 @@ public class BitPayTest3 {
     }
 
     @Test
-    public void testShouldSubmitGetAndDeletePayoutBatch() {
+    public void testShouldGetPayoutRecipientId() {
+        List<PayoutRecipient> recipientsList = Arrays.asList(
+                new PayoutRecipient(
+                        "sandbox+recipient1@bitpay.com",
+                        "recipient1",
+                        "https://hookb.in/wNDlQMV7WMFz88VDyGnJ"),
+                new PayoutRecipient(
+                        "sandbox+recipient2@bitpay.com",
+                        "recipient2",
+                        "https://hookb.in/QJOPBdMgRkukpp2WO60o"),
+                new PayoutRecipient(
+                        "sandbox+recipient3@bitpay.com",
+                        "recipient3",
+                        "https://hookb.in/QJOPBdMgRkukpp2WO60o")
+        );
+
+        PayoutRecipients recipientsObj = new PayoutRecipients(recipientsList);
+        try {
+            List<PayoutRecipient> recipients = this.bitpay.submitPayoutRecipients(recipientsObj);
+            PayoutRecipient firstRecipient = recipients.get(0);
+            PayoutRecipient retrieved = this.bitpay.getPayoutRecipient(firstRecipient.getId());
+
+            assertNotNull(firstRecipient);
+            assertNotNull(retrieved.getId());
+            assertEquals(firstRecipient.getId(), retrieved.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testShouldGetPayoutRecipients() {
+        try {
+            List<PayoutRecipient> recipients = this.bitpay.getPayoutRecipients(null, 2);
+            assertEquals(2, recipients.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testShouldSubmitGetAndDeletePayoutBatch() throws PayoutCreationException {
         Date date = new Date();
         Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);
 
         long effectiveDate = threeDaysFromNow.getTime();
         String currency = "USD";
         List<PayoutInstruction> instructions = Arrays.asList(
-                new PayoutInstruction(100.0, "mtHDtQtkEkRRB5mgeWpLhALsSbga3iZV6u"),
-                new PayoutInstruction(200.0, "mvR4Xj7MYT7GJcL93xAQbSZ2p4eHJV5F7A")
+                new PayoutInstruction(100.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com")
         );
 
         PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, instructions);
@@ -133,12 +178,12 @@ public class BitPayTest3 {
             batch0 = this.bitpay.submitPayoutBatch(batch0);
 
             assertNotNull(batch0.getId());
-            assertTrue(batch0.getInstructions().size() == 2);
+            assertTrue(batch0.getInstructions().size() == 1);
 
             PayoutBatch batch1 = this.bitpay.getPayoutBatch(batch0.getId());
 
             assertEquals(batch1.getId(), batch0.getId());
-            assertTrue(batch1.getInstructions().size() == 2);
+            assertTrue(batch1.getInstructions().size() == 1);
 
             this.bitpay.cancelPayoutBatch(batch0.getId());
 

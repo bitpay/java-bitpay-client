@@ -12,15 +12,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutBatch {
-    public static final String MethodManual2 = "manual_2";
     public static final String MethodVwap24 = "vwap_24hr";
 
     private String _guid = "";
