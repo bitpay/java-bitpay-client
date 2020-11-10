@@ -11,16 +11,15 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Buyer;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceStatus;
+import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
-import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -38,7 +37,7 @@ public class BitPayTest {
 
     private final static double BTC_EPSILON = .000000001;
     private final static double EPSILON = .001;
-    private static String clientName = "BitPay Java Library Tester";
+    private static final String clientName = "BitPay Java Library Tester";
     private static String pairingCode;
     private static URI myKeyFile;
     private Client bitpay;
@@ -48,25 +47,57 @@ public class BitPayTest {
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
 //        bitpay = new Client("BitPay.config.json", null);
-        bitpay = new Client(
-                Env.Test,
-                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
-                new Env.Tokens() {{
-                    merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
-                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
-                }},
-                null
-        );
+//        bitpay = new Client(
+//                Env.Prod,
+//                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_fw_prod.key",
+//                new Env.Tokens() {{
+//                    merchant = "5uMX7kPk4SeDSvthuh4AnU72gUSoYsDRqe1Jn9YoGmzc";
+//                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
+//                }},
+//                null
+//        );
+//        bitpay = new Client(
+//                Env.Test,
+//                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_RP_test.key",
+//                new Env.Tokens() {{
+//                    merchant = "28yBJ1ht9y24yapGc4MZM33ymti2wCgmjATyq92ybmfh";
+//                    payroll = "28yBJ1ht9y24yapGc4MZM38BUVp1kdNRBJBhCki82xVz";
+//                }},
+//                null
+//        );
+//        bitpay.setLoggerLevel(BitPayLogger.DEBUG);
+        // STAGGING
+//        bitpay = new Client(
+//                Env.Test,
+//                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
+//                new Env.Tokens() {{
+//                    merchant = "7CuhG8QTn27HWyhtjiVBFdoh73srzeWRVpMdb6BuyTK";
+//                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
+//                }},
+//                null
+//        );
+
 //        bitpay = new Client(
 //                Env.Prod,
 //                "bitpay_private_prod.key",
 //                new Env.Tokens() {{
-//                    pos = "";
+//                    pos = "satoshi@buyeremaildomain.com";
 //                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
-//                    payroll = "";
+//                    payroll = "satoshi@buyeremaildomain.com";
 //                }},
 ////              null
 //        );
+
+
+//NODEJS
+        bitpay = new Client(
+                Env.Test,
+                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
+                new Env.Tokens() {{
+                    merchant = "FWYAcTiHmoMgdxAV4Jzx1wKHyNbNFsoP66sevhF6sVvx";
+                }},
+                null
+        );
         bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
 
@@ -79,7 +110,10 @@ public class BitPayTest {
 
     @Test
     public void testShouldGetInvoiceId() {
-        Invoice invoice = new Invoice(50.0, "USD");
+        Invoice invoice = new Invoice(10.0, "USD");
+        invoice.setNotificationURL("https://hookb.in/QJlE0MeyM7hZ7jrRNdoB");
+        invoice.setFullNotifications(true);
+        invoice.setExtendedNotifications(true);
         try {
             basicInvoice = bitpay.createInvoice(invoice);
         } catch (Exception e) {
@@ -198,7 +232,7 @@ public class BitPayTest {
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice("FUfs9crxMuuJLUL1f4hxHf");
+            retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -210,7 +244,7 @@ public class BitPayTest {
     public void testShouldCreateInvoiceWithAdditionalParams() {
         Buyer buyer = new Buyer();
         buyer.setName("Satoshi");
-//        buyer.setEmail("satoshi@buyeremaildomain.com");
+        buyer.setEmail("satoshi@buyeremaildomain.com");
 
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
@@ -256,7 +290,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -291,7 +325,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.EUR, "", items);
+        Bill bill = new Bill("7", Currency.EUR, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -326,7 +360,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -361,7 +395,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -396,7 +430,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         try {
@@ -433,7 +467,7 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
         Bill retrievedBill = null;
         Bill updatedBill = null;
@@ -482,9 +516,9 @@ public class BitPayTest {
             setDescription("product-d");
         }});
 
-        Bill bill = new Bill("7", Currency.USD, "", items);
+        Bill bill = new Bill("7", Currency.USD, "satoshi@buyeremaildomain.com", items);
         Bill basicBill = null;
-        String result = "";
+        String result = "satoshi@buyeremaildomain.com";
         Bill retrievedBill = null;
         try {
             basicBill = this.bitpay.createBill(bill);
@@ -584,7 +618,7 @@ public class BitPayTest {
         try {
             //check within the last few days
             Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
@@ -603,7 +637,7 @@ public class BitPayTest {
             //check within the last few days
             Date date = new Date();
             Date dateTomorrow = new Date(date.getTime() + 1 * 24 * 3600 * 1000);
-            Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String tomorrow = sdf.format(dateTomorrow);
             String sevenDaysAgo = sdf.format(dateBefore);
@@ -622,7 +656,7 @@ public class BitPayTest {
             //check within the last few days
             Date date = new Date();
             Date dateTomorrow = new Date(date.getTime() + 100 * 24 * 3600 * 1000);
-            Date dateBefore = new Date(date.getTime() - 7 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String tomorrow = sdf.format(dateTomorrow);
             String sevenDaysAgo = sdf.format(dateBefore);
@@ -658,29 +692,32 @@ public class BitPayTest {
         Refund firstRefund = null;
         Refund retrievedRefund = null;
         List<Refund> retrievedRefunds = null;
+        List<Refund> retrievedRefundsAgain = null;
         Boolean createdRefund = false;
         Boolean cancelled = false;
         try {
             //check within the last few days
-            Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String today = sdf.format(date);
-            String sevenDaysAgo = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
-            firstInvoice = invoices.get(0);
+//            Date date = new Date();
+//            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            String today = sdf.format(date);
+//            String sevenDaysAgo = sdf.format(dateBefore);
+//            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
+            firstInvoice = this.bitpay.getInvoice("MoiNtA7venwmitKKQLPhG9");// invoices.get(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(firstInvoice);
-        String refundEmail = "";
+        String refundEmail = "sandbox@bitpay.com";
 
         try {
             createdRefund = this.bitpay.createRefund(firstInvoice, refundEmail, firstInvoice.getPrice(), firstInvoice.getCurrency());
+            Thread.sleep(30000);
             retrievedRefunds = this.bitpay.getRefunds(firstInvoice);
             firstRefund = retrievedRefunds.get(0);
             retrievedRefund = this.bitpay.getRefund(firstInvoice, firstRefund.getId());
             cancelled = this.bitpay.cancelRefund(firstInvoice, firstRefund.getId());
+            retrievedRefundsAgain = this.bitpay.getRefunds(firstInvoice);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -699,7 +736,7 @@ public class BitPayTest {
         try {
             //check within the last few days
             Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 300 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String oneMonthAgo = sdf.format(dateBefore);
@@ -721,7 +758,7 @@ public class BitPayTest {
         try {
             //check within the last few days
             Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 300 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String oneMonthAgo = sdf.format(dateBefore);
@@ -745,7 +782,7 @@ public class BitPayTest {
         try {
             //check within the last few days
             Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 30 * 24 * 3600 * 1000);
+            Date dateBefore = new Date(date.getTime() - 300 * 24 * 3600 * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String oneMonthAgo = sdf.format(dateBefore);
@@ -759,5 +796,44 @@ public class BitPayTest {
         }
         assertNotNull(settlement.getId());
         assertEquals(firstSettlement.getId(), settlement.getId());
+    }
+
+    @Test
+    public void testShouldViajesliliTest() {
+        Buyer buyer = new Buyer();
+        buyer.setEmail("fwafrg@dffsdf.com");
+
+        Invoice invoice = new Invoice(10798.31, "MXN");
+        invoice.setBuyer(buyer);
+        invoice.setOrderId("200825xQpD2MNYqG");
+        invoice.setFullNotifications(true);
+        invoice.setExtendedNotifications(true);
+        invoice.setRedirectURL("https://www.viajeslili.com/secure/payment/payment-completed.xhtml?tripId=2&payment=ok");
+        invoice.setNotificationURL("https://www.viajeslili.com/resources-internal/bitpay/notification");
+        invoice.setPosData("200825xQpD2MNYqG");
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(InvoiceStatus.New, invoice.getStatus());
+        assertEquals(1.00, invoice.getPrice(), EPSILON);
+        assertEquals("F15910de149dd14e26s2", invoice.getPosData());
+        assertEquals("henry henry", invoice.getBuyer().getName());
+        assertEquals("kk@kk.com", invoice.getBuyer().getEmail());
+        assertEquals(true, invoice.getFullNotifications());
+    }
+
+    @Test
+    public void testShouldGetInvoiceNode() {
+        Invoice invoice = new Invoice(50.0, "USD");
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
     }
 }

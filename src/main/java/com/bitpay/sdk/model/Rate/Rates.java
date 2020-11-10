@@ -9,7 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rates {
 
-    private Client _bp;
+    private final Client _bp;
     private List<Rate> _rates;
 
     public Rates(List<Rate> rates, Client bp) {
