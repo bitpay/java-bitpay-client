@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class BitPayTest2 {
 
     private static final BitPayLogger _log = new BitPayLogger(BitPayLogger.DEBUG);
-    private static final String clientName = "BitPay Java Library Tester2";
+    private static String clientName = "BitPay Java Library Tester2";
     private Client bitpay;
 
     @BeforeClass
