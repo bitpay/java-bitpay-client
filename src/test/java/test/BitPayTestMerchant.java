@@ -20,7 +20,6 @@ import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -34,13 +33,10 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class BitPayTest {
+public class BitPayTestMerchant {
 
     private final static double BTC_EPSILON = .000000001;
     private final static double EPSILON = .001;
-    private static String clientName = "BitPay Java Library Tester";
-    private static String pairingCode;
-    private static URI myKeyFile;
     private Client bitpay;
     private Invoice basicInvoice;
 
@@ -50,7 +46,7 @@ public class BitPayTest {
 //        bitpay = new Client("BitPay.config.json", null);
         bitpay = new Client(
                 Env.Test,
-                "/Users/antonio.buedo/Bitpay/Repos/java-bitpay-client/output/bitpay_private_test.key",
+                "bitpay_private_test.key",
                 new Env.Tokens() {{
                     merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
                     payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
@@ -215,7 +211,7 @@ public class BitPayTest {
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
-        invoice.setNotificationEmail("satoshi@merchantemaildomain.com");
+        invoice.setNotificationEmail("sandbox@bitpay.com");
         invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
         try {
             invoice = this.bitpay.createInvoice(invoice);
@@ -229,7 +225,7 @@ public class BitPayTest {
         assertEquals("Satoshi", invoice.getBuyer().getName());
         assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
         assertEquals(true, invoice.getFullNotifications());
-        assertEquals("satoshi@merchantemaildomain.com", invoice.getNotificationEmail());
+        assertEquals("sandbox@bitpay.com", invoice.getNotificationEmail());
     }
 
     @Test
