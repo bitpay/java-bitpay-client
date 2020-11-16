@@ -49,7 +49,7 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 5.1.2011
+ * @version 5.2.2011
  * See bitpay.com/api for more information.
  * date 03.11.2020
  */
@@ -836,7 +836,8 @@ public class Client {
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
-     * @throws PayoutCreationException BitPayException class
+     * @throws BitPayException BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException, PayoutCreationException {
         recipients.setToken(this.getAccessToken(Facade.Payroll));
@@ -872,6 +873,7 @@ public class Client {
      *               result).
      * @return array     A list of BitPayRecipient objects.
      * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
      */
     public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit) throws BitPayException, PayoutQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -903,7 +905,8 @@ public class Client {
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
-     * @throws PayoutQueryException BitPayException class
+     * @throws BitPayException BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
      */
     public PayoutRecipient getPayoutRecipient(String recipientId) throws BitPayException, PayoutQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();

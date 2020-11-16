@@ -33,7 +33,7 @@ public class PayoutInstruction {
     /**
      * Constructor, create a PayoutInstruction object.
      *
-     * @param amount      float BTC amount.
+     * @param amount      float amount (in currency of batch).
      * @param method      int Method used to target the recipient.
      * @param methodValue string value for the choosen target method.
      * @throws PayoutCreationException BitPayException class
