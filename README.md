@@ -1,4 +1,4 @@
-<img src="https://bitpay.com/_nuxt/img/1c0494b.svg" width="150">
+<img src="https://bitpay.com/_nuxt/img/bitpay-logo-blue.1c0494b.svg" width="150">
 
 # BitPay Java client
 [![License](https://img.shields.io/github/license/bitpay/java-bitpay-client.svg?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bitpay/java-bitpay-client/master/LICENSE)
