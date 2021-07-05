@@ -226,7 +226,7 @@ public class PayoutBatch {
         return _account;
     }
 
-    @JsonProperty("Account")
+    @JsonProperty("account")
     public void setAccount(String account) {
         this._account = account;
     }

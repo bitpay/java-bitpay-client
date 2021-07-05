@@ -1193,7 +1193,6 @@ public class Client {
             }
             deriveIdentity();
             LoadAccessTokens();
-            loadCurrencies();
         } catch (Exception e) {
             throw new BitPayException("failed to deserialize BitPay server response (Token array) : " + e.getMessage());
         }
@@ -1565,12 +1564,27 @@ public class Client {
     /**
      * Load currencies info.
      *
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException BitPayException class //TODO test and integrate
      */
     private void loadCurrencies() throws BitPayException {
         try {
-            HttpResponse response = this.get("currencies/");
-            _currenciesInfo = new ArrayList(Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Object[].class)));
+            HttpEntity newEntity = this.get("currencies").getEntity();
+
+            String jsonString;
+
+            jsonString = EntityUtils.toString(newEntity, "UTF-8");
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("data");
+
+            if (node != null) {
+                jsonString = node.toString();
+            }
+
+            _currenciesInfo = new ArrayList(Arrays.asList(new ObjectMapper().readValue(jsonString, Map[].class)));
+
         } catch (Exception e) {
             // No action required
         }
