@@ -55,7 +55,7 @@ class BitPaySetup {
             }
 
             if (keyType == 1) {
-                privateKeyPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/output/bitpay_private_delete" + env.toLowerCase() + ".key";
+                privateKeyPath = Paths.get(".").toAbsolutePath().normalize().toString() + "/output/bitpay_private_" + env.toLowerCase() + ".key";
                 if (!KeyUtils.privateKeyExists(privateKeyPath)) {
                     ECKey _ecKey = KeyUtils.createEcKey();
                     KeyUtils.saveEcKey(_ecKey);
@@ -108,14 +108,14 @@ class BitPaySetup {
             String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(configurationFile);
 
             ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-            writer.writeValue(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "/output/BitPay.config.delete.json"), configurationFile);
+            writer.writeValue(new File(Paths.get(".").toAbsolutePath().normalize().toString() + "/output/BitPay.config.json"), configurationFile);
 
             System.out.println("In location:");
-            System.out.println(Paths.get(".").toAbsolutePath().normalize().toString() + "/output/BitPay.config.delete.json");
+            System.out.println(Paths.get(".").toAbsolutePath().normalize().toString() + "/output/BitPay.config.json");
             System.out.println("With the following information:");
             System.out.println(jsonString);
             System.out.println();
-            System.out.println("To complete your setup, Go to " + (env == Env.Test ? Env.TestUrl : Env.ProdUrl) + "dashboard/merchant/api-tokens and pair this client with your merchant account using the pairing codes:");
+            System.out.println("To complete your setup, Go to " + Env.TestUrl + "dashboard/merchant/api-tokens and pair this client with your merchant account using the pairing codes:");
             System.out.println();
             System.out.println(pairingCodeMerchant + " for the Merchant facade.");
             System.out.println(pairingCodePayroll + " for the Payroll facade ONLY if you have requested access for this role.");
