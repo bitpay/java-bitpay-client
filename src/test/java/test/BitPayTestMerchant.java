@@ -8,17 +8,15 @@ import com.bitpay.sdk.model.Bill.BillStatus;
 import com.bitpay.sdk.model.Bill.Item;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Invoice.Buyer;
-import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.model.Invoice.InvoiceStatus;
+import com.bitpay.sdk.model.Invoice.*;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
-import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,10 +24,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -46,23 +41,13 @@ public class BitPayTestMerchant {
 //        bitpay = new Client("BitPay.config.json", null);
         bitpay = new Client(
                 Env.Test,
-                "bitpay_private_test.key",
+                "3082013102010104206f265fe7bd03e113604f36e34d0a6bb0c0216423a23e17d0d5b00efd04cb377ba081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a12403220003b01f5ba6a59b44e139febabcbce5fdadfa1071eff16c43912527e7e5f91887bb",
                 new Env.Tokens() {{
-                    merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
-                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
+                    merchant = "AZXvpSt15gYVRSag5fJ6PoKhKJXShcA51vTXXTjp3kXU";
+                    payroll = "";
                 }},
                 null
         );
-//        bitpay = new Client(
-//                Env.Prod,
-//                "bitpay_private_prod.key",
-//                new Env.Tokens() {{
-//                    pos = "";
-//                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
-//                    payroll = "";
-//                }},
-////              null
-//        );
         bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
 
@@ -103,6 +88,7 @@ public class BitPayTestMerchant {
         Invoice invoice = new Invoice(50.0, "USD");
         invoice.setPaymentCurrencies(Arrays.asList(Currency.BCH));
         try {
+//            Map curre = bitpay.getCurrencyInfo("USD");
             basicInvoice = bitpay.createInvoice(invoice);
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,6 +120,42 @@ public class BitPayTestMerchant {
             fail(e.getMessage());
         }
         assertNotNull(basicInvoice.getUrl());
+    }
+
+    @Test
+    public void testShouldCreateUpdateAndDeleteInvoice() throws BitPayException {
+        Buyer buyer = new Buyer();
+        buyer.setName("Satoshi");
+        buyer.setEmail("sandbox@bitpay.com");
+
+        Invoice invoice = new Invoice(5.0, "USD");
+        invoice.setBuyer(buyer);
+
+        invoice.setMerchantName("merchantNameTest");
+        invoice.setForcedBuyerSelectedWallet("bitpay");
+        invoice.setSelectedTransactionCurrency(Currency.BTC);
+        invoice.setTransactionDetails(new InvoiceTransactionDetails(50.00, "desc", true));
+        Boolean cancelled = false;
+        Boolean updated = false;
+        Invoice retreivedInvoice;
+        Invoice updatedInvoice;
+        Invoice cancelledInvocie;
+        InvoiceBuyerProvidedInfo updatedBuyer;
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+            retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
+            updatedBuyer = retreivedInvoice.getInvoiceBuyerProvidedInfo();
+//            updatedBuyer.setBuyerSms("666111666");
+//            updated = this.bitpay.updateInvoice(invoice.getId(),"666111666", null);
+//            updatedInvoice = this.bitpay.getInvoice(invoice.getId());
+            cancelled = bitpay.cancelInvoice(invoice.getId());
+            cancelledInvocie = this.bitpay.getInvoice(invoice.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getUrl());
+        assertEquals(true, cancelled);
     }
 
     @Test
@@ -194,25 +216,28 @@ public class BitPayTestMerchant {
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice("FUfs9crxMuuJLUL1f4hxHf");
+            retreivedInvoice = this.bitpay.getInvoice("V4x51pZUXK99z76gsRCs6v");
+            System.out.println(retreivedInvoice);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        assertEquals(invoice.getId(), retreivedInvoice.getId());
+//        assertEquals(invoice.getId(), retreivedInvoice.getId());
     }
 
     @Test
     public void testShouldCreateInvoiceWithAdditionalParams() {
         Buyer buyer = new Buyer();
         buyer.setName("Satoshi");
-//        buyer.setEmail("satoshi@buyeremaildomain.com");
+        buyer.setEmail("satoshi@buyeremaildomain.com");
 
-        Invoice invoice = new Invoice(100.0, "USD");
+        Invoice invoice = new Invoice(5.0, "USD");
         invoice.setBuyer(buyer);
         invoice.setFullNotifications(true);
+        invoice.setExtendedNotifications(true);
         invoice.setNotificationEmail("sandbox@bitpay.com");
         invoice.setPosData("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
+        invoice.setNotificationURL("https://hookb.in/jeR2QPGdMkSeBB23O6bq");
         try {
             invoice = this.bitpay.createInvoice(invoice);
         } catch (Exception e) {
@@ -220,7 +245,7 @@ public class BitPayTestMerchant {
             fail(e.getMessage());
         }
         assertEquals(InvoiceStatus.New, invoice.getStatus());
-        assertEquals(100.0, invoice.getPrice(), EPSILON);
+        assertEquals(5.0, invoice.getPrice(), EPSILON);
         assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
         assertEquals("Satoshi", invoice.getBuyer().getName());
         assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
@@ -663,8 +688,9 @@ public class BitPayTestMerchant {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
-            firstInvoice = invoices.get(0);
+//            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
+//            firstInvoice = invoices.get(0);
+            firstInvoice = this.bitpay.getInvoice("A2xssNF9LHbpDucdaueiDr");
         } catch (Exception e) {
             e.printStackTrace();
         }

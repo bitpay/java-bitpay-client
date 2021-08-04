@@ -27,34 +27,16 @@ public class BitPayTestPayouts {
     private static URI myKeyFile;
     private Client bitpay;
 
-    @BeforeClass
-    public static void setUpOneTime() throws InterruptedException, IOException, BitPayException, URISyntaxException {
-
-//        Client bitpay = new Client("BitPay.config.json");
-        Client bitpay = new Client(
-                Env.Test,
-                "bitpay_private_test.key",
-                new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
-                }},
-                null
-        );
-        bitpay.setLoggerLevel(BitPayLogger.DEBUG);
-    }
-
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("BitPay.config.json");
+//        bitpay = new Client("BitPay.config.json", null);
         bitpay = new Client(
-                Env.Test,
-                "bitpay_private_test.key",
+        Env.Test,
+                "3082013102010104206f265fe7bd03e113604f36e34d0a6bb0c0216423a23e17d0d5b00efd04cb377ba081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a12403220003b01f5ba6a59b44e139febabcbce5fdadfa1071eff16c43912527e7e5f91887bb",
                 new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
+                    merchant = "";
+                    payroll = "6cRuGXyitnoVJrGwFUQUKvcKXEAi6QCxoZG88gjGb6ub";
                 }},
                 null
         );
