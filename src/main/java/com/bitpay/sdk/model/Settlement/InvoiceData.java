@@ -16,7 +16,7 @@ public class InvoiceData {
     private String _currency;
     private String _transactionCurrency;
     private Float _overPaidAmount;
-    private Double _payoutPercentage;
+    private Object _payoutPercentage;
     private Float _btcPrice;
     private RefundInfo _refundInfo;
 
@@ -86,12 +86,12 @@ public class InvoiceData {
     }
 
     @JsonIgnore
-    public Double getPayoutPercentage() {
+    public Object getPayoutPercentage() {
         return _payoutPercentage;
     }
 
     @JsonProperty("payoutPercentage")
-    public void setPayoutPercentage(Double payoutPercentage) {
+    public void setPayoutPercentage(Object payoutPercentage) {
         this._payoutPercentage = payoutPercentage;
     }
 
