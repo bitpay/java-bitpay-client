@@ -35,6 +35,7 @@ public class Invoice {
     private String _selectedTransactionCurrency;
     private String _forcedBuyerSelectedWallet;
     private InvoiceTransactionDetails _transactionDetails;
+    private InvoiceUniversalCodes _universalCodes;
 
     private String _id;
     private String _url;
@@ -321,6 +322,17 @@ public class Invoice {
     @JsonProperty("transactionDetails")
     public void setTransactionDetails(InvoiceTransactionDetails _transactionDetails) {
         this._transactionDetails = _transactionDetails;
+    }
+
+    @JsonProperty("universalCodes")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public InvoiceUniversalCodes getUniversalCodes() {
+        return _universalCodes;
+    }
+
+    @JsonProperty("universalCodes")
+    public void setUniversalCodes(InvoiceUniversalCodes _universalCodes) {
+        this._universalCodes = _universalCodes;
     }
 
     // Buyer data
