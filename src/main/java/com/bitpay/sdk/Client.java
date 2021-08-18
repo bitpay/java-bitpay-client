@@ -362,74 +362,70 @@ public class Client {
         return invoices;
     }
 
-//    /**
-//     * Update a BitPay invoice with communication method.
-//     *
-//     * @param invoiceId The id of the invoice to updated.
-//     * @param buyerSms  The buyer's cell number.
-//     * @param buyerEmail The buyer's email address.
-//     * @return A BitPay generated Invoice object.
-//     * @throws BitPayException          BitPayException class
-//     * @throws InvoiceUpdateException InvoiceUpdateException class
-//     */
-//    public Boolean updateInvoice(String invoiceId, String buyerSms, String buyerEmail) throws BitPayException, InvoiceUpdateException {
-//        final ArrayList<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-//        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
-//        if (buyerSms == null && buyerEmail == null) {
-//            throw new InvoiceUpdateException("Updating the invoice requires EITHER Cell Number for SMS or E-mail address.");
-//        }
-//        if (buyerSms != null) {
-//            params.add(new BasicNameValuePair("buyerSms", buyerSms));
-//        }
-//        if (buyerEmail != null) {
-//            params.add(new BasicNameValuePair("buyerEmail", buyerEmail));
-//        }
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//        String json;
-//        Boolean result;
-//
-//        try {
-//            json = mapper.writeValueAsString(params);
-//        } catch (JsonProcessingException e) {
-//            throw new InvoiceUpdateException("failed to serialize object : " + e.getMessage());
-//        }
-//
-//        try {
-//            HttpResponse response = this.update("invoices/" + invoiceId, json);
-//            String jsonString = this.responseToJsonString(response);
-//            JsonNode rootNode = mapper.readTree(jsonString);
-//            JsonNode node = rootNode.get("success");
-//            result = node.toString().equals("true");
-//        } catch (Exception e) {
-//            throw new InvoiceUpdateException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
-//        }
-//
-//        return result;
-//    }
-//
-//    /**
-//     * Delete a previously created BitPay invoice.
-//     *
-//     * @param invoiceId The Id of the BitPay invoice to be canceled.
-//     * @return True if the invoice was successfully canceled, false otherwise.
-//     * @throws InvoiceCancellationException InvoiceCancellationException class
-//     */
-//    public Boolean cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
-//        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-//        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
-//        Boolean result;
-//
-//        try {
-//            HttpResponse response = this.delete("invoices/" + invoiceId, params);
-//            String res = this.responseToJsonString(response);
-//            result = this.responseToJsonString(response).replace("\"", "").equals("Success");
-//        } catch (Exception e) {
-//            throw new InvoiceCancellationException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
-//        }
-//
-//        return result;
-//    }
+    /**
+     * Update a BitPay invoice with communication method.
+     *
+     * @param invoiceId The id of the invoice to updated.
+     * @param buyerSms  The buyer's cell number.
+     * @param smsCode   The buyer's received verification code.
+     * @return A BitPay generated Invoice object.
+     * @throws BitPayException          BitPayException class
+     * @throws InvoiceUpdateException InvoiceUpdateException class
+     */
+    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode) throws BitPayException, InvoiceUpdateException {
+        final Map<String,String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (buyerSms == null && smsCode == null) {
+            throw new InvoiceUpdateException("Updating the invoice requires Mobile Phone Number for SMS reception.");
+        }
+        if (buyerSms != null) {
+            params.put("buyerSms", buyerSms);
+        }
+        if (smsCode != null) {
+            params.put("smsCode", smsCode);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        Invoice invoice;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new InvoiceUpdateException("failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.update("invoices/" + invoiceId, json);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (Exception e) {
+            throw new InvoiceUpdateException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
+    /**
+     * Delete a previously created BitPay invoice.
+     *
+     * @param invoiceId The Id of the BitPay invoice to be canceled.
+     * @return A BitPay generated Invoice object.
+     * @throws InvoiceCancellationException InvoiceCancellationException class
+     */
+    public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        Invoice invoice;
+
+        try {
+            HttpResponse response = this.delete("invoices/" + invoiceId, params);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (Exception e) {
+            throw new InvoiceCancellationException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
 
     /**
      * Create a refund for a BitPay invoice.

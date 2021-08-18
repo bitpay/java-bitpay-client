@@ -8,9 +8,7 @@ import com.bitpay.sdk.model.Bill.BillStatus;
 import com.bitpay.sdk.model.Bill.Item;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Invoice.Buyer;
-import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.model.Invoice.InvoiceStatus;
+import com.bitpay.sdk.model.Invoice.*;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
@@ -134,6 +132,41 @@ public class BitPayTestMerchant {
             fail(e.getMessage());
         }
         assertNotNull(basicInvoice.getUrl());
+    }
+
+    @Test
+    public void testShouldCreateUpdateAndDeleteInvoice() throws BitPayException {
+        Buyer buyer = new Buyer();
+        buyer.setName("Satoshi");
+        buyer.setEmail("sandbox@bitpay.com");
+
+        Invoice invoice = new Invoice(5.0, "USD");
+        invoice.setBuyer(buyer);
+
+        invoice.setMerchantName("newMerchantName");
+        invoice.setForcedBuyerSelectedWallet("bitpay");
+        invoice.setSelectedTransactionCurrency(Currency.BTC);
+        invoice.setTransactionDetails(new InvoiceTransactionDetails(50.00, "desc", true));
+        Invoice retreivedInvoice = null;
+        Invoice updatedInvoice = null;
+        Invoice cancelledInvoice = null;
+        Invoice retreivedCancelledInvoice = null;
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+            retreivedInvoice = this.bitpay.getInvoice(basicInvoice.getId());
+            updatedInvoice = this .bitpay.updateInvoice(retreivedInvoice.getId(), "*********", null);
+            cancelledInvoice = bitpay.cancelInvoice(updatedInvoice.getId());
+            retreivedCancelledInvoice = this.bitpay.getInvoice(cancelledInvoice.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getUrl());
+        assertNotNull(retreivedInvoice.getId());
+        assertNotNull(updatedInvoice.getId());
+        assertNotNull(cancelledInvoice.getId());
+        assertNotNull(retreivedCancelledInvoice.getId());
+
     }
 
     @Test

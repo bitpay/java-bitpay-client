@@ -11,6 +11,8 @@ public class InvoiceBuyerProvidedInfo {
     private String _selectedTransactionCurrency;
     private String _emailAddress;
     private String _selectedWallet;
+    private String _sms;
+    private Boolean _smsVerified;
 
     public InvoiceBuyerProvidedInfo() {
     }
@@ -63,5 +65,25 @@ public class InvoiceBuyerProvidedInfo {
     @JsonProperty("selectedWallet")
     public void setSelectedWallet(String selectedWallet) {
         this._selectedWallet = selectedWallet;
+    }
+
+    @JsonIgnore
+    public String getSms() {
+        return _sms;
+    }
+
+    @JsonProperty("sms")
+    public void setSms(String sms) {
+        this._sms = sms;
+    }
+
+    @JsonIgnore
+    public Boolean getSmsVerified() {
+        return _smsVerified;
+    }
+
+    @JsonProperty("smsVerified")
+    public void setSmsVerified(Boolean smsVerified) {
+        this._smsVerified = smsVerified;
     }
 }
