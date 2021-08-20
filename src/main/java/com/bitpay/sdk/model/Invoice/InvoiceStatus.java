@@ -8,4 +8,5 @@ public class InvoiceStatus {
     public static final String Complete  = "complete";
     public static final String Expired   = "expired";
     public static final String Invalid   = "invalid";
+    public static final String Declined  = "declined";
 }
