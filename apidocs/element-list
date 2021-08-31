@@ -7,5 +7,6 @@ com.bitpay.sdk.model.Ledger
 com.bitpay.sdk.model.Payout
 com.bitpay.sdk.model.Rate
 com.bitpay.sdk.model.Settlement
+com.bitpay.sdk.model.Wallet
 com.bitpay.sdk.util
 test
