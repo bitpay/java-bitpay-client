@@ -789,4 +789,16 @@ public class BitPayTestMerchant {
         assertNotNull(settlement.getId());
         assertEquals(firstSettlement.getId(), settlement.getId());
     }
+
+    @Test
+    public void testShouldGetSupportedWallets() {
+        List<Wallet> wallets = null;
+        try {
+            wallets = bitpay.getSupportedWallets();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(wallets.size() > 0);
+    }
 }

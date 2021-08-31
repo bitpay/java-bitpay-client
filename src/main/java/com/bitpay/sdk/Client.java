@@ -14,6 +14,7 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Token;
+import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -1229,12 +1230,25 @@ public class Client {
         return reconciliationReport;
     }
 
-    /* @deprecated As of release 4.3.2001, not replaced
-     * Check the Invoice Status when receiving the IPN
+    /**
+     * Retrieve all supported wallets.
+     *
+     * @return A list of wallet objets.
+     * @throws WalletQueryException WalletQueryException class
      */
-    @Deprecated
-    public boolean isFullyPaid(Invoice invoice) throws BitPayException {
-        throw new BitPayException("The isFullyPaid method has been deprecated, please base this check on the Invoice Status when receiving the IPN");
+    public List<Wallet> getSupportedWallets() throws WalletQueryException, BitPayException {
+        List<Wallet> wallets;
+
+        try {
+            HttpResponse response = this.get("supportedWallets/");
+            wallets = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Wallet[].class));
+        } catch (JsonProcessingException e) {
+            throw new WalletQueryException("failed to deserialize BitPay server response (Wallet) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new WalletQueryException("failed to deserialize BitPay server response (Wallet) : " + e.getMessage());
+        }
+
+        return wallets;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
