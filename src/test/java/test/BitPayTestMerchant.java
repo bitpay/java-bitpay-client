@@ -14,6 +14,7 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Settlement.Settlement;
+import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import org.bitcoinj.core.ECKey;
@@ -696,7 +697,7 @@ public class BitPayTestMerchant {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(date);
             String sevenDaysAgo = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete,null, null, null);
+            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete, null, null, null);
             firstInvoice = invoices.get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -720,6 +721,113 @@ public class BitPayTestMerchant {
         assertNotNull(firstRefund);
         assertNotNull(retrievedRefund);
         assertTrue(cancelled);
+    }
+
+    @Test
+    public void testShouldCreateGetCancelRefundRequestNEW() {
+        List<Invoice> invoices;
+        Invoice firstInvoice = null;
+        Refund firstRefund = null;
+        Refund retrievedRefund = null;
+        List<Refund> retrievedRefunds = null;
+        Refund createdRefund = null;
+        Refund updatedRefund = null;
+        Refund cancelledRefund = null;
+        Invoice updatedInvoice = null;
+        try {
+            //check within the last few days
+            Date date = new Date();
+            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date);
+            String sevenDaysAgo = sdf.format(dateBefore);
+            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete, null, null, null);
+            firstInvoice = invoices.get(0);
+            updatedInvoice = this.bitpay.updateInvoice(firstInvoice.getId(), "+***********", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull(firstInvoice);
+        String refundEmail = "";
+
+        try {
+            createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, null, true, false, false);
+            retrievedRefunds = this.bitpay.getRefunds(firstInvoice.getId());
+            firstRefund = retrievedRefunds.get(0);
+            retrievedRefund = this.bitpay.getRefund(firstInvoice, firstRefund.getId());
+            updatedRefund = this.bitpay.updateRefund(firstInvoice.getId(), RefundStatus.Failure);
+            cancelledRefund = this.bitpay.cancelRefund(createdRefund.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        assertNotNull(createdRefund);
+        assertTrue(retrievedRefunds.size() > 0);
+        assertNotNull(firstRefund);
+        assertNotNull(updatedRefund);
+        assertNotNull(cancelledRefund);
+    }
+
+    @Test
+    public void TestShouldCancelRefund() {
+        Refund refund = null;
+        try {
+            refund = this.bitpay.cancelRefund("REFUND-ID-HERE");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(refund);
+    }
+
+    @Test
+    public void TestShouldUpdateRefund() {
+        Refund refund = null;
+        try {
+            refund = this.bitpay.updateRefund("3sj2Ysmq1iQ5s5PMvAKZ4y", RefundStatus.Created);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(refund);
+        assertEquals(refund.getStatus(), RefundStatus.Created);
+    }
+
+    @Test
+    public void TestShouldGetRefund() {
+        Refund refund = null;
+        try {
+            refund = this.bitpay.getRefund("XkPqg9RKKNgmMtfN71F5AW");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(refund);
+    }
+
+    @Test
+    public void TestShouldGetRefunds() {
+        List<Refund> refunds = null;
+        try {
+            refunds = this.bitpay.getRefunds("REFUND-ID-HERE");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(refunds.size() > 0);
+    }
+
+    @Test
+    public void TestShouldNotifyRefund() {
+        Boolean result = null;
+        try {
+            result = this.bitpay.sendRefundNotification("REFUND-ID-HERE");
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertTrue(result);
     }
 
     @Test

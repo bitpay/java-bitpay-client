@@ -370,11 +370,11 @@ public class Client {
      * @param buyerSms  The buyer's cell number.
      * @param smsCode   The buyer's received verification code.
      * @return A BitPay generated Invoice object.
-     * @throws BitPayException          BitPayException class
+     * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
     public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode) throws BitPayException, InvoiceUpdateException {
-        final Map<String,String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (buyerSms == null && smsCode == null) {
             throw new InvoiceUpdateException("Updating the invoice requires Mobile Phone Number for SMS reception.");
@@ -600,17 +600,17 @@ public class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @param invoiceId     The BitPay invoice Id having the associated refund to be created.
-     * @param amount        Amount to be refunded in the currency indicated.
-     * @param currency      Aeference currency used for the refund, usually the same as the currency used to create the invoice.
-     * @param preview       Whether to create the refund request as a preview (which will not be acted on until status is updated)
-     * @param immediate     Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
+     * @param amount             Amount to be refunded in the currency indicated.
+     * @param currency           Aeference currency used for the refund, usually the same as the currency used to create the invoice.
+     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      */
     public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee) throws RefundCreationException, BitPayException {
-        final Map<String,String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (invoiceId == null && amount == null && currency == null) {
             throw new RefundCreationException("Invoice ID, amount and currency are required to issue a refund.");
@@ -709,13 +709,13 @@ public class Client {
      * Update the status of a BitPay invoice.
      *
      * @param refundId A BitPay refund ID.
-     * @param status The new status for the refund to be updated.
+     * @param status   The new status for the refund to be updated.
      * @return A BitPay generated Refund object.
-     * @throws BitPayException          BitPayException class
+     * @throws BitPayException       BitPayException class
      * @throws RefundUpdateException RefundUpdateException class
      */
     public Refund updateRefund(String refundId, String status) throws BitPayException, RefundUpdateException {
-        final Map<String,String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (refundId == null || status == null) {
             throw new RefundUpdateException("Updating the refund requires a refund ID and a new status to be set.");
@@ -752,7 +752,7 @@ public class Client {
      * @throws RefundCreationException RefundCreationException class
      */
     public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
-        final Map<String,String> params = new HashMap<>();
+        final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
 
         Refund refund;
@@ -782,7 +782,7 @@ public class Client {
 
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
-     * 
+     *
      * @param refundId The refund Id for the refund to be canceled.
      * @return An updated Refund Object.
      * @throws RefundCancellationException RefundCancellationException class
@@ -1108,7 +1108,7 @@ public class Client {
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException, PayoutCreationException {
@@ -1144,7 +1144,7 @@ public class Client {
      * @param limit  int|null Maximum results that the query will return (useful for paging results).
      *               result).
      * @return array     A list of BitPayRecipient objects.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit) throws BitPayException, PayoutQueryException {
@@ -1177,7 +1177,7 @@ public class Client {
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public PayoutRecipient getPayoutRecipient(String recipientId) throws BitPayException, PayoutQueryException {
