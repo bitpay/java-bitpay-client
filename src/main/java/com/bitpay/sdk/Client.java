@@ -412,6 +412,7 @@ public class Client {
      * @param invoiceId The Id of the BitPay invoice to be canceled.
      * @return A BitPay generated Invoice object.
      * @throws InvoiceCancellationException InvoiceCancellationException class
+     * @throws BitPayException       BitPayException class
      */
     public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -608,6 +609,7 @@ public class Client {
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException       BitPayException class
      */
     public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee) throws RefundCreationException, BitPayException {
         final Map<String, String> params = new HashMap<>();
@@ -661,6 +663,7 @@ public class Client {
      * @param refundId The BitPay refund ID.
      * @return A BitPay Refund object with the associated Refund object.
      * @throws RefundQueryException RefundQueryException class
+     * @throws BitPayException       BitPayException class
      */
     public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
         Refund refund;
@@ -686,6 +689,7 @@ public class Client {
      * @param invoiceId The BitPay invoice object having the associated refunds.
      * @return A list of BitPay Refund objects with the associated Refund objects.
      * @throws RefundQueryException RefundQueryException class
+     * @throws BitPayException       BitPayException class
      */
     public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
         List<Refund> refunds;
@@ -711,10 +715,10 @@ public class Client {
      * @param refundId A BitPay refund ID.
      * @param status   The new status for the refund to be updated.
      * @return A BitPay generated Refund object.
-     * @throws BitPayException       BitPayException class
      * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
      */
-    public Refund updateRefund(String refundId, String status) throws BitPayException, RefundUpdateException {
+    public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (refundId == null || status == null) {
@@ -750,6 +754,7 @@ public class Client {
      * @param refundId A BitPay refund ID.
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException       BitPayException class
      */
     public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
         final Map<String, String> params = new HashMap<>();
@@ -786,6 +791,7 @@ public class Client {
      * @param refundId The refund Id for the refund to be canceled.
      * @return An updated Refund Object.
      * @throws RefundCancellationException RefundCancellationException class
+     * @throws BitPayException       BitPayException class
      */
     public Refund cancelRefund(String refundId) throws RefundCancellationException, BitPayException {
         Refund refund;
@@ -1441,6 +1447,7 @@ public class Client {
      *
      * @return A list of wallet objets.
      * @throws WalletQueryException WalletQueryException class
+     * @throws BitPayException       BitPayException class
      */
     public List<Wallet> getSupportedWallets() throws WalletQueryException, BitPayException {
         List<Wallet> wallets;
