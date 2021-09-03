@@ -785,7 +785,7 @@ public class BitPayTestMerchant {
     public void TestShouldUpdateRefund() {
         Refund refund = null;
         try {
-            refund = this.bitpay.updateRefund("3sj2Ysmq1iQ5s5PMvAKZ4y", RefundStatus.Created);
+            refund = this.bitpay.updateRefund("REFUND-ID-HERE", RefundStatus.Created);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -798,7 +798,7 @@ public class BitPayTestMerchant {
     public void TestShouldGetRefund() {
         Refund refund = null;
         try {
-            refund = this.bitpay.getRefund("XkPqg9RKKNgmMtfN71F5AW");
+            refund = this.bitpay.getRefund("REFUND-ID-HERE");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -810,7 +810,7 @@ public class BitPayTestMerchant {
     public void TestShouldGetRefunds() {
         List<Refund> refunds = null;
         try {
-            refunds = this.bitpay.getRefunds("REFUND-ID-HERE");
+            refunds = this.bitpay.getRefunds("INVOICE-ID-HERE");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
