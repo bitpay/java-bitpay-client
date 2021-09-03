@@ -1,18 +1,18 @@
 package com.bitpay.sdk.exceptions;
 
-public class RefundCancellationException extends RefundException {
+public class RefundUpdateException extends RefundException {
     /**
-     * Construct the RefundCancellationException.
+     * Construct the RefundUpdateException.
      *
      * @param message String [optional] The Exception message to throw.
      */
-    public RefundCancellationException(String message) {
+    public RefundUpdateException(String message) {
         super(BuildMessage(message));
     }
 
     private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to cancel refund";
-        String BitPayCode = "BITPAY-REFUND-CANCEL";
+        String BitPayMessage = "Failed to update refund";
+        String BitPayCode = "BITPAY-REFUND-UPDATE";
 
         message = BitPayCode + ": " + BitPayMessage + "-> " + message;
 

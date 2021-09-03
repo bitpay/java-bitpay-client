@@ -36,7 +36,7 @@ public class Invoice {
     private String _forcedBuyerSelectedWallet;
     private InvoiceTransactionDetails _transactionDetails;
     private InvoiceUniversalCodes _universalCodes;
-    private InvoiceItemizedDetails _itemizedDetails;
+    private List<InvoiceItemizedDetails> _itemizedDetails;
 
     private String _id;
     private String _url;
@@ -338,12 +338,12 @@ public class Invoice {
 
     @JsonProperty("itemizedDetails")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public InvoiceItemizedDetails getItemizedDetails() {
+    public List<InvoiceItemizedDetails> getItemizedDetails() {
         return _itemizedDetails;
     }
 
     @JsonProperty("itemizedDetails")
-    public void setItemizedDetails(InvoiceItemizedDetails _itemizedDetails) {
+    public void setItemizedDetails(List<InvoiceItemizedDetails> _itemizedDetails) {
         this._itemizedDetails = _itemizedDetails;
     }
 

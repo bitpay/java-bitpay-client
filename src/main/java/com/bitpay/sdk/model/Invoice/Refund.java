@@ -11,9 +11,14 @@ import java.util.Date;
 public class Refund {
 
     private String _guid;
-    private String _refundEmail;
     private Double _amount;
     private String _currency;
+    private String _invoice;
+    private Boolean _preview;
+    private Boolean _immediate;
+    private Boolean _buyerPaysRefundFee;
+
+    private String _refundEmail;
     private String _token;
     private String _id;
     private Date _requestDate;
@@ -33,8 +38,72 @@ public class Refund {
     }
 
     @JsonProperty("guid")
-    public void setGuid(String guid) {
-        this._guid = guid;
+    public void setGuid(String guid) { this._guid = guid; }
+
+    @JsonProperty("amount")
+    public Double getAmount() {
+        return _amount;
+    }
+
+    @JsonProperty("amount")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setAmount(Double amount) {
+        this._amount = amount;
+    }
+
+    @JsonProperty("currency")
+    public String getCurrency() {
+        return _currency;
+    }
+
+    @JsonProperty("currency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setCurrency(String currency) {
+        this._currency = currency;
+    }
+
+    @JsonProperty("invoice")
+    public String getInvoice() {
+        return _invoice;
+    }
+
+    @JsonProperty("invoice")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setInvoice(String invoice) {
+        this._invoice = invoice;
+    }
+
+    @JsonProperty("preview")
+    public Boolean getPreview() {
+        return _preview;
+    }
+
+    @JsonProperty("preview")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setPreview(Boolean preview) {
+        this._preview = preview;
+    }
+
+    @JsonProperty("immediate")
+    public Boolean getImmediate() {
+        return _immediate;
+    }
+
+    @JsonProperty("immediate")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setImmediate(Boolean immediate) {
+        this._immediate = immediate;
+    }
+
+    @JsonProperty("buyerPaysRefundFee")
+    public Boolean getBuyerPaysRefundFee() {
+        return _buyerPaysRefundFee;
+    }
+
+    @JsonProperty("buyerPaysRefundFee")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setBuyerPaysRefundFee(Boolean buyerPaysRefundFee) {
+        this._buyerPaysRefundFee = buyerPaysRefundFee;
     }
 
     @JsonProperty("refundEmail")
@@ -48,17 +117,6 @@ public class Refund {
         this._refundEmail = refundEmail;
     }
 
-    @JsonProperty("amount")
-    public Double getAmount() {
-        return _amount;
-    }
-
-    @JsonProperty("amount")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public void setAmount(Double amount) {
-        this._amount = amount;
-    }
-
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
@@ -68,17 +126,6 @@ public class Refund {
     @JsonProperty("token")
     public void setToken(String token) {
         this._token = token;
-    }
-
-    @JsonProperty("currency")
-    public String getCurrency() {
-        return _currency;
-    }
-
-    @JsonProperty("currency")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public void setCurrency(String currency) {
-        this._currency = currency;
     }
 
     // Response fields
