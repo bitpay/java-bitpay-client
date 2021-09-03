@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {
@@ -16,7 +17,7 @@ public class InvoiceData {
     private String _currency;
     private String _transactionCurrency;
     private Float _overPaidAmount;
-    private Double _payoutPercentage;
+    private Map<String, Double> _payoutPercentage;
     private Float _btcPrice;
     private RefundInfo _refundInfo;
 
@@ -86,12 +87,12 @@ public class InvoiceData {
     }
 
     @JsonIgnore
-    public Double getPayoutPercentage() {
+    public Map<String, Double> getPayoutPercentage() {
         return _payoutPercentage;
     }
 
     @JsonProperty("payoutPercentage")
-    public void setPayoutPercentage(Double payoutPercentage) {
+    public void setPayoutPercentage(Map<String, Double> payoutPercentage) {
         this._payoutPercentage = payoutPercentage;
     }
 

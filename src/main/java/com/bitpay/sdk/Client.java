@@ -14,6 +14,7 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Token;
+import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -49,9 +50,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 5.3.2107
+ * @version 6.0.2109
  * See bitpay.com/api for more information.
- * date 06.07.2021
+ * date 01.09.2021
  */
 
 public class Client {
@@ -363,6 +364,72 @@ public class Client {
     }
 
     /**
+     * Update a BitPay invoice with communication method.
+     *
+     * @param invoiceId The id of the invoice to updated.
+     * @param buyerSms  The buyer's cell number.
+     * @param smsCode   The buyer's received verification code.
+     * @return A BitPay generated Invoice object.
+     * @throws BitPayException        BitPayException class
+     * @throws InvoiceUpdateException InvoiceUpdateException class
+     */
+    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode) throws BitPayException, InvoiceUpdateException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (buyerSms == null && smsCode == null) {
+            throw new InvoiceUpdateException("Updating the invoice requires Mobile Phone Number for SMS reception.");
+        }
+        if (buyerSms != null) {
+            params.put("buyerSms", buyerSms);
+        }
+        if (smsCode != null) {
+            params.put("smsCode", smsCode);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        Invoice invoice;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new InvoiceUpdateException("failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.update("invoices/" + invoiceId, json);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (Exception e) {
+            throw new InvoiceUpdateException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
+    /**
+     * Delete a previously created BitPay invoice.
+     *
+     * @param invoiceId The Id of the BitPay invoice to be canceled.
+     * @return A BitPay generated Invoice object.
+     * @throws InvoiceCancellationException InvoiceCancellationException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        Invoice invoice;
+
+        try {
+            HttpResponse response = this.delete("invoices/" + invoiceId, params);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (Exception e) {
+            throw new InvoiceCancellationException("failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
+    /** TODO to be deprecated in version 7.0
      * Create a refund for a BitPay invoice.
      *
      * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
@@ -404,7 +471,7 @@ public class Client {
         return result;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Retrieve all refund requests on a BitPay invoice.
      *
      * @param invoice The BitPay invoice object having the associated refunds.
@@ -428,7 +495,7 @@ public class Client {
         return refunds;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Retrieve a previously made refund request on a BitPay invoice.
      *
      * @param invoice  The BitPay invoice having the associated refund.
@@ -455,7 +522,7 @@ public class Client {
         return refund;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
@@ -472,7 +539,7 @@ public class Client {
         }
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
@@ -506,7 +573,7 @@ public class Client {
         return result;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoiceId The BitPay invoice Id having the associated refund to be canceled.
@@ -529,6 +596,217 @@ public class Client {
         }
 
         return result;
+    }
+
+    /**
+     * Create a refund for a BitPay invoice.
+     *
+     * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
+     * @param amount             Amount to be refunded in the currency indicated.
+     * @param currency           Aeference currency used for the refund, usually the same as the currency used to create the invoice.
+     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee) throws RefundCreationException, BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (invoiceId == null && amount == null && currency == null) {
+            throw new RefundCreationException("Invoice ID, amount and currency are required to issue a refund.");
+        }
+        if (invoiceId != null) {
+            params.put("invoiceId", invoiceId);
+        }
+        if (amount != null) {
+            params.put("amount", amount.toString());
+        }
+        if (currency != null) {
+            params.put("currency", currency);
+        }
+        if (preview != null) {
+            params.put("preview", preview.toString());
+        }
+        if (immediate != null) {
+            params.put("immediate", immediate.toString());
+        }
+        if (buyerPaysRefundFee != null) {
+            params.put("buyerPaysRefundFee", buyerPaysRefundFee.toString());
+        }
+
+        Refund refund;
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundCreationException("failed to serialize Refund object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("refunds/", json, true);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (Exception e) {
+            throw new RefundCreationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Retrieve a previously made refund request on a BitPay invoice.
+     *
+     * @param refundId The BitPay refund ID.
+     * @return A BitPay Refund object with the associated Refund object.
+     * @throws RefundQueryException RefundQueryException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
+        Refund refund;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+
+        try {
+            HttpResponse response = this.get("refunds/" + refundId, params, true);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (JsonProcessingException e) {
+            throw new RefundQueryException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new RefundQueryException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Retrieve all refund requests on a BitPay invoice.
+     *
+     * @param invoiceId The BitPay invoice object having the associated refunds.
+     * @return A list of BitPay Refund objects with the associated Refund objects.
+     * @throws RefundQueryException RefundQueryException class
+     * @throws BitPayException       BitPayException class
+     */
+    public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
+        List<Refund> refunds;
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("invoiceId", invoiceId));
+
+        try {
+            HttpResponse response = this.get("refunds/", params, true);
+            refunds = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Refund[].class));
+        } catch (JsonProcessingException e) {
+            throw new RefundQueryException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new RefundQueryException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refunds;
+    }
+
+    /**
+     * Update the status of a BitPay invoice.
+     *
+     * @param refundId A BitPay refund ID.
+     * @param status   The new status for the refund to be updated.
+     * @return A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (refundId == null || status == null) {
+            throw new RefundUpdateException("Updating the refund requires a refund ID and a new status to be set.");
+        }
+        if (status != null) {
+            params.put("status", status);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        Refund refund;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundUpdateException("failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.update("refunds/" + refundId, json);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (Exception e) {
+            throw new RefundUpdateException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Send a refund notification.
+     *
+     * @param refundId A BitPay refund ID.
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+
+        Refund refund;
+        ObjectMapper mapper = new ObjectMapper();
+
+        Boolean result;
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundCreationException("failed to serialize Refund object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("refunds/" + refundId + "/notifications", json, true);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (Exception e) {
+            throw new RefundCreationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param refundId The refund Id for the refund to be canceled.
+     * @return An updated Refund Object.
+     * @throws RefundCancellationException RefundCancellationException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Refund cancelRefund(String refundId) throws RefundCancellationException, BitPayException {
+        Refund refund;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+
+        try {
+            HttpResponse response = this.delete("refunds/" + refundId, params);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (Exception e) {
+            throw new RefundCancellationException("failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
     }
 
     /**
@@ -836,7 +1114,7 @@ public class Client {
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException, PayoutCreationException {
@@ -872,7 +1150,7 @@ public class Client {
      * @param limit  int|null Maximum results that the query will return (useful for paging results).
      *               result).
      * @return array     A list of BitPayRecipient objects.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit) throws BitPayException, PayoutQueryException {
@@ -905,7 +1183,7 @@ public class Client {
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public PayoutRecipient getPayoutRecipient(String recipientId) throws BitPayException, PayoutQueryException {
@@ -1164,12 +1442,26 @@ public class Client {
         return reconciliationReport;
     }
 
-    /* @deprecated As of release 4.3.2001, not replaced
-     * Check the Invoice Status when receiving the IPN
+    /**
+     * Retrieve all supported wallets.
+     *
+     * @return A list of wallet objets.
+     * @throws WalletQueryException WalletQueryException class
+     * @throws BitPayException       BitPayException class
      */
-    @Deprecated
-    public boolean isFullyPaid(Invoice invoice) throws BitPayException {
-        throw new BitPayException("The isFullyPaid method has been deprecated, please base this check on the Invoice Status when receiving the IPN");
+    public List<Wallet> getSupportedWallets() throws WalletQueryException, BitPayException {
+        List<Wallet> wallets;
+
+        try {
+            HttpResponse response = this.get("supportedWallets/");
+            wallets = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Wallet[].class));
+        } catch (JsonProcessingException e) {
+            throw new WalletQueryException("failed to deserialize BitPay server response (Wallet) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new WalletQueryException("failed to deserialize BitPay server response (Wallet) : " + e.getMessage());
+        }
+
+        return wallets;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1468,6 +1760,11 @@ public class Client {
                 }
             }
 
+            node = rootNode.get("status");
+            if (node != null) {
+                return rootNode.toString();
+            }
+
             node = rootNode.get("data");
 
             if (node != null) {
@@ -1486,10 +1783,9 @@ public class Client {
     }
 
     private String getGuid() {
-        int Min = 0;
-        int Max = 99999999;
+        UUID uuid = UUID.randomUUID();
 
-        return Min + (int) (Math.random() * ((Max - Min) + 1)) + "";
+        return uuid.toString();
     }
 
     /**

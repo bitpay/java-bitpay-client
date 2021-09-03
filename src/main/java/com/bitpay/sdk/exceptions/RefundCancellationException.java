@@ -11,7 +11,7 @@ public class RefundCancellationException extends RefundException {
     }
 
     private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to cancel refund batch";
+        String BitPayMessage = "Failed to cancel refund";
         String BitPayCode = "BITPAY-REFUND-CANCEL";
 
         message = BitPayCode + ": " + BitPayMessage + "-> " + message;

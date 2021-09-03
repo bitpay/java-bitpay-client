@@ -2,7 +2,10 @@ package com.bitpay.sdk.model.Invoice;
 
 import com.bitpay.sdk.BitPayException;
 import com.bitpay.sdk.model.Currency;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,6 +34,12 @@ public class Invoice {
     private List<String> _paymentCurrencies;
     private long _acceptanceWindow;
     private Buyer _buyer;
+    private String _merchantName;
+    private String _selectedTransactionCurrency;
+    private String _forcedBuyerSelectedWallet;
+    private InvoiceTransactionDetails _transactionDetails;
+    private InvoiceUniversalCodes _universalCodes;
+    private List<InvoiceItemizedDetails> _itemizedDetails;
 
     private String _id;
     private String _url;
@@ -55,6 +64,8 @@ public class Invoice {
     private String _transactionCurrency;
     private BigDecimal _amountPaid;
     private Hashtable<String, Hashtable<String, String>> _exchangeRates;
+    private boolean _isCancelled = false;
+    private boolean _bitpayIdRequired = false;
 
     /**
      * Constructor, create an empty Invoice object.
@@ -268,6 +279,75 @@ public class Invoice {
     @JsonProperty("acceptanceWindow")
     public void setAcceptanceWindow(long _acceptanceWindow) {
         this._acceptanceWindow = _acceptanceWindow;
+    }
+
+    @JsonProperty("merchantName")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getMerchantName() {
+        return _merchantName;
+    }
+
+    @JsonProperty("merchantName")
+    public void setMerchantName(String _merchantName) {
+        this._merchantName = _merchantName;
+    }
+
+    @JsonProperty("selectedTransactionCurrency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getSelectedTransactionCurrency() {
+        return _selectedTransactionCurrency;
+    }
+
+    @JsonProperty("selectedTransactionCurrency")
+    public void setSelectedTransactionCurrency(String _selectedTransactionCurrency) throws BitPayException {
+        if (!Currency.isValid(_selectedTransactionCurrency))
+            throw new BitPayException("Error: selectedTransactionCurrency code must be a type of Model.Currency");
+
+        this._selectedTransactionCurrency = _currency;
+    }
+
+    @JsonProperty("forcedBuyerSelectedWallet")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getForcedBuyerSelectedWallet() {
+        return _forcedBuyerSelectedWallet;
+    }
+
+    @JsonProperty("forcedBuyerSelectedWallet")
+    public void setForcedBuyerSelectedWallet(String _forcedBuyerSelectedWallet) {
+        this._forcedBuyerSelectedWallet = _forcedBuyerSelectedWallet;
+    }
+
+    @JsonProperty("transactionDetails")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public InvoiceTransactionDetails getTransactionDetails() {
+        return _transactionDetails;
+    }
+
+    @JsonProperty("transactionDetails")
+    public void setTransactionDetails(InvoiceTransactionDetails _transactionDetails) {
+        this._transactionDetails = _transactionDetails;
+    }
+
+    @JsonProperty("universalCodes")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public InvoiceUniversalCodes getUniversalCodes() {
+        return _universalCodes;
+    }
+
+    @JsonProperty("universalCodes")
+    public void setUniversalCodes(InvoiceUniversalCodes _universalCodes) {
+        this._universalCodes = _universalCodes;
+    }
+
+    @JsonProperty("itemizedDetails")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public List<InvoiceItemizedDetails> getItemizedDetails() {
+        return _itemizedDetails;
+    }
+
+    @JsonProperty("itemizedDetails")
+    public void setItemizedDetails(List<InvoiceItemizedDetails> _itemizedDetails) {
+        this._itemizedDetails = _itemizedDetails;
     }
 
     // Buyer data
@@ -505,5 +585,25 @@ public class Invoice {
     @JsonProperty("exchangeRates")
     public void setExchangeRates(Hashtable<String, Hashtable<String, String>> _exchangeRates) {
         this._exchangeRates = _exchangeRates;
+    }
+
+    @JsonIgnore
+    public Boolean getIsCancelled() {
+        return _isCancelled;
+    }
+
+    @JsonProperty("isCancelled")
+    public void setIsCancelled(Boolean _isCancelled) {
+        this._isCancelled = _isCancelled;
+    }
+
+    @JsonIgnore
+    public Boolean getBitpayIdRequired() {
+        return _bitpayIdRequired;
+    }
+
+    @JsonProperty("bitpayIdRequired")
+    public void setBitpayIdRequired(Boolean _bitpayIdRequired) {
+        this._bitpayIdRequired = _bitpayIdRequired;
     }
 }

@@ -11,14 +11,22 @@ import java.util.Date;
 public class Refund {
 
     private String _guid;
-    private String _refundEmail;
     private Double _amount;
     private String _currency;
-    private String _token;
+    private String _invoice;
+    private Boolean _preview;
+    private Boolean _immediate;
+    private Boolean _buyerPaysRefundFee;
+    private Double _refundFee;
+    private Date _lastRefundNotification;
+
+    private String _refundEmail; // TODO to be deprecated in version 7.0
+    private String _token; // TODO to be deprecated in version 7.0
+    private RefundParams _params = new RefundParams(); // TODO to be deprecated in version 7.0
+
     private String _id;
     private Date _requestDate;
     private String _status;
-    private RefundParams _params = new RefundParams();
 
     public Refund() {
     }
@@ -33,20 +41,7 @@ public class Refund {
     }
 
     @JsonProperty("guid")
-    public void setGuid(String guid) {
-        this._guid = guid;
-    }
-
-    @JsonProperty("refundEmail")
-    public String getRefundEmail() {
-        return _refundEmail;
-    }
-
-    @JsonProperty("refundEmail")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public void setRefundEmail(String refundEmail) {
-        this._refundEmail = refundEmail;
-    }
+    public void setGuid(String guid) { this._guid = guid; }
 
     @JsonProperty("amount")
     public Double getAmount() {
@@ -59,17 +54,6 @@ public class Refund {
         this._amount = amount;
     }
 
-    @JsonProperty("token")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getToken() {
-        return _token;
-    }
-
-    @JsonProperty("token")
-    public void setToken(String token) {
-        this._token = token;
-    }
-
     @JsonProperty("currency")
     public String getCurrency() {
         return _currency;
@@ -79,6 +63,74 @@ public class Refund {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setCurrency(String currency) {
         this._currency = currency;
+    }
+
+    @JsonProperty("invoice")
+    public String getInvoice() {
+        return _invoice;
+    }
+
+    @JsonProperty("invoice")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setInvoice(String invoice) {
+        this._invoice = invoice;
+    }
+
+    @JsonProperty("preview")
+    public Boolean getPreview() {
+        return _preview;
+    }
+
+    @JsonProperty("preview")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setPreview(Boolean preview) {
+        this._preview = preview;
+    }
+
+    @JsonProperty("immediate")
+    public Boolean getImmediate() {
+        return _immediate;
+    }
+
+    @JsonProperty("immediate")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setImmediate(Boolean immediate) {
+        this._immediate = immediate;
+    }
+
+    @JsonProperty("buyerPaysRefundFee")
+    public Boolean getBuyerPaysRefundFee() {
+        return _buyerPaysRefundFee;
+    }
+
+    @JsonProperty("buyerPaysRefundFee")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setBuyerPaysRefundFee(Boolean buyerPaysRefundFee) {
+        this._buyerPaysRefundFee = buyerPaysRefundFee;
+    }
+
+    // TODO to be deprecated in version 7.0
+    @JsonProperty("refundEmail")
+    public String getRefundEmail() {
+        return _refundEmail;
+    }
+
+    @JsonProperty("refundEmail")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setRefundEmail(String refundEmail) {
+        this._refundEmail = refundEmail;
+    }
+
+    // TODO to be deprecated in version 7.0
+    @JsonProperty("token")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getToken() {
+        return _token;
+    }
+
+    @JsonProperty("token")
+    public void setToken(String token) {
+        this._token = token;
     }
 
     // Response fields
@@ -114,6 +166,27 @@ public class Refund {
         this._status = status;
     }
 
+    @JsonIgnore
+    public Date getLastRefundNotification() {
+        return _lastRefundNotification;
+    }
+
+    @JsonProperty("lastRefundNotification")
+    public void setLastRefundNotification(Date lastRefundNotification) {
+        this._lastRefundNotification = lastRefundNotification;
+    }
+
+    @JsonIgnore
+    public Double getRefundFee() {
+        return _refundFee;
+    }
+
+    @JsonProperty("refundFee")
+    public void setRefundFee(Double refundFee) {
+        this._refundFee = refundFee;
+    }
+
+    // TODO to be deprecated in version 7.0
     @JsonIgnore
     public RefundParams getParams() {
         return _params;

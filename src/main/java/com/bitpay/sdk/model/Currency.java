@@ -10,8 +10,11 @@ public class Currency {
     public static final String ETH = "ETH";
     public static final String USDC = "USDC";
     public static final String GUSD = "GUSD";
+    public static final String BUSD = "BUSD";
     public static final String PAX = "PAX";
     public static final String XRP = "XRP";
+    public static final String DOGE = "DOGE";
+    public static final String LTC = "LTC";
 
     // FIAT
     public static final String AED = "AED";
