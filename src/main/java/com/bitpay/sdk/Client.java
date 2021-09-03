@@ -50,9 +50,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 6.0.2108
+ * @version 6.0.2109
  * See bitpay.com/api for more information.
- * date 01.08.2021
+ * date 01.09.2021
  */
 
 public class Client {
@@ -428,7 +428,7 @@ public class Client {
         return invoice;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Create a refund for a BitPay invoice.
      *
      * @param invoice     A BitPay invoice object for which a refund request should be made.  Must have been obtained using the merchant facade.
@@ -470,7 +470,7 @@ public class Client {
         return result;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Retrieve all refund requests on a BitPay invoice.
      *
      * @param invoice The BitPay invoice object having the associated refunds.
@@ -494,7 +494,7 @@ public class Client {
         return refunds;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Retrieve a previously made refund request on a BitPay invoice.
      *
      * @param invoice  The BitPay invoice having the associated refund.
@@ -521,7 +521,7 @@ public class Client {
         return refund;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoiceId The BitPay invoiceId having the associated refund to be canceled.
@@ -538,7 +538,7 @@ public class Client {
         }
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoice  The BitPay invoice having the associated refund to be canceled. Must have been obtained using the merchant facade.
@@ -572,7 +572,7 @@ public class Client {
         return result;
     }
 
-    /**
+    /** TODO to be deprecated in version 7.0
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
      * @param invoiceId The BitPay invoice Id having the associated refund to be canceled.

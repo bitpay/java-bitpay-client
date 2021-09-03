@@ -6,7 +6,7 @@
 
     <groupId>com.bitpay</groupId>
     <artifactId>bitpay_sdk</artifactId>
-    <version>6.0.2108</version>
+    <version>6.0.2109</version>
     <packaging>jar</packaging>
 
     <name>BitPay</name>
