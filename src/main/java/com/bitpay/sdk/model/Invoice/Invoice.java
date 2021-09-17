@@ -350,6 +350,17 @@ public class Invoice {
         this._itemizedDetails = _itemizedDetails;
     }
 
+    @JsonProperty("bitpayIdRequired")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public boolean getBitpayIdRequired() {
+        return _bitpayIdRequired;
+    }
+
+    @JsonProperty("bitpayIdRequired")
+    public void setBitpayIdRequired(boolean _bitpayIdRequired) {
+        this._bitpayIdRequired = _bitpayIdRequired;
+    }
+
     // Buyer data
     //
 
@@ -398,12 +409,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public Boolean getLowFeeDetected() {
+    public boolean getLowFeeDetected() {
         return _lowFeeDetected;
     }
 
     @JsonProperty("lowFeeDetected")
-    public void setLowFeeDetected(Boolean _lowFeeDetected) {
+    public void setLowFeeDetected(boolean _lowFeeDetected) {
         this._lowFeeDetected = _lowFeeDetected;
     }
 
@@ -588,22 +599,12 @@ public class Invoice {
     }
 
     @JsonIgnore
-    public Boolean getIsCancelled() {
+    public boolean getIsCancelled() {
         return _isCancelled;
     }
 
     @JsonProperty("isCancelled")
-    public void setIsCancelled(Boolean _isCancelled) {
+    public void setIsCancelled(boolean _isCancelled) {
         this._isCancelled = _isCancelled;
-    }
-
-    @JsonIgnore
-    public Boolean getBitpayIdRequired() {
-        return _bitpayIdRequired;
-    }
-
-    @JsonProperty("bitpayIdRequired")
-    public void setBitpayIdRequired(Boolean _bitpayIdRequired) {
-        this._bitpayIdRequired = _bitpayIdRequired;
     }
 }
