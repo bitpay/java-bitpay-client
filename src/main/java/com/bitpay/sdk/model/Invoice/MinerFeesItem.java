@@ -11,6 +11,7 @@ public class MinerFeesItem {
 
     private BigDecimal _satoshisPerByte;
     private BigDecimal _totalFee;
+    private double _fiatAmount;
 
     public MinerFeesItem() {
     }
@@ -34,4 +35,12 @@ public class MinerFeesItem {
     public void setTotalFee(BigDecimal totalFee) {
         this._totalFee = totalFee;
     }
+
+    @JsonIgnore
+    public double getFiatAmount() {
+        return _fiatAmount;
+    }
+
+    @JsonProperty("fiatAmount")
+    public void setFiatAmount(double fiatAmount) { this._fiatAmount = fiatAmount; }
 }

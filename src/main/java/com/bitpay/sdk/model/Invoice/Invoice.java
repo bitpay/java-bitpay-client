@@ -34,6 +34,7 @@ public class Invoice {
     private List<String> _paymentCurrencies;
     private long _acceptanceWindow;
     private Buyer _buyer;
+    private String _buyerSms;
     private String _merchantName;
     private String _selectedTransactionCurrency;
     private String _forcedBuyerSelectedWallet;
@@ -373,6 +374,17 @@ public class Invoice {
     @JsonProperty("buyer")
     public void setBuyer(Buyer _buyer) {
         this._buyer = _buyer;
+    }
+
+    @JsonProperty("buyerSms")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getBuyerSms() {
+        return _buyerSms;
+    }
+
+    @JsonProperty("buyerSms")
+    public void setBuyerSms(String _buyerSms) {
+        this._buyerSms = _buyerSms;
     }
 
     // Response fields
