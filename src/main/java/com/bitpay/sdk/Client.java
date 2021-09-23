@@ -50,7 +50,7 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 6.1.2109
+ * @version 6.2.2109
  * See bitpay.com/api for more information.
  * date 17.09.2021
  */
@@ -369,11 +369,12 @@ public class Client {
      * @param invoiceId The id of the invoice to updated.
      * @param buyerSms  The buyer's cell number.
      * @param smsCode   The buyer's received verification code.
+     * @param buyerEmail   The buyer's email address.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode) throws BitPayException, InvoiceUpdateException {
+    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode, String buyerEmail) throws BitPayException, InvoiceUpdateException {
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (buyerSms == null && smsCode == null) {
@@ -384,6 +385,9 @@ public class Client {
         }
         if (smsCode != null) {
             params.put("smsCode", smsCode);
+        }
+        if (buyerEmail != null) {
+            params.put("buyerEmail", buyerEmail);
         }
 
         ObjectMapper mapper = new ObjectMapper();

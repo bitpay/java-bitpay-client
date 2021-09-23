@@ -155,7 +155,7 @@ public class BitPayTestMerchant {
         try {
             basicInvoice = bitpay.createInvoice(invoice);
             retreivedInvoice = this.bitpay.getInvoice(basicInvoice.getId());
-            updatedInvoice = this .bitpay.updateInvoice(retreivedInvoice.getId(), "*********", null);
+            updatedInvoice = this .bitpay.updateInvoice(retreivedInvoice.getId(), "*********", null, null);
             cancelledInvoice = bitpay.cancelInvoice(updatedInvoice.getId());
             retreivedCancelledInvoice = this.bitpay.getInvoice(cancelledInvoice.getId());
         } catch (Exception e) {
