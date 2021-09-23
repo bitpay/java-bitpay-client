@@ -50,7 +50,7 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 6.1.2109
+ * @version 6.2.2109
  * See bitpay.com/api for more information.
  * date 17.09.2021
  */
