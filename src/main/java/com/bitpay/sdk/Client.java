@@ -50,9 +50,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 6.2.2109
+ * @version 6.3.2109
  * See bitpay.com/api for more information.
- * date 17.09.2021
+ * date 28.09.2021
  */
 
 public class Client {
@@ -616,7 +616,7 @@ public class Client {
      * @throws BitPayException       BitPayException class
      */
     public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee) throws RefundCreationException, BitPayException {
-        final Map<String, String> params = new HashMap<>();
+        final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (invoiceId == null && amount == null && currency == null) {
             throw new RefundCreationException("Invoice ID, amount and currency are required to issue a refund.");
@@ -625,19 +625,19 @@ public class Client {
             params.put("invoiceId", invoiceId);
         }
         if (amount != null) {
-            params.put("amount", amount.toString());
+            params.put("amount", amount);
         }
         if (currency != null) {
             params.put("currency", currency);
         }
         if (preview != null) {
-            params.put("preview", preview.toString());
+            params.put("preview", preview);
         }
         if (immediate != null) {
-            params.put("immediate", immediate.toString());
+            params.put("immediate", immediate);
         }
         if (buyerPaysRefundFee != null) {
-            params.put("buyerPaysRefundFee", buyerPaysRefundFee.toString());
+            params.put("buyerPaysRefundFee", buyerPaysRefundFee);
         }
 
         Refund refund;
