@@ -27,6 +27,7 @@ public class Invoice {
     private boolean _fullNotifications = false;
     private String _notificationEmail = "";
     private String _redirectURL = "";
+    private String _closeURL = "";
     private String _orderId = "";
     private String _itemDesc = "";
     private String _itemCode = "";
@@ -41,6 +42,7 @@ public class Invoice {
     private InvoiceTransactionDetails _transactionDetails;
     private InvoiceUniversalCodes _universalCodes;
     private List<InvoiceItemizedDetails> _itemizedDetails;
+    private boolean _autoRedirect = false;
 
     private String _id;
     private String _url;
@@ -64,10 +66,20 @@ public class Invoice {
     private boolean _extendedNotifications = false;
     private String _transactionCurrency;
     private BigDecimal _amountPaid;
+    private BigDecimal _displayAmountPaid;
     private Hashtable<String, Hashtable<String, String>> _exchangeRates;
     private boolean _isCancelled = false;
     private boolean _bitpayIdRequired = false;
-
+    private Hashtable<String, String> _paymentSubtotals;
+    private Hashtable<String, String> _paymentTotals;
+    private Hashtable<String, String> _paymentDisplayTotals;
+    private Hashtable<String, String> _paymentDisplaySubTotals;
+    private boolean _nonPayProPaymentReceived;
+    private boolean _jsonPayProRequired = false;
+    private BigDecimal _underpaidAmount;
+    private BigDecimal _overpaidAmount;
+    private Hashtable<String, Hashtable<String, String>> _paymentCodes;
+    
     /**
      * Constructor, create an empty Invoice object.
      */
@@ -249,6 +261,17 @@ public class Invoice {
         this._redirectURL = _redirectURL;
     }
 
+    @JsonProperty("closeURL")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getCloseURL() {
+        return _closeURL;
+    }
+
+    @JsonProperty("closeURL")
+    public void setCloseURL(String _closeURL) {
+        this._closeURL = _closeURL;
+    }
+
     @JsonProperty("physical")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getPhysical() {
@@ -349,6 +372,16 @@ public class Invoice {
     @JsonProperty("itemizedDetails")
     public void setItemizedDetails(List<InvoiceItemizedDetails> _itemizedDetails) {
         this._itemizedDetails = _itemizedDetails;
+    }
+
+    @JsonIgnore
+    public boolean getAutoRedirect() {
+        return _autoRedirect;
+    }
+
+    @JsonProperty("autoRedirect")
+    public void setAutoRedirect(boolean _autoRedirect) {
+        this._autoRedirect = _autoRedirect;
     }
 
     @JsonProperty("bitpayIdRequired")
@@ -601,6 +634,16 @@ public class Invoice {
     }
 
     @JsonIgnore
+    public BigDecimal getDisplayAmountPaid() {
+        return _displayAmountPaid;
+    }
+
+    @JsonProperty("displayAmountPaid")
+    public void setDisplayAmountPaid(BigDecimal _displayAmountPaid) {
+        this._displayAmountPaid = _displayAmountPaid;
+    }
+
+    @JsonIgnore
     public Hashtable<String, Hashtable<String, String>> getExchangeRates() {
         return _exchangeRates;
     }
@@ -619,4 +662,94 @@ public class Invoice {
     public void setIsCancelled(boolean _isCancelled) {
         this._isCancelled = _isCancelled;
     }
+
+    @JsonIgnore
+    public Hashtable<String, String> getPaymentSubTotals() {
+        return _paymentSubtotals;
+    }
+
+    @JsonProperty("paymentSubtotals")
+    public void setPaymentSubTotals(Hashtable<String, String> _paymentSubtotals) {
+        this._paymentSubtotals = _paymentSubtotals;
+    }
+
+    @JsonIgnore
+    public Hashtable<String, String> getPaymentTotals() {
+        return _paymentTotals;
+    }
+
+    @JsonProperty("paymentTotals")
+    public void setPaymentTotals(Hashtable<String, String> _paymentTotals) {
+        this._paymentTotals = _paymentTotals;
+    }
+
+    @JsonIgnore
+    public Hashtable<String, String> getPaymentDisplayTotals() {
+        return _paymentDisplayTotals;
+    }
+
+    @JsonProperty("paymentDisplayTotals")
+    public void setPaymentDisplayTotals(Hashtable<String, String> _paymentDisplayTotals) {
+        this._paymentDisplayTotals = _paymentDisplayTotals;
+    }
+
+    @JsonIgnore
+    public Hashtable<String, String> getPaymentDisplaySubTotals() {
+        return _paymentDisplaySubTotals;
+    }
+
+    @JsonProperty("paymentDisplaySubTotals")
+    public void setPaymentDisplaySubTotals(Hashtable<String, String> _paymentDisplaySubTotals) {
+        this._paymentDisplaySubTotals = _paymentDisplaySubTotals;
+    }
+
+    @JsonIgnore
+    public boolean getNonPayProPaymentReceived() {
+        return _nonPayProPaymentReceived;
+    }
+
+    @JsonProperty("nonPayProPaymentReceived")
+    public void setNonPayProPaymentReceived(boolean _nonPayProPaymentReceived) {
+        this._nonPayProPaymentReceived = _nonPayProPaymentReceived;
+    }
+
+    @JsonIgnore
+    public boolean getJsonPayProRequired() {
+        return _jsonPayProRequired;
+    }
+
+    @JsonProperty("jsonPayProRequired")
+    public void setJsonPayProRequired(boolean _jsonPayProRequired) {
+        this._jsonPayProRequired = _jsonPayProRequired;
+    }
+
+    @JsonIgnore
+    public BigDecimal getUnderPaidAmount() {
+        return _underpaidAmount;
+    }
+
+    @JsonProperty("underpaidAmount")
+    public void setUnderPaidAmount(BigDecimal _underpaidAmount) {
+        this._underpaidAmount = _underpaidAmount;
+    }
+    
+    @JsonIgnore
+    public BigDecimal getOverPaidAmount() {
+        return _overpaidAmount;
+    }
+
+    @JsonProperty("overpaidAmount")
+    public void setOverPaidAmount(BigDecimal _overpaidAmount) {
+        this._overpaidAmount = _overpaidAmount;
+    }
+
+    @JsonIgnore
+    public Hashtable<String, Hashtable<String, String>> getPaymentCodes() {
+        return _paymentCodes;
+    }
+
+    @JsonProperty("paymentCodes")
+    public void setPaymentCodes(Hashtable<String, Hashtable<String, String>> _paymentCodes) {
+        this._paymentCodes = _paymentCodes;
+    }    
 }

@@ -23,6 +23,7 @@ public class PayoutInstruction {
     private PayoutInstructionBtcSummary _btc;
     private List<PayoutInstructionTransaction> _transactions;
     private String _status;
+    private String _address;
 
     /**
      * Constructor, create an empty PayoutInstruction object.
@@ -163,5 +164,16 @@ public class PayoutInstruction {
     @JsonProperty("status")
     public void setStatus(String status) {
         this._status = status;
+    }
+
+    @JsonProperty("address")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getAddress() {
+        return _address;
+    }
+
+    @JsonProperty("address")
+    public void setAddress(String address) {
+        this._address = address;
     }
 }

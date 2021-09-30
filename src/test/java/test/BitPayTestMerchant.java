@@ -228,7 +228,7 @@ public class BitPayTestMerchant {
             //
             // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
             String token = this.bitpay.getAccessToken(Facade.Merchant);
-            retreivedInvoice = this.bitpay.getInvoice("FUfs9crxMuuJLUL1f4hxHf");
+            retreivedInvoice = this.bitpay.getInvoice(invoice.getId());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -240,7 +240,7 @@ public class BitPayTestMerchant {
     public void testShouldCreateInvoiceWithAdditionalParams() {
         Buyer buyer = new Buyer();
         buyer.setName("Satoshi");
-//        buyer.setEmail("satoshi@buyeremaildomain.com");
+        buyer.setEmail("satoshi@buyeremaildomain.com");
 
         Invoice invoice = new Invoice(100.0, "USD");
         invoice.setBuyer(buyer);
@@ -743,7 +743,7 @@ public class BitPayTestMerchant {
             String sevenDaysAgo = sdf.format(dateBefore);
             invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete, null, null, null);
             firstInvoice = invoices.get(0);
-            updatedInvoice = this.bitpay.updateInvoice(firstInvoice.getId(), "+***********", null);
+            updatedInvoice = this.bitpay.updateInvoice(firstInvoice.getId(), "+***********", null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
