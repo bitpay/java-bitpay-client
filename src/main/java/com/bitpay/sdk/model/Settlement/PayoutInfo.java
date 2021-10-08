@@ -21,6 +21,7 @@ public class PayoutInfo {
     private String _wire;
     private String _bankName;
     private String _bankAddress;
+    private String _bankAddress2;
     private String _iban;
     private String _additionalInformation;
     private String _accountHolderName;
@@ -146,6 +147,12 @@ public class PayoutInfo {
 
     @JsonProperty("bankAddress")
     public void setBankAddress(String bankAddress) { this._bankAddress = bankAddress; }
+
+    @JsonIgnore
+    public String getBankAddress2() { return _bankAddress2; }
+
+    @JsonProperty("bankAddress2")
+    public void getBankAddress2(String bankAddress2) { this._bankAddress2 = bankAddress2; }
 
     @JsonIgnore
     public String getIban() { return _iban; }
