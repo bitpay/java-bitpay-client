@@ -25,7 +25,7 @@ public class Rates {
         try {
             _rates = _bp.getRates().getRates();
         } catch (Exception e) {
-            throw new RateQueryException(e.getMessage());
+            throw new RateQueryException(null, e.getMessage());
         }
     }
 

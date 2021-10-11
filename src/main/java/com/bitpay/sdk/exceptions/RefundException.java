@@ -4,10 +4,11 @@ public class RefundException extends BitPayException {
     /**
      * Construct the RefundException.
      *
+     * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public RefundException(String message) {
-        super(BuildMessage(message));
+    public RefundException(String status, String message) {
+        super(status, BuildMessage(message));
     }
 
     private static String BuildMessage(String message) {
@@ -15,7 +16,7 @@ public class RefundException extends BitPayException {
         String BitPayCode = "BITPAY-REFUND-GENERIC";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + "-> " + message;
+            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
         }
 
         return message;

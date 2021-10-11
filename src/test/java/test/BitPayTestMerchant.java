@@ -676,53 +676,6 @@ public class BitPayTestMerchant {
         assertTrue(ledgers.size() > 0);
     }
 
-    /*
-    To use this test:
-	You must have a paid/completed invoice in your account (list of invoices). The test looks for the first invoice in the "complete"
-	state and authorises a refund. The actual refund will not be executed until the email receiver enters his bitcoin refund address.
-    */
-    @Test
-    public void testShouldCreateGetCancelRefundRequest() {
-        List<Invoice> invoices;
-        Invoice firstInvoice = null;
-        Refund firstRefund = null;
-        Refund retrievedRefund = null;
-        List<Refund> retrievedRefunds = null;
-        Boolean createdRefund = false;
-        Boolean cancelled = false;
-        try {
-            //check within the last few days
-            Date date = new Date();
-            Date dateBefore = new Date(date.getTime() - 70 * 24 * 3600 * 1000);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String today = sdf.format(date);
-            String sevenDaysAgo = sdf.format(dateBefore);
-            invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete, null, null, null);
-            firstInvoice = invoices.get(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertNotNull(firstInvoice);
-        String refundEmail = "";
-
-        try {
-            createdRefund = this.bitpay.createRefund(firstInvoice, refundEmail, firstInvoice.getPrice(), firstInvoice.getCurrency());
-            retrievedRefunds = this.bitpay.getRefunds(firstInvoice);
-            firstRefund = retrievedRefunds.get(0);
-            retrievedRefund = this.bitpay.getRefund(firstInvoice, firstRefund.getId());
-            cancelled = this.bitpay.cancelRefund(firstInvoice, firstRefund.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-
-        assertTrue(createdRefund);
-        assertTrue(retrievedRefunds.size() > 0);
-        assertNotNull(firstRefund);
-        assertNotNull(retrievedRefund);
-        assertTrue(cancelled);
-    }
-
     @Test
     public void testShouldCreateGetCancelRefundRequestNEW() {
         List<Invoice> invoices;
