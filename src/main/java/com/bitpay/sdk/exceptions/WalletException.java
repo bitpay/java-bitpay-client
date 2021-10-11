@@ -4,10 +4,11 @@ public class WalletException extends BitPayException {
     /**
      * Construct the WalletException.
      *
+     * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public WalletException(String message) {
-        super(BuildMessage(message));
+    public WalletException(String status, String message) {
+        super(status, BuildMessage(message));
     }
 
     private static String BuildMessage(String message) {
@@ -15,7 +16,7 @@ public class WalletException extends BitPayException {
         String BitPayCode = "BITPAY-WALLET-GENERIC";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + "-> " + message;
+            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
         }
 
         return message;

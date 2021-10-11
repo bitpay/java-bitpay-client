@@ -4,10 +4,11 @@ public class BillCreationException extends BillException {
     /**
      * Construct the BillCreationException.
      *
+     * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public BillCreationException(String message) {
-        super(BuildMessage(message));
+    public BillCreationException(String status, String message) {
+        super(status, BuildMessage(message));
     }
 
     private static String BuildMessage(String message) {
@@ -15,7 +16,7 @@ public class BillCreationException extends BillException {
         String BitPayCode = "BITPAY-BILL-CREATE";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + "-> " + message;
+            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
         }
 
         return message;

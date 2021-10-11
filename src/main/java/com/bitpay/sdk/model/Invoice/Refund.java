@@ -20,10 +20,6 @@ public class Refund {
     private Double _refundFee;
     private Date _lastRefundNotification;
 
-    private String _refundEmail; // TODO to be deprecated in version 7.0
-    private String _token; // TODO to be deprecated in version 7.0
-    private RefundParams _params = new RefundParams(); // TODO to be deprecated in version 7.0
-
     private String _id;
     private Date _requestDate;
     private String _status;
@@ -109,30 +105,6 @@ public class Refund {
         this._buyerPaysRefundFee = buyerPaysRefundFee;
     }
 
-    // TODO to be deprecated in version 7.0
-    @JsonProperty("refundEmail")
-    public String getRefundEmail() {
-        return _refundEmail;
-    }
-
-    @JsonProperty("refundEmail")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public void setRefundEmail(String refundEmail) {
-        this._refundEmail = refundEmail;
-    }
-
-    // TODO to be deprecated in version 7.0
-    @JsonProperty("token")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getToken() {
-        return _token;
-    }
-
-    @JsonProperty("token")
-    public void setToken(String token) {
-        this._token = token;
-    }
-
     // Response fields
     //
 
@@ -185,16 +157,4 @@ public class Refund {
     public void setRefundFee(Double refundFee) {
         this._refundFee = refundFee;
     }
-
-    // TODO to be deprecated in version 7.0
-    @JsonIgnore
-    public RefundParams getParams() {
-        return _params;
-    }
-
-    @JsonProperty("params")
-    public void setPaymentUrls(RefundParams refundParams) {
-        this._params = refundParams;
-    }
-
 }

@@ -1,6 +1,6 @@
 package com.bitpay.sdk.model.Bill;
 
-import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -79,7 +79,7 @@ public class Bill {
     @JsonProperty("currency")
     public void setCurrency(String _currency) throws BitPayException {
         if (!Currency.isValid(_currency))
-            throw new BitPayException("Error: currency code must be a type of Model.Currency");
+            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
         this._currency = _currency;
     }

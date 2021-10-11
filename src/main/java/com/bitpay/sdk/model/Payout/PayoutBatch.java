@@ -1,6 +1,6 @@
 package com.bitpay.sdk.model.Payout;
 
-import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.util.DateDeserializer;
@@ -133,7 +133,7 @@ public class PayoutBatch {
     @JsonProperty("currency")
     public void setCurrency(String currency) throws BitPayException {
         if (!Currency.isValid(_currency))
-            throw new BitPayException("Error: currency code must be a type of Model.Currency");
+            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
         this._currency = currency;
     }

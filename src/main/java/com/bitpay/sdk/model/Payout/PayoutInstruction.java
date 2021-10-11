@@ -52,7 +52,7 @@ public class PayoutInstruction {
                 this._shopperId = methodValue;
                 break;
             default:
-                throw new PayoutCreationException("method code must be a type of RecipientReferenceMethod");
+                throw new PayoutCreationException(null, "method code must be a type of RecipientReferenceMethod");
         }
     }
 
