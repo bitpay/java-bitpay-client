@@ -1,10 +1,9 @@
 package test;
 
-import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.Env;
 import com.bitpay.sdk.exceptions.PayoutCreationException;
-import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.*;
 import com.bitpay.sdk.util.BitPayLogger;
 import org.junit.Before;
@@ -39,6 +38,7 @@ public class BitPayTestPayouts {
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
                 }},
+                null,
                 null
         );
         bitpay.setLoggerLevel(BitPayLogger.DEBUG);
@@ -56,6 +56,7 @@ public class BitPayTestPayouts {
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
                     payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
                 }},
+                null,
                 null
         );
         bitpay.setLoggerLevel(BitPayLogger.DEBUG);

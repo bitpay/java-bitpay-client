@@ -82,7 +82,7 @@ class BitPaySetup {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            bitpay = new Client(env, privateKey, new Env.Tokens(), null);
+            bitpay = new Client(env, privateKey, new Env.Tokens(), null, null);
             pairingCodeMerchant = bitpay.requestClientAuthorization(Facade.Merchant);
             pairingCodePayroll = bitpay.requestClientAuthorization(Facade.Payroll);
 

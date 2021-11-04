@@ -27,6 +27,7 @@ import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -50,9 +51,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 7.0.2110
+ * @version 7.1.2111
  * See bitpay.com/api for more information.
- * date 11.10.2021
+ * date 04.11.2021
  */
 
 public class Client {
@@ -75,18 +76,19 @@ public class Client {
     /**
      * Constructor for use if the keys and SIN are managed by this library.
      *
-     * @param environment Target environment. Options: Env.Test / Env.Prod
-     * @param privateKey  The full path to the securely located private key or the HEX key value.
-     * @param tokens      Env.Tokens containing the available tokens.
-     * @param proxy       HttpHost Optional Proxy setting (set to NULL to ignore)
-     * @throws BitPayException BitPayException class
+     * @param environment       Target environment. Options: Env.Test / Env.Prod
+     * @param privateKey        The full path to the securely located private key or the HEX key value.
+     * @param tokens            Env.Tokens containing the available tokens.
+     * @param proxy             HttpHost Optional Proxy setting (set to NULL to ignore)
+     * @param proxyCredentials  CredentialsProvider Optional Proxy Basic Auth Credentials (set to NULL to ignore)
+     * @throws BitPayException  BitPayException class
      */
-    public Client(String environment, String privateKey, Env.Tokens tokens, HttpHost proxy) throws BitPayException {
+    public Client(String environment, String privateKey, Env.Tokens tokens, HttpHost proxy, CredentialsProvider proxyCredentials) throws BitPayException {
         try {
             this._env = environment;
             this.BuildConfig(privateKey, tokens);
             this.initKeys();
-            this.init(proxy);
+            this.init(proxy, proxyCredentials);
         } catch (JsonProcessingException e) {
             throw new BitPayException(null, "failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (URISyntaxException e) {
@@ -101,14 +103,15 @@ public class Client {
      *
      * @param configFilePath The path to the configuration file.
      * @param proxy          HttpHost Optional Proxy setting (set to NULL to ignore)
+     * @param proxyCredentials  CredentialsProvider Optional Proxy Basic Auth Credentials (set to NULL to ignore)
      * @throws BitPayException BitPayException class
      */
-    public Client(String configFilePath, HttpHost proxy) throws BitPayException {
+    public Client(String configFilePath, HttpHost proxy, CredentialsProvider proxyCredentials) throws BitPayException {
         try {
             this._configFilePath = configFilePath;
             this.GetConfig();
             this.initKeys();
-            this.init(proxy);
+            this.init(proxy, proxyCredentials);
         } catch (JsonProcessingException e) {
             throw new BitPayException(null, "failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (URISyntaxException e) {
@@ -1336,11 +1339,15 @@ public class Client {
      * @throws Exception
      * @throws URISyntaxException
      */
-    private void init(HttpHost proxyDetails) throws BitPayException {
+    private void init(HttpHost proxyDetails, CredentialsProvider proxyCreds) throws BitPayException {
         try {
             this._baseUrl = this._env.equals(Env.Test) ? Env.TestUrl : Env.ProdUrl;
             if (proxyDetails != null) {
-                _httpClient = HttpClientBuilder.create().setProxy(proxyDetails).build();
+                if (proxyCreds != null) {
+                    _httpClient = HttpClientBuilder.create().setProxy(proxyDetails).setDefaultCredentialsProvider(proxyCreds).build();
+                } else {
+                    _httpClient = HttpClientBuilder.create().setProxy(proxyDetails).build();
+                }
             } else {
                 _httpClient = HttpClientBuilder.create().build();
             }

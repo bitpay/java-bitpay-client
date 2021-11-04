@@ -1,6 +1,6 @@
 package test;
 
-import com.bitpay.sdk.BitPayException;
+import com.bitpay.sdk.exceptions.*;
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.Env;
 import com.bitpay.sdk.model.Bill.Bill;
@@ -17,6 +17,12 @@ import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
+import org.apache.http.HttpHost;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.bitcoinj.core.ECKey;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +47,15 @@ public class BitPayTestMerchant {
 
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
+
+        //Use only when Proxy connection is required
+//        HttpHost proxy = new HttpHost("x.x.com",8080);
+//        Credentials credentials = new UsernamePasswordCredentials("username","password");
+//        AuthScope authScope = new AuthScope("x.x.com", 8080);
+//        CredentialsProvider proxyCredentials = new BasicCredentialsProvider();
+//        proxyCredentials.setCredentials(authScope, credentials);
+
+
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
 //        bitpay = new Client("BitPay.config.json", null);
         bitpay = new Client(
