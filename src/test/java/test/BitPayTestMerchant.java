@@ -57,7 +57,7 @@ public class BitPayTestMerchant {
 
 
         //ensure the second argument (api url) is the same as the one used in setUpOneTime()
-//        bitpay = new Client("BitPay.config.json", null);
+//        bitpay = new Client("BitPay.config.json", null, null);
         bitpay = new Client(
                 Env.Test,
                 "bitpay_private_test.key",
@@ -65,6 +65,7 @@ public class BitPayTestMerchant {
                     merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
                     payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
                 }},
+                null,
                 null
         );
 //        bitpay = new Client(
@@ -75,7 +76,8 @@ public class BitPayTestMerchant {
 //                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
 //                    payroll = "";
 //                }},
-////              null
+//                null,
+//                null
 //        );
         bitpay.setLoggerLevel(BitPayLogger.DEBUG);
     }
