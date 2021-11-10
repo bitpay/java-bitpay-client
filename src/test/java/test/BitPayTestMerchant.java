@@ -90,6 +90,18 @@ public class BitPayTestMerchant {
     }
 
     @Test
+    public void testShouldGetRates() {
+        Rates rates = null;
+        try {
+            rates = this.bitpay.getRates();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assert rates != null;
+        assertTrue(rates.getRates().size() > 0);
+    }
+
+    @Test
     public void testShouldGetInvoiceId() {
         Invoice invoice = new Invoice(50.0, "USD");
         try {

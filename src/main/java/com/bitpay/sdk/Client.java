@@ -51,9 +51,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 7.1.2111
+ * @version 7.2.2111
  * See bitpay.com/api for more information.
- * date 04.11.2021
+ * date 10.11.2021
  */
 
 public class Client {
@@ -1608,7 +1608,15 @@ public class Client {
             ObjectMapper mapper = new ObjectMapper();
 
             JsonNode rootNode = mapper.readTree(jsonString);
-            JsonNode node = rootNode.get("error");
+
+            JsonNode node = rootNode.get("status");
+            if (node != null) {
+                if (node.toString().replace("\"", "").equals("error")) {
+                    throw new BitPayException(rootNode.get("code").textValue(), rootNode.get("message").textValue());
+                }
+            }
+
+            node = rootNode.get("error");
 
             if (node != null) {
                 throw new BitPayException(null, "Error: " + node.asText());
