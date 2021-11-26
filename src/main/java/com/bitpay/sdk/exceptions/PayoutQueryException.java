@@ -12,8 +12,8 @@ public class PayoutQueryException extends PayoutException {
     }
 
     private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to retrieve payout batch";
-        String BitPayCode = "BITPAY-PAYOUT-BATCH-GET";
+        String BitPayMessage = "Failed to retrieve payout.";
+        String BitPayCode = "BITPAY-PAYOUT-GET";
 
         message = BitPayCode + ": " + BitPayMessage + " -> " + message;
 

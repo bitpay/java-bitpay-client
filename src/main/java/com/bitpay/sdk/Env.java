@@ -14,5 +14,6 @@ public class Env {
         public String pos;
         public String merchant;
         public String payroll;
+        public String payout;
     }
 }

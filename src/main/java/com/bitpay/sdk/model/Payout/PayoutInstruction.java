@@ -1,6 +1,6 @@
 package com.bitpay.sdk.model.Payout;
 
-import com.bitpay.sdk.exceptions.PayoutCreationException;
+import com.bitpay.sdk.exceptions.PayoutBatchCreationException;
 import com.bitpay.sdk.util.PayoutInstructionBtcSummaryDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -39,7 +39,7 @@ public class PayoutInstruction {
      * @param methodValue string value for the choosen target method.
      * @throws PayoutCreationException BitPayException class
      */
-    public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutCreationException {
+    public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutBatchCreationException {
         this._amount = amount;
         switch (method) {
             case RecipientReferenceMethod.EMAIL:
@@ -52,7 +52,7 @@ public class PayoutInstruction {
                 this._shopperId = methodValue;
                 break;
             default:
-                throw new PayoutCreationException(null, "method code must be a type of RecipientReferenceMethod");
+                throw new PayoutBatchCreationException(null, "method code must be a type of RecipientReferenceMethod");
         }
     }
 
