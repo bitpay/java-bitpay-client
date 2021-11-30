@@ -38,7 +38,6 @@ public class BitPayTestPayouts {
                 new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
                 }},
                 null,
                 null
@@ -55,7 +54,6 @@ public class BitPayTestPayouts {
                 new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payroll = "Ax2Yunq4EtbL8cFJeJmeL9g1ZvjPWJudyPBY1iuPqUwB";
                 }},
                 null,
                 null

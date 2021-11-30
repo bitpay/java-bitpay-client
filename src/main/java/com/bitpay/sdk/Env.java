@@ -13,7 +13,6 @@ public class Env {
     public static class Tokens {
         public String pos;
         public String merchant;
-        public String payroll;
         public String payout;
     }
 }

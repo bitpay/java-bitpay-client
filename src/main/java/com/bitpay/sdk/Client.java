@@ -1526,7 +1526,7 @@ public class Client {
 
     /**
      * Retrieve a BitPay payout batch by batch id using. The client must have been
-     * previously authorized for the payroll facade.
+     * previously authorized for the payout facade.
      * 
      * @param payoutBatchId String The id of the batch to retrieve.
      * @return A BitPay PayoutBatch object.
