@@ -38,6 +38,7 @@ public class BitPayTestPayouts {
                 new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+    	            payout = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
                 }},
                 null,
                 null
@@ -54,6 +55,7 @@ public class BitPayTestPayouts {
                 new Env.Tokens() {{
                     pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
                     merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
+                    payout = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
                 }},
                 null,
                 null
@@ -276,8 +278,10 @@ public class BitPayTestPayouts {
         	payout.setNotificationURL("https://hookbin.com/yDEDeWJKyasG9yjj9X9P");
         	Payout createPayout = this.bitpay.submitPayout(payout);
         	Boolean result = this.bitpay.requestPayoutNotification(createPayout.getId()); 
+        	Boolean cancelledPayout = this.bitpay.cancelPayout(createPayout.getId());
         	
-            assertTrue(result); 
+            assertTrue(result);
+            assertTrue(cancelledPayout); 
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -295,14 +299,15 @@ public class BitPayTestPayouts {
         	String currency = Currency.USD;
         	String ledgerCurrency = Currency.ETH;
         	List<PayoutInstruction> instructions = Arrays.asList(
-        			new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
-                    new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
-        			);
+        		new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
+        		new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
+        	);
         	
         	PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, instructions, ledgerCurrency);
         	batch0.setNotificationURL("https://hookbin.com/yDEDeWJKyasG9yjj9X9P");
         	
             batch0 = this.bitpay.submitPayoutBatch(batch0);
+            this.bitpay.cancelPayoutBatch(batch0.getId());
             
             assertNotNull(batch0.getId());
             assertTrue(batch0.getInstructions().size() == 2);
@@ -322,8 +327,8 @@ public class BitPayTestPayouts {
         String currency = Currency.USD;
     	String ledgerCurrency = Currency.ETH;
         List<PayoutInstruction> instructions = Arrays.asList(
-        		new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
-                new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
+        	new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
+        	new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
         );
 
         PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, instructions, ledgerCurrency);
@@ -357,16 +362,17 @@ public class BitPayTestPayouts {
         	String currency = Currency.USD;
         	String ledgerCurrency = Currency.ETH;
         	List<PayoutInstruction> instructions = Arrays.asList(
-        			new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
-                    new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
-        			);
+        		new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient1@bitpay.com"),
+        	    new PayoutInstruction(10.0, RecipientReferenceMethod.EMAIL, "sandbox+recipient2@bitpay.com")
+        	);
         	
         	PayoutBatch batch0 = new PayoutBatch(currency, effectiveDate, instructions, ledgerCurrency);
         	batch0.setNotificationURL("https://hookbin.com/yDEDeWJKyasG9yjj9X9P");
         	
             batch0 = this.bitpay.submitPayoutBatch(batch0);
             Boolean result = this.bitpay.requestPayoutBatchNotification(batch0.getId());
-        	
+            this.bitpay.cancelPayoutBatch(batch0.getId());
+            
             assertTrue(result); 
             
         } catch (Exception e) {
