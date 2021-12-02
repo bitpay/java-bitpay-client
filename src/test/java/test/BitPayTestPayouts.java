@@ -168,7 +168,7 @@ public class BitPayTestPayouts {
     }
     
     @Test
-    public void testShouldNotifyPayoutRecipientId() {
+    public void testShouldRequestPayoutRecipientNotification() {
         try {
         	List<PayoutRecipient> recipientsList = Arrays.asList(
                     new PayoutRecipient("sandbox+recipient1@bitpay.com", "recipient1",
@@ -268,7 +268,7 @@ public class BitPayTestPayouts {
     }
     
     @Test
-    public void testShouldNotifyPayoutId() {
+    public void testShouldRequestPayoutNotification() {
         try {
         	String currency = Currency.USD;
         	String ledgerCurrency = Currency.ETH;
@@ -353,7 +353,7 @@ public class BitPayTestPayouts {
     }
     
     @Test
-    public void testShouldNotifyPayoutBatchId() {
+    public void testShouldRequestPayoutBatchNotification() {
         try {
         	Date date = new Date();
         	Date threeDaysFromNow = new Date(date.getTime() + 3 * 24 * 3600 * 1000);

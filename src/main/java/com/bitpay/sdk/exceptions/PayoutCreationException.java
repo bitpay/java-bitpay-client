@@ -1,6 +1,6 @@
 package com.bitpay.sdk.exceptions;
 
-public class PayoutCreationException extends BitPayException {
+public class PayoutCreationException extends PayoutException {
     /**
      * Construct the PayoutCreationException.
      *

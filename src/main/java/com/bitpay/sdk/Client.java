@@ -1350,7 +1350,7 @@ public class Client {
      * @throws PayoutNotificationException PayoutNotificationException class
      */
     public Boolean requestPayoutNotification(String payoutId)
-            throws BitPayException, PayoutBatchNotificationException, BitPayException {
+            throws BitPayException, PayoutBatchNotificationException {
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Payout));
 
