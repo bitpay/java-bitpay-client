@@ -590,4 +590,4 @@ BitPay does not sign webhooks, so the information in the payload should never be
 
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

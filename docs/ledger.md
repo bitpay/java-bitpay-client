@@ -177,4 +177,4 @@ Ledger ledger = bitpay.getLedger(Currency.USD, sevenDaysAgo, tomorrow);
 ```
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

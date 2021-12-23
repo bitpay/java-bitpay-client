@@ -652,4 +652,4 @@ Settlement settlement = bitpay.getSettlementReconciliationReport(firstSettlement
 ```
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

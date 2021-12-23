@@ -800,4 +800,4 @@ Invoice cancelInvoice = bitpay.cancelInvoice(invoice.getId());
 ```
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

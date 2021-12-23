@@ -479,4 +479,4 @@ recipients/recipientId endpoint (recipientId will be provided in the body of the
 
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

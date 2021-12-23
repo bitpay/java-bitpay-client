@@ -462,4 +462,4 @@ String deliveryResult = bitpay.deliverBill(bill.getId(), bill.getToken());
 ```
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

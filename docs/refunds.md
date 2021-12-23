@@ -274,4 +274,4 @@ Boolean result = bitpay.sendRefundNotification(createRefund.getId());
 
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)

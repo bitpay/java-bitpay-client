@@ -79,4 +79,4 @@ These errors are mapped to the refund resource
 | xx0208 | Fees are greater than refund amount | `string` |
 
 
-### [Back to guide index](GUIDE.md)
+### [Back to guide index](../GUIDE.md)
