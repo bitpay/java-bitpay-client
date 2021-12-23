@@ -460,3 +460,6 @@ String deliveryResult = bitpay.deliverBill(bill.getId(), bill.getToken());
     "data": "Success"
 }
 ```
+
+
+### [Back to guide index](GUIDE.md)

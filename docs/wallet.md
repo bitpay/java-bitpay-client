@@ -3132,3 +3132,6 @@ List<Wallet> wallets = bitpay.getSupportedWallets();
   ]
 }
 ```
+
+
+### [Back to guide index](GUIDE.md)

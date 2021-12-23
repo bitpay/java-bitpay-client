@@ -271,3 +271,7 @@ Boolean result = bitpay.sendRefundNotification(createRefund.getId());
 | Name | Description | Type |  
 | --- | --- | :---: | 
 | status | successful response status will be always be “success” | `string` |
+
+
+
+### [Back to guide index](GUIDE.md)

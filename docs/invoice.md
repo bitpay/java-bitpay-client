@@ -799,4 +799,5 @@ Invoice cancelInvoice = bitpay.cancelInvoice(invoice.getId());
 
 ```
 
-### [Back to guide index](https://github.com/bitpay/php-bitpay-client-v2/blob/master/GUIDE.md)
+
+### [Back to guide index](GUIDE.md)

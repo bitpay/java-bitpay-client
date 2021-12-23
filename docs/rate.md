@@ -94,3 +94,6 @@ rates.update();
   ]
 }
 ```
+
+
+### [Back to guide index](GUIDE.md)

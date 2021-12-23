@@ -77,3 +77,6 @@ These errors are mapped to the refund resource
 | xx0203 | Missing params | `string` |
 | xx0207 | Invalid invoice state for refund | `string` |
 | xx0208 | Fees are greater than refund amount | `string` |
+
+
+### [Back to guide index](GUIDE.md)
