@@ -62,7 +62,7 @@ public class BitPayTestMerchant {
                 Env.Test,
                 "bitpay_private_test.key",
                 new Env.Tokens() {{
-                    merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
+                    merchant = "";
                 }},
                 null,
                 null
@@ -71,8 +71,7 @@ public class BitPayTestMerchant {
 //                Env.Prod,
 //                "bitpay_private_prod.key",
 //                new Env.Tokens() {{
-//                    pos = "";
-//                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
+//                    merchant = "";
 //                }},
 //                null,
 //                null
@@ -284,7 +283,7 @@ public class BitPayTestMerchant {
         assertEquals(100.0, invoice.getPrice(), EPSILON);
         assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", invoice.getPosData());
         assertEquals("Satoshi", invoice.getBuyer().getName());
-        assertEquals("satoshi@buyeremaildomain.com", invoice.getBuyer().getEmail());
+        assertEquals("sandbox@bitpay.com", invoice.getBuyer().getEmail());
         assertEquals(true, invoice.getFullNotifications());
         assertEquals("sandbox@bitpay.com", invoice.getNotificationEmail());
     }
