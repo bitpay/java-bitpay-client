@@ -36,9 +36,8 @@ public class BitPayTestPayouts {
                 Env.Test,
                 "bitpay_private_test.key",
                 new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-    	            payout = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+                    merchant = "";
+    	            payout = "";
                 }},
                 null,
                 null
@@ -53,9 +52,8 @@ public class BitPayTestPayouts {
                 Env.Test,
                 "bitpay_private_test.key",
                 new Env.Tokens() {{
-                    pos = "AvJdGrEqTW9HVsJit9zabAnrJabqaQDhWHRacHYgfgxK";
-                    merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-                    payout = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
+                    merchant = "";
+                    payout = "";
                 }},
                 null,
                 null
