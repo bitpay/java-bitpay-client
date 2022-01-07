@@ -13,7 +13,7 @@ It also implements BitPay's remote client authentication and authorization strat
     - [Invoice](docs/invoice.md)
     - [Bill](docs/bill.md)
     - [Ledger](docs/ledger.md)
-    - [Payout Recipient](docs/payout-recipient.md)
+    - [Payout Recipient](docs/payout-recipients.md)
     - [Payouts](docs/payouts.md)
     - [Payout Batch](docs/payout-batch.md)
     - [Rate](docs/rate.md)
