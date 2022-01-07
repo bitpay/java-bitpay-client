@@ -11,7 +11,6 @@ public class Env {
     public static final String BitpayApiFrameVersion = "1.0.0";
 
     public static class Tokens {
-        public String pos;
         public String merchant;
         public String payout;
     }
