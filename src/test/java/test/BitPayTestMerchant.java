@@ -63,7 +63,6 @@ public class BitPayTestMerchant {
                 "bitpay_private_test.key",
                 new Env.Tokens() {{
                     merchant = "Ffm2qBvfF5B75ENThRpRDC7WQLPosfbf24qAccriRCYQ";
-                    payroll = "FmCU4D5bGL8hRtzJX7rZZatjywqep12wDR4PKStE1rzp";
                 }},
                 null,
                 null
@@ -74,7 +73,6 @@ public class BitPayTestMerchant {
 //                new Env.Tokens() {{
 //                    pos = "";
 //                    merchant = "8RLcGKTvdAXKuyivTe693RHpwdMBNuxGFUWCyvsPvYas";
-//                    payroll = "";
 //                }},
 //                null,
 //                null
@@ -736,7 +734,7 @@ public class BitPayTestMerchant {
             createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, null, true, false, false);
             retrievedRefunds = this.bitpay.getRefunds(firstInvoice.getId());
             firstRefund = retrievedRefunds.get(0);
-            retrievedRefund = this.bitpay.getRefund(firstInvoice, firstRefund.getId());
+            retrievedRefund = this.bitpay.getRefund(firstRefund.getId());
             updatedRefund = this.bitpay.updateRefund(firstInvoice.getId(), RefundStatus.Failure);
             cancelledRefund = this.bitpay.cancelRefund(createdRefund.getId());
         } catch (Exception e) {

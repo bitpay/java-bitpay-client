@@ -1,7 +1,6 @@
 package com.bitpay.sdk.model.Payout;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.Client;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -19,29 +18,30 @@ import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PayoutBatch {
-    public static final String MethodVwap24 = "vwap_24hr";
+public class Payout {
 
-    private String _guid = "";
     private String _token = "";
 
     private Double _amount = 0.0;
     private String _currency = "";
     private Long _effectiveDate;
-    private List<PayoutInstruction> _instructions = Collections.emptyList();
-    private PayoutInstruction _exchangeRates;
-    private String _ledgerCurrency = "";
 
     private String _reference = "";
     private String _notificationEmail = "";
     private String _notificationURL = "";
     private String _redirectUrl = "";
-    private String _pricingMethod = MethodVwap24;
+    private String _ledgerCurrency = "";
 
     private String _id;
+    private String _shopperId;
+    private String _recipientId;
+    private PayoutInstruction _exchangeRates;
     private String _account;
+    private String _email;
+    private String _label;
     private String _supportPhone;
     private String _status;
+    private String _message;
     private Double _percentFee;
     private Double _fee;
     private Double _depositTotal;
@@ -49,24 +49,28 @@ public class PayoutBatch {
     private Double _btc;
     private Long _requestDate;
     private Long _dateExecuted;
+    private List<PayoutInstructionTransaction> _transactions = Collections.emptyList();
 
     /**
-     * Constructor, create an empty PayoutBatch object.
+     * Constructor, create an empty Payout object.
      */
-    public PayoutBatch() {
+    public Payout() {
         _amount = 0.0;
         _currency = "USD";
         _notificationEmail = "";
         _notificationURL = "";
-        _pricingMethod = MethodVwap24;
     }
 
     /**
-     * Constructor, create an instruction-full request PayoutBatch object.
+     * Constructor, create an instruction-full request Payout object.
      *
-     * @param currency      The three digit currency string for the PayoutBatch to use.
-     * @param effectiveDate Date when request is effective. Note that the time of day will automatically be set to 09:00:00.000 UTC time for the given day. Only requests submitted before 09:00:00.000 UTC are guaranteed to be processed on the same day.
-     * @param instructions  Payout instructions.
+     * @param amount         Date when request is effective. Note that the time of
+     *                       day will automatically be set to 09:00:00.000 UTC time
+     *                       for the given day. Only requests submitted before
+     *                       09:00:00.000 UTC are guaranteed to be processed on the
+     *                       same day.
+     * @param currency       The three digit currency string for the PayoutBatch to
+     *                       use.
      * @param ledgerCurrency Ledger currency code set for the payout request
      *                       (ISO4217 3-character currency code), it indicates on
      *                       which ledger the payoutrequest will be recorded. If not
@@ -77,42 +81,14 @@ public class PayoutBatch {
      *                       CAD, NZD, AUD, ZAR, JPY, BTC, BCH, GUSD, USDC, PAX,XRP,
      *                       BUSD, DOGE,ETH, WBTC, DAI
      */
-    public PayoutBatch(String currency, Long effectiveDate, List<PayoutInstruction> instructions, String ledgerCurrency) {
+    public Payout(Double amount, String currency, String ledgerCurrency) {
+        this._amount = amount;
         this._currency = currency;
-        this._effectiveDate = effectiveDate;
-        this._instructions = instructions;
         this._ledgerCurrency = ledgerCurrency;
-        _computeAndSetAmount();
-    }
-
-    // Private methods
-    //
-
-    private void _computeAndSetAmount() {
-        Map currencyInfo = Client.getCurrencyInfo("USD");
-        Integer precision = currencyInfo.isEmpty() ? 2 : Integer.valueOf(currencyInfo.get("precision").toString());
-
-        Double amount = 0.0;
-        for (PayoutInstruction instruction : this._instructions) {
-            amount += instruction.getAmount();
-        }
-
-        this._amount = new BigDecimal(amount).setScale(precision, RoundingMode.HALF_UP).doubleValue();
     }
 
     // API fields
     //
-
-    @JsonProperty("guid")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getGuid() {
-        return _guid;
-    }
-
-    @JsonProperty("guid")
-    public void setGuid(String guid) {
-        this._guid = guid;
-    }
 
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -145,12 +121,12 @@ public class PayoutBatch {
 
     @JsonProperty("currency")
     public void setCurrency(String currency) throws BitPayException {
-        if (!Currency.isValid(currency))
+        if (!Currency.isValid(currency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
-
+        }
         this._currency = currency;
     }
-    
+
     @JsonProperty("ledgerCurrency")
     public String getLedgerCurrency() {
         return _ledgerCurrency;
@@ -158,9 +134,9 @@ public class PayoutBatch {
 
     @JsonProperty("ledgerCurrency")
     public void setLedgerCurrency(String ledgerCurrency) throws BitPayException {
-        if (!Currency.isValid(ledgerCurrency))
+        if (!Currency.isValid(ledgerCurrency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
-
+        }
         this._ledgerCurrency = ledgerCurrency;
     }
 
@@ -176,16 +152,15 @@ public class PayoutBatch {
         this._effectiveDate = effectiveDate;
     }
 
-    @JsonProperty("instructions")
+    @JsonProperty("transactions")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public List<PayoutInstruction> getInstructions() {
-        return _instructions;
+    public List<PayoutInstructionTransaction> getTransactions() {
+        return _transactions;
     }
 
-    @JsonProperty("instructions")
-    public void setInstructions(List<PayoutInstruction> instructions) {
-        this._instructions = instructions;
-        _computeAndSetAmount();
+    @JsonProperty("transactions")
+    public void setTransactions(List<PayoutInstructionTransaction> transactions) {
+        this._transactions = transactions;
     }
 
     // Optional fields
@@ -217,7 +192,7 @@ public class PayoutBatch {
     public String getNotificationURL() {
         return _notificationURL;
     }
-
+    
     @JsonProperty("notificationURL")
     public void setNotificationURL(String notificationURL) {
         this._notificationURL = notificationURL;
@@ -234,17 +209,6 @@ public class PayoutBatch {
         this._redirectUrl = redirectUrl;
     }
 
-    @JsonProperty("pricingMethod")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getPricingMethod() {
-        return _pricingMethod;
-    }
-
-    @JsonProperty("pricingMethod")
-    public void setPricingMethod(String pricingMethod) {
-        this._pricingMethod = pricingMethod;
-    }
-
     // Response fields
     //
 
@@ -258,16 +222,26 @@ public class PayoutBatch {
         this._id = id;
     }
 
-    @JsonIgnore
-    public String getAccount() {
-        return _account;
+    @JsonProperty("shopperId")
+    public String getShopperId() {
+        return _shopperId;
     }
 
-    @JsonProperty("account")
-    public void setAccount(String account) {
-        this._account = account;
+    @JsonProperty("shopperId")
+    public void setShopperId(String shopperId) {
+        this._shopperId = shopperId;
     }
-    
+
+    @JsonProperty("recipientId")
+    public String getRecipientId() {
+        return _recipientId;
+    }
+
+    @JsonProperty("recipientId")
+    public void setRecipientId(String recipientId) {
+        this._recipientId = recipientId;
+    }
+
     @JsonProperty("exchangeRates")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public PayoutInstruction getExchangeRates() {
@@ -277,6 +251,46 @@ public class PayoutBatch {
     @JsonProperty("exchangeRates")
     public void setExchangeRates(PayoutInstruction exchangeRates) {
         this._exchangeRates = exchangeRates;
+    }
+
+    @JsonIgnore
+    public String getAccount() {
+        return _account;
+    }
+
+    @JsonProperty("account")
+    public void setAccount(String account) {
+        this._account = account;
+    }
+
+    @JsonIgnore
+    public String getMessage() {
+        return _message;
+    }
+
+    @JsonProperty("message")
+    public void setMessage(String message) {
+        this._message = message;
+    }
+
+    @JsonProperty("email")
+    public String getEmail() {
+        return _email;
+    }
+
+    @JsonProperty("email")
+    public void setEmail(String email) {
+        this._email = email;
+    }
+
+    @JsonIgnore
+    public String getLabel() {
+        return _label;
+    }
+
+    @JsonProperty("label")
+    public void setLabel(String label) {
+        this._label = label;
     }
 
     @JsonIgnore

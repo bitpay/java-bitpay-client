@@ -8,14 +8,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
     private String _email = "";
+    private String _guid = "";
     private String _label = "";
+    private String _reference = "";
     private String _notificationURL = "";
 
+    private String _account;
     private String _status;
     private String _id;
     private String _shopperId;
     private String _token;
+    private String _supportPhone;
 
+    
     /**
      * Constructor, create a minimal Recipient object.
      *
@@ -38,40 +43,73 @@ public class PayoutRecipient {
 
     // Required fields
     //
+    
+    @JsonProperty("guid")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getGuid() {
+        return _guid;
+    }
+
+    @JsonProperty("guid")
+    public void setGuid(String guid) {
+        this._guid = guid;
+    }
 
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getGuid() {
+    public String getEmail() {
         return _email;
     }
 
     @JsonProperty("email")
-    public void setGuid(String email) {
+    public void setEmail(String email) {
         this._email = email;
     }
 
+    @JsonProperty("token")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getToken() {
+    	return _token;
+    }
+    
+    @JsonProperty("token")
+    public void setToken(String token) {
+    	this._token = token;
+    }
+    
     // Optional fields
     //
 
     @JsonProperty("label")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getToken() {
+    public String getLabel() {
         return _label;
     }
 
     @JsonProperty("label")
-    public void setToken(String label) {
+    public void setLabel(String label) {
         this._label = label;
     }
+    
 
     @JsonProperty("notificationURL")
-    public String getReference() {
+    public String getNotificationURL() {
         return _notificationURL;
     }
 
     @JsonProperty("notificationURL")
-    public void setReference(String notificationURL) {
+    public void setNotificationURL(String notificationURL) {
         this._notificationURL = notificationURL;
+    }
+    
+    @JsonProperty("reference")
+    public String getReference() {
+        return _reference;
+    }
+
+    @JsonProperty("reference")
+    public void setReference(String reference) {
+        this._reference = reference;
     }
 
     // Response fields
@@ -98,22 +136,32 @@ public class PayoutRecipient {
     }
 
     @JsonIgnore
-    public String getAccount() {
+    public String getShopperId() {
         return _shopperId;
     }
 
-    @JsonProperty("Account")
-    public void setAccount(String shopperId) {
+    @JsonProperty("shopperId")
+    public void setShopperId(String shopperId) {
         this._shopperId = shopperId;
+    }
+    
+    @JsonIgnore
+    public String getAccount() {
+        return _account;
+    }
+
+    @JsonProperty("account")
+    public void setAccount(String account) {
+        this._account = account;
     }
 
     @JsonIgnore
     public String getSupportPhone() {
-        return _token;
+        return _supportPhone;
     }
 
-    @JsonProperty("token")
-    public void setSupportPhone(String token) {
-        this._token = token;
+    @JsonProperty("supportPhone")
+    public void setSupportPhone(String supportPhone) {
+        this._supportPhone = supportPhone;
     }
 }

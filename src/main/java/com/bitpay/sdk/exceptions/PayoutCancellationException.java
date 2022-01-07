@@ -12,8 +12,8 @@ public class PayoutCancellationException extends PayoutException {
     }
 
     private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to cancel payout batch";
-        String BitPayCode = "BITPAY-PAYOUT-BATCH-CANCEL";
+        String BitPayMessage = "Failed to cancel payout.";
+        String BitPayCode = "BITPAY-PAYOUT-CANCEL";
 
         message = BitPayCode + ": " + BitPayMessage + " -> " + message;
 

@@ -15,10 +15,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
+
 class BitPaySetup {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String opt, env, privateKeyPath = "", privateKeyAsHex = "", pairingCodeMerchant, pairingCodePayroll, privateKey = "";
+        String opt, env, privateKeyPath = "", privateKeyAsHex = "", pairingCodeMerchant, pairingCodePayout, privateKey = "";
         int keyType; // 1 = in file, 2 = as text
         Client bitpay;
 
@@ -84,11 +85,12 @@ class BitPaySetup {
 
             bitpay = new Client(env, privateKey, new Env.Tokens(), null, null);
             pairingCodeMerchant = bitpay.requestClientAuthorization(Facade.Merchant);
-            pairingCodePayroll = bitpay.requestClientAuthorization(Facade.Payroll);
+            pairingCodePayout = bitpay.requestClientAuthorization(Facade.Payout);
 
+            
             HashMap<String, String> tokens = new HashMap<>();
             tokens.put("merchant", bitpay.getAccessToken(Facade.Merchant));
-            tokens.put("payroll", bitpay.getAccessToken(Facade.Payroll));
+            tokens.put("payout", bitpay.getAccessToken(Facade.Payout));
             AtomicReference<JsonNode> ApiTokens = new AtomicReference<>(mapper.valueToTree(tokens));
 
             ObjectNode envConfig = mapper.createObjectNode();
@@ -118,7 +120,8 @@ class BitPaySetup {
             System.out.println("To complete your setup, Go to " + Env.TestUrl + "dashboard/merchant/api-tokens and pair this client with your merchant account using the pairing codes:");
             System.out.println();
             System.out.println(pairingCodeMerchant + " for the Merchant facade.");
-            System.out.println(pairingCodePayroll + " for the Payroll facade ONLY if you have requested access for this role.");
+            System.out.println(pairingCodePayout + " for the Payout facade ONLY if you have requested access for this role.");
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);

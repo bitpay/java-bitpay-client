@@ -7,6 +7,7 @@ import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
+import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutBatch;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
@@ -978,11 +979,11 @@ public class Client {
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
-     * @throws BitPayException         BitPayException class
-     * @throws PayoutCreationException PayoutCreationException class
+     * @throws BitPayException                  BitPayException class
+     * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
      */
-    public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException, PayoutCreationException {
-        recipients.setToken(this.getAccessToken(Facade.Payroll));
+    public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException, PayoutRecipientCreationException {
+        recipients.setToken(this.getAccessToken(Facade.Payout));
         recipients.setGuid(this.getGuid());
         ObjectMapper mapper = new ObjectMapper();
         String json;
@@ -990,7 +991,7 @@ public class Client {
         try {
             json = mapper.writeValueAsString(recipients);
         } catch (JsonProcessingException e) {
-            throw new PayoutCreationException(null, "failed to serialize PayoutRecipients object : " + e.getMessage());
+            throw new PayoutRecipientCreationException(null, "failed to serialize PayoutRecipients object : " + e.getMessage());
         }
 
         List<PayoutRecipient> recipientsList;
@@ -999,9 +1000,9 @@ public class Client {
             HttpResponse response = this.post("recipients", json, true);
             recipientsList = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutCreationException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            throw new PayoutRecipientCreationException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutCreationException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            throw new PayoutRecipientCreationException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
         }
 
         return recipientsList;
@@ -1011,31 +1012,40 @@ public class Client {
      * Retrieve a collection of BitPay Payout Recipients.
      *
      * @param status String|null The recipient status you want to query on.
-     * @param limit  int|null Maximum results that the query will return (useful for paging results).
-     *               result).
-     * @return array     A list of BitPayRecipient objects.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @param limit  int Maximum results that the query will return (useful for
+     *               paging results). result).
+     * @param offset int Offset for paging.
+     * @return array A list of BitPayRecipient objects.
+     * @throws BitPayException               BitPayException class
+     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
-    public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit) throws BitPayException, PayoutQueryException {
+    public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit, Integer offset)
+            throws BitPayException, PayoutRecipientQueryException {
+        
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payroll)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
         if (status != null) {
             params.add(new BasicNameValuePair("status", status));
         }
         if (limit != null) {
             params.add(new BasicNameValuePair("limit", limit.toString()));
         }
+        if (offset != null) {
+            params.add(new BasicNameValuePair("offset", offset.toString()));
+        }
 
         List<PayoutRecipient> recipientsList;
 
         try {
             HttpResponse response = this.get("recipients", params, true);
-            recipientsList = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutRecipient[].class));
+            recipientsList = Arrays
+                    .asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            throw new PayoutRecipientQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            throw new PayoutRecipientQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
         }
 
         return recipientsList;
@@ -1043,16 +1053,16 @@ public class Client {
 
     /**
      * Retrieve a BitPay payout recipient by batch id using.  The client must have been previously authorized for the
-     * payroll facade.
+     * payout facade.
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws BitPayException               BitPayException class
+     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
-    public PayoutRecipient getPayoutRecipient(String recipientId) throws BitPayException, PayoutQueryException {
+    public PayoutRecipient getPayoutRecipient(String recipientId) throws BitPayException, PayoutRecipientQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payroll)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
 
         PayoutRecipient recipient;
 
@@ -1060,40 +1070,346 @@ public class Client {
             HttpResponse response = this.get("recipients/" + recipientId, params, true);
             recipient = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutRecipient.class);
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
+            throw new PayoutRecipientQueryException(null, "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
+            throw new PayoutRecipientQueryException(null, "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
         }
 
         return recipient;
     }
+    
+    /**
+     * Update a Payout Recipient.
+     *
+     * @param recipientId String The recipient id for the recipient to be updated.
+     * @param recipient   PayoutRecipients A PayoutRecipient object with updated
+     *                    parameters defined.
+     * @return The updated recipient object.
+     * @throws BitPayException                BitPayException class
+     * @throws PayoutRecipientUpdateException PayoutRecipientUpdateException class
+     */
+    public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
+            throws BitPayException, PayoutRecipientUpdateException {
+        recipient.setToken(this.getAccessToken(Facade.Payout));
+        recipient.setGuid(this.getGuid());
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+
+        try {
+        	json = mapper.writeValueAsString(recipient);
+        } catch (JsonProcessingException e) {
+            throw new PayoutRecipientUpdateException(null,
+                    "failed to serialize PayoutRecipient object : " + e.getMessage());
+        }
+
+        PayoutRecipient updateRecipient;
+
+        try {
+            HttpResponse response = this.update("recipients/" + recipientId, json);
+            updateRecipient = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutRecipient.class);
+        } catch (JsonProcessingException e) {
+            throw new PayoutRecipientUpdateException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new PayoutRecipientUpdateException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        }
+
+        return updateRecipient;
+    }
+
+    /**
+     * Cancel a BitPay Payout recipient.
+     *
+     * @param recipientId String The id of the recipient to cancel.
+     * @return True if the delete operation was successfull, false otherwise.
+     * @throws BitPayException                      BitPayException class
+     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException
+     *                                              class
+     */
+    public Boolean deletePayoutRecipient(String recipientId)
+            throws BitPayException, PayoutRecipientCancellationException {
+        
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
+        
+        ObjectMapper mapper = new ObjectMapper();    
+        Boolean result;
+        
+        try {
+            HttpResponse response = this.delete("recipients/" + recipientId, params);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (BitPayException ex) {
+            throw new PayoutRecipientCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new PayoutRecipientCancellationException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Request a payout recipient notification
+     * 
+     * @param recipientId String A BitPay recipient ID.
+     * @return True if the notification was successfully sent, false otherwise.
+     * @throws BitPayException                      BitPayException class
+     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException
+     *                                              class
+     */
+    public Boolean requestPayoutRecipientNotification(String recipientId)
+            throws PayoutRecipientNotificationException, BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Payout));
+
+        ObjectMapper mapper = new ObjectMapper();
+        Boolean result;
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new PayoutRecipientNotificationException(null,
+                    "failed to serialize PayoutRecipient object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("recipients/" + recipientId + "/notifications", json, true);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (BitPayException ex) {
+            throw new PayoutRecipientNotificationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new PayoutRecipientNotificationException(null,
+                    "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        }
+
+        return result;
+    }
+    
+    /**
+     * Submit a BitPay Payout.
+     *
+     * @param payout Payout A Payout object with request parameters defined.
+     * @return A BitPay generated Payout object.
+     * @throws BitPayException         BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     */
+    public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
+        String token = this.getAccessToken(Facade.Payout);
+        payout.setToken(token);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        
+        try {
+            json = mapper.writeValueAsString(payout);
+        } catch (JsonProcessingException e) {
+            throw new PayoutCreationException(null, "failed to serialize Payout object : " + e.getMessage());
+        }
+        try {
+            HttpResponse response = this.post("payouts", json, true);
+            payout = new ObjectMapper().readValue(this.responseToJsonString(response), Payout.class);
+        } catch (Exception e) {
+            throw new PayoutCreationException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        }
+
+        return payout;
+    }
+
+    /**
+     * Retrieve a BitPay payout by payout id using. The client must have been
+     * previously authorized for the payout facade.
+     * 
+     * @param payoutId String The id of the payout to retrieve.
+     * @return A BitPay Payout object.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
+        String token = this.getAccessToken(Facade.Payout);
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", token));
+
+        Payout payout;
+
+        try {
+            HttpResponse response = this.get("payouts/" + payoutId, params, true);
+            payout = new ObjectMapper().readValue(this.responseToJsonString(response), Payout.class);
+        } catch (JsonProcessingException e) {
+            throw new PayoutQueryException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new PayoutQueryException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        }
+
+        return payout;
+    }
+
+    /**
+     * Cancel a BitPay Payout.
+     *
+     * @param payoutId String The id of the payout to cancel.
+     * @return True if the refund was successfully canceled, false otherwise.
+     * @throws BitPayException             BitPayException class
+     * @throws PayoutCancellationException PayoutCancellationException class
+     */
+    public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
+        Boolean result;
+        ObjectMapper mapper = new ObjectMapper();
+        
+        try {
+            HttpResponse response = this.delete("payouts/" + payoutId, params);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+
+        } catch (JsonProcessingException e) {
+            throw new PayoutCancellationException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new PayoutCancellationException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieve a collection of BitPay payouts.
+     *
+     * @param startDate String The start date for the query.
+     * @param endDate   String The end date for the query.
+     * @param status    String The status to filter(optional).
+     * @param reference String The optional reference specified at payout request creation.
+     * @param limit     int Maximum results that the query will return (useful for
+     *                  paging results).
+     * @param offset    int Offset for paging.
+     * @return A list of BitPay Payout objects.
+     * @throws BitPayException      BitPayException class
+     * @throws PayoutQueryException PayoutQueryException class
+     */
+    public List<Payout> getPayouts(String startDate, String endDate, String status, String reference, Integer limit,
+            Integer offset) throws BitPayException, PayoutQueryException {
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
+        if (startDate != null) {
+            params.add(new BasicNameValuePair("startDate", startDate));
+        }
+        if (endDate != null) {
+            params.add(new BasicNameValuePair("endDate", endDate));
+        }
+        if (reference != null) {
+            params.add(new BasicNameValuePair("reference", reference));
+        }
+        if (status != null) {
+            params.add(new BasicNameValuePair("status", status));
+        }
+        if (limit != null) {
+            params.add(new BasicNameValuePair("limit", limit.toString()));
+        }
+        if (offset != null) {
+            params.add(new BasicNameValuePair("offset", offset.toString()));
+        }
+        
+        List<Payout> payouts;
+
+        try {
+            HttpResponse response = this.get("payouts", params, true);
+            payouts = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Payout[].class));
+        } catch (JsonProcessingException e) {
+            throw new PayoutQueryException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new PayoutQueryException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        }
+
+        return payouts;
+    }
+
+    /**
+     * Request a payout notification
+     * 
+     * @param payoutId String The id of the payout to notify..
+     * @return True if the notification was successfully sent, false otherwise.
+     * @throws BitPayException             BitPayException class
+     * @throws PayoutNotificationException PayoutNotificationException class
+     */
+    public Boolean requestPayoutNotification(String payoutId)
+            throws BitPayException, PayoutBatchNotificationException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Payout));
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Boolean result;
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new PayoutNotificationException(null, "failed to serialize payout batch object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("payouts/" + payoutId + "/notifications", json, true);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (BitPayException ex) {
+            throw new PayoutNotificationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new PayoutNotificationException(null,
+                    "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        }
+
+        return result;
+    }
+
 
     /**
      * Submit a BitPay Payout batch.
      *
-     * @param batch A PayoutBatch object with request parameters defined.
+     * @param batch PayoutBatch A PayoutBatch object with request parameters defined.
      * @return A BitPay generated PayoutBatch object.
-     * @throws BitPayException         BitPayException class
-     * @throws PayoutCreationException PayoutCreationException class
+     * @throws BitPayException              BitPayException class
+     * @throws PayoutBatchCreationException PayoutBatchCreationException class
      */
-    public PayoutBatch submitPayoutBatch(PayoutBatch batch) throws BitPayException, PayoutCreationException {
-        String token = this.getAccessToken(Facade.Payroll);
+    public PayoutBatch submitPayoutBatch(PayoutBatch batch) throws BitPayException, PayoutBatchCreationException {
+        String token = this.getAccessToken(Facade.Payout);
         batch.setToken(token);
         batch.setGuid(this.getGuid());
 
         ObjectMapper mapper = new ObjectMapper();
         String json;
+        
         try {
             json = mapper.writeValueAsString(batch);
         } catch (JsonProcessingException e) {
-            throw new PayoutCreationException(null, "failed to serialize PayoutBatch object : " + e.getMessage());
+            throw new PayoutBatchCreationException(null, "failed to serialize PayoutBatch object : " + e.getMessage());
         }
 
         try {
-            HttpResponse response = this.post("payouts", json, true);
+            HttpResponse response = this.post("payoutBatches", json, true);
             batch = mapper.readerForUpdating(batch).readValue(this.responseToJsonString(response));
         } catch (Exception e) {
-            throw new PayoutCreationException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchCreationException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         }
 
         this.cacheToken(batch.getId(), batch.getToken());
@@ -1105,22 +1421,25 @@ public class Client {
      * Retrieve a collection of BitPay payout batches.
      *
      * @return A list of BitPay PayoutBatch objects.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws BitPayException           BitPayException class
+     * @throws PayoutBatchQueryException PayoutBatchQueryException class
      */
-    public List<PayoutBatch> getPayoutBatches() throws BitPayException, PayoutQueryException {
+    public List<PayoutBatch> getPayoutBatches() throws BitPayException, PayoutBatchQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payroll)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
 
         List<PayoutBatch> batches;
 
         try {
             HttpResponse response = this.get("payouts", params);
-            batches = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
+            batches = Arrays
+                    .asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         }
 
         return batches;
@@ -1129,14 +1448,14 @@ public class Client {
     /**
      * Retrieve a collection of BitPay payout batches.
      *
-     * @param status The status to filter the Payout Batches.
+     * @param status String The status to filter the Payout Batches.
      * @return A list of BitPay PayoutBatch objects.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public List<PayoutBatch> getPayoutBatches(String status) throws BitPayException, PayoutQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payroll)));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
         params.add(new BasicNameValuePair("status", status));
 
         List<PayoutBatch> batches;
@@ -1152,29 +1471,84 @@ public class Client {
 
         return batches;
     }
+    
+    /**
+     * Retrieve a collection of BitPay payout batches.
+     *
+     * @param startDate String The start date for the query.
+     * @param endDate   String The end date for the query.
+     * @param status    String The status to filter(optional).
+     * @param limit     int Maximum results that the query will return (useful for
+     *                  paging results).
+     * @param offset    int Offset for paging.
+     * @return A list of BitPay PayoutBatch objects.
+     * @throws BitPayException           BitPayException class
+     * @throws PayoutBatchQueryException PayoutBatchQueryException class
+     */
+    public List<PayoutBatch> getPayoutBatches(String startDate, String endDate, String status, Integer limit,
+            Integer offset) throws BitPayException, PayoutBatchQueryException {
+        
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
+        if (startDate != null) {
+            params.add(new BasicNameValuePair("startDate", startDate));
+        }
+        if (endDate != null) {
+            params.add(new BasicNameValuePair("endDate", endDate));
+        }
+        if (status != null) {
+            params.add(new BasicNameValuePair("status", status));
+        }
+        if (limit != null) {
+            params.add(new BasicNameValuePair("limit", limit.toString()));
+        }
+        if (offset != null) {
+            params.add(new BasicNameValuePair("offset", offset.toString()));
+        }
+
+        List<PayoutBatch> batches;
+
+        try {
+            HttpResponse response = this.get("payoutBatches", params);
+            batches = Arrays
+                    .asList(new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch[].class));
+        } catch (JsonProcessingException e) {
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+        }
+
+        return batches;
+    }
 
     /**
-     * Retrieve a BitPay payout batch by batch id using.  The client must have been previously authorized for the payroll facade.
-     *
-     * @param batchId The id of the batch to retrieve.
+     * Retrieve a BitPay payout batch by batch id using. The client must have been
+     * previously authorized for the payout facade.
+     * 
+     * @param payoutBatchId String The id of the batch to retrieve.
      * @return A BitPay PayoutBatch object.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws BitPayException           BitPayException class
+     * @throws PayoutBatchQueryException PayoutBatchQueryException class
      */
-    public PayoutBatch getPayoutBatch(String batchId) throws BitPayException, PayoutQueryException {
-        String token = this.getAccessToken(Facade.Payroll);
+    public PayoutBatch getPayoutBatch(String payoutBatchId) throws BitPayException, PayoutBatchQueryException {
+        String token = this.getAccessToken(Facade.Payout);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
 
         PayoutBatch batch;
 
         try {
-            HttpResponse response = this.get("payouts/" + batchId, params, true);
+            HttpResponse response = this.get("payoutBatches/" + payoutBatchId, params, true);
             batch = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch.class);
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutQueryException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchQueryException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         }
 
         return batch;
@@ -1183,32 +1557,78 @@ public class Client {
     /**
      * Cancel a BitPay Payout batch.
      *
-     * @param batchId The id of the batch to cancel.
-     * @return A BitPay generated PayoutBatch object.
-     * @throws PayoutCancellationException PayoutCancellationException class
+     * @param payoutBatchId String The id of the payout batch to cancel.
+     * @return True if the refund was successfully canceled, false otherwise.
+     * @throws BitPayException                  BitPayException class
+     * @throws PayoutBatchCancellationException PayoutBatchCancellationException
+     *                                          class
      */
-    public PayoutBatch cancelPayoutBatch(String batchId) throws PayoutCancellationException {
-        PayoutBatch batch;
+    public Boolean cancelPayoutBatch(String payoutBatchId) throws BitPayException, PayoutBatchCancellationException {
 
-        try {
-            batch = getPayoutBatch(batchId);
-        } catch (Exception e) {
-            throw new PayoutCancellationException(null, "failed to serialize PayoutBatch object : " + e.getMessage());
-        }
-
+        Boolean result;
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", batch.getToken()));
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Payout)));
 
+        ObjectMapper mapper = new ObjectMapper();
+        
         try {
-            HttpResponse response = this.delete("payouts/" + batchId, params);
-            batch = new ObjectMapper().readValue(this.responseToJsonString(response), PayoutBatch.class);
+            HttpResponse response = this.delete("payoutBatches/" + payoutBatchId, params);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+
         } catch (JsonProcessingException e) {
-            throw new PayoutCancellationException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchCancellationException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         } catch (Exception e) {
-            throw new PayoutCancellationException(null, "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
+            throw new PayoutBatchCancellationException(null,
+                    "failed to deserialize BitPay server response (PayoutBatch) : " + e.getMessage());
         }
 
-        return batch;
+        return result;
+    }
+    
+    /**
+     * Request a payout batch notification
+     * 
+     * @param payoutBatchId String The id of the payout batch to notify..
+     * @return True if the notification was successfully sent, false otherwise.
+     * @throws BitPayException                  BitPayException class
+     * @throws PayoutBatchNotificationException PayoutBatchNotificationException
+     *                                          class
+     */
+    public Boolean requestPayoutBatchNotification(String payoutBatchId)
+            throws BitPayException, PayoutBatchNotificationException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Payout));
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        Boolean result;
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new PayoutBatchNotificationException(null,
+                    "failed to serialize payout batch object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("payoutBatches/" + payoutBatchId + "/notifications", json, true);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (BitPayException ex) {
+            throw new PayoutBatchNotificationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new PayoutBatchNotificationException(null,
+                    "failed to deserialize BitPay server response (Payoutbatch) : " + e.getMessage());
+        }
+
+        return result;
     }
 
     /**
@@ -1353,6 +1773,7 @@ public class Client {
             }
             deriveIdentity();
             LoadAccessTokens();
+            loadCurrencies();
         } catch (Exception e) {
             throw new BitPayException(null, "failed to deserialize BitPay server response (Token array) : " + e.getMessage());
         }
@@ -1604,11 +2025,9 @@ public class Client {
 
             jsonString = EntityUtils.toString(entity, "UTF-8");
             _log.info("RESPONSE: " + jsonString);
-
             ObjectMapper mapper = new ObjectMapper();
 
             JsonNode rootNode = mapper.readTree(jsonString);
-
             JsonNode node = rootNode.get("status");
             if (node != null) {
                 if (node.toString().replace("\"", "").equals("error")) {
@@ -1641,8 +2060,15 @@ public class Client {
                 if (node.toString().replace("\"", "").equals("error")) {
                     throw new BitPayException(rootNode.get("code").textValue(), rootNode.get("message").textValue());
                 }
+                if (node.toString().replace("\"", "").equals("success")) {
+                	node = rootNode.get("data");
+                	
+                	if (node.toString().equals("{}")) {
+                		return rootNode.toString();
+                	}
+                }
             }
-
+            
             node = rootNode.get("data");
 
             if (node != null) {
@@ -1765,7 +2191,9 @@ public class Client {
             // No action required
         }
     }
-
+    
+    
+    
     /**
      * Gets info for specific currency.
      *
@@ -1773,6 +2201,7 @@ public class Client {
      * @return Map|null
      */
     public static Map getCurrencyInfo(String currencyCode) {
+    	
         for (int i = 0; i < _currenciesInfo.size(); i++) {
             Map currencyInfo = new ObjectMapper().convertValue(_currenciesInfo.get(i), Map.class);
 

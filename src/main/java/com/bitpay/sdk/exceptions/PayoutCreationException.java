@@ -1,6 +1,6 @@
 package com.bitpay.sdk.exceptions;
 
-public class PayoutCreationException extends BitPayException {
+public class PayoutCreationException extends PayoutException {
     /**
      * Construct the PayoutCreationException.
      *
@@ -12,8 +12,8 @@ public class PayoutCreationException extends BitPayException {
     }
 
     private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to create payout batch";
-        String BitPayCode = "BITPAY-PAYOUT-BATCH-SUBMIT";
+        String BitPayMessage = "Failed to create payout.";
+        String BitPayCode = "BITPAY-PAYOUT-SUBMIT";
 
         message = BitPayCode + ": " + BitPayMessage + " -> " + message;
 
