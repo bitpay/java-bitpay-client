@@ -37,7 +37,7 @@ public class PayoutInstruction {
      * @param amount      float amount (in currency of batch).
      * @param method      int Method used to target the recipient.
      * @param methodValue string value for the choosen target method.
-     * @throws PayoutCreationException BitPayException class
+     * @throws PayoutBatchCreationException BitPayException class
      */
     public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutBatchCreationException {
         this._amount = amount;
