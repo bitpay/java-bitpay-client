@@ -558,7 +558,7 @@ public class Invoice {
         return _invoiceBuyerProvidedInfo;
     }
 
-    @JsonProperty("invoiceBuyerProvidedInfo")
+    @JsonProperty("buyerProvidedInfo")
     public void setInvoiceBuyerProvidedInfo(InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo) {
         this._invoiceBuyerProvidedInfo = _invoiceBuyerProvidedInfo;
     }
