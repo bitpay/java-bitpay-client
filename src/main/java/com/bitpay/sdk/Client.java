@@ -52,9 +52,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 8.1.2201
+ * @version 8.2.2201
  * See bitpay.com/api for more information.
- * date 17.01.2022
+ * date 25.01.2022
  */
 
 public class Client {
@@ -435,8 +435,30 @@ public class Client {
      * @throws BitPayException       BitPayException class
      */
     public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
+        try {
+            return this.cancelInvoice(invoiceId, false);
+        } catch (BitPayException ex) {
+            throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceCancellationException(null, e.getMessage());
+        }
+    }
+
+    /**
+     * Delete a previously created BitPay invoice.
+     *
+     * @param invoiceId The Id of the BitPay invoice to be canceled.
+     * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
+     * @return A BitPay generated Invoice object.
+     * @throws InvoiceCancellationException InvoiceCancellationException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Invoice cancelInvoice(String invoiceId, Boolean forceCancel) throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        if (forceCancel) {
+            params.add(new BasicNameValuePair("forceCancel", forceCancel.toString()));
+        }
         Invoice invoice;
 
         try {

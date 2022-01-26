@@ -760,6 +760,7 @@ Facades  **`POS` `MERCHANT`**
 | Parameter | Description |Type | Presence
 | ------ | ------ | ----- |------ |
 |  ?token=  | When fetching an invoice via the merchant or the pos facade, pass the API token as a URL parameter - the same token used to create the invoice in the first place. | `string` | **Mandatory** |
+|  forceCancel  | If 'true' it will cancel the invoice even if no contact information is present | `boolean` | Optional |
 
 
 **Headers**
