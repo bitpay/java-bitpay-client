@@ -434,7 +434,7 @@ public class Client {
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException       BitPayException class
      */
-    public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException {
+    public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
         try {
             return this.cancelInvoice(invoiceId, false);
         } catch (BitPayException ex) {
