@@ -713,6 +713,8 @@ Update an invoice with SMS or email in order to respond to a payment exception
 
 :warning: smsCode required only when verifying SMS.
 
+:warning: autoVerify is only available in Sandbox environment.
+
 `PUT /invoices/:invoiceId`  
 
 Facades  **`POS` `MERCHANT`**
@@ -730,6 +732,7 @@ Facades  **`POS` `MERCHANT`**
 |  buyerEmail  | Email address of the buyer | `string` | :warning: |
 |  buyerSms  | SMS to use to process any payment exception if necessary. ex. “+13415556589” | `string` | :warning: |
 |  smsCode  | Verification code in order to complete the SMS verification process | `string` | :warning: |
+|  autoVerify  | If provided alongside a valid SMS, will bypass the need to complete an SMS challenge.  | `boolean` | :warning: |
 
 **Headers**
 
