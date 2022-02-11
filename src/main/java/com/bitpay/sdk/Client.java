@@ -52,9 +52,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 8.2.2201
+ * @version 8.3.2202
  * See bitpay.com/api for more information.
- * date 25.01.2022
+ * date 11.02.2022
  */
 
 public class Client {
@@ -384,12 +384,13 @@ public class Client {
      * @param buyerSms  The buyer's cell number.
      * @param smsCode   The buyer's received verification code.
      * @param buyerEmail   The buyer's email address.
+     * @param autoVerify   Skip the user verification on sandbox ONLY.
      * @return A BitPay generated Invoice object.
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode, String buyerEmail) throws BitPayException, InvoiceUpdateException {
-        final Map<String, String> params = new HashMap<>();
+    public Invoice updateInvoice(String invoiceId, String buyerSms, String smsCode, String buyerEmail, Boolean autoVerify) throws BitPayException, InvoiceUpdateException {
+        final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (buyerSms == null && smsCode == null) {
             throw new InvoiceUpdateException(null, "Updating the invoice requires Mobile Phone Number for SMS reception.");
@@ -402,6 +403,9 @@ public class Client {
         }
         if (buyerEmail != null) {
             params.put("buyerEmail", buyerEmail);
+        }
+        if (autoVerify != null) {
+            params.put("autoVerify", autoVerify);
         }
 
         ObjectMapper mapper = new ObjectMapper();

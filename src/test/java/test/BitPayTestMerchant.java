@@ -181,7 +181,7 @@ public class BitPayTestMerchant {
         try {
             basicInvoice = bitpay.createInvoice(invoice);
             retreivedInvoice = this.bitpay.getInvoice(basicInvoice.getId());
-            updatedInvoice = this .bitpay.updateInvoice(retreivedInvoice.getId(), "*********", null, null);
+            updatedInvoice = this .bitpay.updateInvoice(retreivedInvoice.getId(), "*********", null, null, false);
             cancelledInvoice = bitpay.cancelInvoice(updatedInvoice.getId());
             retreivedCancelledInvoice = this.bitpay.getInvoice(cancelledInvoice.getId());
         } catch (Exception e) {
@@ -722,7 +722,7 @@ public class BitPayTestMerchant {
             String sevenDaysAgo = sdf.format(dateBefore);
             invoices = this.bitpay.getInvoices(sevenDaysAgo, today, InvoiceStatus.Complete, null, null, null);
             firstInvoice = invoices.get(0);
-            updatedInvoice = this.bitpay.updateInvoice(firstInvoice.getId(), "+***********", null, null);
+            updatedInvoice = this.bitpay.updateInvoice(firstInvoice.getId(), "+***********", null, null, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
