@@ -730,7 +730,7 @@ public class BitPayTestMerchant {
         String refundEmail = "";
 
         try {
-            createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, null, true, false, false);
+            createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, null, false, false, false, "RefTest");
             retrievedRefunds = this.bitpay.getRefunds(firstInvoice.getId());
             firstRefund = retrievedRefunds.get(0);
             retrievedRefund = this.bitpay.getRefund(firstRefund.getId());
