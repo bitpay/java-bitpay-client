@@ -17,6 +17,7 @@ public class Refund {
     private Boolean _preview;
     private Boolean _immediate;
     private Boolean _buyerPaysRefundFee;
+    private String _reference;
     private Double _refundFee;
     private Date _lastRefundNotification;
 
@@ -103,6 +104,17 @@ public class Refund {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setBuyerPaysRefundFee(Boolean buyerPaysRefundFee) {
         this._buyerPaysRefundFee = buyerPaysRefundFee;
+    }
+
+    @JsonProperty("reference")
+    public String getReference() {
+        return _reference;
+    }
+
+    @JsonProperty("reference")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setReference(String reference) {
+        this._reference = reference;
     }
 
     // Response fields

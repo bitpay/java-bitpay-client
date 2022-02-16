@@ -52,7 +52,7 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 8.3.2202
+ * @version 8.4.2202
  * See bitpay.com/api for more information.
  * date 11.02.2022
  */
@@ -486,11 +486,12 @@ public class Client {
      * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
      * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
+     * @param reference          Present only if specified. Used as reference label for the refund. Max str length = 100
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException       BitPayException class
      */
-    public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee) throws RefundCreationException, BitPayException {
+    public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee, String reference) throws RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
         if (invoiceId == null && amount == null && currency == null) {
@@ -513,6 +514,9 @@ public class Client {
         }
         if (buyerPaysRefundFee != null) {
             params.put("buyerPaysRefundFee", buyerPaysRefundFee);
+        }
+        if (reference != null) {
+            params.put("reference", reference);
         }
 
         Refund refund;
