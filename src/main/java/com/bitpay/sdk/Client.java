@@ -52,9 +52,9 @@ import java.util.*;
 
 /**
  * @author Antonio Buedo
- * @version 8.4.2202
+ * @version 8.5.2203
  * See bitpay.com/api for more information.
- * date 11.02.2022
+ * date 04.03.2022
  */
 
 public class Client {
@@ -431,6 +431,46 @@ public class Client {
     }
 
     /**
+     * Pay a BitPay invoice with a mock transaction.
+     *
+     * @param invoiceId The id of the invoice to updated.
+     * @param complete  Indicate if paid invoice should have complete status if true or a confirmed status
+     * @return A BitPay generated Invoice object.
+     * @throws BitPayException        BitPayException class
+     * @throws InvoiceUpdateException InvoiceUpdateException class
+     */
+    public Invoice payInvoice(String invoiceId, Boolean complete) throws BitPayException, InvoiceUpdateException {
+        final Map<String, Object> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (complete == null) {
+            throw new InvoiceUpdateException(null, "It is required to define the whether the invoice will be set to \"complete\" or \"confirmed\".");
+        }
+
+        params.put("complete", complete);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        Invoice invoice;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new InvoiceUpdateException(null, "failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.update("invoices/pay/" + invoiceId, json);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceUpdateException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
+    /**
      * Delete a previously created BitPay invoice.
      *
      * @param invoiceId The Id of the BitPay invoice to be canceled.
@@ -482,7 +522,6 @@ public class Client {
      *
      * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
      * @param amount             Amount to be refunded in the currency indicated.
-     * @param currency           Aeference currency used for the refund, usually the same as the currency used to create the invoice.
      * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
      * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
@@ -491,10 +530,10 @@ public class Client {
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException       BitPayException class
      */
-    public Refund createRefund(String invoiceId, Double amount, String currency, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee, String reference) throws RefundCreationException, BitPayException {
+    public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee, String reference) throws RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
-        if (invoiceId == null && amount == null && currency == null) {
+        if (invoiceId == null && amount == null) {
             throw new RefundCreationException(null ,"Invoice ID, amount and currency are required to issue a refund.");
         }
         if (invoiceId != null) {
@@ -502,9 +541,6 @@ public class Client {
         }
         if (amount != null) {
             params.put("amount", amount);
-        }
-        if (currency != null) {
-            params.put("currency", currency);
         }
         if (preview != null) {
             params.put("preview", preview);

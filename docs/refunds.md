@@ -23,15 +23,15 @@ Facades **`MERCHANT`**
 | --- | --- | :---: | :---: |
 | invoiceId | the id of the invoice to refund | `string` | **Mandatory** |
 | amount | Amount to be refunded in the `currency` indicated | `number` | **Mandatory** |
-| currency | reference currency used for the refund, usually the same as the currency used to create the invoice. | `string` | **Mandatory** |
 | preview | whether to create the refund request as a preview (which will not be acted on until status is updated) | `boolean` | Default: `false` |
 | immediate | whether funds should be removed from merchant ledger immediately on submission or at time of processing | `boolean` | Default: `false` |
 | buyerPaysRefundFee | whether the buyer should pay the refund fee (default is `merchant`) | `boolean` | Default: `false` |
+| reference | Present only if specified in the request to create the refund. This is your reference label for this refund. It will be passed-through on each response for you to identify the refund in your system. Maximum string length is 100 characters | `string` | Default: `Null` |
 
 An example code of the create a new refund request
 
 ```java
-Refund createRefund = bitpay.createRefund(invoice.getId(), 1.0, null, true, false, false);
+Refund createRefund = bitpay.createRefund(invoice.getId(), 1.0, true, false, false);
 ```
 
 **Response Body Fields**
