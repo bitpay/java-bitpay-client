@@ -803,5 +803,40 @@ Invoice cancelInvoice = bitpay.cancelInvoice(invoice.getId());
 
 ```
 
+## Pay an invoice
+
+Update an invoice status to either **`confirmed`** or **`completed`** with a mock transaction to help speed up the testing
+
+:warning: PayInvoice is only available in Sandbox environment.
+
+`POST /invoices/pay/:invoiceId`
+
+Facades  **`MERCHANT`**
+
+### HTTP Request
+
+**URL Parameters**
+
+| Parameter | Description |Type | Presence
+| ------ | ------ | ----- |------ |
+|  ?token=  | When fetching an invoice via the merchant or the pos facade, pass the API token as a URL parameter - the same token used to create the invoice in the first place. | `string` | **Mandatory** |
+
+| Name | Description |Type | Presence
+| ------ | ------ | ----- |------ |
+|  complete  | Indicate if paid invoice should have a complete or confirmed status. Invoice status will be complete if true or confirmed if false or undefined. | `string` | :warning: |
+
+**Headers**
+
+| Fields | Description | Presence
+| ------ | ------ | ------ |
+|  X-Accept-Version  | must be set to `2.0.0` for requests to the BitPay API  | **Mandatory** |
+| Content-Type | must be set to `application/json` for requests to the BitPay API | **Mandatory** | 
+|  X-Identity  | the hexadecimal public key generated from the client private key. This header is required when using tokens with higher privileges (merchant facade). When using standard pos facade token directly from the BitPay dashboard (with "Require Authentication" disabled), this header is not needed.  | C |
+| X-Signature | header is the ECDSA signature of the full request URL concatenated with the request body, signed with your private key. This header is required when using tokens with higher privileges (merchant facade). When using standard pos facade token directly from the BitPay dashboard (with "Require Authentication" disabled), this header is not needed. | C |
+
+```java
+Invoice paidInvoice = bitpay.payInvoice(invoice.getId(), true);
+```
+
 
 ### [Back to guide index](../GUIDE.md)
