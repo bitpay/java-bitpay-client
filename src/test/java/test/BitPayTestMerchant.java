@@ -44,6 +44,8 @@ public class BitPayTestMerchant {
     private final static double EPSILON = .001;
     private Client bitpay;
     private Invoice basicInvoice;
+    private Invoice paidInvoice;
+    private Refund basicInvoiceRefund;
 
     @Before
     public void setUp() throws BitPayException, IOException, URISyntaxException {
@@ -286,6 +288,21 @@ public class BitPayTestMerchant {
         assertEquals("sandbox@bitpay.com", invoice.getBuyer().getEmail());
         assertEquals(true, invoice.getFullNotifications());
         assertEquals("sandbox@bitpay.com", invoice.getNotificationEmail());
+    }
+
+    @Test
+    public void testShouldCreateAndPayInvoice() {
+        Invoice invoice = new Invoice(1.0, "USD");
+        try {
+            basicInvoice = bitpay.createInvoice(invoice);
+            paidInvoice = bitpay.payInvoice(basicInvoice.getId(), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertNotNull(basicInvoice.getId());
+        assertNotNull(paidInvoice.getId());
+        assertEquals(paidInvoice.getStatus(), InvoiceStatus.Complete);
     }
 
     @Test
@@ -730,7 +747,7 @@ public class BitPayTestMerchant {
         String refundEmail = "";
 
         try {
-            createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, null, false, false, false, "RefTest");
+            createdRefund = this.bitpay.createRefund(firstInvoice.getId(), 1.0, false, false, false, "RefTest");
             retrievedRefunds = this.bitpay.getRefunds(firstInvoice.getId());
             firstRefund = retrievedRefunds.get(0);
             retrievedRefund = this.bitpay.getRefund(firstRefund.getId());

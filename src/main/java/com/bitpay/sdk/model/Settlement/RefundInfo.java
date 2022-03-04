@@ -11,6 +11,7 @@ public class RefundInfo {
     private String _supportRequest;
     private String _currency;
     private Hashtable<String, Double> _amounts;
+    private String _reference;
 
     public RefundInfo() {
     }
@@ -43,5 +44,15 @@ public class RefundInfo {
     @JsonProperty("amounts")
     public void setAmount(Hashtable<String, Double> amounts) {
         this._amounts = amounts;
+    }
+
+    @JsonIgnore
+    public String getReference() {
+        return _reference;
+    }
+
+    @JsonProperty("reference")
+    public void setReference(String reference) {
+        this._reference = reference;
     }
 }
