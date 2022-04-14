@@ -263,6 +263,22 @@ public class BitPayTestMerchant {
         }
         assertEquals(invoice.getId(), retreivedInvoice.getId());
     }
+    
+    @Test
+    public void testShouldGetInvoiceByGuid() {
+        Invoice invoice = new Invoice(27.50, "USD");
+        Invoice retreivedInvoice = null;
+        try {
+            invoice = this.bitpay.createInvoice(invoice);
+            //
+            // Must use a merchant token to retrieve this invoice since it was not created on the public facade.
+            retreivedInvoice = this.bitpay.getInvoiceByGuid(invoice.getGuid(), Facade.Merchant, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        assertEquals(invoice.getId(), retreivedInvoice.getId());
+    }
 
     @Test
     public void testShouldCreateInvoiceWithAdditionalParams() {
