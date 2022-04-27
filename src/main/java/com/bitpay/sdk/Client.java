@@ -301,7 +301,7 @@ public class Client {
     }
 
     /**
-     * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade (the public facade requires no authorization).
+     * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade.
      *
      * @param invoiceId   The id of the invoice to retrieve.
      * @param facade      The facade used to create it.
@@ -318,6 +318,35 @@ public class Client {
 
         try {
             HttpResponse response = this.get("invoices/" + invoiceId, params, signRequest);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (JsonProcessingException e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+    
+    /**
+     * Retrieve a BitPay invoice by guid using the specified facade.  The client must have been previously authorized for the specified facade.
+     *
+     * @param guid        The guid of the invoice to retrieve.
+     * @param facade      The facade used to create it.
+     * @param signRequest Signed request.
+     * @return A BitPay Invoice object.
+     * @throws BitPayException       BitPayException class
+     * @throws InvoiceQueryException InvoiceQueryException class
+     */
+    public Invoice getInvoiceByGuid(String guid, String facade, Boolean signRequest) throws BitPayException, InvoiceQueryException {
+    	final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(facade)));
+        Invoice invoice;
+
+        try {
+            HttpResponse response = this.get("invoices/guid/" + guid, params, signRequest);
             invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
