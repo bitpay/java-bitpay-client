@@ -65,6 +65,7 @@ public class Invoice {
     private ArrayList<RefundInfo> _refundInfo;
     private boolean _extendedNotifications = false;
     private String _transactionCurrency;
+    private String _forcedBuyerSelectedTransactionCurrency;
     private BigDecimal _amountPaid;
     private BigDecimal _displayAmountPaid;
     private Hashtable<String, Hashtable<String, String>> _exchangeRates;
@@ -422,6 +423,16 @@ public class Invoice {
 
     // Response fields
     //
+    
+    @JsonIgnore
+    public String getForcedBuyerSelectedTransactionCurrency() {
+        return _forcedBuyerSelectedTransactionCurrency;
+    }
+
+    @JsonProperty("forcedBuyerSelectedTransactionCurrency")
+    public void setForcedBuyerSelectedTransactionCurrency(String _forcedBuyerSelectedTransactionCurrency) {
+        this._forcedBuyerSelectedTransactionCurrency = _forcedBuyerSelectedTransactionCurrency;
+    }
 
     @JsonIgnore
     public String getId() {
