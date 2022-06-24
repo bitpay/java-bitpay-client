@@ -13,6 +13,7 @@ public class Wallet {
     private String _avatar;
     private Boolean _payPro;
     private ArrayList<Currencies> _currencies;
+    private String _image;
 
     public Wallet() {
     }
@@ -61,5 +62,15 @@ public class Wallet {
     @JsonProperty("currencies")
     public void setCurrencies(ArrayList<Currencies> currencies) {
         this._currencies = currencies;
+    }
+    
+    @JsonIgnore
+    public String getImage() {
+        return _image;
+    }
+
+    @JsonProperty("image")
+    public void setImage(String image) {
+        this._image = image;
     }
 }

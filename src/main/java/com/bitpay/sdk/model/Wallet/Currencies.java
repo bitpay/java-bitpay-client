@@ -11,6 +11,7 @@ public class Currencies {
     private Boolean _dappBrowser;
     private Boolean _payPro;
     private CurrencyQr _qr;
+    private String _image;
 
     public Currencies() {
     }
@@ -59,5 +60,15 @@ public class Currencies {
     @JsonProperty("qr")
     public void setQr(CurrencyQr qr) {
         this._qr = qr;
+    }
+    
+    @JsonIgnore
+    public String getImage() {
+        return _image;
+    }
+
+    @JsonProperty("image")
+    public void setImage(String image) {
+        this._image = image;
     }
 }
