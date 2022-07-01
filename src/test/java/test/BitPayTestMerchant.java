@@ -311,7 +311,7 @@ public class BitPayTestMerchant {
         Invoice invoice = new Invoice(1.0, "USD");
         try {
             basicInvoice = bitpay.createInvoice(invoice);
-            paidInvoice = bitpay.payInvoice(basicInvoice.getId(), true);
+            paidInvoice = bitpay.payInvoice(basicInvoice.getId(), "confirmed", true);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
