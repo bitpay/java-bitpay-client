@@ -311,14 +311,14 @@ public class BitPayTestMerchant {
         Invoice invoice = new Invoice(1.0, "USD");
         try {
             basicInvoice = bitpay.createInvoice(invoice);
-            paidInvoice = bitpay.payInvoice(basicInvoice.getId(), "confirmed", true);
+            paidInvoice = bitpay.payInvoice(basicInvoice.getId(), "confirmed");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
         assertNotNull(basicInvoice.getId());
         assertNotNull(paidInvoice.getId());
-        assertEquals(paidInvoice.getStatus(), InvoiceStatus.Complete);
+        assertEquals(paidInvoice.getStatus(), InvoiceStatus.Confirmed);
     }
 
     @Test
