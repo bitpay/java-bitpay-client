@@ -468,15 +468,12 @@ public class Client {
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice payInvoice(String invoiceId, Boolean complete) throws BitPayException, InvoiceUpdateException {
+    public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
-        if (complete == null) {
-            throw new InvoiceUpdateException(null, "It is required to define the whether the invoice will be set to \"complete\" or \"confirmed\".");
+        if (status != null) {
+        	params.put("status", status);
         }
-
-        params.put("complete", complete);
-
         ObjectMapper mapper = new ObjectMapper();
         String json;
         Invoice invoice;
