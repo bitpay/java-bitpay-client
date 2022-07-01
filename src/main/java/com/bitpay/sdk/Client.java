@@ -463,7 +463,7 @@ public class Client {
      * Pay a BitPay invoice with a mock transaction.
      *
      * @param invoiceId The id of the invoice to updated.
-     * @param complete  Indicate if paid invoice should have complete status if true or a confirmed status
+     * @param status  The status of the invoice to be updated, can be "confirmed" or "complete".
      * @return A BitPay generated Invoice object.
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
