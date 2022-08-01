@@ -375,7 +375,7 @@ public class Invoice {
         this._itemizedDetails = _itemizedDetails;
     }
 
-    @JsonIgnore
+    @JsonProperty("autoRedirect")
     public boolean getAutoRedirect() {
         return _autoRedirect;
     }
