@@ -424,7 +424,7 @@ public class Invoice {
     // Response fields
     //
     
-    @JsonIgnore
+    @JsonProperty("forcedBuyerSelectedTransactionCurrency")
     public String getForcedBuyerSelectedTransactionCurrency() {
         return _forcedBuyerSelectedTransactionCurrency;
     }
