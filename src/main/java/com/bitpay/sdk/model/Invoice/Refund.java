@@ -232,7 +232,7 @@ public class Refund {
     /**
      * Sets the {@link #_transactionCurrency} for a Refund.
      * 
-     * @param transactionCurrency The refund fee expressed in terms of transaction currency
+     * @param transactionCurrency The currency used for the invoice transaction
      * 
      * @see   Refund
      */
