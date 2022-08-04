@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,6 +21,22 @@ public class Refund {
     private String _reference;
     private Double _refundFee;
     private Date _lastRefundNotification;
+
+    /**
+     * Amount to be refunded in terms of the transaction currency.
+     */
+    private BigDecimal _transactionAmount;
+
+    /**
+     * The refund fee expressed in terms of transaction currency.
+     */
+    private BigDecimal _transactionRefundFee;
+
+    /**
+     * The currency used for the invoice transaction.
+     */
+    private String _transactionCurrency;
+
 
     private String _id;
     private Date _requestDate;
@@ -148,6 +165,81 @@ public class Refund {
     @JsonProperty("status")
     public void setStatus(String status) {
         this._status = status;
+    }
+
+    /**
+     * Gets the {@link #_transactionAmount} for a Refund.
+     * 
+     * @return the transaction amount of the Refund
+     * 
+     * @see    Refund
+     */
+    @JsonProperty("transactionAmount")
+    public BigDecimal getTransactionAmount() {
+        return _transactionAmount;
+    }
+
+    /**
+     * Sets the {@link #_transactionAmount} for a Refund.
+     * 
+     * @param transactionAmount Amount to be refunded in terms of the transaction currency
+     * 
+     * @see   Refund
+     */
+    @JsonProperty("transactionAmount")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this._transactionAmount = transactionAmount;
+    }
+
+    /**
+     * Gets the {@link #_transactionRefundFee} for a Refund.
+     * 
+     * @return the transaction refund fee of the Refund
+     * 
+     * @see    Refund
+     */
+    @JsonProperty("transactionRefundFee")
+    public BigDecimal getTransactionRefundFee() {
+        return _transactionRefundFee;
+    }
+
+    /**
+     * Sets the {@link #_transactionAmount} for a Refund.
+     * 
+     * @param transactionRefundFee The refund fee expressed in terms of transaction currency
+     * 
+     * @see   Refund
+     */
+    @JsonProperty("transactionRefundFee")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setTransactionRefundFee(BigDecimal transactionRefundFee) {
+        this._transactionRefundFee = transactionRefundFee;
+    }
+
+    /**
+     * Gets the {@link #_transactionCurrency} for a Refund.
+     * 
+     * @return the transaction currency of the Refund
+     * 
+     * @see    Refund
+     */
+    @JsonProperty("transactionCurrency")
+    public String getTransactionCurrency() {
+        return _transactionCurrency;
+    }
+
+    /**
+     * Sets the {@link #_transactionCurrency} for a Refund.
+     * 
+     * @param transactionCurrency The refund fee expressed in terms of transaction currency
+     * 
+     * @see   Refund
+     */
+    @JsonProperty("transactionCurrency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setTransactionCurrency(String transactionCurrency) {
+        this._transactionCurrency = transactionCurrency;
     }
 
     @JsonIgnore
