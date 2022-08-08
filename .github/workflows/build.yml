@@ -6,7 +6,7 @@ on:
       - 'master'
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,19 +21,6 @@ jobs:
           distribution: 'corretto'
       - name: Build with Maven
         run: mvn compile
-  test:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        java-version: [8, 11, 17]
-      
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java-version }}
-          distribution: 'corretto'
-      - name: Test with Maven
+      - name: Test
         run: mvn test
     
