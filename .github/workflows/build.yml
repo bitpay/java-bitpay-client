@@ -19,8 +19,8 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'corretto'
-      - name: Build with Maven
+      - name: Run mvn compile
         run: mvn --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn compile
-      - name: Test
+      - name: Run mvn test
         run: mvn --batch-mode -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn test
     
