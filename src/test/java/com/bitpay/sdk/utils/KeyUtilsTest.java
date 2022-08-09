@@ -16,6 +16,13 @@ public class KeyUtilsTest {
   }
 
   @Test
+  public void whenECKeyCreated_thenReturnBitcoinJECKey() {
+    ECKey expectedClass = new ECKey();
+    ECKey actualClass = KeyUtils.createEcKey();
+    assertEquals(expectedClass.getClass(), actualClass.getClass());
+  }
+
+  @Test
   public void whenCreateEcKey_thenReturnKey() {
     ECKey actualKey = KeyUtils.createEcKey();
     assertNotNull(actualKey);
