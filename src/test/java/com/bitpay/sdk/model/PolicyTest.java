@@ -28,8 +28,8 @@ public class PolicyTest {
     String actualMethod = policy.getMethod();
     List<String> actualParams = policy.getParams();
 
-    assertEquals(actualPolicy, expectedPolicy);
-    assertEquals(actualMethod, expectedMethod);
-    assertEquals(actualParams, expectedParams);
+    assertEquals(expectedPolicy, actualPolicy);
+    assertEquals(expectedMethod, actualMethod);
+    assertEquals(expectedParams, actualParams);
   }
 }
