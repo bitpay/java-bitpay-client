@@ -41,6 +41,9 @@ public class BitPayLoggerTest {
     String expectedInfoMessage = "WARN: This is a test";
     logger.warn("This is a test");
     assertEquals(expectedConstructorMessage + "\n" + expectedInfoMessage, outputStreamCaptor.toString().trim());
+ 
+    BitPayLogger logger2 = new BitPayLogger(BitPayLogger.INFO);
+    logger2.warn("This is a test");
   }
 
   @Test
@@ -50,6 +53,9 @@ public class BitPayLoggerTest {
     String expectedInfoMessage = "ERR: This is a test";
     logger.err("This is a test");
     assertEquals(expectedConstructorMessage + "\n" + expectedInfoMessage, outputStreamCaptor.toString().trim());
+
+    BitPayLogger logger2 = new BitPayLogger(BitPayLogger.INFO);
+    logger2.err("This is a test");
   }
 
   @Test
