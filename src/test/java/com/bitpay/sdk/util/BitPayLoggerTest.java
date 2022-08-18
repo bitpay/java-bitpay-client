@@ -32,6 +32,9 @@ public class BitPayLoggerTest {
     String expectedInfoMessage = "INFO: This is a test";
     logger.info("This is a test");
     assertEquals(expectedConstructorMessage + "\n" + expectedInfoMessage, outputStreamCaptor.toString().trim());
+
+    BitPayLogger logger2 = new BitPayLogger(BitPayLogger.OFF);
+    logger2.info("This is a test");
   }
 
   @Test
