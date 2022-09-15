@@ -6,19 +6,26 @@ import org.junit.jupiter.api.Test;
 
 public class CurrencyQrTest {
   @Test
-  public void givenSetCurrencyQrFields_thenReturnGetPolicyFields() {
-    CurrencyQr currencyQr = new CurrencyQr();
-
+  public void testGetCollapsed() {
     Boolean expectedCollapsed = true;
-    String expectedType = "ADDRESS";
 
+    CurrencyQr currencyQr = new CurrencyQr();
     currencyQr.setCollapsed(expectedCollapsed);
-    currencyQr.setType(expectedType);
 
     Boolean actualCollapsed = currencyQr.getCollapsed();
-    String actualType = currencyQr.getType();
 
     assertEquals(expectedCollapsed, actualCollapsed);
+  }
+
+  @Test
+  public void testGetType() {
+    String expectedType = "ADDRESS";
+
+    CurrencyQr currencyQr = new CurrencyQr();
+    currencyQr.setType(expectedType);
+
+    String actualType = currencyQr.getType();
+
     assertEquals(expectedType, actualType);
   }
 }
