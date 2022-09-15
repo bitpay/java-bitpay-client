@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class RateTest {
   @Test
-  public void testGetName() {
+  public void it_should_get_name() {
     String expectedName = "Bitcoin";
 
     Rate rate = new Rate();
@@ -18,7 +18,7 @@ public class RateTest {
   }
 
   @Test
-  public void testGetCode() {
+  public void it_should_get_code() {
     String expectedCode = "BTC";
 
     Rate rate = new Rate();
@@ -30,7 +30,7 @@ public class RateTest {
   }
 
   @Test
-  public void testGetValue() {
+  public void it_should_vet_value() {
     Double expectedValue = 1.0;
 
     Rate rate = new Rate();

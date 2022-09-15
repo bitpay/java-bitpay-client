@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PolicyTest {
   @Test
-  public void testGetPolicy() {
+  public void it_should_get_policy() {
     String expectedPolicy = "sin";
 
     Policy policy = new Policy();
@@ -21,7 +21,7 @@ public class PolicyTest {
   }
 
   @Test
-  public void testGetMethod() {
+  public void it_should_get_method() {
     String expectedMethod = "requireSin";
 
     Policy policy = new Policy();
@@ -33,7 +33,7 @@ public class PolicyTest {
   }
 
   @Test
-  public void testGetParams() {
+  public void it_should_get_params() {
     List<String> expectedParams = new ArrayList<String>();
     String sin = "Tf1XQVBRPxVeQEQXUb7NTtcoB1qbAzGYBQ9";
     expectedParams.add(sin);

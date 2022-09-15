@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class CurrencyQrTest {
   @Test
-  public void testGetCollapsed() {
+  public void it_should_get_collapsed() {
     Boolean expectedCollapsed = true;
 
     CurrencyQr currencyQr = new CurrencyQr();
@@ -18,7 +18,7 @@ public class CurrencyQrTest {
   }
 
   @Test
-  public void testGetType() {
+  public void it_should_get_type() {
     String expectedType = "ADDRESS";
 
     CurrencyQr currencyQr = new CurrencyQr();

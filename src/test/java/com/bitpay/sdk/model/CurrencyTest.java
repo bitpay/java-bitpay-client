@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CurrencyTest {
   @Test
-  public void testGetIsValidTrue() {
+  public void it_should_validate() {
     String currency = "BTC";
     Boolean isValid = Currency.isValid(currency);
     
@@ -15,7 +15,7 @@ public class CurrencyTest {
   }
 
   @Test
-  public void testGetIsValidFalse() {
+  public void it_should_not_validate() {
     String currency = "FAKECURRENCY";
     Boolean isValid = Currency.isValid(currency);
     

@@ -13,13 +13,13 @@ import org.junit.jupiter.api.Test;
 public class KeyUtilsTest {
 
   @Test
-  public void testKeyUtils() {
+  public void it_should_not_be_null() {
     KeyUtils keyUtils = new KeyUtils();
     assertNotNull(keyUtils);
   }
 
   @Test
-  public void testCreateEcKeyClass() {
+  public void it_should_be_correct_class() {
     ECKey expectedClass = new ECKey();
 
     ECKey actualClass = KeyUtils.createEcKey();
@@ -28,14 +28,14 @@ public class KeyUtilsTest {
   }
 
   @Test
-  public void testCreateEcKeyNotNull() {
+  public void it_should_be_not_null() {
     ECKey actualKey = KeyUtils.createEcKey();
 
     assertNotNull(actualKey);
   }
 
   @Test
-  public void testHexToBytes() {
+  public void it_should_convert_hex_to_bytes() {
     String hex = "0123456789abcdef";
     byte[] expectedBytes = { 1, 35, 69, 103, -119, -85, -51, -17 };
     
@@ -45,7 +45,7 @@ public class KeyUtilsTest {
   }
 
   @Test
-  public void testBytesToHex() {
+  public void it_should_convert_bytes_to_hex() {
     byte[] bytes = { 1, 35, 69, 103, -119, -85, -51, -17 };
     String expectedHex = "0123456789abcdef";
     
