@@ -1,10 +1,10 @@
 package com.bitpay.sdk.util;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -13,7 +13,7 @@ public class BitPayLoggerTest {
   private final PrintStream standardOut = System.out;
   private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
 
-  @Before
+  @BeforeEach
   public void setUp() {
     System.setOut(new PrintStream(outputStreamCaptor));
   }
@@ -70,7 +70,7 @@ public class BitPayLoggerTest {
     assertEquals(expectedConstructorMessage + "\n" + expectedInfoMessage, outputStreamCaptor.toString().trim());
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
       System.setOut(standardOut);
   }

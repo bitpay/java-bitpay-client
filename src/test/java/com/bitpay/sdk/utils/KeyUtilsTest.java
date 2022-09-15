@@ -1,11 +1,14 @@
 package com.bitpay.sdk.utils;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.bitcoinj.core.ECKey;
-import org.junit.Test;
 
 import com.bitpay.sdk.util.KeyUtils;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 public class KeyUtilsTest {
 
