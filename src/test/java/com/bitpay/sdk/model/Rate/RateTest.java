@@ -6,22 +6,38 @@ import org.junit.jupiter.api.Test;
 
 public class RateTest {
   @Test
-  public void givenSetRateFields_thenReturnGetRateFields() {
+  public void testGetName() {
     String expectedName = "Bitcoin";
-    String expectedCode = "BTC";
-    Double expectedValue = 1.0;
 
     Rate rate = new Rate();
     rate.setName(expectedName);
-    rate.setCode(expectedCode);
-    rate.setValue(expectedValue);
 
     String actualName = rate.getName();
-    String actualCode = rate.getCode();
-    Double actualValue = rate.getValue();
 
     assertEquals(expectedName, actualName);
+  }
+
+  @Test
+  public void testGetCode() {
+    String expectedCode = "BTC";
+
+    Rate rate = new Rate();
+    rate.setCode(expectedCode);
+
+    String actualCode = rate.getCode();
+
     assertEquals(expectedCode, actualCode);
+  }
+
+  @Test
+  public void testGetValue() {
+    Double expectedValue = 1.0;
+
+    Rate rate = new Rate();
+    rate.setValue(expectedValue);
+
+    Double actualValue = rate.getValue();
+
     assertEquals(expectedValue, actualValue);
   }
 }
