@@ -1,35 +1,48 @@
 package com.bitpay.sdk.model;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PolicyTest {
   @Test
-  public void givenSetPolicyFields_thenReturnGetPolicyFields() {
-    Policy policy = new Policy();
-    List<String> params = new ArrayList<String>();
-    
-    String expectedSIN = "Tf1XQVBRPxVeQEQXUb7NTtcoB1qbAzGYBQ9";
-    params.add(expectedSIN);
-
+  public void it_should_get_policy() {
     String expectedPolicy = "sin";
-    String expectedMethod = "requireSin";
-    List<String> expectedParams = params;
 
+    Policy policy = new Policy();
     policy.setPolicy(expectedPolicy);
-    policy.setMethod(expectedMethod);
-    policy.setParams(expectedParams);
 
     String actualPolicy = policy.getPolicy();
-    String actualMethod = policy.getMethod();
-    List<String> actualParams = policy.getParams();
 
     assertEquals(expectedPolicy, actualPolicy);
+  }
+
+  @Test
+  public void it_should_get_method() {
+    String expectedMethod = "requireSin";
+
+    Policy policy = new Policy();
+    policy.setMethod(expectedMethod);
+
+    String actualMethod = policy.getMethod();
+
     assertEquals(expectedMethod, actualMethod);
+  }
+
+  @Test
+  public void it_should_get_params() {
+    List<String> expectedParams = new ArrayList<String>();
+    String sin = "Tf1XQVBRPxVeQEQXUb7NTtcoB1qbAzGYBQ9";
+    expectedParams.add(sin);
+
+    Policy policy = new Policy();
+    policy.setParams(expectedParams);
+
+    List<String> actualParams = policy.getParams();
+
     assertEquals(expectedParams, actualParams);
   }
 }

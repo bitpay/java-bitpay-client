@@ -1,24 +1,31 @@
 package com.bitpay.sdk.model.Wallet;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CurrencyQrTest {
   @Test
-  public void givenSetCurrencyQrFields_thenReturnGetPolicyFields() {
-    CurrencyQr currencyQr = new CurrencyQr();
-
+  public void it_should_get_collapsed() {
     Boolean expectedCollapsed = true;
-    String expectedType = "ADDRESS";
 
+    CurrencyQr currencyQr = new CurrencyQr();
     currencyQr.setCollapsed(expectedCollapsed);
-    currencyQr.setType(expectedType);
 
     Boolean actualCollapsed = currencyQr.getCollapsed();
-    String actualType = currencyQr.getType();
 
     assertEquals(expectedCollapsed, actualCollapsed);
+  }
+
+  @Test
+  public void it_should_get_type() {
+    String expectedType = "ADDRESS";
+
+    CurrencyQr currencyQr = new CurrencyQr();
+    currencyQr.setType(expectedType);
+
+    String actualType = currencyQr.getType();
+
     assertEquals(expectedType, actualType);
   }
 }
