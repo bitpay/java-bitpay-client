@@ -1,8 +1,3 @@
-/*
- * Copyright 2020 MarketNation, Inc.
- * All rights reserved.
- */
-
 package com.bitpay.sdk;
 
 import com.fasterxml.jackson.databind.JsonNode;
