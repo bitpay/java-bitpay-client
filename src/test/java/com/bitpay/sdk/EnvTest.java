@@ -1,8 +1,3 @@
-/*
- * Copyright 2020 MarketNation, Inc.
- * All rights reserved.
- */
-
 package com.bitpay.sdk;
 
 import org.junit.jupiter.api.Assertions;
