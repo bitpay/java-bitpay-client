@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk;
 
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,8 +1,6 @@
 /*
- * Copyright 2020 MarketNation, Inc.
- * All rights reserved.
+ * Copyright (c) 2019 BitPay
  */
-
 package com.bitpay.sdk.model.Rate;
 
 import com.bitpay.sdk.Client;

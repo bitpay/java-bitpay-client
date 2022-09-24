@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk.model.Rate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

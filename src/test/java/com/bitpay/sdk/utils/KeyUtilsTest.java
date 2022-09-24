@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk.utils;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
