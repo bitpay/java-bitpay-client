@@ -35,7 +35,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_token() {
-        final String token = "SomeString";
+        final String token = "6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setToken(token);
@@ -62,7 +62,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_number() {
-        final String number = "SomeString";
+        final String number = "bill1234-EFGH";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setNumber(number);
@@ -143,7 +143,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_phone() {
-        final String phone = "SomeString";
+        final String phone = "555-123-456";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setPhone(phone);
@@ -152,7 +152,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_dueDate() {
-        final String dueDate = "SomeString";
+        final String dueDate = "2021-05-21T09:51:04.126Z";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setDueDate(dueDate);
@@ -189,7 +189,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_createDate() {
-        final String createDate = "SomeString";
+        final String createDate = "2021-05-21T09:51:04.126Z";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setCreateDate(createDate);
@@ -198,7 +198,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_id() {
-        final String id = "SomeString";
+        final String id = "3Zpmji8bRKxWJo2NJbWX5H";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setId(id);
@@ -207,7 +207,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_merchant() {
-        final String merchant = "SomeString";
+        final String merchant = "7HyKWn3d4xdhAMQYAEVxVq";
         Bill testedClass = this.getTestedClass();
 
         testedClass.setMerchant(merchant);
