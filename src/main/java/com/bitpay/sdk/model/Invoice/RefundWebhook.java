@@ -132,7 +132,7 @@ public class RefundWebhook {
 
 	@JsonProperty("buyerPaysRefundFee")
 	public void setBuyerPaysRefundFee(boolean buyerPaysRefundFee) {
-		this._buyerPaysRefundFee = _buyerPaysRefundFee;
+		this._buyerPaysRefundFee = buyerPaysRefundFee;
 	}
 
 	@JsonProperty("requestDate")
@@ -143,7 +143,7 @@ public class RefundWebhook {
 
 	@JsonProperty("requestDate")
 	public void setRequestDate(Date requestDate) {
-		this._requestDate = _requestDate;
+		this._requestDate = requestDate;
 	}
 
 }
