@@ -74,13 +74,31 @@ public class PayoutInfo {
         this._merchantEin = merchantEin;
     }
 
+    /**
+     * It should be replaced by getLabel().
+     */
     @JsonIgnore
+    @Deprecated
     public String getlabel() {
         return _label;
     }
 
+    @JsonIgnore
+    public String getLabel() {
+        return _label;
+    }
+
+    /**
+     * It should be replaced by setLabel().
+     */
     @JsonProperty("label")
+    @Deprecated
     public void setlabel(String label) {
+        this._label = label;
+    }
+
+    @JsonProperty("label")
+    public void setLabel(String label) {
         this._label = label;
     }
 
@@ -152,7 +170,7 @@ public class PayoutInfo {
     public String getBankAddress2() { return _bankAddress2; }
 
     @JsonProperty("bankAddress2")
-    public void getBankAddress2(String bankAddress2) { this._bankAddress2 = bankAddress2; }
+    public void setBankAddress2(String bankAddress2) { this._bankAddress2 = bankAddress2; }
 
     @JsonIgnore
     public String getIban() { return _iban; }
