@@ -1,5 +1,19 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Invoice.
+ *
+ * @see com.bitpay.sdk.exceptions.InvoiceCancellationException
+ * @see com.bitpay.sdk.exceptions.InvoiceCreationException
+ * @see com.bitpay.sdk.exceptions.InvoiceQueryException
+ * @see com.bitpay.sdk.exceptions.InvoiceUpdateException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class InvoiceException extends BitPayException {
     /**
      * Construct the InvoiceException.

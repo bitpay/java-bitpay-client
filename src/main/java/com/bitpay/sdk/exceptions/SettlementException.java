@@ -1,5 +1,16 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Settlement.
+
+ * @see com.bitpay.sdk.exceptions.SettlementQueryException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class SettlementException extends BitPayException {
     /**
      * Construct the SettlementException.
