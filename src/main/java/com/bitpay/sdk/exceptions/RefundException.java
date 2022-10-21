@@ -1,5 +1,19 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Refund.
+ *
+ * @see com.bitpay.sdk.exceptions.RefundCancellationException
+ * @see com.bitpay.sdk.exceptions.RefundCreationException
+ * @see com.bitpay.sdk.exceptions.RefundUpdateException
+ * @see com.bitpay.sdk.exceptions.RefundQueryException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class RefundException extends BitPayException {
     /**
      * Construct the RefundException.

@@ -1,5 +1,20 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Payout Recipient.
+ *
+ * @see com.bitpay.sdk.exceptions.PayoutRecipientCancellationException
+ * @see com.bitpay.sdk.exceptions.PayoutRecipientCreationException
+ * @see com.bitpay.sdk.exceptions.PayoutRecipientUpdateException
+ * @see com.bitpay.sdk.exceptions.PayoutRecipientNotificationException
+ * @see com.bitpay.sdk.exceptions.PayoutRecipientQueryException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class PayoutRecipientException extends BitPayException {
     /**
      * Construct the PayoutRecipientException.

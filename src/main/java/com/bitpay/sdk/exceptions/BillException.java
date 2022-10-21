@@ -1,5 +1,19 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Bill.
+ *
+ * @see com.bitpay.sdk.exceptions.BillCreationException
+ * @see com.bitpay.sdk.exceptions.BillQueryException
+ * @see com.bitpay.sdk.exceptions.BillDeliveryException
+ * @see com.bitpay.sdk.exceptions.BillUpdateException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class BillException extends BitPayException {
     /**
      * Construct the BillException.

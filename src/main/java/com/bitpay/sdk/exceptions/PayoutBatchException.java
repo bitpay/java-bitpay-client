@@ -1,5 +1,19 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk.exceptions;
 
+/**
+ * Exception which is extended by other exceptions related with Payout Batch.
+ *
+ * @see com.bitpay.sdk.exceptions.PayoutBatchCancellationException
+ * @see com.bitpay.sdk.exceptions.PayoutBatchCreationException
+ * @see com.bitpay.sdk.exceptions.PayoutBatchNotificationException
+ * @see com.bitpay.sdk.exceptions.PayoutBatchQueryException
+ *
+ * @link https://bitpay.com/api/#rest-api-error-codes
+ */
 public class PayoutBatchException extends BitPayException {
     /**
      * Construct the PayoutBatchException.
