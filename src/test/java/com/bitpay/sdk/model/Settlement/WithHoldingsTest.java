@@ -62,7 +62,7 @@ public class WithHoldingsTest {
     }
 
     @Test
-    public void it_should_change_label() {
+    public void it_should_change_deprecated_label() {
         // given
         String expected = "expectedString";
         WithHoldings testedClass = this.getTestedClass();
@@ -72,6 +72,19 @@ public class WithHoldingsTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getlabel());
+    }
+
+    @Test
+    public void it_should_change_label() {
+        // given
+        String expected = "expectedString";
+        WithHoldings testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setLabel(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getLabel());
     }
 
     @Test
