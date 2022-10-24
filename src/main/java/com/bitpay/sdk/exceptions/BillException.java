@@ -12,7 +12,7 @@ package com.bitpay.sdk.exceptions;
  * @see com.bitpay.sdk.exceptions.BillDeliveryException
  * @see com.bitpay.sdk.exceptions.BillUpdateException
  *
- * @link https://bitpay.com/api/#rest-api-error-codes
+ * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
  */
 public class BillException extends BitPayException {
     /**

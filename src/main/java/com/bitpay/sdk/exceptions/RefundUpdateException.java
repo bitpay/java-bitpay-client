@@ -13,7 +13,6 @@ package com.bitpay.sdk.exceptions;
  *   <li>Second two digits: Resource</li>
  *   <li>Final two digits: Error</li>
  * </ul>
- * <p>
  * <p>HTTP method digits for this class: 02</p>
  * <p>Resource digits for the this class: 03</p>
  * <p>Error digits for this class:</p>
@@ -26,12 +25,11 @@ package com.bitpay.sdk.exceptions;
  *     <li>07 - Invalid invoice state for refund</li>
  *     <li>08 - Fees are greater than refund amount</li>
  * </ul>
- * </p>
  * <pre>
  * eg 020301
  * </pre>
  *
- * @link https://bitpay.com/api/#rest-api-error-codes
+ * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
  */
 public class RefundUpdateException extends RefundException {
     /**

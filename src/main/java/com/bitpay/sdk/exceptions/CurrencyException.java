@@ -8,8 +8,7 @@ package com.bitpay.sdk.exceptions;
  * Exception which is extended by other exceptions related with Currency.
  *
  * @see com.bitpay.sdk.exceptions.CurrencyQueryException
- *
- * @link https://bitpay.com/api/#rest-api-error-codes
+ * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
  */
 public class CurrencyException extends BitPayException {
     /**

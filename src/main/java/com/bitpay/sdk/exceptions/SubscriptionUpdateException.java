@@ -13,7 +13,6 @@ package com.bitpay.sdk.exceptions;
  *   <li>Second two digits: Resource</li>
  *   <li>Final two digits: Error</li>
  * </ul>
- * <p>
  * <p>HTTP method digits for this class: 03</p>
  * <p>Resource digits for the this class: 00</p>
  * <p>Error digits for this class:</p>
@@ -23,12 +22,11 @@ package com.bitpay.sdk.exceptions;
  *     <li>02 - Invalid parameters</li>
  *     <li>03 - Missing parameters</li>
  * </ul>
- * </p>
  * <pre>
  * eg 030002
  * </pre>
  *
- * @link https://bitpay.com/api/#rest-api-error-codes
+ * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
  */
 public class SubscriptionUpdateException extends SubscriptionException {
     /**
