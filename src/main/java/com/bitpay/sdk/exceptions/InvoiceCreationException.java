@@ -13,7 +13,6 @@ package com.bitpay.sdk.exceptions;
  *   <li>Second two digits: Resource</li>
  *   <li>Final two digits: Error</li>
  * </ul>
- * <p>
  * <p>HTTP method digits for this class: 01</p>
  * <p>Resource digits for the Invoice: 01</p>
  * <p>Error digits for the Invoice:</p>
@@ -34,12 +33,11 @@ package com.bitpay.sdk.exceptions;
  *     <li>17 - Invalid invoice state</li>
  *     <li>18 - Misconfigured account</li>
  * </ul>
- * </p>
  * <pre>
  * eg 010101
  * </pre>
  *
- * @link https://bitpay.com/api/#rest-api-error-codes
+ * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
  */
 public class InvoiceCreationException extends InvoiceException {
     /**
