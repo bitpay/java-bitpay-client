@@ -69,7 +69,7 @@ public class BitPayException extends ClientProtocolException {
 
     /**
      * <p>Reason phrase including BitPay Code and BitPay Message.</p>
-     * <p>eg. BITPAY-BILL-UPDATE: Failed to update bill -> failed to deserialize BitPay server response (Bill) </p>
+     * <p>eg. BITPAY-BILL-UPDATE: Failed to update bill -&gt; failed to deserialize BitPay server response (Bill) </p>
      * @return String
      */
     public String getReasonPhrase() {
