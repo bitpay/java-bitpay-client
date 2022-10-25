@@ -1,5 +1,10 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk.util;
-
+/*
+ * Copyright (c) 2019 BitPay
+ */
 import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.ECKey.ECDSASignature;
@@ -11,26 +16,49 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * The type Key utils.
+ */
 public class KeyUtils {
 
     final private static char[] hexArray = "0123456789abcdef".toCharArray();
     private static String PrivateKeyFile;
     private static URI privateKey;
 
+    /**
+     * Instantiates a new Key utils.
+     */
     public KeyUtils() {
     }
 
+    /**
+     * Check if private key exists.
+     *
+     * @param privateKeyFile the private key file
+     * @return the boolean
+     */
     public static boolean privateKeyExists(String privateKeyFile) {
         PrivateKeyFile = privateKeyFile;
 
         return new File(privateKeyFile).exists();
     }
 
+    /**
+     * Create EC key.
+     *
+     * @return the ec key
+     */
     public static ECKey createEcKey() {
         //Default constructor uses SecureRandom numbers.
         return new ECKey();
     }
 
+    /**
+     * Create EC key from hex string.
+     *
+     * @param privateKey the private key
+     * @return the ec key
+     */
     public static ECKey createEcKeyFromHexString(String privateKey) {
         byte[] bytes = hexToBytes(privateKey);
         ECKey ecKey = ECKey.fromASN1(bytes);
@@ -38,10 +66,23 @@ public class KeyUtils {
         return ecKey;
     }
 
+    /**
+     * Create EC key from hex string private key file.
+     *
+     * @param privKeyFile the priv key file
+     * @return the ec key
+     * @throws IOException the io exception
+     */
     public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException {
         return createEcKeyFromHexString(getKeyStringFromFile(privKeyFile));
     }
 
+    /**
+     * Load EC key.
+     *
+     * @return the ec key
+     * @throws IOException the io exception
+     */
     public static ECKey loadEcKey() throws IOException {
         FileInputStream fileInputStream;
         File file;
@@ -65,6 +106,14 @@ public class KeyUtils {
         return ECKey.fromASN1(bytes);
     }
 
+    /**
+     * Load EC key.
+     *
+     * @param privateKey the private key
+     * @return the ec key
+     * @throws IOException        the io exception
+     * @throws URISyntaxException the uri syntax exception
+     */
     public static ECKey loadEcKey(URI privateKey) throws IOException, URISyntaxException {
         KeyUtils.privateKey = privateKey;
         File file = new File(privateKey);
@@ -76,6 +125,13 @@ public class KeyUtils {
         return loadEcKey();
     }
 
+    /**
+     * Gets key string from file.
+     *
+     * @param filename the filename
+     * @return the key string from file
+     * @throws IOException the io exception
+     */
     public static String getKeyStringFromFile(String filename) throws IOException {
         BufferedReader br;
 
@@ -88,6 +144,12 @@ public class KeyUtils {
         return line;
     }
 
+    /**
+     * Save EC key.
+     *
+     * @param ecKey the ec key
+     * @throws IOException the io exception
+     */
     public static void saveEcKey(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
         File file;
@@ -104,6 +166,12 @@ public class KeyUtils {
         output.close();
     }
 
+    /**
+     * Save EC key as hex.
+     *
+     * @param ecKey the ec key
+     * @throws IOException the io exception
+     */
     public static void saveEcKeyAsHex(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
         PrintWriter file;
@@ -119,6 +187,13 @@ public class KeyUtils {
         file.close();
     }
 
+    /**
+     * Load EC key as hex string.
+     *
+     * @param ecKey the ec key
+     * @return the string
+     * @throws IOException the io exception
+     */
     public static String loadEcKeyAsHex(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
         String keyHex = bytesToHex(bytes);
@@ -126,6 +201,14 @@ public class KeyUtils {
         return keyHex;
     }
 
+    /**
+     * Save EC key.
+     *
+     * @param ecKey      the ec key
+     * @param privateKey the private key
+     * @throws IOException        the io exception
+     * @throws URISyntaxException the uri syntax exception
+     */
     public static void saveEcKey(ECKey ecKey, URI privateKey) throws IOException, URISyntaxException {
         File file = new File(privateKey);
         //we shan't overwrite an existing file
@@ -137,6 +220,13 @@ public class KeyUtils {
         saveEcKey(ecKey);
     }
 
+    /**
+     * Derive sin string.
+     *
+     * @param ecKey the ec key
+     * @return the string
+     * @throws IllegalArgumentException the illegal argument exception
+     */
     public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).
         byte[] pubKeyHash = ecKey.getPubKeyHash();
@@ -163,6 +253,14 @@ public class KeyUtils {
         return Base58.encode(unencodedBytes);
     }
 
+    /**
+     * Sign EC Key.
+     *
+     * @param key   the key
+     * @param input the input
+     * @return the string
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
         byte[] data = input.getBytes(StandardCharsets.UTF_8);
 
@@ -179,6 +277,13 @@ public class KeyUtils {
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
     }
 
+    /**
+     * Convert hex to bytes.
+     *
+     * @param hex the hex
+     * @return the byte []
+     * @throws IllegalArgumentException the illegal argument exception
+     */
     public static byte[] hexToBytes(String hex) throws IllegalArgumentException {
         char[] hexArray = hex.toCharArray();
 
@@ -195,6 +300,12 @@ public class KeyUtils {
         return arr;
     }
 
+    /**
+     * Convert bytes to hex.
+     *
+     * @param bytes the bytes
+     * @return the string
+     */
     public static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
 
