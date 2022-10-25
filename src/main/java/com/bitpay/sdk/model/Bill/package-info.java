@@ -3,6 +3,6 @@
  */
 
 /**
- * BitPay SDK Exceptions.
+ * BitPay SDK Bill.
  */
 package com.bitpay.sdk.model.Bill;

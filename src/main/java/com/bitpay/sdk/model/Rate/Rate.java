@@ -61,7 +61,7 @@ public class Rate {
 
     /**
      * Returns the name of the rate's currency or cryptocurrency.
-     * 
+     *
      * @return the name of the rate's currency or cryptocurrency
      */
     @JsonIgnore
@@ -71,7 +71,7 @@ public class Rate {
 
     /**
      * Sets the name of the rate's currency or cryptocurrency.
-     * 
+     *
      * @param name the name of the rate
      */
     @JsonProperty("name")
@@ -81,7 +81,7 @@ public class Rate {
 
     /**
      * Returns the rate's ISO 4217 currency code or cryptocurrency code.
-     * 
+     *
      * @return the rate's ISO 4217 currency code or cryptocurrency code
      */
     @JsonIgnore
@@ -91,7 +91,7 @@ public class Rate {
 
     /**
      * Sets the rate's ISO 4217 currency code or cryptocurrency code.
-     * 
+     *
      * @param code the rate's ISO 4217 currency code or cryptocurrency code
      */
     @JsonProperty("code")
@@ -101,7 +101,7 @@ public class Rate {
 
     /**
      * Returns the numeric value of the rate.
-     * 
+     *
      * @return the numeric value of the rate, to two decimal places
      */
     @JsonIgnore
@@ -111,7 +111,7 @@ public class Rate {
 
     /**
      * Sets the numeric value of the rate.
-     * 
+     *
      * @param value the numeric value of the rate, to two decimal places
      */
     @JsonProperty("rate")
