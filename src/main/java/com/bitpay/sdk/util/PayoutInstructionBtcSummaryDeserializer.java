@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk.util;
 
 import com.bitpay.sdk.model.Payout.PayoutInstructionBtcSummary;
@@ -8,8 +11,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
+/**
+ * The type Payout instruction btc summary deserializer.
+ */
 public class PayoutInstructionBtcSummaryDeserializer extends JsonDeserializer<PayoutInstructionBtcSummary> {
 
+    /**
+     * Deserialize to PayoutInstructionBtcSummary.
+     *
+     * @param jp JsonParser
+     * @param dc DeserializationContext
+     * @return PayoutInstructionBtcSummary
+     * @throws IOException
+     */
     @Override
     public PayoutInstructionBtcSummary deserialize(JsonParser jp, DeserializationContext dc) throws IOException {
         Double paid = 0.0;
