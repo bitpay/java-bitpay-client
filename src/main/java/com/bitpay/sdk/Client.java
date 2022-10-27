@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
+
 package com.bitpay.sdk;
 
 import com.bitpay.sdk.exceptions.*;
@@ -51,10 +55,12 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
+ * The type Client. Class is responsible for API calls.
+ *
  * @author Antonio Buedo
- * @version 8.5.2208
- * See bitpay.com/api for more information.
- * date 04.03.2022
+ * @version 8.5.2208 date 04.03.2022
+ * @see <a href="https://bitpay.com/api/#rest-api">REST API</a>
+ *
  */
 
 public class Client {
@@ -329,7 +335,7 @@ public class Client {
 
         return invoice;
     }
-    
+
     /**
      * Retrieve a BitPay invoice by guid using the specified facade.  The client must have been previously authorized for the specified facade.
      *
@@ -1169,7 +1175,7 @@ public class Client {
 
         return recipient;
     }
-    
+
     /**
      * Update a Payout Recipient.
      *
@@ -1246,7 +1252,7 @@ public class Client {
 
     /**
      * Request a payout recipient notification
-     * 
+     *
      * @param recipientId String A BitPay recipient ID.
      * @return True if the notification was successfully sent, false otherwise.
      * @throws BitPayException                      BitPayException class
@@ -1284,7 +1290,7 @@ public class Client {
 
         return result;
     }
-    
+
     /**
      * Submit a BitPay Payout.
      *
@@ -1319,7 +1325,7 @@ public class Client {
     /**
      * Retrieve a BitPay payout by payout id using. The client must have been
      * previously authorized for the payout facade.
-     * 
+     *
      * @param payoutId String The id of the payout to retrieve.
      * @return A BitPay Payout object.
      * @throws BitPayException      BitPayException class
@@ -1435,7 +1441,7 @@ public class Client {
 
     /**
      * Request a payout notification
-     * 
+     *
      * @param payoutId String The id of the payout to notify..
      * @return True if the notification was successfully sent, false otherwise.
      * @throws BitPayException             BitPayException class
@@ -1563,7 +1569,7 @@ public class Client {
 
         return batches;
     }
-    
+
     /**
      * Retrieve a collection of BitPay payout batches.
      *
@@ -1619,7 +1625,7 @@ public class Client {
     /**
      * Retrieve a BitPay payout batch by batch id using. The client must have been
      * previously authorized for the payout facade.
-     * 
+     *
      * @param payoutBatchId String The id of the batch to retrieve.
      * @return A BitPay PayoutBatch object.
      * @throws BitPayException           BitPayException class
@@ -1680,15 +1686,14 @@ public class Client {
 
         return result;
     }
-    
+
     /**
      * Request a payout batch notification
-     * 
+     *
      * @param payoutBatchId String The id of the payout batch to notify..
      * @return True if the notification was successfully sent, false otherwise.
      * @throws BitPayException                  BitPayException class
-     * @throws PayoutBatchNotificationException PayoutBatchNotificationException
-     *                                          class
+     * @throws PayoutBatchNotificationException PayoutBatchNotificationException class
      */
     public Boolean requestPayoutBatchNotification(String payoutBatchId)
             throws BitPayException, PayoutBatchNotificationException {
@@ -1972,10 +1977,27 @@ public class Client {
     }
 
 
+    /**
+     * Send GET request.
+     *
+     * @param uri        the uri
+     * @param parameters the parameters
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse get(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
         return get(uri, parameters, true);
     }
 
+    /**
+     * Send GET request.
+     *
+     * @param uri               the uri
+     * @param parameters        the parameters
+     * @param signatureRequired the signature required
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse get(String uri, List<BasicNameValuePair> parameters, boolean signatureRequired) throws BitPayException {
         try {
 
@@ -2009,6 +2031,13 @@ public class Client {
         }
     }
 
+    /**
+     * Send GET request.
+     *
+     * @param uri the uri
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse get(String uri) throws BitPayException {
         return this.get(uri, null, false);
     }
@@ -2045,10 +2074,27 @@ public class Client {
         }
     }
 
+    /**
+     * Send POST request.
+     *
+     * @param uri  the uri
+     * @param json the json
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse post(String uri, String json) throws BitPayException {
         return this.post(uri, json, false);
     }
 
+    /**
+     * Send POST request.
+     *
+     * @param uri               the uri
+     * @param json              the json
+     * @param signatureRequired the signature required
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse post(String uri, String json, boolean signatureRequired) throws BitPayException {
         try {
             HttpPost post = new HttpPost(_baseUrl + uri);
@@ -2078,6 +2124,14 @@ public class Client {
         }
     }
 
+    /**
+     * Send PUT request.
+     *
+     * @param uri  the uri
+     * @param json the json
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse update(String uri, String json) throws BitPayException {
         try {
             HttpPut put = new HttpPut(_baseUrl + uri);
@@ -2104,6 +2158,13 @@ public class Client {
         }
     }
 
+    /**
+     * Convert HttpResponse for Json string.
+     *
+     * @param response the response
+     * @return the string
+     * @throws BitPayException the bit pay exception
+     */
     public String responseToJsonString(HttpResponse response) throws BitPayException {
         if (response == null) {
             throw new BitPayException(null, "Error: HTTP response is null");
@@ -2187,7 +2248,7 @@ public class Client {
     }
 
     /**
-     * Loads the configuration file (JSON)
+     * Loads the configuration file (JSON).
      *
      * @throws BitPayException BitPayException class
      */
@@ -2209,7 +2270,7 @@ public class Client {
     }
 
     /**
-     * Builds the configuration object
+     * Builds the configuration object.
      *
      * @param privateKey The full path to the securely located private key.
      * @param tokens     Env.Tokens object containing the BitPay's API tokens.
@@ -2283,9 +2344,9 @@ public class Client {
             // No action required
         }
     }
-    
-    
-    
+
+
+
     /**
      * Gets info for specific currency.
      *
