@@ -15,6 +15,7 @@ public class DateSerializerTest {
     @Test
     public void it_should_serialize_date() throws IOException {
         // given
+        System.setProperty("user.timezone", "UTC");
         DateSerializer testedClass = new DateSerializer();
         JsonGenerator jsonGenerator = Mockito.mock(JsonGenerator.class);
         SerializerProvider serializerProvider = Mockito.mock(SerializerProvider.class);
@@ -24,6 +25,6 @@ public class DateSerializerTest {
         testedClass.serialize(value, jsonGenerator, serializerProvider);
 
         // then
-        Mockito.verify(jsonGenerator, Mockito.times(1)).writeString("1977-05-24T20:07:03.232Z");
+        Mockito.verify(jsonGenerator, Mockito.times(1)).writeString("1977-05-24T18:07:03.232Z");
     }
 }
