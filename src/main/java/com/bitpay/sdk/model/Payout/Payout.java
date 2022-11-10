@@ -11,11 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The type Payout.
@@ -74,9 +71,22 @@ public class Payout {
     /**
      * Constructor, create an instruction-full request Payout object.
      *
-     * @param amount         Date when request is effective. Note that the time of                       day will automatically be set to 09:00:00.000 UTC time                       for the given day. Only requests submitted before                       09:00:00.000 UTC are guaranteed to be processed on the                       same day.
-     * @param currency       The three digit currency string for the PayoutBatch to                       use.
-     * @param ledgerCurrency Ledger currency code set for the payout request                       (ISO4217 3-character currency code), it indicates on                       which ledger the payoutrequest will be recorded. If not                       provided in the request, this parameter will be set by                       default to the active ledger currency on your                       account,e.g. your settlement currency. Supported ledger                       currency codes for payout requestsare EUR, USD, GBP,                       CAD, NZD, AUD, ZAR, JPY, BTC, BCH, GUSD, USDC, PAX,XRP,                       BUSD, DOGE,ETH, WBTC, DAI
+     * @param amount         Date when request is effective. Note that the time of
+     *                       day will automatically be set to 09:00:00.000 UTC time
+     *                       for the given day. Only requests submitted before
+     *                       09:00:00.000 UTC are guaranteed to be processed on the
+     *                       same day.
+     * @param currency       The three digit currency string for the PayoutBatch to
+     *                       use.
+     * @param ledgerCurrency Ledger currency code set for the payout request
+     *                       (ISO4217 3-character currency code), it indicates on
+     *                       which ledger the payoutrequest will be recorded. If not
+     *                       provided in the request, this parameter will be set by
+     *                       default to the active ledger currency on your
+     *                       account,e.g. your settlement currency. Supported ledger
+     *                       currency codes for payout requestsare EUR, USD, GBP,
+     *                       CAD, NZD, AUD, ZAR, JPY, BTC, BCH, GUSD, USDC, PAX,XRP,
+     *                       BUSD, DOGE,ETH, WBTC, DAI
      */
     public Payout(Double amount, String currency, String ledgerCurrency) {
         this._amount = amount;
@@ -90,9 +100,10 @@ public class Payout {
     /**
      * Gets resource token.
      * <p>
-     *  This token is actually derived from the API token -
-     *  used to submit the payout and is tied to the specific payout resource id created..
+     * This token is actually derived from the API token -
+     * used to submit the payout and is tied to the specific payout resource id created..
      * </p>
+     *
      * @return the token
      */
     @JsonProperty("token")
