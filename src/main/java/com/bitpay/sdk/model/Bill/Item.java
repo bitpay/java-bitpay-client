@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
 
-    private String _id;
-    private String _description;
-    private Double _price;
-    private Integer _quantity;
+    private String id;
+    private String description;
+    private Double price;
+    private Integer quantity;
 
     /**
      * Instantiates a new Item.
@@ -32,7 +32,7 @@ public class Item {
     @JsonProperty("id")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -42,7 +42,7 @@ public class Item {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -53,7 +53,7 @@ public class Item {
     @JsonProperty("description")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Item {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -74,7 +74,7 @@ public class Item {
     @JsonProperty("price")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getPrice() {
-        return _price;
+        return this.price;
     }
 
     /**
@@ -84,7 +84,7 @@ public class Item {
      */
     @JsonProperty("price")
     public void setPrice(Double price) {
-        this._price = price;
+        this.price = price;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Item {
     @JsonProperty("quantity")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Integer getQuantity() {
-        return _quantity;
+        return this.quantity;
     }
 
     /**
@@ -105,6 +105,6 @@ public class Item {
      */
     @JsonProperty("quantity")
     public void setQuantity(Integer quantity) {
-        this._quantity = quantity;
+        this.quantity = quantity;
     }
 }

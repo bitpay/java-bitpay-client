@@ -16,10 +16,10 @@ import java.util.Hashtable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
-    private String _supportRequest;
-    private String _currency;
-    private Hashtable<String, Double> _amounts;
-    private String _reference;
+    private String supportRequest;
+    private String currency;
+    private Hashtable<String, Double> amounts;
+    private String reference;
 
     /**
      * Instantiates a new Refund info.
@@ -34,7 +34,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public String getSupportRequest() {
-        return _supportRequest;
+        return this.supportRequest;
     }
 
     /**
@@ -44,7 +44,7 @@ public class RefundInfo {
      */
     @JsonProperty("supportRequest")
     public void setSupportRequest(String supportRequest) {
-        this._supportRequest = supportRequest;
+        this.supportRequest = supportRequest;
     }
 
     /**
@@ -54,7 +54,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -64,7 +64,7 @@ public class RefundInfo {
      */
     @JsonProperty("currency")
     public void setCurrency(String currency) {
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -76,7 +76,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public Hashtable<String, Double> getAmount() {
-        return _amounts;
+        return this.amounts;
     }
 
     /**
@@ -88,7 +88,7 @@ public class RefundInfo {
      */
     @JsonProperty("amounts")
     public void setAmount(Hashtable<String, Double> amounts) {
-        this._amounts = amounts;
+        this.amounts = amounts;
     }
 
     /**
@@ -101,7 +101,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public String getReference() {
-        return _reference;
+        return this.reference;
     }
 
     /**
@@ -114,6 +114,6 @@ public class RefundInfo {
      */
     @JsonProperty("reference")
     public void setReference(String reference) {
-        this._reference = reference;
+        this.reference = reference;
     }
 }

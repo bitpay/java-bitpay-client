@@ -37,7 +37,7 @@ public class Rate {
      * for a list of ISO 4217 currency codes.
      * 
      */
-    private String _code;
+    private String code;
 
     /**
      * The name of the currency or cryptocurrency
@@ -45,13 +45,13 @@ public class Rate {
      * Refer to <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO Standards</a>
      * for a list of ISO 4217 currency codes.
      */
-    private String _name;
+    private String name;
 
     /**
      * The value of the rate, returned in the JSON as "rate" and to a precision
      * of two decimal places.
      */
-    private Double _value;
+    private Double value;
 
     /**
      * Class constructor.
@@ -66,7 +66,7 @@ public class Rate {
      */
     @JsonIgnore
     public String getName() {
-        return _name;
+        return this.name;
     }
 
     /**
@@ -76,7 +76,7 @@ public class Rate {
      */
     @JsonProperty("name")
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Rate {
      */
     @JsonIgnore
     public String getCode() {
-        return _code;
+        return this.code;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Rate {
      */
     @JsonProperty("code")
     public void setCode(String code) {
-        this._code = code;
+        this.code = code;
     }
 
     /**
@@ -106,7 +106,7 @@ public class Rate {
      */
     @JsonIgnore
     public Double getValue() {
-        return _value;
+        return this.value;
     }
 
     /**
@@ -116,7 +116,7 @@ public class Rate {
      */
     @JsonProperty("rate")
     public void setValue(Double value) {
-        this._value = value;
+        this.value = value;
     }
 
 }

@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceTransactionDetails {
-    private Double _amount;
-    private String _description;
-    private Boolean _isFee;
+    private Double amount;
+    private String description;
+    private Boolean isFee;
 
     /**
      * Instantiates a new Invoice transaction details.
@@ -27,9 +27,9 @@ public class InvoiceTransactionDetails {
      * @param isFee       the is fee
      */
     public InvoiceTransactionDetails(Double amount, String description, Boolean isFee) {
-        this._amount = amount;
-        this._description = description;
-        this._isFee = isFee;
+        this.amount = amount;
+        this.description = description;
+        this.isFee = isFee;
     }
 
     /**
@@ -40,7 +40,7 @@ public class InvoiceTransactionDetails {
     @JsonProperty("amount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -50,7 +50,7 @@ public class InvoiceTransactionDetails {
      */
     @JsonProperty("amount")
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -61,7 +61,7 @@ public class InvoiceTransactionDetails {
     @JsonProperty("description")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -71,7 +71,7 @@ public class InvoiceTransactionDetails {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -81,7 +81,7 @@ public class InvoiceTransactionDetails {
      */
     @JsonProperty("isFee")
     public Boolean getIsFee() {
-        return _isFee;
+        return this.isFee;
     }
 
     /**
@@ -91,6 +91,6 @@ public class InvoiceTransactionDetails {
      */
     @JsonProperty("isFee")
     public void setIsFee(Boolean isFee) {
-        this._isFee = isFee;
+        this.isFee = isFee;
     }
 }

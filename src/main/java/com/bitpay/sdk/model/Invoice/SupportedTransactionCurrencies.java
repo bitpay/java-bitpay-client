@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SupportedTransactionCurrencies {
 
-    private SupportedTransactionCurrency _btc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _bch = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _eth = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _usdc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _gusd = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _pax = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency _xrp = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency btc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency bch = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency eth = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency usdc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency gusd = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency pax = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency xrp = new SupportedTransactionCurrency();
 
     /**
      * Instantiates a new Supported transaction currencies.
@@ -37,7 +37,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonIgnore
     public SupportedTransactionCurrency getBtc() {
-        return _btc;
+        return this.btc;
     }
 
     /**
@@ -47,7 +47,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonProperty("BTC")
     public void setBtc(SupportedTransactionCurrency btc) {
-        this._btc = btc;
+        this.btc = btc;
     }
 
     /**
@@ -57,7 +57,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonIgnore
     public SupportedTransactionCurrency getBch() {
-        return _bch;
+        return this.bch;
     }
 
     /**
@@ -67,7 +67,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonProperty("BCH")
     public void setBch(SupportedTransactionCurrency bch) {
-        this._bch = bch;
+        this.bch = bch;
     }
 
     /**
@@ -76,7 +76,7 @@ public class SupportedTransactionCurrencies {
      * @return the ETH
      */
     @JsonIgnore
-    public SupportedTransactionCurrency getEth() { return _eth; }
+    public SupportedTransactionCurrency getEth() { return this.eth; }
 
     /**
      * Sets ETH.
@@ -85,7 +85,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonProperty("ETH")
     public void setEth(SupportedTransactionCurrency eth) {
-        this._eth = eth;
+        this.eth = eth;
     }
 
     /**
@@ -94,7 +94,7 @@ public class SupportedTransactionCurrencies {
      * @return the USDC
      */
     @JsonIgnore
-    public SupportedTransactionCurrency getUsdc() { return _usdc; }
+    public SupportedTransactionCurrency getUsdc() { return this.usdc; }
 
     /**
      * Sets USDC.
@@ -102,7 +102,7 @@ public class SupportedTransactionCurrencies {
      * @param usdc the USDC
      */
     @JsonProperty("USDC")
-    public void setUsdc(SupportedTransactionCurrency usdc) { this._usdc = usdc; }
+    public void setUsdc(SupportedTransactionCurrency usdc) { this.usdc = usdc; }
 
     /**
      * Gets GUSD.
@@ -110,7 +110,7 @@ public class SupportedTransactionCurrencies {
      * @return the GUSD
      */
     @JsonIgnore
-    public SupportedTransactionCurrency getGusd() { return _gusd; }
+    public SupportedTransactionCurrency getGusd() { return this.gusd; }
 
     /**
      * Sets GUSD.
@@ -118,7 +118,7 @@ public class SupportedTransactionCurrencies {
      * @param gusd the GUSD
      */
     @JsonProperty("GUSD")
-    public void setGusd(SupportedTransactionCurrency gusd) { this._gusd = gusd; }
+    public void setGusd(SupportedTransactionCurrency gusd) { this.gusd = gusd; }
 
     /**
      * Gets PAX.
@@ -126,7 +126,7 @@ public class SupportedTransactionCurrencies {
      * @return the pax
      */
     @JsonIgnore
-    public SupportedTransactionCurrency getPax() { return _pax; }
+    public SupportedTransactionCurrency getPax() { return this.pax; }
 
     /**
      * Sets pax.
@@ -134,7 +134,7 @@ public class SupportedTransactionCurrencies {
      * @param pax the PAX
      */
     @JsonProperty("PAX")
-    public void setPax(SupportedTransactionCurrency pax) { this._pax = pax; }
+    public void setPax(SupportedTransactionCurrency pax) { this.pax = pax; }
 
     /**
      * Gets XRP.
@@ -142,7 +142,7 @@ public class SupportedTransactionCurrencies {
      * @return the XRP
      */
     @JsonIgnore
-    public SupportedTransactionCurrency getXrp() { return _xrp; }
+    public SupportedTransactionCurrency getXrp() { return this.xrp; }
 
     /**
      * Sets XRP.
@@ -150,5 +150,5 @@ public class SupportedTransactionCurrencies {
      * @param xrp the XRP
      */
     @JsonProperty("XRP")
-    public void setXrp(SupportedTransactionCurrency xrp) { this._xrp = xrp; }
+    public void setXrp(SupportedTransactionCurrency xrp) { this.xrp = xrp; }
 }

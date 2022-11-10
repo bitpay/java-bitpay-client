@@ -12,18 +12,18 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstruction {
-    private Double _amount;
-    private String _email;
-    private String _recipientId;
-    private String _shopperId;
-    private String _label = "";
-    private String _walletProvider;
-    private String _id;
+    private Double amount;
+    private String email;
+    private String recipientId;
+    private String shopperId;
+    private String label = "";
+    private String walletProvider;
+    private String id;
 
-    private PayoutInstructionBtcSummary _btc;
-    private List<PayoutInstructionTransaction> _transactions;
-    private String _status;
-    private String _address;
+    private PayoutInstructionBtcSummary btc;
+    private List<PayoutInstructionTransaction> transactions;
+    private String status;
+    private String address;
 
     /**
      * Constructor, create an empty PayoutInstruction object.
@@ -40,16 +40,16 @@ public class PayoutInstruction {
      * @throws PayoutBatchCreationException BitPayException class
      */
     public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutBatchCreationException {
-        this._amount = amount;
+        this.amount = amount;
         switch (method) {
             case RecipientReferenceMethod.EMAIL:
-                this._email = methodValue;
+                this.email = methodValue;
                 break;
             case RecipientReferenceMethod.RECIPIENT_ID:
-                this._recipientId = methodValue;
+                this.recipientId = methodValue;
                 break;
             case RecipientReferenceMethod.SHOPPER_ID:
-                this._shopperId = methodValue;
+                this.shopperId = methodValue;
                 break;
             default:
                 throw new PayoutBatchCreationException(null, "method code must be a type of RecipientReferenceMethod");
@@ -59,67 +59,67 @@ public class PayoutInstruction {
     @JsonProperty("amount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     @JsonProperty("amount")
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     @JsonProperty("recipientId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRecipientId() {
-        return _recipientId;
+        return this.recipientId;
     }
 
     @JsonProperty("recipientId")
     public void setRecipientId(String recipientId) {
-        this._recipientId = recipientId;
+        this.recipientId = recipientId;
     }
 
     @JsonProperty("shopperId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getShopperId() {
-        return _shopperId;
+        return this.shopperId;
     }
 
     @JsonProperty("shopperId")
     public void setShopperId(String shopperId) {
-        this._shopperId = shopperId;
+        this.shopperId = shopperId;
     }
 
     @JsonProperty("label")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     @JsonProperty("walletProvider")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getWalletProvider() {
-        return _walletProvider;
+        return this.walletProvider;
     }
 
     @JsonProperty("walletProvider")
     public void setWalletProvider(String walletProvider) {
-        this._walletProvider = walletProvider;
+        this.walletProvider = walletProvider;
     }
 
     // Response fields
@@ -127,53 +127,53 @@ public class PayoutInstruction {
 
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     @JsonIgnore
     public PayoutInstructionBtcSummary getBtc() {
-        return _btc;
+        return this.btc;
     }
 
     @JsonProperty("btc")
     @JsonDeserialize(using = PayoutInstructionBtcSummaryDeserializer.class)
     public void setBtc(PayoutInstructionBtcSummary btc) {
-        this._btc = btc;
+        this.btc = btc;
     }
 
     @JsonIgnore
     public List<PayoutInstructionTransaction> getTransactions() {
-        return _transactions;
+        return this.transactions;
     }
 
     @JsonProperty("transactions")
     public void setTransactions(List<PayoutInstructionTransaction> transactions) {
-        this._transactions = transactions;
+        this.transactions = transactions;
     }
 
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     @JsonProperty("address")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress() {
-        return _address;
+        return this.address;
     }
 
     @JsonProperty("address")
     public void setAddress(String address) {
-        this._address = address;
+        this.address = address;
     }
 }

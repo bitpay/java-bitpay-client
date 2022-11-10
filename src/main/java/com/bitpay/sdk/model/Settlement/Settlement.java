@@ -17,23 +17,23 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Settlement {
 
-    private String _id;
-    private String _accountId;
-    private String _currency;
-    private PayoutInfo _payoutInfo;
-    private String _status;
-    private Long _dateCreated;
-    private Long _dateExecuted;
-    private Long _dateCompleted;
-    private Long _openingDate;
-    private Long _closingDate;
-    private Float _openingBalance;
-    private Float _ledgerEntriesSum;
-    private List<WithHoldings> _withHoldings;
-    private Float _withHoldingsSum;
-    private Float _totalAmount;
-    private List<SettlementLedgerEntry> _ledgerEntries;
-    private String _token;
+    private String id;
+    private String accountId;
+    private String currency;
+    private PayoutInfo payoutInfo;
+    private String status;
+    private Long dateCreated;
+    private Long dateExecuted;
+    private Long dateCompleted;
+    private Long openingDate;
+    private Long closingDate;
+    private Float openingBalance;
+    private Float ledgerEntriesSum;
+    private List<WithHoldings> withHoldings;
+    private Float withHoldingsSum;
+    private Float totalAmount;
+    private List<SettlementLedgerEntry> ledgerEntries;
+    private String token;
 
     /**
      * Instantiates a new Settlement.
@@ -49,7 +49,7 @@ public class Settlement {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -60,7 +60,7 @@ public class Settlement {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -71,7 +71,7 @@ public class Settlement {
      */
     @JsonIgnore
     public String getAccountId() {
-        return _accountId;
+        return this.accountId;
     }
 
     /**
@@ -82,7 +82,7 @@ public class Settlement {
      */
     @JsonProperty("accountId")
     public void setAccountId(String accountId) {
-        this._accountId = accountId;
+        this.accountId = accountId;
     }
 
     /**
@@ -93,7 +93,7 @@ public class Settlement {
      */
     @JsonIgnore
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -104,7 +104,7 @@ public class Settlement {
      */
     @JsonProperty("currency")
     public void setCurrency(String currency) {
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -114,7 +114,7 @@ public class Settlement {
      */
     @JsonIgnore
     public PayoutInfo getPayoutInfo() {
-        return _payoutInfo;
+        return this.payoutInfo;
     }
 
     /**
@@ -124,7 +124,7 @@ public class Settlement {
      */
     @JsonProperty("payoutInfo")
     public void setPayoutInfo(PayoutInfo payoutInfo) {
-        this._payoutInfo = payoutInfo;
+        this.payoutInfo = payoutInfo;
     }
 
     /**
@@ -134,7 +134,7 @@ public class Settlement {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -144,7 +144,7 @@ public class Settlement {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -155,7 +155,7 @@ public class Settlement {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getDateCreated() {
-        return _dateCreated;
+        return this.dateCreated;
     }
 
     /**
@@ -166,7 +166,7 @@ public class Settlement {
     @JsonProperty("dateCreated")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDateCreated(Long dateCreated) {
-        this._dateCreated = dateCreated;
+        this.dateCreated = dateCreated;
     }
 
     /**
@@ -177,7 +177,7 @@ public class Settlement {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getDateExecuted() {
-        return _dateExecuted;
+        return this.dateExecuted;
     }
 
     /**
@@ -188,7 +188,7 @@ public class Settlement {
     @JsonProperty("dateExecuted")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDateExecuted(Long dateExecuted) {
-        this._dateExecuted = dateExecuted;
+        this.dateExecuted = dateExecuted;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Settlement {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getDateCompleted() {
-        return _dateCompleted;
+        return this.dateCompleted;
     }
 
     /**
@@ -210,7 +210,7 @@ public class Settlement {
     @JsonProperty("dateCompleted")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDateCompleted(Long dateCompleted) {
-        this._dateCompleted = dateCompleted;
+        this.dateCompleted = dateCompleted;
     }
 
     /**
@@ -223,7 +223,7 @@ public class Settlement {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getOpeningDate() {
-        return _openingDate;
+        return this.openingDate;
     }
 
     /**
@@ -236,7 +236,7 @@ public class Settlement {
     @JsonProperty("openingDate")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setOpeningDate(Long openingDate) {
-        this._openingDate = openingDate;
+        this.openingDate = openingDate;
     }
 
     /**
@@ -247,7 +247,7 @@ public class Settlement {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getClosingDate() {
-        return _closingDate;
+        return this.closingDate;
     }
 
     /**
@@ -258,7 +258,7 @@ public class Settlement {
     @JsonProperty("closingDate")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setClosingDate(Long closingDate) {
-        this._closingDate = closingDate;
+        this.closingDate = closingDate;
     }
 
     /**
@@ -268,7 +268,7 @@ public class Settlement {
      */
     @JsonIgnore
     public Float getOpeningBalance() {
-        return _openingBalance;
+        return this.openingBalance;
     }
 
     /**
@@ -278,7 +278,7 @@ public class Settlement {
      */
     @JsonProperty("openingBalance")
     public void setOpeningBalance(Float openingBalance) {
-        this._openingBalance = openingBalance;
+        this.openingBalance = openingBalance;
     }
 
     /**
@@ -289,7 +289,7 @@ public class Settlement {
      */
     @JsonIgnore
     public Float getLedgerEntriesSum() {
-        return _ledgerEntriesSum;
+        return this.ledgerEntriesSum;
     }
 
     /**
@@ -300,7 +300,7 @@ public class Settlement {
      */
     @JsonProperty("ledgerEntriesSum")
     public void setLedgerEntriesSum(Float ledgerEntriesSum) {
-        this._ledgerEntriesSum = ledgerEntriesSum;
+        this.ledgerEntriesSum = ledgerEntriesSum;
     }
 
     /**
@@ -320,7 +320,7 @@ public class Settlement {
      */
     @JsonIgnore
     public List<WithHoldings> getWithHoldings() {
-        return _withHoldings;
+        return this.withHoldings;
     }
 
     /**
@@ -340,7 +340,7 @@ public class Settlement {
      */
     @JsonProperty("withHoldings")
     public void setWithHoldings(List<WithHoldings> withHoldings) {
-        this._withHoldings = withHoldings;
+        this.withHoldings = withHoldings;
     }
 
     /**
@@ -350,7 +350,7 @@ public class Settlement {
      */
     @JsonIgnore
     public Float getWithHoldingsSum() {
-        return _withHoldingsSum;
+        return this.withHoldingsSum;
     }
 
     /**
@@ -360,7 +360,7 @@ public class Settlement {
      */
     @JsonProperty("withHoldingsSum")
     public void setWithHoldingsSum(Float withHoldingsSum) {
-        this._withHoldingsSum = withHoldingsSum;
+        this.withHoldingsSum = withHoldingsSum;
     }
 
     /**
@@ -372,7 +372,7 @@ public class Settlement {
      */
     @JsonIgnore
     public Float getTotalAmount() {
-        return _totalAmount;
+        return this.totalAmount;
     }
 
     /**
@@ -384,7 +384,7 @@ public class Settlement {
      */
     @JsonProperty("totalAmount")
     public void setTotalAmount(Float totalAmount) {
-        this._totalAmount = totalAmount;
+        this.totalAmount = totalAmount;
     }
 
     /**
@@ -394,7 +394,7 @@ public class Settlement {
      */
     @JsonIgnore
     public List<SettlementLedgerEntry> getLedgerEntries() {
-        return _ledgerEntries;
+        return this.ledgerEntries;
     }
 
     /**
@@ -404,7 +404,7 @@ public class Settlement {
      */
     @JsonProperty("ledgerEntries")
     public void setLedgerEntries(List<SettlementLedgerEntry> ledgerEntries) {
-        this._ledgerEntries = ledgerEntries;
+        this.ledgerEntries = ledgerEntries;
     }
 
     /**
@@ -416,7 +416,7 @@ public class Settlement {
      */
     @JsonIgnore
     public String getToken() {
-        return _token;
+        return this.token;
     }
 
     /**
@@ -428,6 +428,6 @@ public class Settlement {
      */
     @JsonProperty("token")
     public void setToken(String token) {
-        this._token = token;
+        this.token = token;
     }
 }

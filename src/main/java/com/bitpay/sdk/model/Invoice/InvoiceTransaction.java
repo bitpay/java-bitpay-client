@@ -22,11 +22,11 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceTransaction {
 
-    private BigDecimal _amount;
-    private int _confirmations;
-    private Date _time;
-    private Date _receivedTime;
-    private String _txid;
+    private BigDecimal amount;
+    private int confirmations;
+    private Date time;
+    private Date receivedTime;
+    private String txid;
 
     /**
      * Instantiates a new Invoice transaction.
@@ -41,7 +41,7 @@ public class InvoiceTransaction {
      */
     @JsonIgnore
     public BigDecimal getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -51,7 +51,7 @@ public class InvoiceTransaction {
      */
     @JsonProperty("amount")
     public void setAmount(BigDecimal amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -61,7 +61,7 @@ public class InvoiceTransaction {
      */
     @JsonIgnore
     public int getConfirmations() {
-        return _confirmations;
+        return this.confirmations;
     }
 
     /**
@@ -71,7 +71,7 @@ public class InvoiceTransaction {
      */
     @JsonProperty("confirmations")
     public void setConfirmations(int confirmations) {
-        this._confirmations = confirmations;
+        this.confirmations = confirmations;
     }
 
     /**
@@ -81,7 +81,7 @@ public class InvoiceTransaction {
      */
     @JsonIgnore
     public Date getReceivedTime() {
-        return _receivedTime;
+        return this.receivedTime;
     }
 
     /**
@@ -91,7 +91,7 @@ public class InvoiceTransaction {
      */
     @JsonProperty("receivedTime")
     public void setReceivedTime(Date receivedTime) {
-        this._receivedTime = receivedTime;
+        this.receivedTime = receivedTime;
     }
 
     /**
@@ -101,7 +101,7 @@ public class InvoiceTransaction {
      */
     @JsonIgnore
     public String getTransactionId() {
-        return _txid;
+        return this.txid;
     }
 
     /**
@@ -111,7 +111,7 @@ public class InvoiceTransaction {
      */
     @JsonProperty("txid")
     public void setTransactionId(String txid) {
-        this._txid = txid;
+        this.txid = txid;
     }
 
     /**
@@ -121,7 +121,7 @@ public class InvoiceTransaction {
      */
     @JsonIgnore
     public Date getTime() {
-        return _time;
+        return this.time;
     }
 
     /**
@@ -131,7 +131,7 @@ public class InvoiceTransaction {
      */
     @JsonProperty("time")
     public void setTime(Date time) {
-        this._time = time;
+        this.time = time;
     }
 
 }

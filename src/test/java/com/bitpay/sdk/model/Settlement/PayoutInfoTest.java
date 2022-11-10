@@ -62,20 +62,7 @@ public class PayoutInfoTest {
     }
 
     @Test
-    public void it_should_change_legacy_label() {
-        // given
-        String expected = "expectedString";
-        PayoutInfo testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setlabel(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getlabel());
-    }
-
-    @Test
-    public void it_should_change__label() {
+    public void it_should_change_label() {
         // given
         String expected = "expectedString";
         PayoutInfo testedClass = this.getTestedClass();

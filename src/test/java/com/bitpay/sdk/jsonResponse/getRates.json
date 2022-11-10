@@ -1,0 +1,47 @@
+[
+  {
+    "code":"BTC",
+    "name":"Bitcoin",
+    "rate":1
+  },
+  {
+    "code":"BCH",
+    "name":"Bitcoin Cash",
+    "rate":50.77
+  },
+  {
+    "code":"USD",
+    "name":"US Dollar",
+    "rate":41248.11
+  },
+  {
+    "code":"EUR",
+    "name":"Eurozone Euro",
+    "rate":33823.04
+  },
+  {
+    "code":"GBP",
+    "name":"Pound Sterling",
+    "rate":29011.49
+  },
+  {
+    "code":"JPY",
+    "name":"Japanese Yen",
+    "rate":4482741
+  },
+  {
+    "code":"CAD",
+    "name":"Canadian Dollar",
+    "rate":49670.85
+  },
+  {
+    "code":"AUD",
+    "name":"Australian Dollar",
+    "rate":53031.99
+  },
+  {
+    "code":"CNY",
+    "name":"Chinese Yuan",
+    "rate":265266.57
+  }
+]

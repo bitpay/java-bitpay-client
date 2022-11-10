@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstructionBtcSummary {
 
-    private final Double _paid;
-    private final Double _unpaid;
+    private final Double paid;
+    private final Double unpaid;
 
     public PayoutInstructionBtcSummary(Double paid, Double unpaid) {
-        this._paid = paid;
-        this._unpaid = unpaid;
+        this.paid = paid;
+        this.unpaid = unpaid;
     }
 
     public Double getPaid() {
-        return _paid;
+        return this.paid;
     }
 
     public Double getUnpaid() {
-        return _unpaid;
+        return this.unpaid;
     }
 
 }
