@@ -22,6 +22,7 @@ public class RefundInfo {
 
     private String _supportRequest;
     private String _currency;
+    private String refundRequestEid;
     private Hashtable<String, Double> _amounts;
 
     /**
@@ -72,6 +73,24 @@ public class RefundInfo {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
         this._currency = currency;
+    }
+
+    /**
+     * Gets Refund Request Eid.
+     *
+     * @return Refund Request Eid
+     */
+    public String getRefundRequestEid() {
+        return refundRequestEid;
+    }
+
+    /**
+     * Sets Refund Request Eid.
+     *
+     * @param refundRequestEid Refund Request Eid
+     */
+    public void setRefundRequestEid(String refundRequestEid) {
+        this.refundRequestEid = refundRequestEid;
     }
 
     /**
