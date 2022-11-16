@@ -154,7 +154,6 @@ public class PayoutInfo {
      *
      * @param label the label
      */
-    @JsonProperty("label")
     @Deprecated
     public void setlabel(String label) {
         this._label = label;
