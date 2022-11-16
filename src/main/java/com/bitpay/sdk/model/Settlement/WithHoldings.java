@@ -123,7 +123,6 @@ public class WithHoldings {
      * @param label the label
      */
     @Deprecated
-    @JsonProperty("label")
     public void setlabel(String label) {
         this._label = label;
     }
