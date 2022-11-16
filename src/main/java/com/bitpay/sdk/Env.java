@@ -27,7 +27,7 @@ public class Env {
     /**
      * BitPay Plugin Info Version.
      */
-    public static final String BitpayPluginInfo = "BitPay_Java_Client_v8.5.2208";
+    public static final String BitpayPluginInfo = "BitPay_Java_Client_v8.6.0";
     /**
      * BitPay Api Frame.
      */
