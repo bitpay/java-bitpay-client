@@ -51,7 +51,7 @@ public class SettlementClient {
         offset = offset != null ? offset : 0;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("dateStart", dateStart));
         params.add(new BasicNameValuePair("dateEnd", dateEnd));
         params.add(new BasicNameValuePair("currency", currency));
@@ -86,7 +86,7 @@ public class SettlementClient {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
-        String token = this.accessTokenCache.getAccessToken(Facade.Merchant);
+        String token = this.accessTokenCache.getAccessToken(Facade.MERCHANT);
         final ObjectMapper objectMapper = JsonMapperFactory.create();
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));

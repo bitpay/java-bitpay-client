@@ -43,7 +43,7 @@ public class BillClient {
      */
     public Bill createBill(Bill bill) throws BillCreationException {
         try {
-            return this.createBill(bill, Facade.Merchant, true);
+            return this.createBill(bill, Facade.MERCHANT, true);
         } catch (Exception e) {
             throw new BillCreationException(null, e.getMessage());
         }
@@ -59,7 +59,7 @@ public class BillClient {
      * @throws BitPayException       BitPayException class
      * @throws BillCreationException BillCreationException class
      */
-    public Bill createBill(Bill bill, String facade, boolean signRequest)
+    public Bill createBill(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
         String token = this.accessTokenCache.getAccessToken(facade);
         bill.setToken(token);
@@ -93,7 +93,7 @@ public class BillClient {
      */
     public Bill getBill(String billId) throws BillQueryException {
         try {
-            return this.getBill(billId, Facade.Merchant, true);
+            return this.getBill(billId, Facade.MERCHANT, true);
         } catch (Exception e) {
             throw new BillQueryException(null, e.getMessage());
         }
@@ -109,7 +109,7 @@ public class BillClient {
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
      */
-    public Bill getBill(String billId, String facade, boolean signRequest) throws BitPayException, BillQueryException {
+    public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
         String token = this.accessTokenCache.getAccessToken(facade);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
@@ -140,7 +140,7 @@ public class BillClient {
      */
     public List<Bill>getBills(String status) throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("status", status));
 
         List<Bill> bills;
@@ -168,7 +168,7 @@ public class BillClient {
      */
     public List<Bill> getBills() throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
 
         List<Bill> bills;
 

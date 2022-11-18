@@ -41,7 +41,7 @@ public class LedgerClient {
     public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("startDate", dateStart));
         params.add(new BasicNameValuePair("endDate", dateEnd));
 
@@ -75,7 +75,7 @@ public class LedgerClient {
      */
     public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
 
         List<Ledger> ledgers;
 

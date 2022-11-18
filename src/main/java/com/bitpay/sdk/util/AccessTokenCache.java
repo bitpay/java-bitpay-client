@@ -6,6 +6,7 @@ package com.bitpay.sdk.util;
 
 import com.bitpay.sdk.Config;
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.model.Facade;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -19,6 +20,21 @@ public class AccessTokenCache {
     public AccessTokenCache(Config configuration) {
         this.data = new Hashtable<String, String>();
         this.configuration = configuration;
+    }
+
+    /**
+     * Retrieve a token associated with a known resource. The token is used to access other related resources.
+     *
+     * @param facade The identifier for the desired resource.
+     * @return The token associated with resource.
+     * @throws BitPayException BitPayException class
+     */
+    public String getAccessToken(Facade facade) throws BitPayException {
+        if (!this.data.containsKey(facade.toString())) {
+            throw new BitPayException(null, "There is no token for the specified key : " + facade);
+        }
+
+        return this.data.get(facade.toString());
     }
 
     /**

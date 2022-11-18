@@ -11,7 +11,6 @@ import com.bitpay.sdk.client.CurrencyClient;
 import com.bitpay.sdk.client.HttpRequestFactory;
 import com.bitpay.sdk.client.InvoiceClient;
 import com.bitpay.sdk.client.LedgerClient;
-import com.bitpay.sdk.client.PayoutBatchClient;
 import com.bitpay.sdk.client.PayoutClient;
 import com.bitpay.sdk.client.PayoutRecipientsClient;
 import com.bitpay.sdk.client.RateClient;
@@ -28,10 +27,6 @@ import com.bitpay.sdk.exceptions.InvoiceCreationException;
 import com.bitpay.sdk.exceptions.InvoiceQueryException;
 import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.exceptions.LedgerQueryException;
-import com.bitpay.sdk.exceptions.PayoutBatchCancellationException;
-import com.bitpay.sdk.exceptions.PayoutBatchCreationException;
-import com.bitpay.sdk.exceptions.PayoutBatchNotificationException;
-import com.bitpay.sdk.exceptions.PayoutBatchQueryException;
 import com.bitpay.sdk.exceptions.PayoutCancellationException;
 import com.bitpay.sdk.exceptions.PayoutCreationException;
 import com.bitpay.sdk.exceptions.PayoutNotificationException;
@@ -54,7 +49,6 @@ import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.model.Payout.PayoutBatch;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
 import com.bitpay.sdk.model.Rate.Rates;
@@ -201,8 +195,19 @@ public class Client {
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException BitPayException class
      */
-    public String requestClientAuthorization(String facade) throws BitPayException {
+    public String requestClientAuthorization(Facade facade) throws BitPayException {
         return this.getAuthorizationClient().requestClientAuthorization(facade);
+    }
+
+    /**
+     * Retrieve a token associated with a known resource. The token is used to access other related resources.
+     *
+     * @param facade The identifier for the desired resource.
+     * @return The token associated with resource.
+     * @throws BitPayException BitPayException class
+     */
+    public String getAccessToken(Facade facade) throws BitPayException {
+        return this.accessTokenCache.getAccessToken(facade);
     }
 
     /**
@@ -237,7 +242,7 @@ public class Client {
     public Invoice createInvoice(Invoice invoice) throws InvoiceCreationException {
         try {
             InvoiceClient client = getInvoiceClient();
-            return client.createInvoice(invoice, Facade.Merchant, true, this.accessTokenCache);
+            return client.createInvoice(invoice, Facade.MERCHANT, true, this.accessTokenCache);
         } catch (BitPayException ex) {
             throw new InvoiceCreationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -254,7 +259,7 @@ public class Client {
      */
     public Invoice getInvoice(String invoiceId) throws InvoiceQueryException {
         try {
-            return this.getInvoiceClient().getInvoice(invoiceId, Facade.Merchant, true);
+            return this.getInvoiceClient().getInvoice(invoiceId, Facade.MERCHANT, true);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -271,7 +276,7 @@ public class Client {
      * @return A BitPay Invoice object.
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getInvoiceByGuid(String guid, String facade, Boolean signRequest) throws InvoiceQueryException {
+    public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
         return this.getInvoiceClient().getInvoiceByGuid(guid, facade, signRequest);
     }
 
@@ -461,7 +466,7 @@ public class Client {
      * @throws BitPayException       BitPayException class
      * @throws BillCreationException BillCreationException class
      */
-    public Bill createBill(Bill bill, String facade, boolean signRequest)
+    public Bill createBill(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
         return this.getBillClient().createBill(bill, facade, signRequest);
     }
@@ -487,7 +492,7 @@ public class Client {
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
      */
-    public Bill getBill(String billId, String facade, boolean signRequest) throws BitPayException, BillQueryException {
+    public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
         return this.getBillClient().getBill(billId, facade, signRequest);
     }
 
@@ -741,99 +746,6 @@ public class Client {
     public Boolean requestPayoutNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
         return this.getPayoutClient().requestPayoutNotification(payoutId);
-    }
-
-
-    /**
-     * Submit a BitPay Payout batch.
-     *
-     * @param batch PayoutBatch A PayoutBatch object with request parameters defined.
-     * @return A BitPay generated PayoutBatch object.
-     * @throws BitPayException              BitPayException class
-     * @throws PayoutBatchCreationException PayoutBatchCreationException class
-     */
-    public PayoutBatch submitPayoutBatch(PayoutBatch batch) throws BitPayException, PayoutBatchCreationException {
-        return this.getPayoutBatchClient().submitPayoutBatch(batch);
-    }
-
-    /**
-     * Retrieve a collection of BitPay payout batches.
-     *
-     * @return A list of BitPay PayoutBatch objects.
-     * @throws BitPayException           BitPayException class
-     * @throws PayoutBatchQueryException PayoutBatchQueryException class
-     */
-    public List<PayoutBatch> getPayoutBatches() throws BitPayException, PayoutBatchQueryException {
-        return this.getPayoutBatchClient().getPayoutBatches();
-    }
-
-    /**
-     * Retrieve a collection of BitPay payout batches.
-     *
-     * @param status String The status to filter the Payout Batches.
-     * @return A list of BitPay PayoutBatch objects.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
-     */
-    public List<PayoutBatch> getPayoutBatches(String status) throws BitPayException, PayoutQueryException {
-        return this.getPayoutBatchClient().getPayoutBatches(status);
-    }
-
-    /**
-     * Retrieve a collection of BitPay payout batches.
-     *
-     * @param startDate String The start date for the query.
-     * @param endDate   String The end date for the query.
-     * @param status    String The status to filter(optional).
-     * @param limit     int Maximum results that the query will return (useful for
-     *                  paging results).
-     * @param offset    int Offset for paging.
-     * @return A list of BitPay PayoutBatch objects.
-     * @throws BitPayException           BitPayException class
-     * @throws PayoutBatchQueryException PayoutBatchQueryException class
-     */
-    public List<PayoutBatch> getPayoutBatches(String startDate, String endDate, String status, Integer limit,
-                                              Integer offset) throws BitPayException, PayoutBatchQueryException {
-        return this.getPayoutBatchClient().getPayoutBatches(startDate, endDate, status, limit, offset);
-    }
-
-    /**
-     * Retrieve a BitPay payout batch by batch id using. The client must have been
-     * previously authorized for the payout facade.
-     *
-     * @param payoutBatchId String The id of the batch to retrieve.
-     * @return A BitPay PayoutBatch object.
-     * @throws BitPayException           BitPayException class
-     * @throws PayoutBatchQueryException PayoutBatchQueryException class
-     */
-    public PayoutBatch getPayoutBatch(String payoutBatchId) throws BitPayException, PayoutBatchQueryException {
-        return this.getPayoutBatchClient().getPayoutBatch(payoutBatchId);
-    }
-
-    /**
-     * Cancel a BitPay Payout batch.
-     *
-     * @param payoutBatchId String The id of the payout batch to cancel.
-     * @return True if the refund was successfully canceled, false otherwise.
-     * @throws BitPayException                  BitPayException class
-     * @throws PayoutBatchCancellationException PayoutBatchCancellationException
-     *                                          class
-     */
-    public Boolean cancelPayoutBatch(String payoutBatchId) throws BitPayException, PayoutBatchCancellationException {
-        return this.getPayoutBatchClient().cancelPayoutBatch(payoutBatchId);
-    }
-
-    /**
-     * Request a payout batch notification
-     *
-     * @param payoutBatchId String The id of the payout batch to notify..
-     * @return True if the notification was successfully sent, false otherwise.
-     * @throws BitPayException                  BitPayException class
-     * @throws PayoutBatchNotificationException PayoutBatchNotificationException class
-     */
-    public Boolean requestPayoutBatchNotification(String payoutBatchId)
-        throws BitPayException, PayoutBatchNotificationException {
-        return this.getPayoutBatchClient().requestPayoutBatchNotification(payoutBatchId);
     }
 
     /**
@@ -1102,10 +1014,6 @@ public class Client {
 
     protected PayoutClient getPayoutClient() {
         return new PayoutClient(this.bitPayClient, this.accessTokenCache);
-    }
-
-    protected PayoutBatchClient getPayoutBatchClient() {
-        return new PayoutBatchClient(this.bitPayClient, this.accessTokenCache, this.uuidGenerator);
     }
 
     protected SettlementClient getSettlementClient() {

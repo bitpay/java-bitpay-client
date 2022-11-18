@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model;
 
+import java.util.Objects;
+
 /**
  * Facades named collections of capabilities that can be granted,
  * such as the ability to create invoices or grant refunds.
@@ -15,13 +17,37 @@ package com.bitpay.sdk.model;
  *
  * @see <a href="https://bitpay.com/api/#rest-api-concepts-api-tokens">REST API concepts</a>
  */
-public class Facade {
+public enum Facade {
     /**
      * The constant Merchant.
      */
-    public static final String Merchant = "merchant";
+    MERCHANT("merchant"),
     /**
      * The constant Payout.
      */
-    public static final String Payout = "payout";
+    PAYOUT("payout");
+
+    private final String value;
+
+    Facade(String value) {
+        this.value = value;
+    }
+
+    public static Facade fromValue(final String text) {
+        if (Objects.isNull(text)) {
+            return null;
+        }
+
+        for (final Facade item : values()) {
+            if (String.valueOf(item.value).equalsIgnoreCase(text)) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    public String toString() {
+        return String.valueOf(this.value);
+    }
 }

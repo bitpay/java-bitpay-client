@@ -45,7 +45,7 @@ public class PayoutClient {
      * @throws PayoutCreationException PayoutCreationException class
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
-        String token = this.accessTokenCache.getAccessToken(Facade.Payout);
+        String token = this.accessTokenCache.getAccessToken(Facade.PAYOUT);
         payout.setToken(token);
 
         JsonMapper mapper = JsonMapperFactory.create();
@@ -77,7 +77,7 @@ public class PayoutClient {
      * @throws PayoutQueryException PayoutQueryException class
      */
     public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
-        String token = this.accessTokenCache.getAccessToken(Facade.Payout);
+        String token = this.accessTokenCache.getAccessToken(Facade.PAYOUT);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
 
@@ -108,7 +108,7 @@ public class PayoutClient {
     public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Payout)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
         Boolean result;
         JsonMapper mapper = JsonMapperFactory.create();
 
@@ -148,7 +148,7 @@ public class PayoutClient {
                                    Integer offset) throws BitPayException, PayoutQueryException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Payout)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
         if (startDate != null) {
             params.add(new BasicNameValuePair("startDate", startDate));
         }
@@ -196,7 +196,7 @@ public class PayoutClient {
     public Boolean requestPayoutNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.Payout));
+        params.put("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
 

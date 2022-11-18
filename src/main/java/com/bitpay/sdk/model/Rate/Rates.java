@@ -20,7 +20,6 @@ public class Rates {
      * Instantiates a new Rates.
      *
      * @param rates the rates
-     * @param rateClient    the rateClient
      */
     public Rates(List<Rate> rates) {
         this.rates = rates;

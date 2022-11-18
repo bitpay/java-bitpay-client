@@ -51,7 +51,7 @@ public class InvoiceClient {
      * @throws BitPayException          BitPayException class
      * @throws InvoiceCreationException InvoiceCreationException class
      */
-    public Invoice createInvoice(Invoice invoice, String facade, Boolean signRequest, AccessTokenCache tokenCache) throws BitPayException,
+    public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest, AccessTokenCache tokenCache) throws BitPayException,
         InvoiceCreationException {
         invoice.setToken(this.accessTokenCache.getAccessToken(facade));
         invoice.setGuid(this.uuidGenerator.execute());
@@ -88,7 +88,7 @@ public class InvoiceClient {
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getInvoice(String invoiceId, String facade, Boolean signRequest) throws BitPayException,
+    public Invoice getInvoice(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(facade)));
@@ -119,7 +119,7 @@ public class InvoiceClient {
      * @throws BitPayException BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getInvoiceByGuid(String guid, String facade, Boolean signRequest) throws InvoiceQueryException {
+    public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         Invoice invoice;
 
@@ -153,7 +153,7 @@ public class InvoiceClient {
      */
     public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit, Integer offset) throws BitPayException, InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("dateStart", dateStart));
         params.add(new BasicNameValuePair("dateEnd", dateEnd));
         if (status != null) {
@@ -205,7 +205,7 @@ public class InvoiceClient {
         Boolean autoVerify
     ) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.Merchant));
+        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
         if (buyerSms == null && smsCode == null) {
             throw new InvoiceUpdateException(null,
                 "Updating the invoice requires Mobile Phone Number for SMS reception.");
@@ -257,7 +257,7 @@ public class InvoiceClient {
      */
     public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.Merchant));
+        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
         if (status != null) {
             params.put("status", status);
         }
@@ -314,7 +314,7 @@ public class InvoiceClient {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.Merchant)));
+        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
         if (forceCancel) {
             params.add(new BasicNameValuePair("forceCancel", forceCancel.toString()));
         }

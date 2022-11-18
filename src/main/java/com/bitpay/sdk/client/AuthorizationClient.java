@@ -5,6 +5,7 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Token;
 import com.bitpay.sdk.util.AccessTokenCache;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -82,11 +83,11 @@ public class AuthorizationClient {
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException BitPayException class
      */
-    public String requestClientAuthorization(String facade) throws BitPayException {
+    public String requestClientAuthorization(Facade facade) throws BitPayException {
         Token token = new Token();
         token.setId(this.identity);
         token.setGuid(this.uuidGenerator.execute());
-        token.setFacade(facade);
+        token.setFacade(facade.toString());
         token.setCount(1);
 
         JsonMapper mapper = JsonMapperFactory.create();
