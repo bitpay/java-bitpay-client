@@ -57,7 +57,7 @@ import java.util.*;
 /**
  * The type Client. Class is responsible for API calls.
  *
- * @version 8.6.0
+ * @version 8.6.1
  * @see <a href="https://bitpay.com/api/#rest-api">REST API</a>
  *
  */
