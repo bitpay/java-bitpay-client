@@ -4,20 +4,25 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.Env;
+import com.bitpay.sdk.Config;
+import com.bitpay.sdk.exceptions.BitPayException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.bitcoinj.core.ECKey;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -57,10 +62,10 @@ public class BitPayClientTest {
             .addHeader(ArgumentMatchers.eq("x-signature"), ArgumentMatchers.anyString());
         Mockito.verify(httpGet, Mockito.times(1))
             .addHeader(ArgumentMatchers.eq("x-identity"), ArgumentMatchers.anyString());
-        Mockito.verify(httpGet, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-accept-version", Env.BitpayApiVersion);
-        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -85,10 +90,10 @@ public class BitPayClientTest {
             .addHeader(ArgumentMatchers.eq("x-signature"), ArgumentMatchers.anyString());
         Mockito.verify(httpDelete, Mockito.times(1))
             .addHeader(ArgumentMatchers.eq("x-identity"), ArgumentMatchers.anyString());
-        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-accept-version", Env.BitpayApiVersion);
-        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -112,10 +117,10 @@ public class BitPayClientTest {
             .addHeader(ArgumentMatchers.eq("x-signature"), ArgumentMatchers.anyString());
         Mockito.verify(httpPost, Mockito.times(1))
             .addHeader(ArgumentMatchers.eq("x-identity"), ArgumentMatchers.anyString());
-        Mockito.verify(httpPost, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-accept-version", Env.BitpayApiVersion);
-        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+        Mockito.verify(httpPost, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -139,13 +144,29 @@ public class BitPayClientTest {
             .addHeader(ArgumentMatchers.eq("x-signature"), ArgumentMatchers.anyString());
         Mockito.verify(httpPut, Mockito.times(1))
             .addHeader(ArgumentMatchers.eq("x-identity"), ArgumentMatchers.anyString());
-        Mockito.verify(httpPut, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-accept-version", Env.BitpayApiVersion);
-        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+        Mockito.verify(httpPut, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+    }
+
+    @Test
+    public void it_should_test_convert_httpResponse_for_json() throws BitPayException {
+        // given
+        final String responseContent = "{\"status\":\"success\",\"data\":{},\"message\":null}";
+        BitPayClient testedClass = this.getTestedClass();
+        HttpResponse httpResponse = Mockito.mock(HttpResponse.class);
+        HttpEntity httpEntity = new StringEntity(responseContent, "UTF-8");
+        Mockito.when(httpResponse.getEntity()).thenReturn(httpEntity);
+
+        // when
+        String result = testedClass.responseToJsonString(httpResponse);
+
+        // then
+        Assertions.assertEquals(responseContent, result);
     }
 
     private BitPayClient getTestedClass() {
-        return new BitPayClient(this.httpClient, new ECKey(), this.httpRequestFactory, BASE_URL);
+        return new BitPayClient(this.httpClient, this.httpRequestFactory, BASE_URL, new ECKey());
     }
 }

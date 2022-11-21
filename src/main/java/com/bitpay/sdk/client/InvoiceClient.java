@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.InvoiceQueryException;
 import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.UuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,16 +28,16 @@ import org.apache.http.message.BasicNameValuePair;
 public class InvoiceClient {
 
     private final BitPayClient bitPayClient;
-    private AccessTokenCache accessTokenCache;
+    private AccessTokens accessTokens;
     private UuidGenerator uuidGenerator;
 
     public InvoiceClient(
         BitPayClient bitPayClient,
-        AccessTokenCache accessTokenCache,
+        AccessTokens accessTokens,
         UuidGenerator uuidGenerator
     ) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
         this.uuidGenerator = uuidGenerator;
     }
 
@@ -51,9 +51,9 @@ public class InvoiceClient {
      * @throws BitPayException          BitPayException class
      * @throws InvoiceCreationException InvoiceCreationException class
      */
-    public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest, AccessTokenCache tokenCache) throws BitPayException,
+    public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceCreationException {
-        invoice.setToken(this.accessTokenCache.getAccessToken(facade));
+        invoice.setToken(this.accessTokens.getAccessToken(facade));
         invoice.setGuid(this.uuidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
@@ -67,7 +67,7 @@ public class InvoiceClient {
         try {
             HttpResponse response = this.bitPayClient.post("invoices", json, signRequest);
             invoice = mapper.readerForUpdating(invoice).readValue(this.bitPayClient.responseToJsonString(response));
-            tokenCache.cacheToken(invoice.getId(), invoice.getToken());
+            this.accessTokens.put(invoice.getId(), invoice.getToken());
 
         } catch (BitPayException ex) {
             throw new InvoiceCreationException(ex.getStatusCode(), ex.getReasonPhrase());
@@ -91,7 +91,7 @@ public class InvoiceClient {
     public Invoice getInvoice(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(facade)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(facade)));
 
         Invoice invoice;
 
@@ -124,7 +124,7 @@ public class InvoiceClient {
         Invoice invoice;
 
         try {
-            params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(facade)));
+            params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(facade)));
             HttpResponse response = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
             invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
@@ -153,7 +153,7 @@ public class InvoiceClient {
      */
     public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit, Integer offset) throws BitPayException, InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("dateStart", dateStart));
         params.add(new BasicNameValuePair("dateEnd", dateEnd));
         if (status != null) {
@@ -205,7 +205,7 @@ public class InvoiceClient {
         Boolean autoVerify
     ) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (buyerSms == null && smsCode == null) {
             throw new InvoiceUpdateException(null,
                 "Updating the invoice requires Mobile Phone Number for SMS reception.");
@@ -257,7 +257,7 @@ public class InvoiceClient {
      */
     public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (status != null) {
             params.put("status", status);
         }
@@ -314,7 +314,7 @@ public class InvoiceClient {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         if (forceCancel) {
             params.add(new BasicNameValuePair("forceCancel", forceCancel.toString()));
         }

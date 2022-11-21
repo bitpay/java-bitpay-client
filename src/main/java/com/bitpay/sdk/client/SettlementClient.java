@@ -8,7 +8,7 @@ import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Settlement.Settlement;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,11 +21,11 @@ import org.apache.http.message.BasicNameValuePair;
 public class SettlementClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
 
-    public SettlementClient(BitPayClient bitPayClient, AccessTokenCache accessTokenCache) {
+    public SettlementClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
     }
 
     /**
@@ -51,7 +51,7 @@ public class SettlementClient {
         offset = offset != null ? offset : 0;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("dateStart", dateStart));
         params.add(new BasicNameValuePair("dateEnd", dateEnd));
         params.add(new BasicNameValuePair("currency", currency));
@@ -86,7 +86,7 @@ public class SettlementClient {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
-        String token = this.accessTokenCache.getAccessToken(Facade.MERCHANT);
+        String token = this.accessTokens.getAccessToken(Facade.MERCHANT);
         final ObjectMapper objectMapper = JsonMapperFactory.create();
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));

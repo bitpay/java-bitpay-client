@@ -1,5 +1,4 @@
 import com.bitpay.sdk.Client;
-import com.bitpay.sdk.Env;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;

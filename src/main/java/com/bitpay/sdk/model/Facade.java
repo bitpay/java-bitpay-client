@@ -19,13 +19,21 @@ import java.util.Objects;
  */
 public enum Facade {
     /**
-     * The constant Merchant.
+     * The broadest set of capabilities against a merchant organization.
+     * Allows for create, search, and view actions for Invoices and Bills; ledger download,
+     * as well as the creation of new merchant or pos tokens associated with the account.
      */
     MERCHANT("merchant"),
     /**
-     * The constant Payout.
+     * This is the facade which allows merchant to access the Payouts related resources and corresponding endpoints.
+     * Access to this facade is not enabled by default, for more information please contact our support channel.
      */
-    PAYOUT("payout");
+    PAYOUT("payout"),
+    /**
+     * Limited to creating new invoice or bills and search specific invoices or bills based on their id for
+     * the merchant's organization.
+     */
+    POS("pos");
 
     private final String value;
 

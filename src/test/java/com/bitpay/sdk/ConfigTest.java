@@ -14,7 +14,7 @@ public class ConfigTest {
     public void it_should_get_environment() {
         // given
         Config testedClass = getTestedClass();
-        String expectedValue = "expectedValue";
+        Environment expectedValue = Environment.PROD;
 
         // when
         testedClass.setEnvironment(expectedValue);
@@ -27,16 +27,48 @@ public class ConfigTest {
     public void it_should_get_env_config() {
         // given
         Config testedClass = getTestedClass();
-        String expectedKey = "expectedKey";
+        final Environment env = Environment.TEST;
         JsonNode config = Mockito.mock(JsonNode.class);
         JsonNode nestedNode = Mockito.mock(JsonNode.class);
-        Mockito.when(config.path(expectedKey)).thenReturn(nestedNode);
+        Mockito.when(config.path(env.toString())).thenReturn(nestedNode);
 
         // when
         testedClass.setEnvConfig(config);
 
         // then
-        Assertions.assertEquals(nestedNode, testedClass.getEnvConfig(expectedKey));
+        Assertions.assertEquals(nestedNode, testedClass.getEnvConfig(env));
+    }
+
+    @Test
+    public void it_should_returns_environments() {
+        Assertions.assertEquals("Test", Environment.TEST.toString());
+        Assertions.assertEquals("Prod", Environment.PROD.toString());
+    }
+
+    @Test
+    public void it_should_returns_env_urls() {
+        Assertions.assertEquals("https://test.bitpay.com/", Config.TEST_URL);
+        Assertions.assertEquals("https://bitpay.com/", Config.PROD_URL);
+    }
+
+    @Test
+    public void it_should_returns_bitpay_api_version() {
+        Assertions.assertEquals("2.0.0", Config.BITPAY_API_VERSION);
+    }
+
+    @Test
+    public void it_should_returns_bitpay_plugin_info() {
+        Assertions.assertEquals("BitPay_Java_Client_v8.5.2208", Config.BITPAY_PLUGIN_INFO);
+    }
+
+    @Test
+    public void it_should_returns_bitpay_api_frame() {
+        Assertions.assertEquals("std", Config.BITPAY_API_FRAME);
+    }
+
+    @Test
+    public void it_should_returns_bitpay_api_frame_version() {
+        Assertions.assertEquals("1.0.0", Config.BITPAY_API_FRAME_VERSION);
     }
 
     private Config getTestedClass() {

@@ -9,7 +9,7 @@ import com.bitpay.sdk.exceptions.LedgerQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -21,11 +21,11 @@ import org.apache.http.message.BasicNameValuePair;
 public class LedgerClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
 
-    public LedgerClient(BitPayClient bitPayClient, AccessTokenCache accessTokenCache) {
+    public LedgerClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
     }
 
     /**
@@ -41,7 +41,7 @@ public class LedgerClient {
     public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("startDate", dateStart));
         params.add(new BasicNameValuePair("endDate", dateEnd));
 
@@ -75,7 +75,7 @@ public class LedgerClient {
      */
     public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
 
         List<Ledger> ledgers;
 

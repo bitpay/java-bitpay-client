@@ -13,7 +13,7 @@ import com.bitpay.sdk.exceptions.PayoutRecipientUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.UuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,16 +32,16 @@ import org.apache.http.message.BasicNameValuePair;
 public class PayoutRecipientsClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
     private final UuidGenerator uuidGenerator;
 
     public PayoutRecipientsClient(
         BitPayClient bitPayClient,
-        AccessTokenCache accessTokenCache,
+        AccessTokens accessTokens,
         UuidGenerator uuidGenerator
     ) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
         this.uuidGenerator = uuidGenerator;
     }
 
@@ -56,7 +56,7 @@ public class PayoutRecipientsClient {
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients)
         throws BitPayException,
         PayoutRecipientCreationException {
-        recipients.setToken(this.accessTokenCache.getAccessToken(Facade.PAYOUT));
+        recipients.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipients.setGuid(this.uuidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
@@ -101,7 +101,7 @@ public class PayoutRecipientsClient {
         throws BitPayException, PayoutRecipientQueryException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
         if (status != null) {
             params.add(new BasicNameValuePair("status", status));
         }
@@ -142,7 +142,7 @@ public class PayoutRecipientsClient {
     public PayoutRecipient getPayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
 
         PayoutRecipient recipient;
 
@@ -173,7 +173,7 @@ public class PayoutRecipientsClient {
      */
     public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
-        recipient.setToken(this.accessTokenCache.getAccessToken(Facade.PAYOUT));
+        recipient.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipient.setGuid(this.uuidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
@@ -215,7 +215,7 @@ public class PayoutRecipientsClient {
         throws BitPayException, PayoutRecipientCancellationException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
 
         JsonMapper mapper = JsonMapperFactory.create();
         Boolean result;
@@ -248,7 +248,7 @@ public class PayoutRecipientsClient {
     public Boolean requestPayoutRecipientNotification(String recipientId)
         throws PayoutRecipientNotificationException, BitPayException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
         Boolean result;

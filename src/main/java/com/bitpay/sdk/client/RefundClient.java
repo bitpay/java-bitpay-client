@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Refund;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,11 +29,11 @@ import org.apache.http.message.BasicNameValuePair;
 public class RefundClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
 
-    public RefundClient(BitPayClient bitPayClient, AccessTokenCache accessTokenCache) {
+    public RefundClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
     }
 
     /**
@@ -53,7 +53,7 @@ public class RefundClient {
                                Boolean buyerPaysRefundFee, String reference) throws
         RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (invoiceId == null && amount == null) {
             throw new RefundCreationException(null, "Invoice ID, amount and currency are required to issue a refund.");
         }
@@ -112,7 +112,7 @@ public class RefundClient {
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/" + refundId, params, true);
@@ -141,7 +141,7 @@ public class RefundClient {
     public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
         List<Refund> refunds;
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("invoiceId", invoiceId));
 
         try {
@@ -171,7 +171,7 @@ public class RefundClient {
      */
     public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (refundId == null || status == null) {
             throw new RefundUpdateException(null,
                 "Updating the refund requires a refund ID and a new status to be set.");
@@ -213,7 +213,7 @@ public class RefundClient {
      */
     public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         Refund refund;
         JsonMapper mapper = JsonMapperFactory.create();
@@ -255,7 +255,7 @@ public class RefundClient {
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/" + refundId, params);
