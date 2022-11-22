@@ -20,6 +20,7 @@ public class RefundInfo {
     private String _currency;
     private Hashtable<String, Double> _amounts;
     private String _reference;
+    private String refundRequestEid;
 
     /**
      * Instantiates a new Refund info.
@@ -115,5 +116,23 @@ public class RefundInfo {
     @JsonProperty("reference")
     public void setReference(String reference) {
         this._reference = reference;
+    }
+
+    /**
+     * Gets Refund Request Eid.
+     *
+     * @return Refund Request Eid
+     */
+    public String getRefundRequestEid() {
+        return this.refundRequestEid;
+    }
+
+    /**
+     * Sets Refund Request Eid.
+     *
+     * @param refundRequestEid Refund Request Eid
+     */
+    public void setRefundRequestEid(String refundRequestEid) {
+        this.refundRequestEid = refundRequestEid;
     }
 }
