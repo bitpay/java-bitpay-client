@@ -91,25 +91,28 @@ You can also look ar the full JavaDoc for reference [here](http://htmlpreview.gi
 
 Once you have the environment file (JSON previously generated) you can initialize the client on two different ways:
 
+Pos Facade:
+```Java
+Client bitpay = Client.createPosClient(new PosToken("[POS_TOKEN]"));
+```
+
+Merchant/Payout Facade:
 ```Java
 // Provide the full path to the env file which you have previously stored securely.
+Client bitpay = Client.createClient(new ConfigFilePath("[FULL_PATH_TO_THE_CONFIG_FILE]"));
 
-Client bitpay = new Client("[FULL_PATH_TO_THE_CONFIG_FILE]", null); //as second argument, Pass a HttpHost object for proxy usage or NULL to ignore
-```
+OR
 
-```Java
 // Initialize with separate variables.
+Tokens tokens = new Tokens();
+tokens.addMerchant("[YOUR_MERCHANT_TOKEN]");
+tokens.addPayout("[YOUR_PAYOUT_TOKEN]");
 
-Client bitpay = new Client(
-    Env.Test,
-    "[FULL_PATH_TO_THE_PRIVATE_KEY_|OR|_PRIVATE_KEY_AS-PLAIN_TEXT]",
-    new Env.Tokens(){{
-        merchant = "2smKkjA1ACPKWUGN7wUEEqdWi3rhXYhDX6AKgG4njKvj";
-        payout = "9pJ7fzW1GGeuDQfj32aNATCDnyY6YAacVMcDrs7HHUNo";
-    }},
-    null //Pass a HttpHost object for proxy usage or NULL to ignore
-);
+Client bitpay = Client.createClient(new PrivateKey("PRIVATE_KEY_AS-PLAIN_TEXT"), tokens)
+
 ```
+
+**More advanced constructors are inside Client class.**
 
 ### Pair your client with BitPay
 

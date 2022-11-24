@@ -4,7 +4,7 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.Env;
+import com.bitpay.sdk.Config;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -35,16 +35,16 @@ import org.bitcoinj.core.ECKey;
 public class BitPayClient {
 
     private final HttpClient httpClient;
-    private final ECKey ecKey;
     private final HttpRequestFactory httpRequestFactory;
     private final String baseUrl;
+    private final ECKey ecKey;
     private static BitPayLogger logger = new BitPayLogger(BitPayLogger.OFF);
 
-    public BitPayClient(HttpClient httpClient, ECKey ecKey, HttpRequestFactory httpRequestFactory, String baseUrl) {
+    public BitPayClient(HttpClient httpClient, HttpRequestFactory httpRequestFactory, String baseUrl, ECKey ecKey) {
         this.httpClient = httpClient;
-        this.ecKey = ecKey;
         this.baseUrl = baseUrl;
         this.httpRequestFactory = httpRequestFactory;
+        this.ecKey = ecKey;
     }
 
     /**
@@ -70,7 +70,6 @@ public class BitPayClient {
      */
     public HttpResponse get(String uri, List<BasicNameValuePair> parameters, boolean signatureRequired) throws BitPayException {
         try {
-
             String fullURL = this.baseUrl + uri;
             HttpGet httpGet = this.httpRequestFactory.createHttpGet(fullURL);
 
@@ -83,10 +82,10 @@ public class BitPayClient {
                 httpGet.addHeader("x-signature", KeyUtils.sign(this.ecKey, fullURL));
                 httpGet.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
             }
-            httpGet.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-            httpGet.addHeader("x-accept-version", Env.BitpayApiVersion);
-            httpGet.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-            httpGet.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+            httpGet.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+            httpGet.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+            httpGet.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+            httpGet.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
 
 
             logger.info(httpGet.toString());
@@ -124,10 +123,10 @@ public class BitPayClient {
 
                 httpDelete.setURI(new URI(fullURL));
 
-                httpDelete.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
-                httpDelete.addHeader("x-accept-version", Env.BitpayApiVersion);
-                httpDelete.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-                httpDelete.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+                httpDelete.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+                httpDelete.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+                httpDelete.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+                httpDelete.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
                 httpDelete.addHeader("x-signature", KeyUtils.sign(this.ecKey, fullURL));
                 httpDelete.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
             }
@@ -176,10 +175,10 @@ public class BitPayClient {
                 httpPost.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
             }
 
-            httpPost.addHeader("x-accept-version", Env.BitpayApiVersion);
-            httpPost.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-            httpPost.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
-            httpPost.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
+            httpPost.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+            httpPost.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+            httpPost.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+            httpPost.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
             httpPost.addHeader("Content-Type", "application/json");
 
             logger.info(httpPost.toString());
@@ -210,11 +209,11 @@ public class BitPayClient {
 
             put.addHeader("x-signature", KeyUtils.sign(this.ecKey, this.baseUrl + uri + json));
             put.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
-            put.addHeader("x-accept-version", Env.BitpayApiVersion);
-            put.addHeader("X-BitPay-Plugin-Info", Env.BitpayPluginInfo);
+            put.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+            put.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
             put.addHeader("Content-Type", "application/json");
-            put.addHeader("x-bitpay-api-frame", Env.BitpayApiFrame);
-            put.addHeader("x-bitpay-api-frame-version", Env.BitpayApiFrameVersion);
+            put.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+            put.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
 
             logger.info(put.toString());
             return httpClient.execute(put);

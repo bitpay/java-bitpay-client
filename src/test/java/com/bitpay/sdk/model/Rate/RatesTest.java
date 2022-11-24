@@ -76,6 +76,21 @@ public class RatesTest {
         Assertions.assertSame(expectedRates, testedClass.getRates());
     }
 
+    @Test
+    public void it_should_throws_rateQueryException() throws RateQueryException {
+        Mockito.when(this.client.getRates()).thenThrow(RateQueryException.class);
+
+        Assertions.assertThrows(RateQueryException.class, () -> {
+            // given
+            List<Rate> rates = Arrays.asList(rate1, rate2);
+            Rates testedClass = this.getTestedClass(rates);
+
+
+            // when
+            testedClass.update(this.client);
+        });
+    }
+
     private Rates getTestedClass(List<Rate> rates) {
         return new Rates(rates);
     }

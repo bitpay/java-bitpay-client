@@ -7,7 +7,7 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Token;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.UuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,18 +20,18 @@ public class AuthorizationClient {
 
     private final BitPayClient bitPayClient;
     private final UuidGenerator uuidGenerator;
-    private final AccessTokenCache tokenCache;
+    private final AccessTokens accessToken;
     private final String identity;
 
     public AuthorizationClient(
         BitPayClient bitPayClient,
         UuidGenerator uuidGenerator,
-        AccessTokenCache tokenCache,
+        AccessTokens accessToken,
         String identity
     ) {
         this.bitPayClient = bitPayClient;
         this.uuidGenerator = uuidGenerator;
-        this.tokenCache = tokenCache;
+        this.accessToken = accessToken;
         this.identity = identity;
     }
 
@@ -72,7 +72,7 @@ public class AuthorizationClient {
         }
 
         for (Token t : tokens) {
-            this.tokenCache.put(t.getFacade(), t.getValue());
+            this.accessToken.put(t.getFacade(), t.getValue());
         }
     }
 
@@ -120,7 +120,7 @@ public class AuthorizationClient {
                 "failed to deserialize BitPay server response (Tokens) : " + e.getMessage());
         }
 
-        this.tokenCache.put(tokens.get(0).getFacade(), tokens.get(0).getValue());
+        this.accessToken.put(tokens.get(0).getFacade(), tokens.get(0).getValue());
 
         return tokens.get(0).getPairingCode();
     }

@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.BillUpdateException;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,26 +27,11 @@ import org.apache.http.message.BasicNameValuePair;
 public class BillClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
 
-    public BillClient(BitPayClient bitPayClient, AccessTokenCache accessTokenCache) {
+    public BillClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
-    }
-
-    /**
-     * Create a BitPay bill using the POS facade.
-     *
-     * @param bill An Bill object with request parameters defined.
-     * @return A BitPay generated Bill object.
-     * @throws BillCreationException BillCreationException class
-     */
-    public Bill createBill(Bill bill) throws BillCreationException {
-        try {
-            return this.createBill(bill, Facade.MERCHANT, true);
-        } catch (Exception e) {
-            throw new BillCreationException(null, e.getMessage());
-        }
+        this.accessTokens = accessTokens;
     }
 
     /**
@@ -61,7 +46,7 @@ public class BillClient {
      */
     public Bill createBill(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
-        String token = this.accessTokenCache.getAccessToken(facade);
+        String token = this.accessTokens.getAccessToken(facade);
         bill.setToken(token);
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
@@ -80,23 +65,8 @@ public class BillClient {
                 "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.accessTokenCache.cacheToken(bill.getId(), bill.getToken());
+        this.accessTokens.put(bill.getId(), bill.getToken());
         return bill;
-    }
-
-    /**
-     * Retrieve a BitPay bill by bill id using the public facade.
-     *
-     * @param billId The id of the bill to retrieve.
-     * @return A BitPay Bill object.
-     * @throws BillQueryException BillQueryException class
-     */
-    public Bill getBill(String billId) throws BillQueryException {
-        try {
-            return this.getBill(billId, Facade.MERCHANT, true);
-        } catch (Exception e) {
-            throw new BillQueryException(null, e.getMessage());
-        }
     }
 
     /**
@@ -110,7 +80,7 @@ public class BillClient {
      * @throws BillQueryException BillQueryException class
      */
     public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
-        String token = this.accessTokenCache.getAccessToken(facade);
+        String token = this.accessTokens.getAccessToken(facade);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
 
@@ -140,7 +110,7 @@ public class BillClient {
      */
     public List<Bill>getBills(String status) throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
         params.add(new BasicNameValuePair("status", status));
 
         List<Bill> bills;
@@ -168,7 +138,7 @@ public class BillClient {
      */
     public List<Bill> getBills() throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.MERCHANT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
 
         List<Bill> bills;
 
@@ -212,24 +182,8 @@ public class BillClient {
                 "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.accessTokenCache.cacheToken(bill.getId(), bill.getToken());
+        this.accessTokens.put(bill.getId(), bill.getToken());
         return bill;
-    }
-
-    /**
-     * Deliver a BitPay Bill.
-     *
-     * @param billId    The id of the requested bill.
-     * @param billToken The token of the requested bill.
-     * @return A response status returned from the API.
-     * @throws BillDeliveryException BillDeliveryException class
-     */
-    public String deliverBill(String billId, String billToken) throws BillDeliveryException {
-        try {
-            return this.deliverBill(billId, billToken, true);
-        } catch (Exception e) {
-            throw new BillDeliveryException(null, e.getMessage());
-        }
     }
 
     /**

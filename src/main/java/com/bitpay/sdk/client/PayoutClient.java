@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.PayoutNotificationException;
 import com.bitpay.sdk.exceptions.PayoutQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.util.AccessTokenCache;
+import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,11 +29,11 @@ import org.apache.http.message.BasicNameValuePair;
 public class PayoutClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokenCache accessTokenCache;
+    private final AccessTokens accessTokens;
 
-    public PayoutClient(BitPayClient bitPayClient, AccessTokenCache accessTokenCache) {
+    public PayoutClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
-        this.accessTokenCache = accessTokenCache;
+        this.accessTokens = accessTokens;
     }
 
     /**
@@ -45,7 +45,7 @@ public class PayoutClient {
      * @throws PayoutCreationException PayoutCreationException class
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
-        String token = this.accessTokenCache.getAccessToken(Facade.PAYOUT);
+        String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         payout.setToken(token);
 
         JsonMapper mapper = JsonMapperFactory.create();
@@ -77,7 +77,7 @@ public class PayoutClient {
      * @throws PayoutQueryException PayoutQueryException class
      */
     public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
-        String token = this.accessTokenCache.getAccessToken(Facade.PAYOUT);
+        String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
 
@@ -108,7 +108,7 @@ public class PayoutClient {
     public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
         Boolean result;
         JsonMapper mapper = JsonMapperFactory.create();
 
@@ -148,7 +148,7 @@ public class PayoutClient {
                                    Integer offset) throws BitPayException, PayoutQueryException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT)));
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
         if (startDate != null) {
             params.add(new BasicNameValuePair("startDate", startDate));
         }
@@ -196,7 +196,7 @@ public class PayoutClient {
     public Boolean requestPayoutNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokenCache.getAccessToken(Facade.PAYOUT));
+        params.put("token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
 
