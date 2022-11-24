@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceBuyerProvidedInfo {
-    private String _name;
-    private String _phoneNumber;
-    private String _selectedTransactionCurrency;
-    private String _emailAddress;
-    private String _selectedWallet;
-    private String _sms;
-    private Boolean _smsVerified;
+    private String name;
+    private String phoneNumber;
+    private String selectedTransactionCurrency;
+    private String emailAddress;
+    private String selectedWallet;
+    private String sms;
+    private Boolean smsVerified;
 
     /**
      * Instantiates a new Invoice buyer provided info.
@@ -36,7 +36,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getName() {
-        return _name;
+        return this.name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("name")
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
@@ -56,7 +56,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getPhoneNumber() {
-        return _phoneNumber;
+        return this.phoneNumber;
     }
 
     /**
@@ -66,7 +66,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("phoneNumber")
     public void setPhoneNumber(String phoneNumber) {
-        this._phoneNumber = phoneNumber;
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -78,7 +78,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getSelectedTransactionCurrency() {
-        return _selectedTransactionCurrency;
+        return this.selectedTransactionCurrency;
     }
 
     /**
@@ -90,7 +90,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("selectedTransactionCurrency")
     public void setSelectedTransactionCurrency(String selectedTransactionCurrency) {
-        this._selectedTransactionCurrency = selectedTransactionCurrency;
+        this.selectedTransactionCurrency = selectedTransactionCurrency;
     }
 
     /**
@@ -101,7 +101,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getEmailAddress() {
-        return _emailAddress;
+        return this.emailAddress;
     }
 
     /**
@@ -112,7 +112,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("emailAddress")
     public void setEmailAddress(String emailAddress) {
-        this._emailAddress = emailAddress;
+        this.emailAddress = emailAddress;
     }
 
     /**
@@ -123,7 +123,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getSelectedWallet() {
-        return _selectedWallet;
+        return this.selectedWallet;
     }
 
     /**
@@ -134,7 +134,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("selectedWallet")
     public void setSelectedWallet(String selectedWallet) {
-        this._selectedWallet = selectedWallet;
+        this.selectedWallet = selectedWallet;
     }
 
     /**
@@ -145,7 +145,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public String getSms() {
-        return _sms;
+        return this.sms;
     }
 
     /**
@@ -156,7 +156,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("sms")
     public void setSms(String sms) {
-        this._sms = sms;
+        this.sms = sms;
     }
 
     /**
@@ -166,7 +166,7 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonIgnore
     public Boolean getSmsVerified() {
-        return _smsVerified;
+        return this.smsVerified;
     }
 
     /**
@@ -176,6 +176,6 @@ public class InvoiceBuyerProvidedInfo {
      */
     @JsonProperty("smsVerified")
     public void setSmsVerified(Boolean smsVerified) {
-        this._smsVerified = smsVerified;
+        this.smsVerified = smsVerified;
     }
 }

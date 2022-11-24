@@ -24,71 +24,71 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice {
 
-    private String _currency;
+    private String currency;
 
-    private String _guid = "";
-    private String _token = "";
+    private String guid = "";
+    private String token = "";
 
-    private Double _price;
-    private String _posData = "";
-    private String _notificationURL = "";
-    private String _transactionSpeed = "";
-    private boolean _fullNotifications = false;
-    private String _notificationEmail = "";
-    private String _redirectURL = "";
-    private String _closeURL = "";
-    private String _orderId = "";
-    private String _itemDesc = "";
-    private String _itemCode = "";
-    private boolean _physical = false;
-    private List<String> _paymentCurrencies;
-    private long _acceptanceWindow;
-    private Buyer _buyer;
-    private String _buyerSms;
-    private String _merchantName;
-    private String _selectedTransactionCurrency;
-    private String _forcedBuyerSelectedWallet;
-    private InvoiceTransactionDetails _transactionDetails;
-    private InvoiceUniversalCodes _universalCodes;
-    private List<InvoiceItemizedDetails> _itemizedDetails;
-    private boolean _autoRedirect = false;
+    private Double price;
+    private String posData = "";
+    private String notificationURL = "";
+    private String transactionSpeed = "";
+    private boolean fullNotifications = false;
+    private String notificationEmail = "";
+    private String redirectURL = "";
+    private String closeURL = "";
+    private String orderId = "";
+    private String itemDesc = "";
+    private String itemCode = "";
+    private boolean physical = false;
+    private List<String> paymentCurrencies;
+    private long acceptanceWindow;
+    private Buyer buyer;
+    private String buyerSms;
+    private String merchantName;
+    private String selectedTransactionCurrency;
+    private String forcedBuyerSelectedWallet;
+    private InvoiceTransactionDetails transactionDetails;
+    private InvoiceUniversalCodes universalCodes;
+    private List<InvoiceItemizedDetails> itemizedDetails;
+    private boolean autoRedirect = false;
 
-    private String _id;
-    private String _url;
-    private String _status;
-    private boolean _lowFeeDetected;
-    private long _invoiceTime;
-    private long _expirationTime;
-    private long _currentTime;
-    private String _exceptionStatus;
-    private long _targetConfirmations;
-    private List<InvoiceTransaction> _transactions;
-    private ArrayList _refundAddresses;
-    private boolean _refundAddressRequestPending;
-    private String _buyerProvidedEmail;
-    private InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
-    private SupportedTransactionCurrencies _supportedTransactionCurrencies = new SupportedTransactionCurrencies();
-    private MinerFees _minerFees = new MinerFees();
-    private Shopper _shopper = new Shopper();
-    private String _billId;
-    private ArrayList<RefundInfo> _refundInfo;
-    private boolean _extendedNotifications = false;
-    private String _transactionCurrency;
-    private String _forcedBuyerSelectedTransactionCurrency;
-    private BigDecimal _amountPaid;
-    private BigDecimal _displayAmountPaid;
-    private Hashtable<String, Hashtable<String, String>> _exchangeRates;
-    private boolean _isCancelled = false;
-    private boolean _bitpayIdRequired = false;
-    private Hashtable<String, String> _paymentSubtotals;
-    private Hashtable<String, String> _paymentTotals;
-    private Hashtable<String, String> _paymentDisplayTotals;
-    private Hashtable<String, String> _paymentDisplaySubTotals;
-    private boolean _nonPayProPaymentReceived;
-    private boolean _jsonPayProRequired = false;
-    private BigDecimal _underpaidAmount;
-    private BigDecimal _overpaidAmount;
-    private Hashtable<String, Hashtable<String, String>> _paymentCodes;
+    private String id;
+    private String url;
+    private String status;
+    private boolean lowFeeDetected;
+    private long invoiceTime;
+    private long expirationTime;
+    private long currentTime;
+    private String exceptionStatus;
+    private long targetConfirmations;
+    private List<InvoiceTransaction> transactions;
+    private ArrayList refundAddresses;
+    private boolean refundAddressRequestPending;
+    private String buyerProvidedEmail;
+    private InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
+    private SupportedTransactionCurrencies supportedTransactionCurrencies = new SupportedTransactionCurrencies();
+    private MinerFees minerFees = new MinerFees();
+    private Shopper shopper = new Shopper();
+    private String billId;
+    private ArrayList<RefundInfo> refundInfo;
+    private boolean extendedNotifications = false;
+    private String transactionCurrency;
+    private String forcedBuyerSelectedTransactionCurrency;
+    private BigDecimal amountPaid;
+    private BigDecimal displayAmountPaid;
+    private Hashtable<String, Hashtable<String, String>> exchangeRates;
+    private boolean isCancelled = false;
+    private boolean bitpayIdRequired = false;
+    private Hashtable<String, String> paymentSubtotals;
+    private Hashtable<String, String> paymentTotals;
+    private Hashtable<String, String> paymentDisplayTotals;
+    private Hashtable<String, String> paymentDisplaySubTotals;
+    private boolean nonPayProPaymentReceived;
+    private boolean jsonPayProRequired = false;
+    private BigDecimal underpaidAmount;
+    private BigDecimal overpaidAmount;
+    private Hashtable<String, Hashtable<String, String>> paymentCodes;
 
     /**
      * Constructor, create an empty Invoice object.
@@ -103,8 +103,8 @@ public class Invoice {
      * @param currency The three digit currency type used to compute the invoice bitcoin amount.
      */
     public Invoice(Double price, String currency) {
-        this._price = price;
-        this._currency = currency;
+        this.price = price;
+        this.currency = currency;
     }
 
     // API fields
@@ -119,7 +119,7 @@ public class Invoice {
     @JsonProperty("guid")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getGuid() {
-        return _guid;
+        return this.guid;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Invoice {
      */
     @JsonProperty("guid")
     public void setGuid(String _guid) {
-        this._guid = _guid;
+        this.guid = _guid;
     }
 
     /**
@@ -143,7 +143,7 @@ public class Invoice {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-        return _token;
+        return this.token;
     }
 
     /**
@@ -155,7 +155,7 @@ public class Invoice {
      */
     @JsonProperty("token")
     public void setToken(String _token) {
-        this._token = _token;
+        this.token = _token;
     }
 
     // Required fields
@@ -168,7 +168,7 @@ public class Invoice {
      */
     @JsonProperty("price")
     public Double getPrice() {
-        return _price;
+        return this.price;
     }
 
     /**
@@ -178,7 +178,7 @@ public class Invoice {
      */
     @JsonProperty("price")
     public void setPrice(Double _price) {
-        this._price = _price;
+        this.price = _price;
     }
 
     /**
@@ -191,7 +191,7 @@ public class Invoice {
      */
     @JsonProperty("currency")
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -200,15 +200,15 @@ public class Invoice {
      *
      * @see <a href="https://bitpay.com/api/#rest-api-resources-currencies">Supported currencies</a>
      *
-     * @param _currency the currency
+     * @param currency the currency
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("currency")
-    public void setCurrency(String _currency) throws BitPayException {
-        if (!Currency.isValid(_currency))
+    public void setCurrency(String currency) throws BitPayException {
+        if (!Currency.isValid(currency))
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
-        this._currency = _currency;
+        this.currency = currency;
     }
 
     // Optional fields
@@ -223,7 +223,7 @@ public class Invoice {
     @JsonProperty("orderId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getOrderId() {
-        return _orderId;
+        return this.orderId;
     }
 
     /**
@@ -234,7 +234,7 @@ public class Invoice {
      */
     @JsonProperty("orderId")
     public void setOrderId(String _orderId) {
-        this._orderId = _orderId;
+        this.orderId = _orderId;
     }
 
     /**
@@ -245,7 +245,7 @@ public class Invoice {
     @JsonProperty("itemDesc")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getItemDesc() {
-        return _itemDesc;
+        return this.itemDesc;
     }
 
     /**
@@ -255,7 +255,7 @@ public class Invoice {
      */
     @JsonProperty("itemDesc")
     public void setItemDesc(String _itemDesc) {
-        this._itemDesc = _itemDesc;
+        this.itemDesc = _itemDesc;
     }
 
     /**
@@ -266,7 +266,7 @@ public class Invoice {
     @JsonProperty("itemCode")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getItemCode() {
-        return _itemCode;
+        return this.itemCode;
     }
 
     /**
@@ -276,7 +276,7 @@ public class Invoice {
      */
     @JsonProperty("itemCode")
     public void setItemCode(String _itemCode) {
-        this._itemCode = _itemCode;
+        this.itemCode = _itemCode;
     }
 
     /**
@@ -290,7 +290,7 @@ public class Invoice {
     @JsonProperty("posData")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPosData() {
-        return _posData;
+        return this.posData;
     }
 
     /**
@@ -304,7 +304,7 @@ public class Invoice {
      */
     @JsonProperty("posData")
     public void setPosData(String _posData) {
-        this._posData = _posData;
+        this.posData = _posData;
     }
 
     /**
@@ -315,7 +315,7 @@ public class Invoice {
     @JsonProperty("notificationURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNotificationURL() {
-        return _notificationURL;
+        return this.notificationURL;
     }
 
     /**
@@ -325,7 +325,7 @@ public class Invoice {
      */
     @JsonProperty("notificationURL")
     public void setNotificationURL(String _notificationURL) {
-        this._notificationURL = _notificationURL;
+        this.notificationURL = _notificationURL;
     }
 
     /**
@@ -363,7 +363,7 @@ public class Invoice {
     @JsonProperty("transactionSpeed")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getTransactionSpeed() {
-        return _transactionSpeed;
+        return this.transactionSpeed;
     }
 
     /**
@@ -400,7 +400,7 @@ public class Invoice {
      */
     @JsonProperty("transactionSpeed")
     public void setTransactionSpeed(String _transactionSpeed) {
-        this._transactionSpeed = _transactionSpeed;
+        this.transactionSpeed = _transactionSpeed;
     }
 
     /**
@@ -415,7 +415,7 @@ public class Invoice {
     @JsonProperty("fullNotifications")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getFullNotifications() {
-        return _fullNotifications;
+        return this.fullNotifications;
     }
 
     /**
@@ -425,11 +425,11 @@ public class Invoice {
      * This webhook will be for the "confirmed" or "complete" invoice status,
      * depending on the transactionSpeed selected.
      *
-     * @param _fullNotifications the full notifications
+     * @param fullNotifications the full notifications
      */
     @JsonProperty("fullNotifications")
-    public void setFullNotifications(boolean _fullNotifications) {
-        this._fullNotifications = _fullNotifications;
+    public void setFullNotifications(boolean fullNotifications) {
+        this.fullNotifications = fullNotifications;
     }
 
     /**
@@ -444,7 +444,7 @@ public class Invoice {
     @JsonProperty("extendedNotifications")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getExtendedNotifications() {
-        return _extendedNotifications;
+        return this.extendedNotifications;
     }
 
     /**
@@ -454,11 +454,11 @@ public class Invoice {
      * When using the extendedNotifications parameter,
      * the webhook also have a payload slightly different from the standard webhooks.
      *
-     * @param _extendedNotifications the extended notifications
+     * @param extendedNotifications the extended notifications
      */
     @JsonProperty("extendedNotifications")
-    public void setExtendedNotifications(boolean _extendedNotifications) {
-        this._extendedNotifications = _extendedNotifications;
+    public void setExtendedNotifications(boolean extendedNotifications) {
+        this.extendedNotifications = extendedNotifications;
     }
 
     /**
@@ -471,7 +471,7 @@ public class Invoice {
     @JsonProperty("notificationEmail")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNotificationEmail() {
-        return _notificationEmail;
+        return this.notificationEmail;
     }
 
     /**
@@ -479,11 +479,11 @@ public class Invoice {
      * It is also possible to configure this email via the account setting on the BitPay dashboard
      * or disable the email notification.
      *
-     * @param _notificationEmail the notification email
+     * @param notificationEmail the notification email
      */
     @JsonProperty("notificationEmail")
-    public void setNotificationEmail(String _notificationEmail) {
-        this._notificationEmail = _notificationEmail;
+    public void setNotificationEmail(String notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
 
     /**
@@ -496,7 +496,7 @@ public class Invoice {
     @JsonProperty("redirectURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRedirectURL() {
-        return _redirectURL;
+        return this.redirectURL;
     }
 
     /**
@@ -504,11 +504,11 @@ public class Invoice {
      * a successful payment or when clicking on the Close button if a separate closeURL is not specified.
      * Be sure to include "http://" or "https://" in the url.
      *
-     * @param _redirectURL the redirect url
+     * @param redirectURL the redirect url
      */
     @JsonProperty("redirectURL")
-    public void setRedirectURL(String _redirectURL) {
-        this._redirectURL = _redirectURL;
+    public void setRedirectURL(String redirectURL) {
+        this.redirectURL = redirectURL;
     }
 
     /**
@@ -520,18 +520,18 @@ public class Invoice {
     @JsonProperty("closeURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCloseURL() {
-        return _closeURL;
+        return this.closeURL;
     }
 
     /**
      * Sets URL to redirect if the shopper does not pay the invoice and click on the Close button instead.
      * Be sure to include "http://" or "https://" in the url.
      *
-     * @param _closeURL the close url
+     * @param closeURL the close url
      */
     @JsonProperty("closeURL")
-    public void setCloseURL(String _closeURL) {
-        this._closeURL = _closeURL;
+    public void setCloseURL(String closeURL) {
+        this.closeURL = closeURL;
     }
 
     /**
@@ -542,17 +542,17 @@ public class Invoice {
     @JsonProperty("physical")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getPhysical() {
-        return _physical;
+        return this.physical;
     }
 
     /**
      * Sets physical. Indicates whether items are physical goods. Alternatives include digital goods and services.
      *
-     * @param _physical the physical
+     * @param physical the physical
      */
     @JsonProperty("physical")
-    public void setPhysical(boolean _physical) {
-        this._physical = _physical;
+    public void setPhysical(boolean physical) {
+        this.physical = physical;
     }
 
     /**
@@ -568,7 +568,7 @@ public class Invoice {
     @JsonProperty("paymentCurrencies")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<String> getPaymentCurrencies() {
-        return _paymentCurrencies;
+        return this.paymentCurrencies;
     }
 
     /**
@@ -579,11 +579,11 @@ public class Invoice {
      * For instance "paymentCurrencies": ["BTC"] will create an invoice with only XRP available as transaction currency,
      * thus bypassing the currency selection step on the invoice.
      *
-     * @param _paymentCurrencies the payment currencies
+     * @param paymentCurrencies the payment currencies
      */
     @JsonProperty("paymentCurrencies")
-    public void setPaymentCurrencies(List<String> _paymentCurrencies) {
-        this._paymentCurrencies = _paymentCurrencies;
+    public void setPaymentCurrencies(List<String> paymentCurrencies) {
+        this.paymentCurrencies = paymentCurrencies;
     }
 
     /**
@@ -596,7 +596,7 @@ public class Invoice {
     @JsonProperty("acceptanceWindow")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public long getAcceptanceWindow() {
-        return _acceptanceWindow;
+        return this.acceptanceWindow;
     }
 
     /**
@@ -604,11 +604,11 @@ public class Invoice {
      * If not set, invoice will default to the account acceptanceWindow.
      * If account acceptanceWindow is not set, invoice will default to 15 minutes (900,000 milliseconds).
      *
-     * @param _acceptanceWindow the acceptance window
+     * @param acceptanceWindow the acceptance window
      */
     @JsonProperty("acceptanceWindow")
-    public void setAcceptanceWindow(long _acceptanceWindow) {
-        this._acceptanceWindow = _acceptanceWindow;
+    public void setAcceptanceWindow(long acceptanceWindow) {
+        this.acceptanceWindow = acceptanceWindow;
     }
 
     /**
@@ -619,17 +619,17 @@ public class Invoice {
     @JsonProperty("merchantName")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getMerchantName() {
-        return _merchantName;
+        return this.merchantName;
     }
 
     /**
      * Sets a display string for merchant identification (ex. Wal-Mart Store #1452, Bowling Green, KY).
      *
-     * @param _merchantName the merchant name
+     * @param merchantName the merchant name
      */
     @JsonProperty("merchantName")
-    public void setMerchantName(String _merchantName) {
-        this._merchantName = _merchantName;
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
     }
 
     /**
@@ -642,7 +642,7 @@ public class Invoice {
     @JsonProperty("selectedTransactionCurrency")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getSelectedTransactionCurrency() {
-        return _selectedTransactionCurrency;
+        return this.selectedTransactionCurrency;
     }
 
     /**
@@ -650,15 +650,15 @@ public class Invoice {
      * the BitPay invoice, current supported values are "BTC", "BCH", "ETH", "GUSD", "PAX", "BUSD", "USDC", "XRP",
      * "DOGE", "DAI" and "WBTC". If not yet selected, this field will not be returned.
      *
-     * @param _selectedTransactionCurrency the selected transaction currency
+     * @param selectedTransactionCurrency the selected transaction currency
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("selectedTransactionCurrency")
-    public void setSelectedTransactionCurrency(String _selectedTransactionCurrency) throws BitPayException {
-        if (!Currency.isValid(_selectedTransactionCurrency))
+    public void setSelectedTransactionCurrency(String selectedTransactionCurrency) throws BitPayException {
+        if (!Currency.isValid(selectedTransactionCurrency))
             throw new BitPayException(null, "Error: selectedTransactionCurrency code must be a type of Model.Currency");
 
-        this._selectedTransactionCurrency = _currency;
+        this.selectedTransactionCurrency = currency;
     }
 
     /**
@@ -669,17 +669,17 @@ public class Invoice {
     @JsonProperty("forcedBuyerSelectedWallet")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getForcedBuyerSelectedWallet() {
-        return _forcedBuyerSelectedWallet;
+        return this.forcedBuyerSelectedWallet;
     }
 
     /**
      * Sets merchant pre-selects wallet on behalf of buyer.
      *
-     * @param _forcedBuyerSelectedWallet the forced buyer selected wallet
+     * @param forcedBuyerSelectedWallet the forced buyer selected wallet
      */
     @JsonProperty("forcedBuyerSelectedWallet")
-    public void setForcedBuyerSelectedWallet(String _forcedBuyerSelectedWallet) {
-        this._forcedBuyerSelectedWallet = _forcedBuyerSelectedWallet;
+    public void setForcedBuyerSelectedWallet(String forcedBuyerSelectedWallet) {
+        this.forcedBuyerSelectedWallet = forcedBuyerSelectedWallet;
     }
 
     /**
@@ -690,17 +690,17 @@ public class Invoice {
     @JsonProperty("transactionDetails")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public InvoiceTransactionDetails getTransactionDetails() {
-        return _transactionDetails;
+        return this.transactionDetails;
     }
 
     /**
      * Sets invoice transaction details.
      *
-     * @param _transactionDetails the transaction details
+     * @param transactionDetails the transaction details
      */
     @JsonProperty("transactionDetails")
-    public void setTransactionDetails(InvoiceTransactionDetails _transactionDetails) {
-        this._transactionDetails = _transactionDetails;
+    public void setTransactionDetails(InvoiceTransactionDetails transactionDetails) {
+        this.transactionDetails = transactionDetails;
     }
 
     /**
@@ -711,17 +711,17 @@ public class Invoice {
     @JsonProperty("universalCodes")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public InvoiceUniversalCodes getUniversalCodes() {
-        return _universalCodes;
+        return this.universalCodes;
     }
 
     /**
      * Sets object containing wallet-specific URLs for payment protocol.
      *
-     * @param _universalCodes the universal codes
+     * @param universalCodes the universal codes
      */
     @JsonProperty("universalCodes")
-    public void setUniversalCodes(InvoiceUniversalCodes _universalCodes) {
-        this._universalCodes = _universalCodes;
+    public void setUniversalCodes(InvoiceUniversalCodes universalCodes) {
+        this.universalCodes = universalCodes;
     }
 
     /**
@@ -732,17 +732,17 @@ public class Invoice {
     @JsonProperty("itemizedDetails")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<InvoiceItemizedDetails> getItemizedDetails() {
-        return _itemizedDetails;
+        return this.itemizedDetails;
     }
 
     /**
      * Sets object containing line item details for display.
      *
-     * @param _itemizedDetails the itemized details
+     * @param itemizedDetails the itemized details
      */
     @JsonProperty("itemizedDetails")
-    public void setItemizedDetails(List<InvoiceItemizedDetails> _itemizedDetails) {
-        this._itemizedDetails = _itemizedDetails;
+    public void setItemizedDetails(List<InvoiceItemizedDetails> itemizedDetails) {
+        this.itemizedDetails = itemizedDetails;
     }
 
     /**
@@ -760,7 +760,7 @@ public class Invoice {
      */
     @JsonProperty("autoRedirect")
     public boolean getAutoRedirect() {
-        return _autoRedirect;
+        return this.autoRedirect;
     }
 
     /**
@@ -774,11 +774,11 @@ public class Invoice {
      * </ul>
      * <p>Note: If automatic redirect is enabled, redirectURL becomes a mandatory invoice parameters.</p>
      *
-     * @param _autoRedirect the auto redirect
+     * @param autoRedirect the auto redirect
      */
     @JsonProperty("autoRedirect")
-    public void setAutoRedirect(boolean _autoRedirect) {
-        this._autoRedirect = _autoRedirect;
+    public void setAutoRedirect(boolean autoRedirect) {
+        this.autoRedirect = autoRedirect;
     }
 
     /**
@@ -791,7 +791,7 @@ public class Invoice {
     @JsonProperty("bitpayIdRequired")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getBitpayIdRequired() {
-        return _bitpayIdRequired;
+        return this.bitpayIdRequired;
     }
 
     /**
@@ -799,11 +799,11 @@ public class Invoice {
      * receiving a refund over a given threshold, which may vary by region.
      * This Boolean forces the invoice to require BitPay ID regardless of the price.
      *
-     * @param _bitpayIdRequired the bitpay id required
+     * @param bitpayIdRequired the bitpay id required
      */
     @JsonProperty("bitpayIdRequired")
-    public void setBitpayIdRequired(boolean _bitpayIdRequired) {
-        this._bitpayIdRequired = _bitpayIdRequired;
+    public void setBitpayIdRequired(boolean bitpayIdRequired) {
+        this.bitpayIdRequired = bitpayIdRequired;
     }
 
     // Buyer data
@@ -817,17 +817,17 @@ public class Invoice {
     @JsonProperty("buyer")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Buyer getBuyer() {
-        return _buyer;
+        return this.buyer;
     }
 
     /**
      * Sets buyer. Allows merchant to pass buyer related information in the invoice object.
      *
-     * @param _buyer the buyer
+     * @param buyer the buyer
      */
     @JsonProperty("buyer")
-    public void setBuyer(Buyer _buyer) {
-        this._buyer = _buyer;
+    public void setBuyer(Buyer buyer) {
+        this.buyer = buyer;
     }
 
     /**
@@ -838,17 +838,17 @@ public class Invoice {
     @JsonProperty("buyerSms")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getBuyerSms() {
-        return _buyerSms;
+        return this.buyerSms;
     }
 
     /**
      * Sets buyer sms. SMS phone number including country code i.e. “+12223334444.
      *
-     * @param _buyerSms the buyer sms
+     * @param buyerSms the buyer sms
      */
     @JsonProperty("buyerSms")
-    public void setBuyerSms(String _buyerSms) {
-        this._buyerSms = _buyerSms;
+    public void setBuyerSms(String buyerSms) {
+        this.buyerSms = buyerSms;
     }
 
     // Response fields
@@ -861,17 +861,17 @@ public class Invoice {
      */
     @JsonProperty("forcedBuyerSelectedTransactionCurrency")
     public String getForcedBuyerSelectedTransactionCurrency() {
-        return _forcedBuyerSelectedTransactionCurrency;
+        return this.forcedBuyerSelectedTransactionCurrency;
     }
 
     /**
      * Sets forced buyer selected transaction currency. Merchant pre-selects transaction currency on behalf of buyer.
      *
-     * @param _forcedBuyerSelectedTransactionCurrency the forced buyer selected transaction currency
+     * @param forcedBuyerSelectedTransactionCurrency the forced buyer selected transaction currency
      */
     @JsonProperty("forcedBuyerSelectedTransactionCurrency")
-    public void setForcedBuyerSelectedTransactionCurrency(String _forcedBuyerSelectedTransactionCurrency) {
-        this._forcedBuyerSelectedTransactionCurrency = _forcedBuyerSelectedTransactionCurrency;
+    public void setForcedBuyerSelectedTransactionCurrency(String forcedBuyerSelectedTransactionCurrency) {
+        this.forcedBuyerSelectedTransactionCurrency = forcedBuyerSelectedTransactionCurrency;
     }
 
     /**
@@ -881,17 +881,17 @@ public class Invoice {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return id;
     }
 
     /**
      * Sets Invoice resource id.
      *
-     * @param _id the id
+     * @param id the id
      */
     @JsonProperty("id")
-    public void setId(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -901,17 +901,17 @@ public class Invoice {
      */
     @JsonIgnore
     public String getUrl() {
-        return _url;
+        return this.url;
     }
 
     /**
      * Sets web address of invoice, expires at expirationTime.
      *
-     * @param _url the url
+     * @param url the url
      */
     @JsonProperty("url")
-    public void setUrl(String _url) {
-        this._url = _url;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     /**
@@ -962,7 +962,7 @@ public class Invoice {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -1009,11 +1009,11 @@ public class Invoice {
      *     Instant Payment Notification
      *     </a>
      *
-     * @param _status the status
+     * @param status the status
      */
     @JsonProperty("status")
-    public void setStatus(String _status) {
-        this._status = _status;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
@@ -1024,18 +1024,18 @@ public class Invoice {
      */
     @JsonIgnore
     public boolean getLowFeeDetected() {
-        return _lowFeeDetected;
+        return this.lowFeeDetected;
     }
 
     /**
      * Sets low fee detected. Flag to indicate if the miner fee used by the buyer is too low.
      * Initially set to false when the invoice is created.
      *
-     * @param _lowFeeDetected the low fee detected
+     * @param lowFeeDetected the low fee detected
      */
     @JsonProperty("lowFeeDetected")
-    public void setLowFeeDetected(boolean _lowFeeDetected) {
-        this._lowFeeDetected = _lowFeeDetected;
+    public void setLowFeeDetected(boolean lowFeeDetected) {
+        this.lowFeeDetected = lowFeeDetected;
     }
 
     /**
@@ -1045,17 +1045,17 @@ public class Invoice {
      */
     @JsonIgnore
     public long getInvoiceTime() {
-        return _invoiceTime;
+        return this.invoiceTime;
     }
 
     /**
      * Sets invoice time. UNIX time of invoice creation, in milliseconds.
      *
-     * @param _invoiceTime the invoice time
+     * @param invoiceTime the invoice time
      */
     @JsonProperty("invoiceTime")
-    public void setInvoiceTime(long _invoiceTime) {
-        this._invoiceTime = _invoiceTime;
+    public void setInvoiceTime(long invoiceTime) {
+        this.invoiceTime = invoiceTime;
     }
 
     /**
@@ -1065,7 +1065,7 @@ public class Invoice {
      */
     @JsonIgnore
     public long getExpirationTime() {
-        return _expirationTime;
+        return this.expirationTime;
     }
 
     /**
@@ -1075,7 +1075,7 @@ public class Invoice {
      */
     @JsonProperty("expirationTime")
     public void setExpirationTime(long _expirationTime) {
-        this._expirationTime = _expirationTime;
+        this.expirationTime = _expirationTime;
     }
 
     /**
@@ -1085,17 +1085,17 @@ public class Invoice {
      */
     @JsonIgnore
     public long getCurrentTime() {
-        return _currentTime;
+        return this.currentTime;
     }
 
     /**
      * Sets UNIX time of API call, in milliseconds.
      *
-     * @param _currentTime the current time
+     * @param currentTime the current time
      */
     @JsonProperty("currentTime")
-    public void setCurrentTime(long _currentTime) {
-        this._currentTime = _currentTime;
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
     }
 
     /**
@@ -1108,7 +1108,7 @@ public class Invoice {
      */
     @JsonIgnore
     public List<InvoiceTransaction> getTransactions() {
-        return _transactions;
+        return this.transactions;
     }
 
     /**
@@ -1116,11 +1116,11 @@ public class Invoice {
      * For instance the consumer's transaction hash if the invoice is paid,
      * but also the refund transaction hash if the merchant decide to issue a refund to the purchaser.
      *
-     * @param _transactions the transactions
+     * @param transactions the transactions
      */
     @JsonProperty("transactions")
-    public void setTransactions(List<InvoiceTransaction> _transactions) {
-        this._transactions = _transactions;
+    public void setTransactions(List<InvoiceTransaction> transactions) {
+        this.transactions = transactions;
     }
 
     /**
@@ -1137,7 +1137,7 @@ public class Invoice {
      */
     @JsonIgnore
     public String getExceptionStatus() {
-        return _exceptionStatus;
+        return this.exceptionStatus;
     }
 
     /**
@@ -1150,11 +1150,11 @@ public class Invoice {
      *     <li>"paidOver": (string) if the consumer sent to much funds when paying the invoice.</li>
      * </ul>
      *
-     * @param _exceptionStatus the exception status
+     * @param exceptionStatus the exception status
      */
     @JsonProperty("exceptionStatus")
-    public void setExceptionStatus(String _exceptionStatus) {
-        this._exceptionStatus = _exceptionStatus;
+    public void setExceptionStatus(String exceptionStatus) {
+        this.exceptionStatus = exceptionStatus;
     }
 
     /**
@@ -1167,7 +1167,7 @@ public class Invoice {
      */
     @JsonIgnore
     public long getTargetConfirmations() {
-        return _targetConfirmations;
+        return this.targetConfirmations;
     }
 
     /**
@@ -1176,11 +1176,11 @@ public class Invoice {
      * Currently the value set is set to 6 by default for BTC/BCH/XRP, 40 for DOGE and 50 for
      * ETH/GUSD/PAX/USDC/BUSD/DAI/WBTC.
      *
-     * @param _targetConfirmations the target confirmations
+     * @param targetConfirmations the target confirmations
      */
     @JsonProperty("targetConfirmations")
-    public void setTargetConfirmations(long _targetConfirmations) {
-        this._targetConfirmations = _targetConfirmations;
+    public void setTargetConfirmations(long targetConfirmations) {
+        this.targetConfirmations = targetConfirmations;
     }
 
     /**
@@ -1192,18 +1192,18 @@ public class Invoice {
      */
     @JsonIgnore
     public ArrayList getRefundAddresses() {
-        return _refundAddresses;
+        return this.refundAddresses;
     }
 
     /**
      * Sets refund addresses. This field will be populated with the refund address provided by the customer
      * if you request a refund of the specific invoice.
      *
-     * @param _refundAddresses the refund addresses
+     * @param refundAddresses the refund addresses
      */
     @JsonProperty("refundAddresses")
-    public void setRefundAddresses(ArrayList _refundAddresses) {
-        this._refundAddresses = _refundAddresses;
+    public void setRefundAddresses(ArrayList refundAddresses) {
+        this.refundAddresses = refundAddresses;
     }
 
     /**
@@ -1216,7 +1216,7 @@ public class Invoice {
      */
     @JsonIgnore
     public boolean getRefundAddressRequestPending() {
-        return _refundAddressRequestPending;
+        return this.refundAddressRequestPending;
     }
 
     /**
@@ -1225,11 +1225,11 @@ public class Invoice {
      * This flag is here to indicate that the refund request is pending action from the buyer to provide an address
      * for the refund, via the secure link which has been automatically emailed to him.
      *
-     * @param _refundAddressRequestPending the refund address request pending
+     * @param refundAddressRequestPending the refund address request pending
      */
     @JsonProperty("refundAddressRequestPending")
-    public void setRefundAddressRequestPending(boolean _refundAddressRequestPending) {
-        this._refundAddressRequestPending = _refundAddressRequestPending;
+    public void setRefundAddressRequestPending(boolean refundAddressRequestPending) {
+        this.refundAddressRequestPending = refundAddressRequestPending;
     }
 
     /**
@@ -1243,7 +1243,7 @@ public class Invoice {
      */
     @JsonIgnore
     public String getBuyerProvidedEmail() {
-        return _buyerProvidedEmail;
+        return this.buyerProvidedEmail;
     }
 
     /**
@@ -1251,11 +1251,11 @@ public class Invoice {
      * otherwise this field is not returned for newly created invoices.
      * with the email submitted.
      *
-     * @param _buyerProvidedEmail the buyer provided email
+     * @param buyerProvidedEmail the buyer provided email
      */
     @JsonProperty("buyerProvidedEmail")
-    public void setBuyerProvidedEmail(String _buyerProvidedEmail) {
-        this._buyerProvidedEmail = _buyerProvidedEmail;
+    public void setBuyerProvidedEmail(String buyerProvidedEmail) {
+        this.buyerProvidedEmail = buyerProvidedEmail;
     }
 
     /**
@@ -1265,17 +1265,17 @@ public class Invoice {
      */
     @JsonIgnore
     public InvoiceBuyerProvidedInfo getInvoiceBuyerProvidedInfo() {
-        return _invoiceBuyerProvidedInfo;
+        return this.invoiceBuyerProvidedInfo;
     }
 
     /**
      * Sets information collected from the buyer during the process of paying an invoice.
      *
-     * @param _invoiceBuyerProvidedInfo the invoice buyer provided info
+     * @param invoiceBuyerProvidedInfo the invoice buyer provided info
      */
     @JsonProperty("buyerProvidedInfo")
-    public void setInvoiceBuyerProvidedInfo(InvoiceBuyerProvidedInfo _invoiceBuyerProvidedInfo) {
-        this._invoiceBuyerProvidedInfo = _invoiceBuyerProvidedInfo;
+    public void setInvoiceBuyerProvidedInfo(InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo) {
+        this.invoiceBuyerProvidedInfo = invoiceBuyerProvidedInfo;
     }
 
     /**
@@ -1287,7 +1287,7 @@ public class Invoice {
      */
     @JsonIgnore
     public SupportedTransactionCurrencies getSupportedTransactionCurrencies() {
-        return _supportedTransactionCurrencies;
+        return this.supportedTransactionCurrencies;
     }
 
     /**
@@ -1295,11 +1295,11 @@ public class Invoice {
      * the BitPay invoice, current supported values are "BTC", "BCH", "ETH", "GUSD", "PAX", "BUSD", "USDC", "XRP",
      * "DOGE", "DAI" and "WBTC". If not yet selected, this field will not be returned.
      *
-     * @param _supportedTransactionCurrencies the supported transaction currencies
+     * @param supportedTransactionCurrencies the supported transaction currencies
      */
     @JsonProperty("supportedTransactionCurrencies")
-    public void setSupportedTransactionCurrencies(SupportedTransactionCurrencies _supportedTransactionCurrencies) {
-        this._supportedTransactionCurrencies = _supportedTransactionCurrencies;
+    public void setSupportedTransactionCurrencies(SupportedTransactionCurrencies supportedTransactionCurrencies) {
+        this.supportedTransactionCurrencies = supportedTransactionCurrencies;
     }
 
     /**
@@ -1312,7 +1312,7 @@ public class Invoice {
      */
     @JsonIgnore
     public MinerFees getMinerFees() {
-        return _minerFees;
+        return this.minerFees;
     }
 
     /**
@@ -1321,11 +1321,11 @@ public class Invoice {
      * and the fiat amount.
      * This is referenced as "Network Cost" on an invoice, see this support article for more information.
      *
-     * @param _minerFees the miner fees
+     * @param minerFees the miner fees
      */
     @JsonProperty("minerFees")
-    public void setMinerFees(MinerFees _minerFees) {
-        this._minerFees = _minerFees;
+    public void setMinerFees(MinerFees minerFees) {
+        this.minerFees = minerFees;
     }
 
     /**
@@ -1338,7 +1338,7 @@ public class Invoice {
      */
     @JsonIgnore
     public Shopper getShopper() {
-        return _shopper;
+        return this.shopper;
     }
 
     /**
@@ -1347,11 +1347,11 @@ public class Invoice {
      *
      * @see <a href="https://blog.bitpay.com/bitpay-dashboard-id/">Blogpost</a>
      *
-     * @param _shopper the shopper
+     * @param shopper the shopper
      */
     @JsonProperty("shopper")
-    public void setShopper(Shopper _shopper) {
-        this._shopper = _shopper;
+    public void setShopper(Shopper shopper) {
+        this.shopper = shopper;
     }
 
     /**
@@ -1364,7 +1364,7 @@ public class Invoice {
      */
     @JsonIgnore
     public String getBillId() {
-        return _billId;
+        return this.billId;
     }
 
     /**
@@ -1373,11 +1373,11 @@ public class Invoice {
      *
      * @see <a href="https://bitpay.com/api/#rest-api-resources-bills/">Bills resource</a>
      *
-     * @param _billId the bill id
+     * @param billId the bill id
      */
     @JsonProperty("billId")
-    public void setBillId(String _billId) {
-        this._billId = _billId;
+    public void setBillId(String billId) {
+        this.billId = billId;
     }
 
     /**
@@ -1388,18 +1388,18 @@ public class Invoice {
      */
     @JsonIgnore
     public ArrayList<RefundInfo> getRefundInfo() {
-        return _refundInfo;
+        return this.refundInfo;
     }
 
     /**
      * Sets refund info. For a refunded invoice, this object will contain the details of executed refunds
      * for the corresponding invoice.
      *
-     * @param _refundInfo the refund info
+     * @param refundInfo the refund info
      */
     @JsonProperty("refundInfo")
-    public void setRefundInfo(ArrayList<RefundInfo> _refundInfo) {
-        this._refundInfo = _refundInfo;
+    public void setRefundInfo(ArrayList<RefundInfo> refundInfo) {
+        this.refundInfo = refundInfo;
     }
 
     /**
@@ -1411,7 +1411,7 @@ public class Invoice {
      */
     @JsonIgnore
     public String getTransactionCurrency() {
-        return _transactionCurrency;
+        return this.transactionCurrency;
     }
 
     /**
@@ -1419,11 +1419,11 @@ public class Invoice {
      * a transaction is applied to the invoice. Possible values are currently "BTC", "BCH", "ETH", "GUSD", "PAX",
      * "BUSD", "USDC", "XRP", "DOGE", "DAI" and "WBTC".
      *
-     * @param _transactionCurrency the transaction currency
+     * @param transactionCurrency the transaction currency
      */
     @JsonProperty("transactionCurrency")
-    public void setTransactionCurrency(String _transactionCurrency) {
-        this._transactionCurrency = _transactionCurrency;
+    public void setTransactionCurrency(String transactionCurrency) {
+        this.transactionCurrency = transactionCurrency;
     }
 
     /**
@@ -1435,18 +1435,18 @@ public class Invoice {
      */
     @JsonIgnore
     public BigDecimal getAmountPaid() {
-        return _amountPaid;
+        return this.amountPaid;
     }
 
     /**
      * Sets amount paid. It will be updated with the total amount paid to the invoice,
      * indicated in the smallest possible unit for the corresponding transactionCurrency.
      *
-     * @param _amountPaid the amount paid
+     * @param amountPaid the amount paid
      */
     @JsonProperty("amountPaid")
-    public void setAmountPaid(BigDecimal _amountPaid) {
-        this._amountPaid = _amountPaid;
+    public void setAmountPaid(BigDecimal amountPaid) {
+        this.amountPaid = amountPaid;
     }
 
     /**
@@ -1458,18 +1458,18 @@ public class Invoice {
      */
     @JsonIgnore
     public BigDecimal getDisplayAmountPaid() {
-        return _displayAmountPaid;
+        return this.displayAmountPaid;
     }
 
     /**
      * Sets display amount paid. Initially set to "0" when creating the invoice. It will be updated with the total
      * amount paid to the invoice indicated in the base unit for the corresponding transactionCurrency.
      *
-     * @param _displayAmountPaid the display amount paid
+     * @param displayAmountPaid the display amount paid
      */
     @JsonProperty("displayAmountPaid")
-    public void setDisplayAmountPaid(BigDecimal _displayAmountPaid) {
-        this._displayAmountPaid = _displayAmountPaid;
+    public void setDisplayAmountPaid(BigDecimal displayAmountPaid) {
+        this.displayAmountPaid = displayAmountPaid;
     }
 
     /**
@@ -1479,17 +1479,17 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, Hashtable<String, String>> getExchangeRates() {
-        return _exchangeRates;
+        return this.exchangeRates;
     }
 
     /**
      * Sets exchange rates keyed by source and target currencies.
      *
-     * @param _exchangeRates the exchange rates
+     * @param exchangeRates the exchange rates
      */
     @JsonProperty("exchangeRates")
-    public void setExchangeRates(Hashtable<String, Hashtable<String, String>> _exchangeRates) {
-        this._exchangeRates = _exchangeRates;
+    public void setExchangeRates(Hashtable<String, Hashtable<String, String>> exchangeRates) {
+        this.exchangeRates = exchangeRates;
     }
 
     /**
@@ -1499,17 +1499,17 @@ public class Invoice {
      */
     @JsonIgnore
     public boolean getIsCancelled() {
-        return _isCancelled;
+        return this.isCancelled;
     }
 
     /**
      * Sets is cancelled. Indicates whether or not the invoice was cancelled.
      *
-     * @param _isCancelled the is cancelled
+     * @param isCancelled the is cancelled
      */
     @JsonProperty("isCancelled")
-    public void setIsCancelled(boolean _isCancelled) {
-        this._isCancelled = _isCancelled;
+    public void setIsCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
     }
 
     /**
@@ -1519,17 +1519,17 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, String> getPaymentSubTotals() {
-        return _paymentSubtotals;
+        return this.paymentSubtotals;
     }
 
     /**
      * Sets payment sub totals. For internal use. This field can be ignored in merchant implementations.
      *
-     * @param _paymentSubtotals the payment subtotals
+     * @param paymentSubtotals the payment subtotals
      */
     @JsonProperty("paymentSubtotals")
-    public void setPaymentSubTotals(Hashtable<String, String> _paymentSubtotals) {
-        this._paymentSubtotals = _paymentSubtotals;
+    public void setPaymentSubTotals(Hashtable<String, String> paymentSubtotals) {
+        this.paymentSubtotals = paymentSubtotals;
     }
 
     /**
@@ -1539,17 +1539,17 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, String> getPaymentTotals() {
-        return _paymentTotals;
+        return this.paymentTotals;
     }
 
     /**
      * Sets payment totals. For internal use - This field can be ignored in merchant implementations.
      *
-     * @param _paymentTotals the payment totals
+     * @param paymentTotals the payment totals
      */
     @JsonProperty("paymentTotals")
-    public void setPaymentTotals(Hashtable<String, String> _paymentTotals) {
-        this._paymentTotals = _paymentTotals;
+    public void setPaymentTotals(Hashtable<String, String> paymentTotals) {
+        this.paymentTotals = paymentTotals;
     }
 
     /**
@@ -1562,7 +1562,7 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, String> getPaymentDisplayTotals() {
-        return _paymentDisplayTotals;
+        return this.paymentDisplayTotals;
     }
 
     /**
@@ -1571,11 +1571,11 @@ public class Invoice {
      * The key is the currency and the value is an amount indicated in the base unit
      * for each supported transactionCurrency.
      *
-     * @param _paymentDisplayTotals the payment display totals
+     * @param paymentDisplayTotals the payment display totals
      */
     @JsonProperty("paymentDisplayTotals")
-    public void setPaymentDisplayTotals(Hashtable<String, String> _paymentDisplayTotals) {
-        this._paymentDisplayTotals = _paymentDisplayTotals;
+    public void setPaymentDisplayTotals(Hashtable<String, String> paymentDisplayTotals) {
+        this.paymentDisplayTotals = paymentDisplayTotals;
     }
 
     /**
@@ -1587,7 +1587,7 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, String> getPaymentDisplaySubTotals() {
-        return _paymentDisplaySubTotals;
+        return this.paymentDisplaySubTotals;
     }
 
     /**
@@ -1595,11 +1595,11 @@ public class Invoice {
      * The key is the currency and the value is an amount indicated in the base unit
      * for each supported transactionCurrency.
      *
-     * @param _paymentDisplaySubTotals the payment display sub totals
+     * @param paymentDisplaySubTotals the payment display sub totals
      */
     @JsonProperty("paymentDisplaySubTotals")
-    public void setPaymentDisplaySubTotals(Hashtable<String, String> _paymentDisplaySubTotals) {
-        this._paymentDisplaySubTotals = _paymentDisplaySubTotals;
+    public void setPaymentDisplaySubTotals(Hashtable<String, String> paymentDisplaySubTotals) {
+        this.paymentDisplaySubTotals = paymentDisplaySubTotals;
     }
 
     /**
@@ -1611,7 +1611,7 @@ public class Invoice {
      */
     @JsonIgnore
     public boolean getNonPayProPaymentReceived() {
-        return _nonPayProPaymentReceived;
+        return this.nonPayProPaymentReceived;
     }
 
     /**
@@ -1619,11 +1619,11 @@ public class Invoice {
      * is paid and indicate if the transaction was made with a wallet using the payment protocol (true)
      * or peer to peer (false).
      *
-     * @param _nonPayProPaymentReceived the non pay pro payment received
+     * @param nonPayProPaymentReceived the non pay pro payment received
      */
     @JsonProperty("nonPayProPaymentReceived")
-    public void setNonPayProPaymentReceived(boolean _nonPayProPaymentReceived) {
-        this._nonPayProPaymentReceived = _nonPayProPaymentReceived;
+    public void setNonPayProPaymentReceived(boolean nonPayProPaymentReceived) {
+        this.nonPayProPaymentReceived = nonPayProPaymentReceived;
     }
 
     /**
@@ -1637,7 +1637,7 @@ public class Invoice {
      */
     @JsonIgnore
     public boolean getJsonPayProRequired() {
-        return _jsonPayProRequired;
+        return this.jsonPayProRequired;
     }
 
     /**
@@ -1646,11 +1646,11 @@ public class Invoice {
      *
      * @see <a href="https://bitpay.com/docs/payment-protocol">BitPay JSON Payment Protocol</a>
      *
-     * @param _jsonPayProRequired the json pay pro required
+     * @param jsonPayProRequired the json pay pro required
      */
     @JsonProperty("jsonPayProRequired")
-    public void setJsonPayProRequired(boolean _jsonPayProRequired) {
-        this._jsonPayProRequired = _jsonPayProRequired;
+    public void setJsonPayProRequired(boolean jsonPayProRequired) {
+        this.jsonPayProRequired = jsonPayProRequired;
     }
 
     /**
@@ -1663,7 +1663,7 @@ public class Invoice {
      */
     @JsonIgnore
     public BigDecimal getUnderPaidAmount() {
-        return _underpaidAmount;
+        return this.underpaidAmount;
     }
 
     /**
@@ -1672,11 +1672,11 @@ public class Invoice {
      * It equals to the absolute difference between amountPaid and paymentTotals for the corresponding
      * transactionCurrency used.
      *
-     * @param _underpaidAmount the underpaid amount
+     * @param underpaidAmount the underpaid amount
      */
     @JsonProperty("underpaidAmount")
-    public void setUnderPaidAmount(BigDecimal _underpaidAmount) {
-        this._underpaidAmount = _underpaidAmount;
+    public void setUnderPaidAmount(BigDecimal underpaidAmount) {
+        this.underpaidAmount = underpaidAmount;
     }
 
     /**
@@ -1689,7 +1689,7 @@ public class Invoice {
      */
     @JsonIgnore
     public BigDecimal getOverPaidAmount() {
-        return _overpaidAmount;
+        return this.overpaidAmount;
     }
 
     /**
@@ -1698,11 +1698,11 @@ public class Invoice {
      * It equals to the absolute difference between amountPaid and paymentTotals for the corresponding
      * transactionCurrency used.
      *
-     * @param _overpaidAmount the overpaid amount
+     * @param overpaidAmount the overpaid amount
      */
     @JsonProperty("overpaidAmount")
-    public void setOverPaidAmount(BigDecimal _overpaidAmount) {
-        this._overpaidAmount = _overpaidAmount;
+    public void setOverPaidAmount(BigDecimal overpaidAmount) {
+        this.overpaidAmount = overpaidAmount;
     }
 
     /**
@@ -1720,7 +1720,7 @@ public class Invoice {
      */
     @JsonIgnore
     public Hashtable<String, Hashtable<String, String>> getPaymentCodes() {
-        return _paymentCodes;
+        return this.paymentCodes;
     }
 
     /**
@@ -1734,10 +1734,10 @@ public class Invoice {
      *     <li>For "XRP" - RIP681, BIP72b and BIP73 is supported</li>
      * </ul>
      *
-     * @param _paymentCodes the payment codes
+     * @param paymentCodes the payment codes
      */
     @JsonProperty("paymentCodes")
-    public void setPaymentCodes(Hashtable<String, Hashtable<String, String>> _paymentCodes) {
-        this._paymentCodes = _paymentCodes;
+    public void setPaymentCodes(Hashtable<String, Hashtable<String, String>> paymentCodes) {
+        this.paymentCodes = paymentCodes;
     }    
 }

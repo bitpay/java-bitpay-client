@@ -1,0 +1,407 @@
+{
+  "url": "https://test.bitpay.com/invoice?id=UZjwcYkWAKfTMn9J1yyfs4",
+  "status": "new",
+  "price": 12,
+  "currency": "USD",
+  "itemDesc": "Example",
+  "orderId": "084a86b6-68aa-47bc-b435-e64d122391d1",
+  "invoiceTime": 1668432675975,
+  "rateRefreshTime": 1668432675975,
+  "expirationTime": 1668433575975,
+  "currentTime": 1668432734661,
+  "guid": "chc9kj52-04g0-4b6f-941d-3a844e352758",
+  "id": "UZjwcYkWAKfTMn9J1yyfs4",
+  "lowFeeDetected": false,
+  "amountPaid": 0,
+  "displayAmountPaid": "0",
+  "exceptionStatus": false,
+  "targetConfirmations": 6,
+  "guaranteedPaymentTargetConfirmations": 6,
+  "transactions": [],
+  "transactionSpeed": "medium",
+  "buyer": {
+    "name": "Marcin",
+    "address1": "street",
+    "address2": "911",
+    "locality": "Washington",
+    "region": "District of Columbia",
+    "postalCode": "20000",
+    "country": "USA",
+    "email": "satoshi@buyeremaildomain.com",
+    "notify": true
+  },
+  "autoRedirect": true,
+  "refundAddresses": [],
+  "refundAddressRequestPending": false,
+  "buyerProvidedEmail": "satoshi@buyeremaildomain.com",
+  "buyerProvidedInfo": {
+    "name": "Marcin",
+    "selectedWallet": "bitpay",
+    "emailAddress": "satoshi@buyeremaildomain.com"
+  },
+  "paymentSubtotals": {
+    "BTC": 70100,
+    "BCH": 11495400,
+    "ETH": 9327000000000000,
+    "GUSD": 1200,
+    "PAX": 12000000000000000000,
+    "BUSD": 12000000000000000000,
+    "USDC": 12000000,
+    "DOGE": 13219659000,
+    "LTC": 20332100,
+    "MATIC": 12502605000000000000,
+    "USDC_m": 12000000
+  },
+  "paymentTotals": {
+    "BTC": 70200,
+    "BCH": 11495400,
+    "ETH": 9327000000000000,
+    "GUSD": 1200,
+    "PAX": 12000000000000000000,
+    "BUSD": 12000000000000000000,
+    "USDC": 12000000,
+    "DOGE": 13219659000,
+    "LTC": 20332100,
+    "MATIC": 12502605000000000000,
+    "USDC_m": 12000000
+  },
+  "paymentDisplayTotals": {
+    "BTC": "0.000702",
+    "BCH": "0.114954",
+    "ETH": "0.009327",
+    "GUSD": "12.00",
+    "PAX": "12.00",
+    "BUSD": "12.00",
+    "USDC": "12.00",
+    "DOGE": "132.196590",
+    "LTC": "0.203321",
+    "MATIC": "12.502605",
+    "USDC_m": "12.00"
+  },
+  "paymentDisplaySubTotals": {
+    "BTC": "0.000701",
+    "BCH": "0.114954",
+    "ETH": "0.009327",
+    "GUSD": "12.00",
+    "PAX": "12.00",
+    "BUSD": "12.00",
+    "USDC": "12.00",
+    "DOGE": "132.196590",
+    "LTC": "0.203321",
+    "MATIC": "12.502605",
+    "USDC_m": "12.00"
+  },
+  "exchangeRates": {
+    "BTC": {
+      "USD": 17120.09,
+      "BCH": 163.84429131974352,
+      "ETH": 13.299739755292292,
+      "GUSD": 17120.09,
+      "PAX": 17120.09,
+      "BUSD": 17120.09,
+      "USDC": 17120.09,
+      "DOGE": 188443.27083844703,
+      "LTC": 289.92531752751904,
+      "MATIC": 17878.1223893066,
+      "USDC_m": 17120.09
+    },
+    "BCH": {
+      "USD": 104.38999999999999,
+      "BTC": 0.006097902914889888,
+      "ETH": 0.08109535832200428,
+      "GUSD": 104.38999999999999,
+      "PAX": 104.38999999999999,
+      "BUSD": 104.38999999999999,
+      "USDC": 104.38999999999999,
+      "DOGE": 1149.0356092068141,
+      "LTC": 1.7678238780694326,
+      "MATIC": 109.01211361737676,
+      "USDC_m": 104.38999999999999
+    },
+    "ETH": {
+      "USD": 1286.54,
+      "BTC": 0.07515275424966411,
+      "BCH": 12.312565795769931,
+      "GUSD": 1286.54,
+      "PAX": 1286.54,
+      "BUSD": 1286.54,
+      "USDC": 1286.54,
+      "DOGE": 14161.129156709787,
+      "LTC": 21.787298899237936,
+      "MATIC": 1343.5045948203842,
+      "USDC_m": 1286.54
+    },
+    "GUSD": {
+      "USD": 1,
+      "BTC": 5.8414627022606464E-5,
+      "BCH": 0.009570293808019907,
+      "ETH": 7.768498737618955E-4,
+      "PAX": 1,
+      "BUSD": 1,
+      "USDC": 1,
+      "DOGE": 11.007142534790825,
+      "LTC": 0.01693480101608806,
+      "MATIC": 1.0442773600668336,
+      "USDC_m": 1
+    },
+    "PAX": {
+      "USD": 1,
+      "BTC": 5.8414627022606464E-5,
+      "BCH": 0.009570293808019907,
+      "ETH": 7.768498737618955E-4,
+      "GUSD": 1,
+      "BUSD": 1,
+      "USDC": 1,
+      "DOGE": 11.007142534790825,
+      "LTC": 0.01693480101608806,
+      "MATIC": 1.0442773600668336,
+      "USDC_m": 1
+    },
+    "BUSD": {
+      "USD": 1,
+      "BTC": 5.8414627022606464E-5,
+      "BCH": 0.009570293808019907,
+      "ETH": 7.768498737618955E-4,
+      "GUSD": 1,
+      "PAX": 1,
+      "USDC": 1,
+      "DOGE": 11.007142534790825,
+      "LTC": 0.01693480101608806,
+      "MATIC": 1.0442773600668336,
+      "USDC_m": 1
+    },
+    "USDC": {
+      "USD": 1,
+      "BTC": 5.8414627022606464E-5,
+      "BCH": 0.009570293808019907,
+      "ETH": 7.768498737618955E-4,
+      "GUSD": 1,
+      "PAX": 1,
+      "BUSD": 1,
+      "DOGE": 11.007142534790825,
+      "LTC": 0.01693480101608806,
+      "MATIC": 1.0442773600668336,
+      "USDC_m": 1
+    },
+    "DOGE": {
+      "USD": 0.09077389999999999,
+      "BTC": 5.302523511887377E-6,
+      "BCH": 8.687328930998182E-4,
+      "ETH": 7.051769275587492E-5,
+      "GUSD": 0.09077389999999999,
+      "PAX": 0.09077389999999999,
+      "BUSD": 0.09077389999999999,
+      "USDC": 0.09077389999999999,
+      "LTC": 0.0015372379339542762,
+      "MATIC": 0.09479312865497075,
+      "USDC_m": 0.09077389999999999
+    },
+    "LTC": {
+      "USD": 59.02,
+      "BTC": 0.0034476312868742336,
+      "BCH": 0.5648387405493349,
+      "ETH": 0.04584967954942708,
+      "GUSD": 59.02,
+      "PAX": 59.02,
+      "BUSD": 59.02,
+      "USDC": 59.02,
+      "DOGE": 649.6415524033546,
+      "MATIC": 61.63324979114453,
+      "USDC_m": 59.02
+    },
+    "MATIC": {
+      "USD": 0.9597999999999999,
+      "BTC": 5.6066359016297676E-5,
+      "BCH": 0.009185567996937507,
+      "ETH": 7.456205088366673E-4,
+      "GUSD": 0.9597999999999999,
+      "PAX": 0.9597999999999999,
+      "BUSD": 0.9597999999999999,
+      "USDC": 0.9597999999999999,
+      "DOGE": 10.564655404892232,
+      "LTC": 0.016254022015241322,
+      "USDC_m": 0.9597999999999999
+    },
+    "USDC_m": {
+      "USD": 1,
+      "BTC": 5.8414627022606464E-5,
+      "BCH": 0.009570293808019907,
+      "ETH": 7.768498737618955E-4,
+      "GUSD": 1,
+      "PAX": 1,
+      "BUSD": 1,
+      "USDC": 1,
+      "DOGE": 11.007142534790825,
+      "LTC": 0.01693480101608806,
+      "MATIC": 1.0442773600668336
+    }
+  },
+  "minerFees": {
+    "BTC": {
+      "satoshisPerByte": 1,
+      "totalFee": 100,
+      "fiatAmount": 0.02
+    },
+    "BCH": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "ETH": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "GUSD": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "PAX": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "BUSD": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "USDC": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "DOGE": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "LTC": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "MATIC": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    },
+    "USDC_m": {
+      "satoshisPerByte": 0,
+      "totalFee": 0,
+      "fiatAmount": 0
+    }
+  },
+  "shopper": {},
+  "jsonPayProRequired": false,
+  "merchantName": "SUMO Heavy Industries LLC",
+  "bitpayIdRequired": false,
+  "itemizedDetails": [],
+  "shopify": {},
+  "supportedTransactionCurrencies": {
+    "BTC": {
+      "enabled": true
+    },
+    "BCH": {
+      "enabled": true
+    },
+    "ETH": {
+      "enabled": true
+    },
+    "GUSD": {
+      "enabled": true
+    },
+    "PAX": {
+      "enabled": true
+    },
+    "BUSD": {
+      "enabled": true
+    },
+    "USDC": {
+      "enabled": true
+    },
+    "XRP": {
+      "enabled": false
+    },
+    "DOGE": {
+      "enabled": true
+    },
+    "LTC": {
+      "enabled": true
+    },
+    "APE": {
+      "enabled": false
+    },
+    "EUROC": {
+      "enabled": false
+    },
+    "MATIC": {
+      "enabled": true
+    },
+    "MATIC_e": {
+      "enabled": false
+    },
+    "ETH_m": {
+      "enabled": false
+    },
+    "USDC_m": {
+      "enabled": true
+    },
+    "BUSD_m": {
+      "enabled": false
+    },
+    "DAI_m": {
+      "enabled": false
+    },
+    "WBTC_m": {
+      "enabled": false
+    },
+    "SHIB_m": {
+      "enabled": false
+    }
+  },
+  "paymentCodes": {
+    "BTC": {
+      "BIP72b": "bitcoin:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4",
+      "BIP73": "https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "BCH": {
+      "BIP72b": "bitcoincash:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4",
+      "BIP73": "https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "ETH": {
+      "EIP681": "ethereum:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "GUSD": {
+      "EIP681b": "ethereum:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "PAX": {
+      "EIP681b": "ethereum:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "BUSD": {
+      "EIP681b": "ethereum:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "USDC": {
+      "EIP681b": "ethereum:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "DOGE": {
+      "BIP72b": "dogecoin:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4",
+      "BIP73": "https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "LTC": {
+      "BIP72b": "litecoin:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4",
+      "BIP73": "https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "MATIC": {
+      "EIP681": "matic:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    },
+    "USDC_m": {
+      "EIP681b": "matic:?r=https://test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+    }
+  },
+  "universalCodes": {
+    "paymentString": "https://link.test.bitpay.com/i/UZjwcYkWAKfTMn9J1yyfs4"
+  },
+  "token": "4qS4CzeRlGRu9VvUfVvuESfQXWTAQuFLjhj6osrGexKWZoadBPe1eiScsvTX99dkYi"
+}

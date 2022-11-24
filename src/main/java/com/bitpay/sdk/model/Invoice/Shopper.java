@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shopper {
 
-    private String _user;
+    private String user;
 
     /**
      * Instantiates a new Shopper.
@@ -31,7 +31,7 @@ public class Shopper {
      */
     @JsonIgnore
     public String getName() {
-        return _user;
+        return this.user;
     }
 
     /**
@@ -41,6 +41,6 @@ public class Shopper {
      */
     @JsonProperty("user")
     public void setName(String user) {
-        this._user = user;
+        this.user = user;
     }
 }

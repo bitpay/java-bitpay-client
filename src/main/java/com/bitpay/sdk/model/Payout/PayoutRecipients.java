@@ -10,9 +10,9 @@ import java.util.List;
  * The type Payout recipients.
  */
 public class PayoutRecipients {
-    private String _guid;
-    private List<PayoutRecipient> _recipients = Collections.emptyList();
-    private String _token = "";
+    private String guid;
+    private List<PayoutRecipient> recipients = Collections.emptyList();
+    private String token = "";
 
     /**
      * Constructor, create an recipient-full request PayoutBatch object.
@@ -20,7 +20,7 @@ public class PayoutRecipients {
      * @param recipients array array of JSON objects, with containing the following parameters.
      */
     public PayoutRecipients(List<PayoutRecipient> recipients) {
-        this._recipients = recipients;
+        this.recipients = recipients;
     }
 
     // API fields
@@ -34,7 +34,7 @@ public class PayoutRecipients {
     @JsonProperty("guid")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getGuid() {
-        return _guid;
+        return this.guid;
     }
 
     /**
@@ -44,7 +44,7 @@ public class PayoutRecipients {
      */
     @JsonProperty("guid")
     public void setGuid(String guid) {
-        this._guid = guid;
+        this.guid = guid;
     }
 
     /**
@@ -55,7 +55,7 @@ public class PayoutRecipients {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-        return _token;
+        return this.token;
     }
 
     /**
@@ -65,7 +65,7 @@ public class PayoutRecipients {
      */
     @JsonProperty("token")
     public void setToken(String token) {
-        this._token = token;
+        this.token = token;
     }
 
     // Required fields
@@ -79,7 +79,7 @@ public class PayoutRecipients {
     @JsonProperty("recipients")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<PayoutRecipient> getInstructions() {
-        return _recipients;
+        return this.recipients;
     }
 
     /**
@@ -89,6 +89,6 @@ public class PayoutRecipients {
      */
     @JsonProperty("recipients")
     public void setInstructions(List<PayoutRecipient> recipients) {
-        this._recipients = recipients;
+        this.recipients = recipients;
     }
 }

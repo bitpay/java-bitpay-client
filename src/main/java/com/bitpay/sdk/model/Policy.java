@@ -18,9 +18,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Policy {
 
-    private String _policy;
-    private String _method;
-    private List<String> _params;
+    private String policy;
+    private String method;
+    private List<String> params;
 
     /**
      * Instantiates a new Policy.
@@ -35,7 +35,7 @@ public class Policy {
      */
     @JsonIgnore
     public String getPolicy() {
-        return _policy;
+        return this.policy;
     }
 
     /**
@@ -45,7 +45,7 @@ public class Policy {
      */
     @JsonProperty("policy")
     public void setPolicy(String policy) {
-        this._policy = policy;
+        this.policy = policy;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Policy {
      */
     @JsonIgnore
     public String getMethod() {
-        return _method;
+        return method;
     }
 
     /**
@@ -67,7 +67,7 @@ public class Policy {
      */
     @JsonProperty("method")
     public void setMethod(String method) {
-        this._method = method;
+        this.method = method;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Policy {
      */
     @JsonIgnore
     public List<String> getParams() {
-        return _params;
+        return params;
     }
 
     /**
@@ -87,6 +87,6 @@ public class Policy {
      */
     @JsonProperty("params")
     public void setParams(List<String> params) {
-        this._params = params;
+        this.params = params;
     }
 }

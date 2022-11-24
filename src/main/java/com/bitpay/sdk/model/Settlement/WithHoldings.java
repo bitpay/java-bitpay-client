@@ -13,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WithHoldings {
-    private Float _amount;
-    private String _code;
-    private String _description;
-    private String _notes;
-    private String _label;
-    private String _bankCountry;
+    private Float amount;
+    private String code;
+    private String description;
+    private String notes;
+    private String label;
+    private String bankCountry;
 
     /**
      * Instantiates a new With holdings.
@@ -33,7 +33,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public Float getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -43,7 +43,7 @@ public class WithHoldings {
      */
     @JsonProperty("amount")
     public void setAmount(Float amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -53,7 +53,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public String getCode() {
-        return _code;
+        return this.code;
     }
 
     /**
@@ -63,7 +63,7 @@ public class WithHoldings {
      */
     @JsonProperty("code")
     public void setCode(String code) {
-        this._code = code;
+        this.code = code;
     }
 
     /**
@@ -73,7 +73,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -83,7 +83,7 @@ public class WithHoldings {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -93,7 +93,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public String getNotes() {
-        return _notes;
+        return this.notes;
     }
 
     /**
@@ -103,28 +103,7 @@ public class WithHoldings {
      */
     @JsonProperty("notes")
     public void setNotes(String notes) {
-        this._notes = notes;
-    }
-
-    /**
-     * It should be replaced by getLabel().
-     *
-     * @return the label
-     */
-    @Deprecated
-    @JsonIgnore
-    public String getlabel() {
-        return _label;
-    }
-
-    /**
-     * It should be replaced by setLabel().
-     *
-     * @param label the label
-     */
-    @Deprecated
-    public void setlabel(String label) {
-        this._label = label;
+        this.notes = notes;
     }
 
     /**
@@ -134,7 +113,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     /**
@@ -144,7 +123,7 @@ public class WithHoldings {
      */
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     /**
@@ -154,7 +133,7 @@ public class WithHoldings {
      */
     @JsonIgnore
     public String getBankCountry() {
-        return _bankCountry;
+        return this.bankCountry;
     }
 
     /**
@@ -164,6 +143,6 @@ public class WithHoldings {
      */
     @JsonProperty("bankCountry")
     public void setBankCountry(String bankCountry) {
-        this._bankCountry = bankCountry;
+        this.bankCountry = bankCountry;
     }
 }

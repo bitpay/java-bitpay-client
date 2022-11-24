@@ -22,36 +22,36 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Refund {
 
-    private String _guid;
-    private Double _amount;
-    private String _currency;
-    private String _invoice;
-    private Boolean _preview;
-    private Boolean _immediate;
-    private Boolean _buyerPaysRefundFee;
-    private String _reference;
-    private Double _refundFee;
-    private Date _lastRefundNotification;
+    private String guid;
+    private Double amount;
+    private String currency;
+    private String invoice;
+    private Boolean preview;
+    private Boolean immediate;
+    private Boolean buyerPaysRefundFee;
+    private String reference;
+    private Double refundFee;
+    private Date lastRefundNotification;
 
     /**
      * Amount to be refunded in terms of the transaction currency.
      */
-    private BigDecimal _transactionAmount;
+    private BigDecimal transactionAmount;
 
     /**
      * The refund fee expressed in terms of transaction currency.
      */
-    private BigDecimal _transactionRefundFee;
+    private BigDecimal transactionRefundFee;
 
     /**
      * The currency used for the invoice transaction.
      */
-    private String _transactionCurrency;
+    private String transactionCurrency;
 
 
-    private String _id;
-    private Date _requestDate;
-    private String _status;
+    private String id;
+    private Date requestDate;
+    private String status;
 
     /**
      * Instantiates a new Refund.
@@ -70,7 +70,7 @@ public class Refund {
     @JsonProperty("guid")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getGuid() {
-        return _guid;
+        return this.guid;
     }
 
     /**
@@ -79,7 +79,7 @@ public class Refund {
      * @param guid the guid
      */
     @JsonProperty("guid")
-    public void setGuid(String guid) { this._guid = guid; }
+    public void setGuid(String guid) { this.guid = guid; }
 
     /**
      * Gets the amount to be refunded, denominated in the invoice original currency - partial refunds are supported.
@@ -88,7 +88,7 @@ public class Refund {
      */
     @JsonProperty("amount")
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -99,7 +99,7 @@ public class Refund {
     @JsonProperty("amount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Refund {
      */
     @JsonProperty("currency")
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -120,7 +120,7 @@ public class Refund {
     @JsonProperty("currency")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setCurrency(String currency) {
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Refund {
      */
     @JsonProperty("invoice")
     public String getInvoice() {
-        return _invoice;
+        return this.invoice;
     }
 
     /**
@@ -141,7 +141,7 @@ public class Refund {
     @JsonProperty("invoice")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setInvoice(String invoice) {
-        this._invoice = invoice;
+        this.invoice = invoice;
     }
 
     /**
@@ -152,7 +152,7 @@ public class Refund {
      */
     @JsonProperty("preview")
     public Boolean getPreview() {
-        return _preview;
+        return this.preview;
     }
 
     /**
@@ -163,7 +163,7 @@ public class Refund {
     @JsonProperty("preview")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setPreview(Boolean preview) {
-        this._preview = preview;
+        this.preview = preview;
     }
 
     /**
@@ -174,7 +174,7 @@ public class Refund {
      */
     @JsonProperty("immediate")
     public Boolean getImmediate() {
-        return _immediate;
+        return this.immediate;
     }
 
     /**
@@ -185,7 +185,7 @@ public class Refund {
     @JsonProperty("immediate")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setImmediate(Boolean immediate) {
-        this._immediate = immediate;
+        this.immediate = immediate;
     }
 
     /**
@@ -196,7 +196,7 @@ public class Refund {
      */
     @JsonProperty("buyerPaysRefundFee")
     public Boolean getBuyerPaysRefundFee() {
-        return _buyerPaysRefundFee;
+        return this.buyerPaysRefundFee;
     }
 
     /**
@@ -207,7 +207,7 @@ public class Refund {
     @JsonProperty("buyerPaysRefundFee")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setBuyerPaysRefundFee(Boolean buyerPaysRefundFee) {
-        this._buyerPaysRefundFee = buyerPaysRefundFee;
+        this.buyerPaysRefundFee = buyerPaysRefundFee;
     }
 
     /**
@@ -220,7 +220,7 @@ public class Refund {
      */
     @JsonProperty("reference")
     public String getReference() {
-        return _reference;
+        return this.reference;
     }
 
     /**
@@ -233,7 +233,7 @@ public class Refund {
     @JsonProperty("reference")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setReference(String reference) {
-        this._reference = reference;
+        this.reference = reference;
     }
 
     // Response fields
@@ -246,7 +246,7 @@ public class Refund {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -256,7 +256,7 @@ public class Refund {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -266,7 +266,7 @@ public class Refund {
      */
     @JsonIgnore
     public Date getRequestDate() {
-        return _requestDate;
+        return this.requestDate;
     }
 
     /**
@@ -276,7 +276,7 @@ public class Refund {
      */
     @JsonProperty("requestDate")
     public void setRequestDate(Date requestDate) {
-        this._requestDate = requestDate;
+        this.requestDate = requestDate;
     }
 
     /**
@@ -287,7 +287,7 @@ public class Refund {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -298,7 +298,7 @@ public class Refund {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -309,7 +309,7 @@ public class Refund {
      */
     @JsonProperty("transactionAmount")
     public BigDecimal getTransactionAmount() {
-        return _transactionAmount;
+        return this.transactionAmount;
     }
 
     /**
@@ -321,7 +321,7 @@ public class Refund {
     @JsonProperty("transactionAmount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setTransactionAmount(BigDecimal transactionAmount) {
-        this._transactionAmount = transactionAmount;
+        this.transactionAmount = transactionAmount;
     }
 
     /**
@@ -332,7 +332,7 @@ public class Refund {
      */
     @JsonProperty("transactionRefundFee")
     public BigDecimal getTransactionRefundFee() {
-        return _transactionRefundFee;
+        return this.transactionRefundFee;
     }
 
     /**
@@ -344,7 +344,7 @@ public class Refund {
     @JsonProperty("transactionRefundFee")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setTransactionRefundFee(BigDecimal transactionRefundFee) {
-        this._transactionRefundFee = transactionRefundFee;
+        this.transactionRefundFee = transactionRefundFee;
     }
 
     /**
@@ -355,7 +355,7 @@ public class Refund {
      */
     @JsonProperty("transactionCurrency")
     public String getTransactionCurrency() {
-        return _transactionCurrency;
+        return this.transactionCurrency;
     }
 
     /**
@@ -367,7 +367,7 @@ public class Refund {
     @JsonProperty("transactionCurrency")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setTransactionCurrency(String transactionCurrency) {
-        this._transactionCurrency = transactionCurrency;
+        this.transactionCurrency = transactionCurrency;
     }
 
     /**
@@ -377,7 +377,7 @@ public class Refund {
      */
     @JsonIgnore
     public Date getLastRefundNotification() {
-        return _lastRefundNotification;
+        return this.lastRefundNotification;
     }
 
     /**
@@ -387,7 +387,7 @@ public class Refund {
      */
     @JsonProperty("lastRefundNotification")
     public void setLastRefundNotification(Date lastRefundNotification) {
-        this._lastRefundNotification = lastRefundNotification;
+        this.lastRefundNotification = lastRefundNotification;
     }
 
     /**
@@ -397,7 +397,7 @@ public class Refund {
      */
     @JsonIgnore
     public Double getRefundFee() {
-        return _refundFee;
+        return this.refundFee;
     }
 
     /**
@@ -407,6 +407,6 @@ public class Refund {
      */
     @JsonProperty("refundFee")
     public void setRefundFee(Double refundFee) {
-        this._refundFee = refundFee;
+        this.refundFee = refundFee;
     }
 }

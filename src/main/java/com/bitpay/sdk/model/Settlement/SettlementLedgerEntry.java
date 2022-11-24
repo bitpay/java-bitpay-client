@@ -18,13 +18,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SettlementLedgerEntry {
 
-    private Integer _code;
-    private String _invoiceId;
-    private Float _amount;
-    private Long _timestamp;
-    private String _description;
-    private String _reference;
-    private InvoiceData _invoiceData;
+    private Integer code;
+    private String invoiceId;
+    private Float amount;
+    private Long timestamp;
+    private String description;
+    private String reference;
+    private InvoiceData invoiceData;
 
     /**
      * Instantiates a new Settlement ledger entry.
@@ -39,7 +39,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public Integer getCode() {
-        return _code;
+        return this.code;
     }
 
     /**
@@ -49,7 +49,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("code")
     public void setCode(Integer code) {
-        this._code = code;
+        this.code = code;
     }
 
     /**
@@ -59,7 +59,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public String getInvoiceId() {
-        return _invoiceId;
+        return this.invoiceId;
     }
 
     /**
@@ -69,7 +69,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("invoiceId")
     public void setInvoiceId(String invoiceId) {
-        this._invoiceId = invoiceId;
+        this.invoiceId = invoiceId;
     }
 
     /**
@@ -79,7 +79,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public Float getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -89,7 +89,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("amount")
     public void setAmount(Float amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -100,7 +100,7 @@ public class SettlementLedgerEntry {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getTimestamp() {
-        return _timestamp;
+        return this.timestamp;
     }
 
     /**
@@ -111,7 +111,7 @@ public class SettlementLedgerEntry {
     @JsonProperty("timestamp")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setTimestamp(Long timestamp) {
-        this._timestamp = timestamp;
+        this.timestamp = timestamp;
     }
 
     /**
@@ -121,7 +121,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -131,7 +131,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -141,7 +141,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public String getReference() {
-        return _reference;
+        return this.reference;
     }
 
     /**
@@ -151,7 +151,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("reference")
     public void setReference(String reference) {
-        this._reference = reference;
+        this.reference = reference;
     }
 
     /**
@@ -161,7 +161,7 @@ public class SettlementLedgerEntry {
      */
     @JsonIgnore
     public InvoiceData getInvoiceData() {
-        return _invoiceData;
+        return this.invoiceData;
     }
 
     /**
@@ -171,7 +171,7 @@ public class SettlementLedgerEntry {
      */
     @JsonProperty("invoiceData")
     public void setInvoiceData(InvoiceData invoiceData) {
-        this._invoiceData = invoiceData;
+        this.invoiceData = invoiceData;
     }
 
 }

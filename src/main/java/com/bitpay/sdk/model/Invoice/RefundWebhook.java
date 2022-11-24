@@ -18,17 +18,17 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundWebhook {
 
-	private String _id;
-	private String _invoice;
-	private String _supportRequest;
-	private String _status;
-	private Double _amount;
-	private String _currency;
-	private Date _lastRefundNotification;
-	private Double _refundFee;
-	private boolean _immediate;
-	private boolean _buyerPaysRefundFee;
-	private Date _requestDate;
+	private String id;
+	private String invoice;
+	private String supportRequest;
+	private String status;
+	private Double amount;
+	private String currency;
+	private Date lastRefundNotification;
+	private Double refundFee;
+	private boolean immediate;
+	private boolean buyerPaysRefundFee;
+	private Date requestDate;
 
     /**
      * Instantiates a new Refund webhook.
@@ -44,17 +44,17 @@ public class RefundWebhook {
     @JsonProperty("id")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getId() {
-		return _id;
+		return this.id;
 	}
 
     /**
      * Sets BitPay refund ID.
      *
-     * @param _id the id
+     * @param id the id
      */
     @JsonProperty("id")
-	public void setId(String _id) {
-		this._id = _id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
     /**
@@ -65,17 +65,17 @@ public class RefundWebhook {
     @JsonProperty("invoice")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getInvoice() {
-		return _invoice;
+		return this.invoice;
 	}
 
     /**
      * Sets BitPay invoice ID associated to the refund.
      *
-     * @param _invoice the invoice
+     * @param invoice the invoice
      */
     @JsonProperty("invoice")
-	public void setInvoice(String _invoice) {
-		this._invoice = _invoice;
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
 	}
 
     /**
@@ -86,17 +86,17 @@ public class RefundWebhook {
     @JsonProperty("supportRequest")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getSupportRequest() {
-		return _supportRequest;
+		return this.supportRequest;
 	}
 
     /**
      * Sets BitPay support request ID associated to the refund.
      *
-     * @param _supportRequest the support request
+     * @param supportRequest the support request
      */
     @JsonProperty("supportRequest")
-	public void setSupportRequest(String _supportRequest) {
-		this._supportRequest = _supportRequest;
+	public void setSupportRequest(String supportRequest) {
+		this.supportRequest = supportRequest;
 	}
 
     /**
@@ -109,7 +109,7 @@ public class RefundWebhook {
     @JsonProperty("status")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getStatus() {
-		return _status;
+		return this.status;
 	}
 
     /**
@@ -117,11 +117,11 @@ public class RefundWebhook {
 	 *
 	 * @see <a href="https://bitpay.com/api/#rest-api-resources-refunds-resource">Refunds resource</a>
      *
-     * @param _status the status
+     * @param status the status
      */
     @JsonProperty("status")
-	public void setStatus(String _status) {
-		this._status = _status;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
     /**
@@ -132,17 +132,17 @@ public class RefundWebhook {
     @JsonProperty("amount")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public Double getAmount() {
-		return _amount;
+		return this.amount;
 	}
 
     /**
      * Sets amount to be refunded in the currency of the associated invoice.
      *
-     * @param _amount the amount
+     * @param amount the amount
      */
     @JsonProperty("amount")
-	public void setAmount(Double _amount) {
-		this._amount = _amount;
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
     /**
@@ -153,17 +153,17 @@ public class RefundWebhook {
     @JsonProperty("currency")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public String getCurrency() {
-		return _currency;
+		return this.currency;
 	}
 
     /**
      * Sets currency used for the refund, the same as the currency used to create the associated invoice.
      *
-     * @param _currency the currency
+     * @param currency the currency
      */
     @JsonProperty("currency")
-	public void setCurrency(String _currency) {
-		this._currency = _currency;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
     /**
@@ -174,17 +174,17 @@ public class RefundWebhook {
     @JsonProperty("lastRefundNotification")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public Date getLastRefundNotification() {
-		return _lastRefundNotification;
+		return this.lastRefundNotification;
 	}
 
     /**
      * Sets timestamp of last notification sent to customer about refund.
      *
-     * @param _lastRefundNotification the last refund notification
+     * @param lastRefundNotification the last refund notification
      */
     @JsonProperty("lastRefundNotification")
-	public void setLastRefundNotification(Date _lastRefundNotification) {
-		this._lastRefundNotification = _lastRefundNotification;
+	public void setLastRefundNotification(Date lastRefundNotification) {
+		this.lastRefundNotification = lastRefundNotification;
 	}
 
     /**
@@ -195,17 +195,17 @@ public class RefundWebhook {
     @JsonProperty("refundFee")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public Double getRefundFee() {
-		return _refundFee;
+		return this.refundFee;
 	}
 
     /**
      * Sets the amount of refund fee expressed in terms of pricing currency.
      *
-     * @param _refundFee the refund fee
+     * @param refundFee the refund fee
      */
     @JsonProperty("refundFee")
-	public void setRefundFee(Double _refundFee) {
-		this._refundFee = _refundFee;
+	public void setRefundFee(Double refundFee) {
+		this.refundFee = refundFee;
 	}
 
     /**
@@ -217,18 +217,18 @@ public class RefundWebhook {
     @JsonProperty("immediate")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public boolean getImmediate() {
-		return _immediate;
+		return this.immediate;
 	}
 
     /**
      * Sets immediate. Whether funds should be removed from merchant ledger immediately on submission or
 	 * at time of processing
      *
-     * @param _immediate the immediate
+     * @param immediate the immediate
      */
     @JsonProperty("immediate")
-	public void setImmediate(boolean _immediate) {
-		this._immediate = _immediate;
+	public void setImmediate(boolean immediate) {
+		this.immediate = immediate;
 	}
 
     /**
@@ -239,7 +239,7 @@ public class RefundWebhook {
     @JsonProperty("buyerPaysRefundFee")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public boolean getBuyerPaysRefundFee() {
-		return _buyerPaysRefundFee;
+		return this.buyerPaysRefundFee;
 	}
 
     /**
@@ -249,7 +249,7 @@ public class RefundWebhook {
      */
     @JsonProperty("buyerPaysRefundFee")
 	public void setBuyerPaysRefundFee(boolean buyerPaysRefundFee) {
-		this._buyerPaysRefundFee = buyerPaysRefundFee;
+		this.buyerPaysRefundFee = buyerPaysRefundFee;
 	}
 
     /**
@@ -260,7 +260,7 @@ public class RefundWebhook {
     @JsonProperty("requestDate")
 	@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public Date getRequestDate() {
-		return _requestDate;
+		return this.requestDate;
 	}
 
     /**
@@ -270,7 +270,7 @@ public class RefundWebhook {
      */
     @JsonProperty("requestDate")
 	public void setRequestDate(Date requestDate) {
-		this._requestDate = requestDate;
+		this.requestDate = requestDate;
 	}
 
 }

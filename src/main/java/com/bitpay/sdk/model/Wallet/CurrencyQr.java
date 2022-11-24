@@ -14,8 +14,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyQr {
-    private String _type;
-    private Boolean _collapsed;
+    private String type;
+    private Boolean collapsed;
 
     /**
      * Instantiates a new Currency qr.
@@ -30,7 +30,7 @@ public class CurrencyQr {
      */
     @JsonIgnore
     public String getType() {
-        return _type;
+        return this.type;
     }
 
     /**
@@ -40,7 +40,7 @@ public class CurrencyQr {
      */
     @JsonProperty("type")
     public void setType(String type) {
-        this._type = type;
+        this.type = type;
     }
 
     /**
@@ -49,7 +49,7 @@ public class CurrencyQr {
      * @return the collapsed
      */
     @JsonIgnore
-    public Boolean getCollapsed() { return _collapsed; }
+    public Boolean getCollapsed() { return this.collapsed; }
 
     /**
      * Sets UI hint for BitPay invoice, generally not relevant to customer integrations.
@@ -58,6 +58,6 @@ public class CurrencyQr {
      */
     @JsonProperty("collapsed")
     public void setCollapsed(Boolean collapsed) {
-        this._collapsed = collapsed;
+        this.collapsed = collapsed;
     }
 }

@@ -1,6 +1,6 @@
 package com.bitpay.sdk.model.Rate;
 
-import com.bitpay.sdk.Client;
+import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.exceptions.RateQueryException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -14,18 +14,15 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rates {
 
-    private final Client _bp;
-    private List<Rate> _rates;
+    private List<Rate> rates;
 
     /**
      * Instantiates a new Rates.
      *
      * @param rates the rates
-     * @param bp    the bp
      */
-    public Rates(List<Rate> rates, Client bp) {
-        _bp = bp;
-        _rates = rates;
+    public Rates(List<Rate> rates) {
+        this.rates = rates;
     }
 
     /**
@@ -34,7 +31,7 @@ public class Rates {
      * @return the rates
      */
     public List<Rate> getRates() {
-        return _rates;
+        return this.rates;
     }
 
     /**
@@ -42,9 +39,9 @@ public class Rates {
      *
      * @throws RateQueryException the rate query exception
      */
-    public void update() throws RateQueryException {
+    public void update(RateClient rateClient) throws RateQueryException {
         try {
-            _rates = _bp.getRates().getRates();
+            this.rates = rateClient.getRates().getRates();
         } catch (Exception e) {
             throw new RateQueryException(null, e.getMessage());
         }
@@ -58,7 +55,7 @@ public class Rates {
      */
     public double getRate(String currencyCode) {
         double val = 0;
-        for (Rate rateObj : _rates) {
+        for (Rate rateObj : this.rates) {
             if (rateObj.getCode().equals(currencyCode)) {
                 val = rateObj.getValue();
                 break;

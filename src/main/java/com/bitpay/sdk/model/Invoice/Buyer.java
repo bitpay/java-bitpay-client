@@ -16,16 +16,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String _name;
-    private String _address1;
-    private String _address2;
-    private String _locality;
-    private String _region;
-    private String _postalCode;
-    private String _country;
-    private String _email;
-    private String _phone;
-    private boolean _notify;
+    private String name;
+    private String address1;
+    private String address2;
+    private String locality;
+    private String region;
+    private String postalCode;
+    private String country;
+    private String email;
+    private String phone;
+    private boolean notify;
 
     /**
      * Instantiates a new Buyer.
@@ -41,7 +41,7 @@ public class Buyer {
     @JsonProperty("name")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getName() {
-        return _name;
+        return this.name;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Buyer {
      */
     @JsonProperty("name")
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
@@ -62,7 +62,7 @@ public class Buyer {
     @JsonProperty("address1")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress1() {
-        return _address1;
+        return this.address1;
     }
 
     /**
@@ -72,7 +72,7 @@ public class Buyer {
      */
     @JsonProperty("address1")
     public void setAddress1(String address1) {
-        this._address1 = address1;
+        this.address1 = address1;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Buyer {
     @JsonProperty("address2")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress2() {
-        return _address2;
+        return this.address2;
     }
 
     /**
@@ -93,7 +93,7 @@ public class Buyer {
      */
     @JsonProperty("address2")
     public void setAddress2(String address2) {
-        this._address2 = address2;
+        this.address2 = address2;
     }
 
     /**
@@ -104,7 +104,7 @@ public class Buyer {
     @JsonProperty("locality")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLocality() {
-        return _locality;
+        return this.locality;
     }
 
     /**
@@ -114,7 +114,7 @@ public class Buyer {
      */
     @JsonProperty("locality")
     public void setLocality(String locality) {
-        this._locality = locality;
+        this.locality = locality;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Buyer {
     @JsonProperty("region")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRegion() {
-        return _region;
+        return this.region;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Buyer {
      */
     @JsonProperty("region")
     public void setRegion(String region) {
-        this._region = region;
+        this.region = region;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Buyer {
     @JsonProperty("postalCode")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPostalCode() {
-        return _postalCode;
+        return this.postalCode;
     }
 
     /**
@@ -156,7 +156,7 @@ public class Buyer {
      */
     @JsonProperty("postalCode")
     public void setPostalCode(String postalCode) {
-        this._postalCode = postalCode;
+        this.postalCode = postalCode;
     }
 
     /**
@@ -167,7 +167,7 @@ public class Buyer {
     @JsonProperty("country")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCountry() {
-        return _country;
+        return this.country;
     }
 
     /**
@@ -177,7 +177,7 @@ public class Buyer {
      */
     @JsonProperty("country")
     public void setCountry(String country) {
-        this._country = country;
+        this.country = country;
     }
 
     /**
@@ -189,7 +189,7 @@ public class Buyer {
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -200,7 +200,7 @@ public class Buyer {
      */
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     /**
@@ -211,7 +211,7 @@ public class Buyer {
     @JsonProperty("phone")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPhone() {
-        return _phone;
+        return this.phone;
     }
 
     /**
@@ -221,7 +221,7 @@ public class Buyer {
      */
     @JsonProperty("phone")
     public void setPhone(String phone) {
-        this._phone = phone;
+        this.phone = phone;
     }
 
     /**
@@ -233,7 +233,7 @@ public class Buyer {
     @JsonProperty("notify")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getNotify() {
-        return _notify;
+        return this.notify;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Buyer {
      */
     @JsonProperty("notify")
     public void setNotify(boolean notify) {
-        this._notify = notify;
+        this.notify = notify;
     }
 
 }

@@ -17,8 +17,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SupportedTransactionCurrency {
 
-    private boolean _enabled;
-    private String _reason;
+    private boolean enabled;
+    private String reason;
 
     /**
      * Instantiates a new Supported transaction currency.
@@ -33,7 +33,7 @@ public class SupportedTransactionCurrency {
      */
     @JsonIgnore
     public boolean getEnabled() {
-        return _enabled;
+        return this.enabled;
     }
 
     /**
@@ -43,7 +43,7 @@ public class SupportedTransactionCurrency {
      */
     @JsonProperty("enabled")
     public void setEnabled(boolean enabled) {
-        this._enabled = enabled;
+        this.enabled = enabled;
     }
 
     /**
@@ -52,7 +52,7 @@ public class SupportedTransactionCurrency {
      * @return the reason
      */
     @JsonIgnore
-    public String getReason() { return _reason; }
+    public String getReason() { return this.reason; }
 
     /**
      * Sets reason.
@@ -61,6 +61,6 @@ public class SupportedTransactionCurrency {
      */
     @JsonProperty("reason")
     public void setReason(String reason) {
-        this._reason = reason;
+        this.reason = reason;
     }
 }

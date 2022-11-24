@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
  * The type Config.
  */
 public class Config {
-    String _environment;
-    JsonNode _envConfig;
+
+    private String environment;
+    private JsonNode envConfig;
 
     /**
      * Instantiates a new Config.
@@ -28,7 +29,7 @@ public class Config {
      */
     @JsonIgnore
     public String getEnvironment() {
-        return _environment;
+        return environment;
     }
 
     /**
@@ -42,7 +43,7 @@ public class Config {
      */
     @JsonProperty("Environment")
     public void setEnvironment(String environment) {
-        this._environment = environment;
+        this.environment = environment;
     }
 
     /**
@@ -57,7 +58,7 @@ public class Config {
      */
     @JsonIgnore
     public JsonNode getEnvConfig(String env) {
-        return _envConfig.path(env);
+        return envConfig.path(env);
     }
 
     /**
@@ -71,6 +72,6 @@ public class Config {
      */
     @JsonProperty("EnvConfig")
     public void setEnvConfig(JsonNode envConfig) {
-        this._envConfig = envConfig;
+        this.envConfig = envConfig;
     }
 }

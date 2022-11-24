@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstructionTransaction {
 
-    private String _txid;
-    private Double _amount;
-    private Long _date;
+    private String txid;
+    private Double amount;
+    private Long date;
 
     /**
      * Instantiates a new Payout instruction transaction.
@@ -33,7 +33,7 @@ public class PayoutInstructionTransaction {
      */
     @JsonIgnore
     public String getTxid() {
-        return _txid;
+        return this.txid;
     }
 
     /**
@@ -43,7 +43,7 @@ public class PayoutInstructionTransaction {
      */
     @JsonProperty("txid")
     public void setTxid(String txid) {
-        this._txid = txid;
+        this.txid = txid;
     }
 
     /**
@@ -53,7 +53,7 @@ public class PayoutInstructionTransaction {
      */
     @JsonIgnore
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -63,7 +63,7 @@ public class PayoutInstructionTransaction {
      */
     @JsonProperty("amount")
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -75,7 +75,7 @@ public class PayoutInstructionTransaction {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getDate() {
-        return _date;
+        return this.date;
     }
 
     /**
@@ -87,7 +87,7 @@ public class PayoutInstructionTransaction {
     @JsonProperty("date")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDate(Long date) {
-        this._date = date;
+        this.date = date;
     }
 
 }

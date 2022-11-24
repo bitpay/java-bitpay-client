@@ -20,27 +20,27 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {
 
-    private String _currency;
-    private String _token = "";
-    private String _email;
-    private List<Item> _items;
-    private String _number;
-    private String _name;
-    private String _address1;
-    private String _address2;
-    private String _city;
-    private String _state;
-    private String _zip;
-    private String _country;
-    private List<String> _cc;
-    private String _phone;
-    private String _dueDate;
-    private boolean _passProcessingFee;
-    private String _status;
-    private String _url;
-    private String _createDate;
-    private String _id;
-    private String _merchant;
+    private String currency;
+    private String token = "";
+    private String email;
+    private List<Item> items;
+    private String number;
+    private String name;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String zip;
+    private String country;
+    private List<String> cc;
+    private String phone;
+    private String dueDate;
+    private boolean passProcessingFee;
+    private String status;
+    private String url;
+    private String createDate;
+    private String id;
+    private String merchant;
 
     /**
      * Constructor, create an empty Bill object.
@@ -57,10 +57,10 @@ public class Bill {
      * @param items    The list of itens to add to this bill.
      */
     public Bill(String number, String currency, String email, List<Item> items) {
-        this._number = number;
-        this._currency = currency;
-        this._email = email;
-        this._items = items;
+        this.number = number;
+        this.currency = currency;
+        this.email = email;
+        this.items = items;
     }
 
     // API fields
@@ -78,7 +78,7 @@ public class Bill {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-        return _token;
+        return this.token;
     }
 
     /**
@@ -88,12 +88,12 @@ public class Bill {
      * and is tied to the specific resource id created.
      * </p>
      *
-     * @param _token the token
+     * @param token the token
      *
      */
     @JsonProperty("token")
-    public void setToken(String _token) {
-        this._token = _token;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     /**
@@ -105,21 +105,21 @@ public class Bill {
     //
     @JsonProperty("currency")
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
      * Sets ISO 4217 3-character currency code. This is the currency associated with the price field.
      *
-     * @param _currency the currency
+     * @param currency the currency
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("currency")
-    public void setCurrency(String _currency) throws BitPayException {
-        if (!Currency.isValid(_currency))
+    public void setCurrency(String currency) throws BitPayException {
+        if (!Currency.isValid(currency))
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
-        this._currency = _currency;
+        this.currency = currency;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Bill {
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -140,7 +140,7 @@ public class Bill {
      */
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     /**
@@ -151,7 +151,7 @@ public class Bill {
     @JsonProperty("items")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<Item> getItems() {
-        return _items;
+        return this.items;
     }
 
     /**
@@ -161,7 +161,7 @@ public class Bill {
      */
     @JsonProperty("items")
     public void setItems(List<Item> items) {
-        this._items = items;
+        this.items = items;
     }
 
     // Optional fields
@@ -175,7 +175,7 @@ public class Bill {
     @JsonProperty("number")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNumber() {
-        return _number;
+        return this.number;
     }
 
     /**
@@ -185,7 +185,7 @@ public class Bill {
      */
     @JsonProperty("number")
     public void setNumber(String number) {
-        this._number = number;
+        this.number = number;
     }
 
     /**
@@ -196,7 +196,7 @@ public class Bill {
     @JsonProperty("name")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getName() {
-        return _name;
+        return name;
     }
 
     /**
@@ -206,7 +206,7 @@ public class Bill {
      */
     @JsonProperty("name")
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
@@ -217,7 +217,7 @@ public class Bill {
     @JsonProperty("address1")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress1() {
-        return _address1;
+        return this.address1;
     }
 
     /**
@@ -227,7 +227,7 @@ public class Bill {
      */
     @JsonProperty("address1")
     public void setAddress1(String address1) {
-        this._address1 = address1;
+        this.address1 = address1;
     }
 
     /**
@@ -238,7 +238,7 @@ public class Bill {
     @JsonProperty("address2")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress2() {
-        return _address2;
+        return this.address2;
     }
 
     /**
@@ -248,7 +248,7 @@ public class Bill {
      */
     @JsonProperty("address2")
     public void setAddress2(String address2) {
-        this._address2 = address2;
+        this.address2 = address2;
     }
 
     /**
@@ -259,7 +259,7 @@ public class Bill {
     @JsonProperty("city")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCity() {
-        return _city;
+        return this.city;
     }
 
     /**
@@ -269,7 +269,7 @@ public class Bill {
      */
     @JsonProperty("city")
     public void setCity(String city) {
-        this._city = city;
+        this.city = city;
     }
 
     /**
@@ -280,7 +280,7 @@ public class Bill {
     @JsonProperty("state")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getState() {
-        return _state;
+        return this.state;
     }
 
     /**
@@ -290,7 +290,7 @@ public class Bill {
      */
     @JsonProperty("state")
     public void setState(String state) {
-        this._state = state;
+        this.state = state;
     }
 
     /**
@@ -301,7 +301,7 @@ public class Bill {
     @JsonProperty("zip")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getZip() {
-        return _zip;
+        return this.zip;
     }
 
     /**
@@ -311,7 +311,7 @@ public class Bill {
      */
     @JsonProperty("zip")
     public void setZip(String zip) {
-        this._zip = zip;
+        this.zip = zip;
     }
 
     /**
@@ -322,7 +322,7 @@ public class Bill {
     @JsonProperty("country")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCountry() {
-        return _country;
+        return this.country;
     }
 
     /**
@@ -332,7 +332,7 @@ public class Bill {
      */
     @JsonProperty("country")
     public void setCountry(String country) {
-        this._country = country;
+        this.country = country;
     }
 
     /**
@@ -343,7 +343,7 @@ public class Bill {
     @JsonProperty("cc")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<String> getCc() {
-        return _cc;
+        return this.cc;
     }
 
     /**
@@ -353,7 +353,7 @@ public class Bill {
      */
     @JsonProperty("cc")
     public void setCc(List<String> cc) {
-        this._cc = cc;
+        this.cc = cc;
     }
 
     /**
@@ -364,7 +364,7 @@ public class Bill {
     @JsonProperty("phone")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPhone() {
-        return _phone;
+        return this.phone;
     }
 
     /**
@@ -374,7 +374,7 @@ public class Bill {
      */
     @JsonProperty("phone")
     public void setPhone(String phone) {
-        this._phone = phone;
+        this.phone = phone;
     }
 
     /**
@@ -385,7 +385,7 @@ public class Bill {
     @JsonProperty("dueDate")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getDueDate() {
-        return _dueDate;
+        return this.dueDate;
     }
 
     /**
@@ -395,7 +395,7 @@ public class Bill {
      */
     @JsonProperty("dueDate")
     public void setDueDate(String dueDate) {
-        this._dueDate = dueDate;
+        this.dueDate = dueDate;
     }
 
     /**
@@ -406,7 +406,7 @@ public class Bill {
     @JsonProperty("passProcessingFee")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getPassProcessingFee() {
-        return _passProcessingFee;
+        return this.passProcessingFee;
     }
 
     /**
@@ -416,7 +416,7 @@ public class Bill {
      */
     @JsonProperty("passProcessingFee")
     public void setPassProcessingFee(boolean passProcessingFee) {
-        this._passProcessingFee = passProcessingFee;
+        this.passProcessingFee = passProcessingFee;
     }
 
     // Response fields
@@ -429,7 +429,7 @@ public class Bill {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -439,7 +439,7 @@ public class Bill {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -449,7 +449,7 @@ public class Bill {
      */
     @JsonIgnore
     public String getUrl() {
-        return _url;
+        return this.url;
     }
 
     /**
@@ -459,7 +459,7 @@ public class Bill {
      */
     @JsonProperty("url")
     public void setUrl(String url) {
-        this._url = url;
+        this.url = url;
     }
 
     /**
@@ -469,7 +469,7 @@ public class Bill {
      */
     @JsonIgnore
     public String getCreateDate() {
-        return _createDate;
+        return this.createDate;
     }
 
     /**
@@ -479,7 +479,7 @@ public class Bill {
      */
     @JsonProperty("createDate")
     public void setCreateDate(String createDate) {
-        this._createDate = createDate;
+        this.createDate = createDate;
     }
 
     /**
@@ -489,7 +489,7 @@ public class Bill {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -499,7 +499,7 @@ public class Bill {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -509,7 +509,7 @@ public class Bill {
      */
     @JsonIgnore
     public String getMerchant() {
-        return _merchant;
+        return this.merchant;
     }
 
     /**
@@ -519,6 +519,6 @@ public class Bill {
      */
     @JsonProperty("merchant")
     public void setMerchant(String merchant) {
-        this._merchant = merchant;
+        this.merchant = merchant;
     }
 }

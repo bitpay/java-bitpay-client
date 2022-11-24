@@ -18,15 +18,15 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {
-    private String _orderId;
-    private Long _date;
-    private Float _price;
-    private String _currency;
-    private String _transactionCurrency;
-    private Float _overPaidAmount;
-    private Map<String, Double> _payoutPercentage;
-    private Float _btcPrice;
-    private RefundInfo _refundInfo;
+    private String orderId;
+    private Long date;
+    private Float price;
+    private String currency;
+    private String transactionCurrency;
+    private Float overPaidAmount;
+    private Map<String, Double> payoutPercentage;
+    private Float btcPrice;
+    private RefundInfo refundInfo;
 
     /**
      * Instantiates a new Invoice data.
@@ -41,7 +41,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public String getOrderId() {
-        return _orderId;
+        return this.orderId;
     }
 
     /**
@@ -51,7 +51,7 @@ public class InvoiceData {
      */
     @JsonProperty("orderId")
     public void setOrderId(String orderId) {
-        this._orderId = orderId;
+        this.orderId = orderId;
     }
 
     /**
@@ -62,7 +62,7 @@ public class InvoiceData {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public Long getDate() {
-        return _date;
+        return this.date;
     }
 
     /**
@@ -73,7 +73,7 @@ public class InvoiceData {
     @JsonProperty("date")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDate(Long date) {
-        this._date = date;
+        this.date = date;
     }
 
     /**
@@ -83,7 +83,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public Float getPrice() {
-        return _price;
+        return this.price;
     }
 
     /**
@@ -93,7 +93,7 @@ public class InvoiceData {
      */
     @JsonProperty("price")
     public void setPrice(Float price) {
-        this._price = price;
+        this.price = price;
     }
 
     /**
@@ -103,7 +103,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -113,7 +113,7 @@ public class InvoiceData {
      */
     @JsonProperty("currency")
     public void setCurrency(String currency) {
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -123,7 +123,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public String getTransactionCurrency() {
-        return _transactionCurrency;
+        return this.transactionCurrency;
     }
 
     /**
@@ -133,7 +133,7 @@ public class InvoiceData {
      */
     @JsonProperty("transactionCurrency")
     public void setTransactionCurrency(String transactionCurrency) {
-        this._transactionCurrency = transactionCurrency;
+        this.transactionCurrency = transactionCurrency;
     }
 
     /**
@@ -148,7 +148,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public Float getOverPaidAmount() {
-        return _overPaidAmount;
+        return this.overPaidAmount;
     }
 
     /**
@@ -158,7 +158,7 @@ public class InvoiceData {
      */
     @JsonProperty("overPaidAmount")
     public void setOverPaidAmount(Float overPaidAmount) {
-        this._overPaidAmount = overPaidAmount;
+        this.overPaidAmount = overPaidAmount;
     }
 
     /**
@@ -168,7 +168,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public Map<String, Double> getPayoutPercentage() {
-        return _payoutPercentage;
+        return this.payoutPercentage;
     }
 
     /**
@@ -178,7 +178,7 @@ public class InvoiceData {
      */
     @JsonProperty("payoutPercentage")
     public void setPayoutPercentage(Map<String, Double> payoutPercentage) {
-        this._payoutPercentage = payoutPercentage;
+        this.payoutPercentage = payoutPercentage;
     }
 
     /**
@@ -188,7 +188,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public Float getBtcPrice() {
-        return _btcPrice;
+        return this.btcPrice;
     }
 
     /**
@@ -198,7 +198,7 @@ public class InvoiceData {
      */
     @JsonProperty("btcPrice")
     public void setBtcPrice(Float btcPrice) {
-        this._btcPrice = btcPrice;
+        this.btcPrice = btcPrice;
     }
 
     /**
@@ -208,7 +208,7 @@ public class InvoiceData {
      */
     @JsonIgnore
     public RefundInfo getAmount() {
-        return _refundInfo;
+        return this.refundInfo;
     }
 
     /**
@@ -218,6 +218,6 @@ public class InvoiceData {
      */
     @JsonProperty("refundInfo")
     public void setAmount(RefundInfo refundInfo) {
-        this._refundInfo = refundInfo;
+        this.refundInfo = refundInfo;
     }
 }

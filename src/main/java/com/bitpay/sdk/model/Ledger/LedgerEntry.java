@@ -12,19 +12,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LedgerEntry {
 
-    private String _type;
-    private String _amount;
-    private String _code;
-    private String _description;
-    private String _timestamp;
-    private String _txType;
-    private String _scale;
-    private String _invoiceId;
-    private Buyer _buyer;
-    private Double _invoiceAmount;
-    private String _invoiceCurrency;
-    private String _transactionCurrency;
-    private String _id;
+    private String type;
+    private String amount;
+    private String code;
+    private String description;
+    private String timestamp;
+    private String txType;
+    private String scale;
+    private String invoiceId;
+    private Buyer buyer;
+    private Double invoiceAmount;
+    private String invoiceCurrency;
+    private String transactionCurrency;
+    private String id;
 
     /**
      * Instantiates a new Ledger entry.
@@ -41,7 +41,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getType() {
-        return _type;
+        return this.type;
     }
 
     /**
@@ -53,7 +53,7 @@ public class LedgerEntry {
      */
     @JsonProperty("type")
     public void setType(String type) {
-        this._type = type;
+        this.type = type;
     }
 
     /**
@@ -65,7 +65,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -79,7 +79,7 @@ public class LedgerEntry {
      */
     @JsonProperty("amount")
     public void setAmount(String amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -92,7 +92,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getCode() {
-        return _code;
+        return this.code;
     }
 
     /**
@@ -105,7 +105,7 @@ public class LedgerEntry {
      */
     @JsonProperty("code")
     public void setCode(String code) {
-        this._code = code;
+        this.code = code;
     }
 
     /**
@@ -118,7 +118,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -131,7 +131,7 @@ public class LedgerEntry {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -141,7 +141,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getTimestamp() {
-        return _timestamp;
+        return this.timestamp;
     }
 
     /**
@@ -151,7 +151,7 @@ public class LedgerEntry {
      */
     @JsonProperty("timestamp")
     public void setTimestamp(String timestamp) {
-        this._timestamp = timestamp;
+        this.timestamp = timestamp;
     }
 
     /**
@@ -164,7 +164,7 @@ public class LedgerEntry {
     @Deprecated
     @JsonIgnore
     public String getTxType() {
-        return _txType;
+        return this.txType;
     }
 
     /**
@@ -176,7 +176,7 @@ public class LedgerEntry {
      */
     @JsonProperty("txType")
     public void setTxType(String txType) {
-        this._txType = txType;
+        this.txType = txType;
     }
 
     /**
@@ -186,7 +186,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getScale() {
-        return _scale;
+        return this.scale;
     }
 
     /**
@@ -196,7 +196,7 @@ public class LedgerEntry {
      */
     @JsonProperty("scale")
     public void setScale(String scale) {
-        this._scale = scale;
+        this.scale = scale;
     }
 
     /**
@@ -206,7 +206,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getInvoiceId() {
-        return _invoiceId;
+        return this.invoiceId;
     }
 
     /**
@@ -216,7 +216,7 @@ public class LedgerEntry {
      */
     @JsonProperty("invoiceId")
     public void setInvoiceId(String invoiceId) {
-        this._invoiceId = invoiceId;
+        this.invoiceId = invoiceId;
     }
 
     /**
@@ -226,7 +226,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public Buyer getBuyer() {
-        return _buyer;
+        return this.buyer;
     }
 
     /**
@@ -236,7 +236,7 @@ public class LedgerEntry {
      */
     @JsonProperty("buyerFields")
     public void setBuyer(Buyer buyer) {
-        this._buyer = buyer;
+        this.buyer = buyer;
     }
 
     /**
@@ -246,7 +246,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public Double getInvoiceAmount() {
-        return _invoiceAmount;
+        return this.invoiceAmount;
     }
 
     /**
@@ -256,7 +256,7 @@ public class LedgerEntry {
      */
     @JsonProperty("invoiceAmount")
     public void setInvoiceAmount(Double invoiceAmount) {
-        this._invoiceAmount = invoiceAmount;
+        this.invoiceAmount = invoiceAmount;
     }
 
     /**
@@ -266,7 +266,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getInvoiceCurrency() {
-        return _invoiceCurrency;
+        return this.invoiceCurrency;
     }
 
     /**
@@ -276,7 +276,7 @@ public class LedgerEntry {
      */
     @JsonProperty("invoiceCurrency")
     public void setInvoiceCurrency(String invoiceCurrency) {
-        this._invoiceCurrency = invoiceCurrency;
+        this.invoiceCurrency = invoiceCurrency;
     }
 
     /**
@@ -287,7 +287,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getTransactionCurrency() {
-        return _transactionCurrency;
+        return this.transactionCurrency;
     }
 
     /**
@@ -298,7 +298,7 @@ public class LedgerEntry {
      */
     @JsonProperty("transactionCurrency")
     public void setTransactionCurrency(String transactionCurrency) {
-        this._transactionCurrency = transactionCurrency;
+        this.transactionCurrency = transactionCurrency;
     }
 
     /**
@@ -308,7 +308,7 @@ public class LedgerEntry {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -318,6 +318,6 @@ public class LedgerEntry {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 }

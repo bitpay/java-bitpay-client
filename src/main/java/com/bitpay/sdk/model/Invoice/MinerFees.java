@@ -19,13 +19,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFees {
 
-    private MinerFeesItem _btc = new MinerFeesItem();
-    private MinerFeesItem _bch = new MinerFeesItem();
-    private MinerFeesItem _eth = new MinerFeesItem();
-    private MinerFeesItem _usdc = new MinerFeesItem();
-    private MinerFeesItem _gusd = new MinerFeesItem();
-    private MinerFeesItem _pax = new MinerFeesItem();
-    private MinerFeesItem _xrp = new MinerFeesItem();
+    private MinerFeesItem btc = new MinerFeesItem();
+    private MinerFeesItem bch = new MinerFeesItem();
+    private MinerFeesItem eth = new MinerFeesItem();
+    private MinerFeesItem usdc = new MinerFeesItem();
+    private MinerFeesItem gusd = new MinerFeesItem();
+    private MinerFeesItem pax = new MinerFeesItem();
+    private MinerFeesItem xrp = new MinerFeesItem();
 
     /**
      * Instantiates a new Miner fees.
@@ -40,7 +40,7 @@ public class MinerFees {
      */
     @JsonIgnore
     public MinerFeesItem getBtc() {
-        return _btc;
+        return this.btc;
     }
 
     /**
@@ -50,7 +50,7 @@ public class MinerFees {
      */
     @JsonProperty("BTC")
     public void setBtc(MinerFeesItem btc) {
-        this._btc = btc;
+        this.btc = btc;
     }
 
     /**
@@ -60,7 +60,7 @@ public class MinerFees {
      */
     @JsonIgnore
     public MinerFeesItem getBch() {
-        return _bch;
+        return this.bch;
     }
 
     /**
@@ -70,7 +70,7 @@ public class MinerFees {
      */
     @JsonProperty("BCH")
     public void setBch(MinerFeesItem bch) {
-        this._bch = bch;
+        this.bch = bch;
     }
 
     /**
@@ -80,7 +80,7 @@ public class MinerFees {
      */
     @JsonIgnore
     public MinerFeesItem getEth() {
-        return _eth;
+        return this.eth;
     }
 
     /**
@@ -90,7 +90,7 @@ public class MinerFees {
      */
     @JsonProperty("ETH")
     public void setEth(MinerFeesItem eth) {
-        this._eth = eth;
+        this.eth = eth;
     }
 
     /**
@@ -99,7 +99,7 @@ public class MinerFees {
      * @return the USDC
      */
     @JsonIgnore
-    public MinerFeesItem getUsdc() { return _usdc; }
+    public MinerFeesItem getUsdc() { return this.usdc; }
 
     /**
      * Sets USDC.
@@ -107,7 +107,7 @@ public class MinerFees {
      * @param usdc the USDC
      */
     @JsonProperty("USDC")
-    public void setUsdc(MinerFeesItem usdc) { this._usdc = usdc; }
+    public void setUsdc(MinerFeesItem usdc) { this.usdc = usdc; }
 
     /**
      * Gets GUSD.
@@ -115,7 +115,7 @@ public class MinerFees {
      * @return the GUSD
      */
     @JsonIgnore
-    public MinerFeesItem getGusd() { return _gusd; }
+    public MinerFeesItem getGusd() { return this.gusd; }
 
     /**
      * Sets GUSD.
@@ -123,7 +123,7 @@ public class MinerFees {
      * @param gusd the GUSD
      */
     @JsonProperty("GUSD")
-    public void setGusd(MinerFeesItem gusd) { this._gusd = gusd; }
+    public void setGusd(MinerFeesItem gusd) { this.gusd = gusd; }
 
     /**
      * Gets PAX.
@@ -131,7 +131,7 @@ public class MinerFees {
      * @return the PAX
      */
     @JsonIgnore
-    public MinerFeesItem getPax() { return _pax; }
+    public MinerFeesItem getPax() { return this.pax; }
 
     /**
      * Sets PAX.
@@ -139,7 +139,7 @@ public class MinerFees {
      * @param pax the PAX
      */
     @JsonProperty("PAX")
-    public void setPax(MinerFeesItem pax) { this._pax = pax; }
+    public void setPax(MinerFeesItem pax) { this.pax = pax; }
 
     /**
      * Gets XRP.
@@ -147,7 +147,7 @@ public class MinerFees {
      * @return the XRP
      */
     @JsonIgnore
-    public MinerFeesItem getXrp() { return _xrp; }
+    public MinerFeesItem getXrp() { return this.xrp; }
 
     /**
      * Sets xrp.
@@ -155,5 +155,5 @@ public class MinerFees {
      * @param xrp the XRP
      */
     @JsonProperty("XRP")
-    public void setXrp(MinerFeesItem xrp) { this._xrp = xrp; }
+    public void setXrp(MinerFeesItem xrp) { this.xrp = xrp; }
 }

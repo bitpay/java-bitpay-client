@@ -3,7 +3,7 @@
  */
 package com.bitpay.sdk.model.Rate;
 
-import com.bitpay.sdk.Client;
+import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.exceptions.RateQueryException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class RatesTest {
 
     @Mock
-    private Client client;
+    private RateClient client;
 
     @Mock
     private Rate rate1;
@@ -65,18 +65,18 @@ public class RatesTest {
         // given
         List<Rate> rates = Arrays.asList(rate1, rate2);
         List<Rate> expectedRates = Collections.singletonList(rate1);
-        Rates expectedRatesObject = new Rates(expectedRates, this.client);
+        Rates expectedRatesObject = new Rates(expectedRates);
         Rates testedClass = this.getTestedClass(rates);
         Mockito.when(this.client.getRates()).thenReturn(expectedRatesObject);
 
         // when
-        testedClass.update();
+        testedClass.update(this.client);
 
         // then
         Assertions.assertSame(expectedRates, testedClass.getRates());
     }
 
     private Rates getTestedClass(List<Rate> rates) {
-        return new Rates(rates, this.client);
+        return new Rates(rates);
     }
 }

@@ -27,45 +27,45 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
 
-    private String _token = "";
+    private String token = "";
 
-    private Double _amount = 0.0;
-    private String _currency = "";
-    private Long _effectiveDate;
+    private Double amount = 0.0;
+    private String currency = "";
+    private Long effectiveDate;
 
-    private String _reference = "";
-    private String _notificationEmail = "";
-    private String _notificationURL = "";
-    private String _redirectUrl = "";
-    private String _ledgerCurrency = "";
+    private String reference = "";
+    private String notificationEmail = "";
+    private String notificationURL = "";
+    private String redirectUrl = "";
+    private String ledgerCurrency = "";
 
-    private String _id;
-    private String _shopperId;
-    private String _recipientId;
-    private PayoutInstruction _exchangeRates;
-    private String _account;
-    private String _email;
-    private String _label;
-    private String _supportPhone;
-    private String _status;
-    private String _message;
-    private Double _percentFee;
-    private Double _fee;
-    private Double _depositTotal;
-    private Double _rate;
-    private Double _btc;
-    private Long _requestDate;
-    private Long _dateExecuted;
-    private List<PayoutInstructionTransaction> _transactions = Collections.emptyList();
+    private String id;
+    private String shopperId;
+    private String recipientId;
+    private PayoutInstruction exchangeRates;
+    private String account;
+    private String email;
+    private String label;
+    private String supportPhone;
+    private String status;
+    private String message;
+    private Double percentFee;
+    private Double fee;
+    private Double depositTotal;
+    private Double rate;
+    private Double btc;
+    private Long requestDate;
+    private Long dateExecuted;
+    private List<PayoutInstructionTransaction> transactions = Collections.emptyList();
 
     /**
      * Constructor, create an empty Payout object.
      */
     public Payout() {
-        _amount = 0.0;
-        _currency = "USD";
-        _notificationEmail = "";
-        _notificationURL = "";
+        amount = 0.0;
+        currency = "USD";
+        notificationEmail = "";
+        notificationURL = "";
     }
 
     /**
@@ -89,9 +89,9 @@ public class Payout {
      *                       BUSD, DOGE,ETH, WBTC, DAI
      */
     public Payout(Double amount, String currency, String ledgerCurrency) {
-        this._amount = amount;
-        this._currency = currency;
-        this._ledgerCurrency = ledgerCurrency;
+        this.amount = amount;
+        this.currency = currency;
+        this.ledgerCurrency = ledgerCurrency;
     }
 
     // API fields
@@ -109,7 +109,7 @@ public class Payout {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-        return _token;
+        return this.token;
     }
 
     /**
@@ -121,7 +121,7 @@ public class Payout {
      */
     @JsonProperty("token")
     public void setToken(String token) {
-        this._token = token;
+        this.token = token;
     }
 
     // Required fields
@@ -134,7 +134,7 @@ public class Payout {
      */
     @JsonProperty("amount")
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -144,7 +144,7 @@ public class Payout {
      */
     @JsonProperty("amount")
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -154,7 +154,7 @@ public class Payout {
      */
     @JsonProperty("currency")
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -168,7 +168,7 @@ public class Payout {
         if (!Currency.isValid(currency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
         }
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -182,7 +182,7 @@ public class Payout {
      */
     @JsonProperty("ledgerCurrency")
     public String getLedgerCurrency() {
-        return _ledgerCurrency;
+        return this.ledgerCurrency;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Payout {
         if (!Currency.isValid(ledgerCurrency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
         }
-        this._ledgerCurrency = ledgerCurrency;
+        this.ledgerCurrency = ledgerCurrency;
     }
 
     /**
@@ -211,7 +211,7 @@ public class Payout {
     @JsonProperty("effectiveDate")
     @JsonSerialize(using = DateSerializer.class)
     public Long getEffectiveDate() {
-        return _effectiveDate;
+        return this.effectiveDate;
     }
 
     /**
@@ -223,7 +223,7 @@ public class Payout {
     @JsonProperty("effectiveDate")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setEffectiveDate(Long effectiveDate) {
-        this._effectiveDate = effectiveDate;
+        this.effectiveDate = effectiveDate;
     }
 
     /**
@@ -234,7 +234,7 @@ public class Payout {
     @JsonProperty("transactions")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<PayoutInstructionTransaction> getTransactions() {
-        return _transactions;
+        return this.transactions;
     }
 
     /**
@@ -244,7 +244,7 @@ public class Payout {
      */
     @JsonProperty("transactions")
     public void setTransactions(List<PayoutInstructionTransaction> transactions) {
-        this._transactions = transactions;
+        this.transactions = transactions;
     }
 
     // Optional fields
@@ -260,7 +260,7 @@ public class Payout {
      */
     @JsonProperty("reference")
     public String getReference() {
-        return _reference;
+        return this.reference;
     }
 
     /**
@@ -273,7 +273,7 @@ public class Payout {
      */
     @JsonProperty("reference")
     public void setReference(String reference) {
-        this._reference = reference;
+        this.reference = reference;
     }
 
     /**
@@ -285,7 +285,7 @@ public class Payout {
     @JsonProperty("notificationEmail")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNotificationEmail() {
-        return _notificationEmail;
+        return this.notificationEmail;
     }
 
     /**
@@ -296,7 +296,7 @@ public class Payout {
      */
     @JsonProperty("notificationEmail")
     public void setNotificationEmail(String notificationEmail) {
-        this._notificationEmail = notificationEmail;
+        this.notificationEmail = notificationEmail;
     }
 
     /**
@@ -308,7 +308,7 @@ public class Payout {
     @JsonProperty("notificationURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNotificationURL() {
-        return _notificationURL;
+        return this.notificationURL;
     }
 
     /**
@@ -319,7 +319,7 @@ public class Payout {
      */
     @JsonProperty("notificationURL")
     public void setNotificationURL(String notificationURL) {
-        this._notificationURL = notificationURL;
+        this.notificationURL = notificationURL;
     }
 
     /**
@@ -333,7 +333,7 @@ public class Payout {
     @JsonProperty("redirectUrl")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRedirectUrl() {
-        return _redirectUrl;
+        return this.redirectUrl;
     }
 
     /**
@@ -346,7 +346,7 @@ public class Payout {
      */
     @JsonProperty("redirectUrl")
     public void setRedirectUrl(String redirectUrl) {
-        this._redirectUrl = redirectUrl;
+        this.redirectUrl = redirectUrl;
     }
 
     // Response fields
@@ -359,7 +359,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -369,7 +369,7 @@ public class Payout {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -385,7 +385,7 @@ public class Payout {
      */
     @JsonProperty("shopperId")
     public String getShopperId() {
-        return _shopperId;
+        return this.shopperId;
     }
 
     /**
@@ -401,7 +401,7 @@ public class Payout {
      */
     @JsonProperty("shopperId")
     public void setShopperId(String shopperId) {
-        this._shopperId = shopperId;
+        this.shopperId = shopperId;
     }
 
     /**
@@ -412,7 +412,7 @@ public class Payout {
      */
     @JsonProperty("recipientId")
     public String getRecipientId() {
-        return _recipientId;
+        return this.recipientId;
     }
 
     /**
@@ -423,7 +423,7 @@ public class Payout {
      */
     @JsonProperty("recipientId")
     public void setRecipientId(String recipientId) {
-        this._recipientId = recipientId;
+        this.recipientId = recipientId;
     }
 
     /**
@@ -434,7 +434,7 @@ public class Payout {
     @JsonProperty("exchangeRates")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public PayoutInstruction getExchangeRates() {
-        return _exchangeRates;
+        return this.exchangeRates;
     }
 
     /**
@@ -444,7 +444,7 @@ public class Payout {
      */
     @JsonProperty("exchangeRates")
     public void setExchangeRates(PayoutInstruction exchangeRates) {
-        this._exchangeRates = exchangeRates;
+        this.exchangeRates = exchangeRates;
     }
 
     /**
@@ -454,7 +454,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getAccount() {
-        return _account;
+        return this.account;
     }
 
     /**
@@ -464,7 +464,7 @@ public class Payout {
      */
     @JsonProperty("account")
     public void setAccount(String account) {
-        this._account = account;
+        this.account = account;
     }
 
     /**
@@ -475,7 +475,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getMessage() {
-        return _message;
+        return this.message;
     }
 
     /**
@@ -486,7 +486,7 @@ public class Payout {
      */
     @JsonProperty("message")
     public void setMessage(String message) {
-        this._message = message;
+        this.message = message;
     }
 
     /**
@@ -499,7 +499,7 @@ public class Payout {
      */
     @JsonProperty("email")
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -512,7 +512,7 @@ public class Payout {
      */
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     /**
@@ -524,7 +524,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     /**
@@ -536,7 +536,7 @@ public class Payout {
      */
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     /**
@@ -546,7 +546,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getSupportPhone() {
-        return _supportPhone;
+        return this.supportPhone;
     }
 
     /**
@@ -556,7 +556,7 @@ public class Payout {
      */
     @JsonProperty("supportPhone")
     public void setSupportPhone(String supportPhone) {
-        this._supportPhone = supportPhone;
+        this.supportPhone = supportPhone;
     }
 
     /**
@@ -581,7 +581,7 @@ public class Payout {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -606,7 +606,7 @@ public class Payout {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -616,7 +616,7 @@ public class Payout {
      */
     @JsonIgnore
     public Double getPercentFee() {
-        return _percentFee;
+        return this.percentFee;
     }
 
     /**
@@ -626,7 +626,7 @@ public class Payout {
      */
     @JsonProperty("percentFee")
     public void setPercentFee(Double percentFee) {
-        this._percentFee = percentFee;
+        this.percentFee = percentFee;
     }
 
     /**
@@ -636,7 +636,7 @@ public class Payout {
      */
     @JsonIgnore
     public Double getFee() {
-        return _fee;
+        return this.fee;
     }
 
     /**
@@ -646,7 +646,7 @@ public class Payout {
      */
     @JsonProperty("fee")
     public void setFee(Double fee) {
-        this._fee = fee;
+        this.fee = fee;
     }
 
     /**
@@ -656,7 +656,7 @@ public class Payout {
      */
     @JsonIgnore
     public Double getDepositTotal() {
-        return _depositTotal;
+        return this.depositTotal;
     }
 
     /**
@@ -666,7 +666,7 @@ public class Payout {
      */
     @JsonProperty("depositTotal")
     public void setDepositTotal(Double depositTotal) {
-        this._depositTotal = depositTotal;
+        this.depositTotal = depositTotal;
     }
 
     /**
@@ -676,7 +676,7 @@ public class Payout {
      */
     @JsonIgnore
     public Double getBtc() {
-        return _btc;
+        return this.btc;
     }
 
     /**
@@ -686,7 +686,7 @@ public class Payout {
      */
     @JsonProperty("btc")
     public void setBtc(Double btc) {
-        this._btc = btc;
+        this.btc = btc;
     }
 
     /**
@@ -696,7 +696,7 @@ public class Payout {
      */
     @JsonIgnore
     public Double getRate() {
-        return _rate;
+        return this.rate;
     }
 
     /**
@@ -706,7 +706,7 @@ public class Payout {
      */
     @JsonProperty("rate")
     public void setRate(Double rate) {
-        this._rate = rate;
+        this.rate = rate;
     }
 
     /**
@@ -717,7 +717,7 @@ public class Payout {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public long getRequestDate() {
-        return _requestDate;
+        return this.requestDate;
     }
 
     /**
@@ -728,7 +728,7 @@ public class Payout {
     @JsonProperty("requestDate")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setRequestDate(long requestDate) {
-        this._requestDate = requestDate;
+        this.requestDate = requestDate;
     }
 
     /**
@@ -739,7 +739,7 @@ public class Payout {
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
     public long getDateExecuted() {
-        return _dateExecuted;
+        return this.dateExecuted;
     }
 
     /**
@@ -750,7 +750,7 @@ public class Payout {
     @JsonProperty("dateExecuted")
     @JsonDeserialize(using = DateDeserializer.class)
     public void setDateExecuted(long dateExecuted) {
-        this._dateExecuted = dateExecuted;
+        this.dateExecuted = dateExecuted;
     }
 
 }

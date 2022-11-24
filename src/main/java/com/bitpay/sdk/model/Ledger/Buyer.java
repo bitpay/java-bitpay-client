@@ -12,16 +12,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String _name;
-    private String _address1;
-    private String _address2;
-    private String _city;
-    private String _state;
-    private String _zip;
-    private String _country;
-    private String _phone;
-    private boolean _notify;
-    private String _email;
+    private String name;
+    private String address1;
+    private String address2;
+    private String city;
+    private String state;
+    private String zip;
+    private String country;
+    private String phone;
+    private boolean notify;
+    private String email;
 
     /**
      * Instantiates a new Buyer.
@@ -37,7 +37,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getName() {
-        return _name;
+        return this.name;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Buyer {
      */
     @JsonProperty("buyerName")
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
     /**
@@ -57,7 +57,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getAddress1() {
-        return _address1;
+        return this.address1;
     }
 
     /**
@@ -67,7 +67,7 @@ public class Buyer {
      */
     @JsonProperty("buyerAddress1")
     public void setAddress1(String address1) {
-        this._address1 = address1;
+        this.address1 = address1;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getAddress2() {
-        return _address2;
+        return this.address2;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Buyer {
      */
     @JsonProperty("buyerAddress2")
     public void setAddress2(String address2) {
-        this._address2 = address2;
+        this.address2 = address2;
     }
 
     /**
@@ -97,7 +97,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getCountry() {
-        return _country;
+        return this.country;
     }
 
     /**
@@ -107,7 +107,7 @@ public class Buyer {
      */
     @JsonProperty("buyerCountry")
     public void setCountry(String country) {
-        this._country = country;
+        this.country = country;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getPhone() {
-        return _phone;
+        return this.phone;
     }
 
     /**
@@ -127,7 +127,7 @@ public class Buyer {
      */
     @JsonProperty("buyerPhone")
     public void setPhone(String phone) {
-        this._phone = phone;
+        this.phone = phone;
     }
 
     /**
@@ -138,7 +138,7 @@ public class Buyer {
      */
     @JsonIgnore
     public boolean getNotify() {
-        return _notify;
+        return this.notify;
     }
 
     /**
@@ -149,7 +149,7 @@ public class Buyer {
      */
     @JsonProperty("buyerNotify")
     public void setNotify(boolean notify) {
-        this._notify = notify;
+        this.notify = notify;
     }
 
     /**
@@ -159,7 +159,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getState() {
-        return _state;
+        return this.state;
     }
 
     /**
@@ -169,7 +169,7 @@ public class Buyer {
      */
     @JsonProperty("buyerState")
     public void setState(String state) {
-        this._state = state;
+        this.state = state;
     }
 
     /**
@@ -179,7 +179,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getZip() {
-        return _zip;
+        return this.zip;
     }
 
     /**
@@ -189,7 +189,7 @@ public class Buyer {
      */
     @JsonProperty("buyerZip")
     public void setZip(String zip) {
-        this._zip = zip;
+        this.zip = zip;
     }
 
     /**
@@ -199,7 +199,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getCity() {
-        return _city;
+        return this.city;
     }
 
     /**
@@ -209,7 +209,7 @@ public class Buyer {
      */
     @JsonProperty("buyerCity")
     public void setCity(String city) {
-        this._city = city;
+        this.city = city;
     }
 
     /**
@@ -219,7 +219,7 @@ public class Buyer {
      */
     @JsonIgnore
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -229,6 +229,6 @@ public class Buyer {
      */
     @JsonProperty("buyerEmail")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 }

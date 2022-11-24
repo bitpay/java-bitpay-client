@@ -15,8 +15,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceUniversalCodes {
-    private String _paymentString;
-    private String _verificationLink;
+
+    private String paymentString;
+    private String verificationLink;
 
     /**
      * Instantiates a new Invoice universal codes.
@@ -31,7 +32,7 @@ public class InvoiceUniversalCodes {
      */
     @JsonIgnore
     public String getBitpay() {
-        return _paymentString;
+        return this.paymentString;
     }
 
     /**
@@ -41,7 +42,7 @@ public class InvoiceUniversalCodes {
      */
     @JsonProperty("paymentString")
     public void setBitpay(String paymentString) {
-        this._paymentString = paymentString;
+        this.paymentString = paymentString;
     }
 
     /**
@@ -51,7 +52,7 @@ public class InvoiceUniversalCodes {
      */
     @JsonIgnore
     public String getVerificationLink() {
-        return _verificationLink;
+        return this.verificationLink;
     }
 
     /**
@@ -61,6 +62,6 @@ public class InvoiceUniversalCodes {
      */
     @JsonProperty("verificationLink")
     public void setVerificationLink(String verificationLink) {
-        this._verificationLink = verificationLink;
+        this.verificationLink = verificationLink;
     }
 }

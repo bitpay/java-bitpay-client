@@ -15,18 +15,18 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstruction {
-    private Double _amount;
-    private String _email;
-    private String _recipientId;
-    private String _shopperId;
-    private String _label = "";
-    private String _walletProvider;
-    private String _id;
+    private Double amount;
+    private String email;
+    private String recipientId;
+    private String shopperId;
+    private String label = "";
+    private String walletProvider;
+    private String id;
 
-    private PayoutInstructionBtcSummary _btc;
-    private List<PayoutInstructionTransaction> _transactions;
-    private String _status;
-    private String _address;
+    private PayoutInstructionBtcSummary btc;
+    private List<PayoutInstructionTransaction> transactions;
+    private String status;
+    private String address;
 
     /**
      * Constructor, create an empty PayoutInstruction object.
@@ -43,16 +43,16 @@ public class PayoutInstruction {
      * @throws PayoutBatchCreationException BitPayException class
      */
     public PayoutInstruction(Double amount, int method, String methodValue) throws PayoutBatchCreationException {
-        this._amount = amount;
+        this.amount = amount;
         switch (method) {
             case RecipientReferenceMethod.EMAIL:
-                this._email = methodValue;
+                this.email = methodValue;
                 break;
             case RecipientReferenceMethod.RECIPIENT_ID:
-                this._recipientId = methodValue;
+                this.recipientId = methodValue;
                 break;
             case RecipientReferenceMethod.SHOPPER_ID:
-                this._shopperId = methodValue;
+                this.shopperId = methodValue;
                 break;
             default:
                 throw new PayoutBatchCreationException(null, "method code must be a type of RecipientReferenceMethod");
@@ -67,7 +67,7 @@ public class PayoutInstruction {
     @JsonProperty("amount")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -77,7 +77,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("amount")
     public void setAmount(Double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -90,7 +90,7 @@ public class PayoutInstruction {
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -102,7 +102,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     /**
@@ -115,7 +115,7 @@ public class PayoutInstruction {
     @JsonProperty("recipientId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRecipientId() {
-        return _recipientId;
+        return this.recipientId;
     }
 
     /**
@@ -127,7 +127,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("recipientId")
     public void setRecipientId(String recipientId) {
-        this._recipientId = recipientId;
+        this.recipientId = recipientId;
     }
 
     /**
@@ -148,7 +148,7 @@ public class PayoutInstruction {
     @JsonProperty("shopperId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getShopperId() {
-        return _shopperId;
+        return this.shopperId;
     }
 
     /**
@@ -168,7 +168,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("shopperId")
     public void setShopperId(String shopperId) {
-        this._shopperId = shopperId;
+        this.shopperId = shopperId;
     }
 
     /**
@@ -181,7 +181,7 @@ public class PayoutInstruction {
     @JsonProperty("label")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     /**
@@ -193,7 +193,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     /**
@@ -204,7 +204,7 @@ public class PayoutInstruction {
     @JsonProperty("walletProvider")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getWalletProvider() {
-        return _walletProvider;
+        return this.walletProvider;
     }
 
     /**
@@ -214,7 +214,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("walletProvider")
     public void setWalletProvider(String walletProvider) {
-        this._walletProvider = walletProvider;
+        this.walletProvider = walletProvider;
     }
 
     // Response fields
@@ -227,7 +227,7 @@ public class PayoutInstruction {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -237,7 +237,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -247,7 +247,7 @@ public class PayoutInstruction {
      */
     @JsonIgnore
     public PayoutInstructionBtcSummary getBtc() {
-        return _btc;
+        return this.btc;
     }
 
     /**
@@ -258,7 +258,7 @@ public class PayoutInstruction {
     @JsonProperty("btc")
     @JsonDeserialize(using = PayoutInstructionBtcSummaryDeserializer.class)
     public void setBtc(PayoutInstructionBtcSummary btc) {
-        this._btc = btc;
+        this.btc = btc;
     }
 
     /**
@@ -268,7 +268,7 @@ public class PayoutInstruction {
      */
     @JsonIgnore
     public List<PayoutInstructionTransaction> getTransactions() {
-        return _transactions;
+        return this.transactions;
     }
 
     /**
@@ -278,7 +278,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("transactions")
     public void setTransactions(List<PayoutInstructionTransaction> transactions) {
-        this._transactions = transactions;
+        this.transactions = transactions;
     }
 
     /**
@@ -303,7 +303,7 @@ public class PayoutInstruction {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -328,7 +328,7 @@ public class PayoutInstruction {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -339,7 +339,7 @@ public class PayoutInstruction {
     @JsonProperty("address")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress() {
-        return _address;
+        return this.address;
     }
 
     /**
@@ -349,6 +349,6 @@ public class PayoutInstruction {
      */
     @JsonProperty("address")
     public void setAddress(String address) {
-        this._address = address;
+        this.address = address;
     }
 }

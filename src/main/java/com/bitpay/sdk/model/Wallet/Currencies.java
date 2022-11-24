@@ -14,12 +14,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Currencies {
-    private String _code;
-    private Boolean _p2p;
-    private Boolean _dappBrowser;
-    private Boolean _payPro;
-    private CurrencyQr _qr;
-    private String _image;
+    private String code;
+    private Boolean p2p;
+    private Boolean dappBrowser;
+    private Boolean payPro;
+    private CurrencyQr qr;
+    private String image;
 
     /**
      * Instantiates a new Currencies.
@@ -34,7 +34,7 @@ public class Currencies {
      */
     @JsonIgnore
     public String getCode() {
-        return _code;
+        return this.code;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Currencies {
      */
     @JsonProperty("code")
     public void setCode(String code) {
-        this._code = code;
+        this.code = code;
     }
 
     /**
@@ -54,7 +54,7 @@ public class Currencies {
      */
     @JsonIgnore
     public Boolean getP2p() {
-        return _p2p;
+        return this.p2p;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Currencies {
      */
     @JsonProperty("p2p")
     public void setP2p(Boolean p2p) {
-        this._p2p = p2p;
+        this.p2p = p2p;
     }
 
     /**
@@ -75,7 +75,7 @@ public class Currencies {
      */
     @JsonIgnore
     public Boolean getDappBrowser() {
-        return _dappBrowser;
+        return this.dappBrowser;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Currencies {
      */
     @JsonProperty("dappBrowser")
     public void setDappBrowser(Boolean dappBrowser) {
-        this._dappBrowser = dappBrowser;
+        this.dappBrowser = dappBrowser;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Currencies {
      * @return the pay pro
      */
     @JsonIgnore
-    public Boolean getPayPro() { return _payPro; }
+    public Boolean getPayPro() { return this.payPro; }
 
     /**
      * Sets pay pro. Whether or not BitPay Payment Protocol is supported on this particular currency option.
@@ -104,7 +104,7 @@ public class Currencies {
      */
     @JsonProperty("payPro")
     public void setPayPro(Boolean payPro) {
-        this._payPro = payPro;
+        this.payPro = payPro;
     }
 
     /**
@@ -113,7 +113,7 @@ public class Currencies {
      * @return the qr
      */
     @JsonIgnore
-    public CurrencyQr getQr() { return _qr; }
+    public CurrencyQr getQr() { return this.qr; }
 
     /**
      * Sets qr. Object containing QR code related information to show for this payment method.
@@ -122,7 +122,7 @@ public class Currencies {
      */
     @JsonProperty("qr")
     public void setQr(CurrencyQr qr) {
-        this._qr = qr;
+        this.qr = qr;
     }
 
     /**
@@ -132,7 +132,7 @@ public class Currencies {
      */
     @JsonIgnore
     public String getImage() {
-        return _image;
+        return this.image;
     }
 
     /**
@@ -142,6 +142,6 @@ public class Currencies {
      */
     @JsonProperty("image")
     public void setImage(String image) {
-        this._image = image;
+        this.image = image;
     }
 }

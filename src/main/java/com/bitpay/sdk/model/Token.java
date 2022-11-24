@@ -19,17 +19,17 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
 
-    private String _guid;
-    private String _id = "";
-    private String _pairingCode = "";
-    private long _pairingExpiration;
-    private String _facade = "";
-    private String _label = "";
-    private int _count = 0;
-    private List<Policy> _policies;
-    private String _resource;
-    private String _value;
-    private long _dateCreated;
+    private String guid;
+    private String id = "";
+    private String pairingCode = "";
+    private long pairingExpiration;
+    private String facade = "";
+    private String label = "";
+    private int count = 0;
+    private List<Policy> policies;
+    private String resource;
+    private String value;
+    private long dateCreated;
 
     /**
      * Instantiates a new Token.
@@ -48,7 +48,7 @@ public class Token {
      */
     @JsonProperty("guid")
     public String getGuid() {
-        return _guid;
+        return this.guid;
     }
 
     /**
@@ -59,7 +59,7 @@ public class Token {
      */
     @JsonProperty("guid")
     public void setGuid(String guid) {
-        this._guid = guid;
+        this.guid = guid;
     }
 
     // Required fields
@@ -73,7 +73,7 @@ public class Token {
     @JsonProperty("id")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Token {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     // Optional fields
@@ -98,7 +98,7 @@ public class Token {
     @JsonProperty("pairingCode")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPairingCode() {
-        return _pairingCode;
+        return this.pairingCode;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Token {
      */
     @JsonProperty("pairingCode")
     public void setPairingCode(String pairingCode) {
-        this._pairingCode = pairingCode;
+        this.pairingCode = pairingCode;
     }
 
     /**
@@ -120,7 +120,7 @@ public class Token {
     @JsonProperty("facade")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getFacade() {
-        return _facade;
+        return this.facade;
     }
 
     /**
@@ -130,7 +130,7 @@ public class Token {
      */
     @JsonProperty("facade")
     public void setFacade(String facade) {
-        this._facade = facade;
+        this.facade = facade;
     }
 
     /**
@@ -142,7 +142,7 @@ public class Token {
     @JsonProperty("label")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     /**
@@ -153,7 +153,7 @@ public class Token {
      */
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     /**
@@ -164,7 +164,7 @@ public class Token {
     @JsonProperty("count")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int getCount() {
-        return _count;
+        return this.count;
     }
 
     /**
@@ -174,7 +174,7 @@ public class Token {
      */
     @JsonProperty("count")
     public void setCount(int count) {
-        this._count = count;
+        this.count = count;
     }
 
     // Response fields
@@ -187,7 +187,7 @@ public class Token {
      */
     @JsonIgnore
     public long getPairingExpiration() {
-        return _pairingExpiration;
+        return this.pairingExpiration;
     }
 
     /**
@@ -197,7 +197,7 @@ public class Token {
      */
     @JsonProperty("pairingExpiration")
     public void setPairingExpiration(long pairingExpiration) {
-        this._pairingExpiration = pairingExpiration;
+        this.pairingExpiration = pairingExpiration;
     }
 
     /**
@@ -207,7 +207,7 @@ public class Token {
      */
     @JsonIgnore
     public List<Policy> getPolicies() {
-        return _policies;
+        return this.policies;
     }
 
     /**
@@ -217,7 +217,7 @@ public class Token {
      */
     @JsonProperty("policies")
     public void setPolicies(List<Policy> policies) {
-        this._policies = policies;
+        this.policies = policies;
     }
 
     /**
@@ -227,7 +227,7 @@ public class Token {
      */
     @JsonIgnore
     public String getResource() {
-        return _resource;
+        return this.resource;
     }
 
     /**
@@ -237,7 +237,7 @@ public class Token {
      */
     @JsonProperty("resource")
     public void setResource(String resource) {
-        this._resource = resource;
+        this.resource = resource;
     }
 
     /**
@@ -247,7 +247,7 @@ public class Token {
      */
     @JsonIgnore
     public String getValue() {
-        return _value;
+        return this.value;
     }
 
     /**
@@ -257,7 +257,7 @@ public class Token {
      */
     @JsonProperty("token")
     public void setValue(String value) {
-        this._value = value;
+        this.value = value;
     }
 
     /**
@@ -267,7 +267,7 @@ public class Token {
      */
     @JsonIgnore
     public long getDateCreated() {
-        return _dateCreated;
+        return this.dateCreated;
     }
 
     /**
@@ -277,7 +277,7 @@ public class Token {
      */
     @JsonProperty("dateCreated")
     public void setDateCreated(long dateCreated) {
-        this._dateCreated = dateCreated;
+        this.dateCreated = dateCreated;
     }
 
 }

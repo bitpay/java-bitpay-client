@@ -16,12 +16,12 @@ import java.util.ArrayList;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Wallet {
-    private String _key;
-    private String _displayName;
-    private String _avatar;
-    private Boolean _payPro;
-    private ArrayList<Currencies> _currencies;
-    private String _image;
+    private String key;
+    private String displayName;
+    private String avatar;
+    private Boolean payPro;
+    private ArrayList<Currencies> currencies;
+    private String image;
 
     /**
      * Instantiates a new Wallet.
@@ -36,7 +36,7 @@ public class Wallet {
      */
     @JsonIgnore
     public String getKey() {
-        return _key;
+        return this.key;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Wallet {
      */
     @JsonProperty("key")
     public void setKey(String key) {
-        this._key = key;
+        this.key = key;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Wallet {
      */
     @JsonIgnore
     public String getDisplayName() {
-        return _displayName;
+        return this.displayName;
     }
 
     /**
@@ -66,7 +66,7 @@ public class Wallet {
      */
     @JsonProperty("displayName")
     public void setDisplayName(String displayName) {
-        this._displayName = displayName;
+        this.displayName = displayName;
     }
 
     /**
@@ -76,7 +76,7 @@ public class Wallet {
      */
     @JsonIgnore
     public String getAvatar() {
-        return _avatar;
+        return this.avatar;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Wallet {
      */
     @JsonProperty("avatar")
     public void setAvatar(String avatar) {
-        this._avatar = avatar;
+        this.avatar = avatar;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Wallet {
      * @return the pay pro
      */
     @JsonIgnore
-    public Boolean getPayPro() { return _payPro; }
+    public Boolean getPayPro() { return this.payPro; }
 
     /**
      * Sets pay pro. Whether or not the wallet supports ANY BitPay Payment Protocol options.
@@ -104,7 +104,7 @@ public class Wallet {
      */
     @JsonProperty("payPro")
     public void setPayPro(Boolean payPro) {
-        this._payPro = payPro;
+        this.payPro = payPro;
     }
 
     /**
@@ -113,7 +113,7 @@ public class Wallet {
      * @return the currencies
      */
     @JsonIgnore
-    public ArrayList<Currencies> getCurrencies() { return _currencies; }
+    public ArrayList<Currencies> getCurrencies() { return this.currencies; }
 
     /**
      * Sets currencies. Details of what currencies support payments for this wallet.
@@ -122,7 +122,7 @@ public class Wallet {
      */
     @JsonProperty("currencies")
     public void setCurrencies(ArrayList<Currencies> currencies) {
-        this._currencies = currencies;
+        this.currencies = currencies;
     }
 
     /**
@@ -132,7 +132,7 @@ public class Wallet {
      */
     @JsonIgnore
     public String getImage() {
-        return _image;
+        return this.image;
     }
 
     /**
@@ -142,6 +142,6 @@ public class Wallet {
      */
     @JsonProperty("image")
     public void setImage(String image) {
-        this._image = image;
+        this.image = image;
     }
 }

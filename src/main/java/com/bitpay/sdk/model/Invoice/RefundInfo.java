@@ -20,9 +20,10 @@ import java.util.Hashtable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
 
-    private String _supportRequest;
-    private String _currency;
-    private Hashtable<String, Double> _amounts;
+    private String supportRequest;
+    private String currency;
+    private String refundRequestEid;
+    private Hashtable<String, Double> amounts;
 
     /**
      * Instantiates a new Refund info.
@@ -37,7 +38,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public String getSupportRequest() {
-        return _supportRequest;
+        return this.supportRequest;
     }
 
     /**
@@ -47,7 +48,7 @@ public class RefundInfo {
      */
     @JsonProperty("supportRequest")
     public void setSupportRequest(String supportRequest) {
-        this._supportRequest = supportRequest;
+        this.supportRequest = supportRequest;
     }
 
     /**
@@ -57,7 +58,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -71,7 +72,25 @@ public class RefundInfo {
         if (!Currency.isValid(currency))
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
-        this._currency = currency;
+        this.currency = currency;
+    }
+
+    /**
+     * Gets Refund Request Eid.
+     *
+     * @return Refund Request Eid
+     */
+    public String getRefundRequestEid() {
+        return this.refundRequestEid;
+    }
+
+    /**
+     * Sets Refund Request Eid.
+     *
+     * @param refundRequestEid Refund Request Eid
+     */
+    public void setRefundRequestEid(String refundRequestEid) {
+        this.refundRequestEid = refundRequestEid;
     }
 
     /**
@@ -83,7 +102,7 @@ public class RefundInfo {
      */
     @JsonIgnore
     public Hashtable<String, Double> getAmounts() {
-        return _amounts;
+        return this.amounts;
     }
 
     /**
@@ -95,7 +114,7 @@ public class RefundInfo {
      */
     @JsonProperty("amounts")
     public void setAmounts(Hashtable<String, Double> amounts) {
-        this._amounts = amounts;
+        this.amounts = amounts;
     }
 
 }

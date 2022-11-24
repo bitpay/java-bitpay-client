@@ -18,9 +18,9 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFeesItem {
 
-    private BigDecimal _satoshisPerByte;
-    private BigDecimal _totalFee;
-    private double _fiatAmount;
+    private BigDecimal satoshisPerByte;
+    private BigDecimal totalFee;
+    private double fiatAmount;
 
     /**
      * Instantiates a new Miner fees item.
@@ -35,7 +35,7 @@ public class MinerFeesItem {
      */
     @JsonIgnore
     public BigDecimal getSatoshisPerByte() {
-        return _satoshisPerByte;
+        return this.satoshisPerByte;
     }
 
     /**
@@ -45,7 +45,7 @@ public class MinerFeesItem {
      */
     @JsonProperty("satoshisPerByte")
     public void setSatoshisPerByte(BigDecimal satoshisPerByte) {
-        this._satoshisPerByte = satoshisPerByte;
+        this.satoshisPerByte = satoshisPerByte;
     }
 
     /**
@@ -55,7 +55,7 @@ public class MinerFeesItem {
      */
     @JsonIgnore
     public BigDecimal getTotalFee() {
-        return _totalFee;
+        return this.totalFee;
     }
 
     /**
@@ -65,7 +65,7 @@ public class MinerFeesItem {
      */
     @JsonProperty("totalFee")
     public void setTotalFee(BigDecimal totalFee) {
-        this._totalFee = totalFee;
+        this.totalFee = totalFee;
     }
 
     /**
@@ -75,7 +75,7 @@ public class MinerFeesItem {
      */
     @JsonIgnore
     public double getFiatAmount() {
-        return _fiatAmount;
+        return this.fiatAmount;
     }
 
     /**
@@ -84,5 +84,5 @@ public class MinerFeesItem {
      * @param fiatAmount the fiat amount
      */
     @JsonProperty("fiatAmount")
-    public void setFiatAmount(double fiatAmount) { this._fiatAmount = fiatAmount; }
+    public void setFiatAmount(double fiatAmount) { this.fiatAmount = fiatAmount; }
 }

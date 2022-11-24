@@ -30,18 +30,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
-    private String _email = "";
-    private String _guid = "";
-    private String _label = "";
-    private String _reference = "";
-    private String _notificationURL = "";
+    private String email = "";
+    private String guid = "";
+    private String label = "";
+    private String reference = "";
+    private String notificationURL = "";
 
-    private String _account;
-    private String _status;
-    private String _id;
-    private String _shopperId;
-    private String _token;
-    private String _supportPhone;
+    private String account;
+    private String status;
+    private String id;
+    private String shopperId;
+    private String token;
+    private String supportPhone;
 
 
     /**
@@ -52,9 +52,9 @@ public class PayoutRecipient {
      * @param notificationURL string URL to which BitPay sends webhook notifications to inform the merchant about the                        status of a given recipient. HTTPS is mandatory (Optional).
      */
     public PayoutRecipient(String email, String label, String notificationURL) {
-        this._email = email;
-        this._label = label;
-        this._notificationURL = notificationURL;
+        this.email = email;
+        this.label = label;
+        this.notificationURL = notificationURL;
     }
 
     /**
@@ -74,7 +74,7 @@ public class PayoutRecipient {
     @JsonProperty("guid")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getGuid() {
-        return _guid;
+        return this.guid;
     }
 
     /**
@@ -84,7 +84,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("guid")
     public void setGuid(String guid) {
-        this._guid = guid;
+        this.guid = guid;
     }
 
     /**
@@ -95,7 +95,7 @@ public class PayoutRecipient {
     @JsonProperty("email")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
-        return _email;
+        return this.email;
     }
 
     /**
@@ -105,7 +105,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("email")
     public void setEmail(String email) {
-        this._email = email;
+        this.email = email;
     }
 
     /**
@@ -118,7 +118,7 @@ public class PayoutRecipient {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-    	return _token;
+    	return this.token;
     }
 
     /**
@@ -130,7 +130,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("token")
     public void setToken(String token) {
-    	this._token = token;
+    	this.token = token;
     }
     
     // Optional fields
@@ -145,7 +145,7 @@ public class PayoutRecipient {
     @JsonProperty("label")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLabel() {
-        return _label;
+        return this.label;
     }
 
     /**
@@ -156,7 +156,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("label")
     public void setLabel(String label) {
-        this._label = label;
+        this.label = label;
     }
 
     /**
@@ -168,7 +168,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("notificationURL")
     public String getNotificationURL() {
-        return _notificationURL;
+        return this.notificationURL;
     }
 
     /**
@@ -180,7 +180,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("notificationURL")
     public void setNotificationURL(String notificationURL) {
-        this._notificationURL = notificationURL;
+        this.notificationURL = notificationURL;
     }
 
     /**
@@ -190,7 +190,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("reference")
     public String getReference() {
-        return _reference;
+        return this.reference;
     }
 
     /**
@@ -200,7 +200,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("reference")
     public void setReference(String reference) {
-        this._reference = reference;
+        this.reference = reference;
     }
 
     // Response fields
@@ -223,7 +223,7 @@ public class PayoutRecipient {
      */
     @JsonIgnore
     public String getStatus() {
-        return _status;
+        return this.status;
     }
 
     /**
@@ -243,7 +243,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("status")
     public void setStatus(String status) {
-        this._status = status;
+        this.status = status;
     }
 
     /**
@@ -253,7 +253,7 @@ public class PayoutRecipient {
      */
     @JsonIgnore
     public String getId() {
-        return _id;
+        return this.id;
     }
 
     /**
@@ -263,7 +263,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("id")
     public void setId(String id) {
-        this._id = id;
+        this.id = id;
     }
 
     /**
@@ -280,7 +280,7 @@ public class PayoutRecipient {
      */
     @JsonIgnore
     public String getShopperId() {
-        return _shopperId;
+        return this.shopperId;
     }
 
     /**
@@ -297,7 +297,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("shopperId")
     public void setShopperId(String shopperId) {
-        this._shopperId = shopperId;
+        this.shopperId = shopperId;
     }
 
     /**
@@ -307,7 +307,7 @@ public class PayoutRecipient {
      */
     @JsonIgnore
     public String getAccount() {
-        return _account;
+        return this.account;
     }
 
     /**
@@ -317,7 +317,7 @@ public class PayoutRecipient {
      */
     @JsonProperty("account")
     public void setAccount(String account) {
-        this._account = account;
+        this.account = account;
     }
 
     /**
@@ -327,7 +327,7 @@ public class PayoutRecipient {
      */
     @JsonIgnore
     public String getSupportPhone() {
-        return _supportPhone;
+        return this.supportPhone;
     }
 
     /**
@@ -337,6 +337,6 @@ public class PayoutRecipient {
      */
     @JsonProperty("supportPhone")
     public void setSupportPhone(String supportPhone) {
-        this._supportPhone = supportPhone;
+        this.supportPhone = supportPhone;
     }
 }

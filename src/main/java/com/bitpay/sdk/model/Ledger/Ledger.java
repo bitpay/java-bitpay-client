@@ -14,9 +14,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {
 
-    private List<LedgerEntry> _entries;
-    private String _currency;
-    private Double _balance;
+    private List<LedgerEntry> entries;
+    private String currency;
+    private Double balance;
 
     /**
      * Instantiates a new Ledger.
@@ -31,7 +31,7 @@ public class Ledger {
      */
     @JsonIgnore
     public List<LedgerEntry> getEntries() {
-        return _entries;
+        return this.entries;
     }
 
     /**
@@ -41,7 +41,7 @@ public class Ledger {
      */
     @JsonProperty("Entries")
     public void setEntries(List<LedgerEntry> entries) {
-        this._entries = entries;
+        this.entries = entries;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Ledger {
      */
     @JsonIgnore
     public String getCurrency() {
-        return _currency;
+        return this.currency;
     }
 
     /**
@@ -61,7 +61,7 @@ public class Ledger {
      */
     @JsonProperty("currency")
     public void setCurrency(String currency) {
-        this._currency = currency;
+        this.currency = currency;
     }
 
     /**
@@ -71,7 +71,7 @@ public class Ledger {
      */
     @JsonIgnore
     public Double getBalance() {
-        return _balance;
+        return this.balance;
     }
 
     /**
@@ -81,6 +81,6 @@ public class Ledger {
      */
     @JsonProperty("balance")
     public void setBalance(Double balance) {
-        this._balance = balance;
+        this.balance = balance;
     }
 }

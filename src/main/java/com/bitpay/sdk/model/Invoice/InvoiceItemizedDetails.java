@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceItemizedDetails {
-    private double _amount;
-    private String _description;
-    private Boolean _isFee;
+    private double amount;
+    private String description;
+    private Boolean isFee;
 
     /**
      * Instantiates a new Invoice itemized details.
@@ -32,7 +32,7 @@ public class InvoiceItemizedDetails {
      */
     @JsonIgnore
     public double getAmount() {
-        return _amount;
+        return this.amount;
     }
 
     /**
@@ -42,7 +42,7 @@ public class InvoiceItemizedDetails {
      */
     @JsonProperty("amount")
     public void setAmount(double amount) {
-        this._amount = amount;
+        this.amount = amount;
     }
 
     /**
@@ -52,7 +52,7 @@ public class InvoiceItemizedDetails {
      */
     @JsonIgnore
     public String getDescription() {
-        return _description;
+        return this.description;
     }
 
     /**
@@ -62,7 +62,7 @@ public class InvoiceItemizedDetails {
      */
     @JsonProperty("description")
     public void setDescription(String description) {
-        this._description = description;
+        this.description = description;
     }
 
     /**
@@ -71,7 +71,7 @@ public class InvoiceItemizedDetails {
      * @return the is fee
      */
     @JsonIgnore
-    public Boolean getIsFee() { return _isFee; }
+    public Boolean getIsFee() { return this.isFee; }
 
     /**
      * Sets is fee. Indicates whether or not the item is considered a fee/tax or part of the main purchase.
@@ -80,6 +80,6 @@ public class InvoiceItemizedDetails {
      */
     @JsonProperty("IsFee")
     public void setIsFee(Boolean isFee) {
-        this._isFee = isFee;
+        this.isFee = isFee;
     }
 }
