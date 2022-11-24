@@ -16,7 +16,6 @@ public class DateDeserializerTest {
     @Test
     public void it_should_deserialize_date() throws IOException {
         // given
-        System.setProperty("user.timezone", "UTC");
         DateDeserializer testedClass = new DateDeserializer();
         JsonParser jsonParser = Mockito.mock(JsonParser.class);
         DeserializationContext deserializationContext = Mockito.mock(DeserializationContext.class);
