@@ -18,11 +18,20 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Settlement client.
+ */
 public class SettlementClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
 
+    /**
+     * Instantiates a new Settlement client.
+     *
+     * @param bitPayClient the bit pay client
+     * @param accessTokens the access tokens
+     */
     public SettlementClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;

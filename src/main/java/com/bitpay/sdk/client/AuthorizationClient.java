@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
 
+/**
+ * The type Authorization client.
+ */
 public class AuthorizationClient {
 
     private final BitPayClient bitPayClient;
@@ -23,6 +26,14 @@ public class AuthorizationClient {
     private final AccessTokens accessToken;
     private final String identity;
 
+    /**
+     * Instantiates a new Authorization client.
+     *
+     * @param bitPayClient  the bit pay client
+     * @param uuidGenerator the uuid generator
+     * @param accessToken   the access token
+     * @param identity      the identity
+     */
     public AuthorizationClient(
         BitPayClient bitPayClient,
         UuidGenerator uuidGenerator,
@@ -83,7 +94,7 @@ public class AuthorizationClient {
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException BitPayException class
      */
-    public String requestClientAuthorization(Facade facade) throws BitPayException {
+    public String authorizeClient(Facade facade) throws BitPayException {
         Token token = new Token();
         token.setId(this.identity);
         token.setGuid(this.uuidGenerator.execute());

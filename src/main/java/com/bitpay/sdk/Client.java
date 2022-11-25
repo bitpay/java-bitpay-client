@@ -73,6 +73,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bitcoinj.core.ECKey;
 
+/**
+ * The type Client.
+ */
 public class Client {
 
     private UuidGenerator uuidGenerator;
@@ -88,7 +91,7 @@ public class Client {
      * Constructor for POS facade.
      *
      * @param token POS token
-     * @throws BitPayException
+     * @throws BitPayException the bit pay exception
      */
     public Client(PosToken token) throws BitPayException {
         this(token, Environment.PROD);
@@ -97,9 +100,9 @@ public class Client {
     /**
      * Constructor for POS facade.
      *
-     * @param token POS token
-     * @param environment Environement
-     * @throws BitPayException
+     * @param token       POS token
+     * @param environment Environment
+     * @throws BitPayException the bit pay exception
      */
     public Client(PosToken token, Environment environment) throws BitPayException {
         this.accessTokens = new AccessTokens();
@@ -118,7 +121,7 @@ public class Client {
      *
      * @param environment      Target environment. Options: Env.Test / Env.Prod
      * @param privateKey       The full path to the securely located private key or the HEX key value.
-     * @param accessTokens Object containing the available tokens.
+     * @param accessTokens     Object containing the available tokens.
      * @param proxyDetails     HttpHost Optional Proxy setting (set to NULL to ignore)
      * @param proxyCredentials CredentialsProvider Optional Proxy Basic Auth Credentials (set to NULL to ignore)
      * @throws BitPayException BitPayException class
@@ -187,10 +190,10 @@ public class Client {
     /**
      * Constructor for all injected classes.
      *
-     * @param bitPayClient     BitPayClient
-     * @param identity         Identity
-     * @param accessTokens accessToken
-     * @param uuidGenerator    UuidGenerator
+     * @param bitPayClient  BitPayClient
+     * @param identity      Identity
+     * @param accessTokens  accessToken
+     * @param uuidGenerator UuidGenerator
      */
     public Client(
         BitPayClient bitPayClient,
@@ -204,21 +207,43 @@ public class Client {
         this.uuidGenerator = uuidGenerator;
     }
 
+    /**
+     * Create pos (light) client.
+     *
+     * @param token the token
+     * @return the client
+     * @throws BitPayException the bit pay exception
+     */
     public static Client createPosClient(PosToken token) throws BitPayException {
         return new Client(token);
     }
 
+    /**
+     * Create standard client.
+     *
+     * @param privateKey the private key
+     * @param tokens     the tokens
+     * @return the client
+     * @throws BitPayException the bit pay exception
+     */
     public static Client createClient(PrivateKey privateKey, AccessTokens tokens) throws BitPayException {
         return new Client(Environment.PROD, privateKey, tokens, null, null);
     }
 
+    /**
+     * Create standard client.
+     *
+     * @param configFilePath the config file path
+     * @return the client
+     * @throws BitPayException the bit pay exception
+     */
     public static Client createClient(ConfigFilePath configFilePath) throws BitPayException {
         return new Client(configFilePath, null, null);
     }
 
 
     /**
-     * Authorize (pair) this client with the server using the specified pairing code.
+     * Authorize this client with the server using the specified pairing code (Server Initiated Pairing).
      *
      * @param pairingCode A code obtained from the server; typically from bitpay.com/api-tokens.
      * @throws BitPayException BitPayException class
@@ -228,14 +253,14 @@ public class Client {
     }
 
     /**
-     * Request a pairing code from the BitPay server.
+     * Request a pairing code from the BitPay server (Client Initiated Pairing).
      *
      * @param facade Defines the level of API access being requested
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException BitPayException class
      */
-    public String requestClientAuthorization(Facade facade) throws BitPayException {
-        return this.getAuthorizationClient().requestClientAuthorization(facade);
+    public String authorizeClient(Facade facade) throws BitPayException {
+        return this.getAuthorizationClient().authorizeClient(facade);
     }
 
     /**
@@ -265,6 +290,7 @@ public class Client {
      *
      * @param currencyCode String Currency code for which the info will be retrieved.
      * @return Map|null
+     * @throws BitPayException the bit pay exception
      */
     public Map getCurrencyInfo(String currencyCode) throws BitPayException {
         CurrencyClient client = new CurrencyClient(this.bitPayClient);
@@ -297,7 +323,7 @@ public class Client {
      *
      * @param invoiceId The id of the invoice to retrieve.
      * @return A BitPay Invoice object.
-     * @throws InvoiceQueryException InvoiceQueryException class
+     * @throws BitPayException the bit pay exception
      */
     public Invoice getInvoice(String invoiceId) throws BitPayException {
         Facade facade = getFacadeBasedOnAccessToken();
@@ -497,6 +523,7 @@ public class Client {
      * @param bill An Bill object with request parameters defined.
      * @return A BitPay generated Bill object.
      * @throws BillCreationException BillCreationException class
+     * @throws BitPayException       the bit pay exception
      */
     public Bill createBill(Bill bill) throws BillCreationException, BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
@@ -525,7 +552,7 @@ public class Client {
      *
      * @param billId The id of the bill to retrieve.
      * @return A BitPay Bill object.
-     * @throws BillQueryException BillQueryException class
+     * @throws BitPayException the bit pay exception
      */
     public Bill getBill(String billId) throws BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
@@ -590,7 +617,7 @@ public class Client {
      * @param billId    The id of the requested bill.
      * @param billToken The token of the requested bill.
      * @return A response status returned from the API.
-     * @throws BillDeliveryException BillDeliveryException class
+     * @throws BitPayException the bit pay exception
      */
     public String deliverBill(String billId, String billToken) throws BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
@@ -863,6 +890,11 @@ public class Client {
         return this.getWalletClient().getSupportedWallets();
     }
 
+    /**
+     * Gets rates client.
+     *
+     * @return the rates client
+     */
     public RateClient getRatesClient() {
         return new RateClient(this.bitPayClient);
     }
@@ -881,6 +913,13 @@ public class Client {
         this.bitPayClient.setLoggerLevel(loggerLevel);
     }
 
+    /**
+     * Gets http client.
+     *
+     * @param proxyDetails the proxy details
+     * @param proxyCreds   the proxy creds
+     * @return the http client
+     */
     protected HttpClient getHttpClient(HttpHost proxyDetails, CredentialsProvider proxyCreds) {
         if (proxyDetails != null) {
             if (proxyCreds != null) {
@@ -894,6 +933,13 @@ public class Client {
         }
     }
 
+    /**
+     * Gets ECKey.
+     *
+     * @param privateKey the private key
+     * @return ECKey
+     * @throws BitPayException the bit pay exception
+     */
     protected ECKey getEcKey(PrivateKey privateKey) throws BitPayException {
         File privateKeyFile = new File(privateKey.value());
         if (privateKeyFile.exists() && KeyUtils.privateKeyExists(privateKey.value().replace("\"", ""))) {
@@ -921,7 +967,9 @@ public class Client {
     /**
      * Initialize the public/private key pair by either loading the existing one or by creating a new one.
      *
-     * @throws Exception
+     * @param config the config
+     * @return ECKey
+     * @throws Exception the exception
      */
     protected ECKey getEcKey(Config config) throws Exception {
         try {
@@ -945,6 +993,13 @@ public class Client {
         }
     }
 
+    /**
+     * Derive identity.
+     *
+     * @param ecKey ECKey
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws BitPayException          the bit pay exception
+     */
     protected void deriveIdentity(ECKey ecKey) throws IllegalArgumentException, BitPayException {
         // Identity in this implementation is defined to be the SIN.
         try {
@@ -955,6 +1010,12 @@ public class Client {
         }
     }
 
+    /**
+     * Gets facade based on access token.
+     *
+     * @return the facade based on access token
+     * @throws BitPayException the bit pay exception
+     */
     protected Facade getFacadeBasedOnAccessToken() throws BitPayException {
         try {
             this.accessTokens.getAccessToken(Facade.MERCHANT);
@@ -967,10 +1028,22 @@ public class Client {
         return Facade.POS;
     }
 
+    /**
+     * Is sign request boolean.
+     *
+     * @param facade the facade
+     * @return the boolean
+     */
     protected boolean isSignRequest(Facade facade) {
         return !facade.equals(Facade.POS);
     }
 
+    /**
+     * Gets base url.
+     *
+     * @param environment the environment
+     * @return the base url
+     */
     protected String getBaseUrl(Environment environment) {
         return environment.equals(Environment.TEST) ? Config.TEST_URL : Config.PROD_URL;
     }
@@ -978,6 +1051,8 @@ public class Client {
     /**
      * Loads the configuration file (JSON).
      *
+     * @param configFilePath the config file path
+     * @return the Config class
      * @throws BitPayException BitPayException class
      */
     protected Config buildConfigFromFile(ConfigFilePath configFilePath) throws BitPayException {
@@ -996,38 +1071,83 @@ public class Client {
         }
     }
 
+    /**
+     * Gets authorization client.
+     *
+     * @return the authorization client
+     */
     protected AuthorizationClient getAuthorizationClient() {
         return new AuthorizationClient(this.bitPayClient, this.uuidGenerator, this.accessTokens, this.identity);
     }
 
+    /**
+     * Gets invoice client.
+     *
+     * @return the invoice client
+     */
     protected InvoiceClient getInvoiceClient() {
         return new InvoiceClient(this.bitPayClient, this.accessTokens, uuidGenerator);
     }
 
+    /**
+     * Gets refund client.
+     *
+     * @return the refund client
+     */
     protected RefundClient getRefundClient() {
         return new RefundClient(this.bitPayClient, this.accessTokens);
     }
 
+    /**
+     * Gets bill client.
+     *
+     * @return the bill client
+     */
     protected BillClient getBillClient() {
         return new BillClient(this.bitPayClient, this.accessTokens);
     }
 
+    /**
+     * Gets ledger client.
+     *
+     * @return the ledger client
+     */
     protected LedgerClient getLedgerClient() {
         return new LedgerClient(this.bitPayClient, this.accessTokens);
     }
 
+    /**
+     * Gets payout recipients client.
+     *
+     * @return the payout recipients client
+     */
     protected PayoutRecipientsClient getPayoutRecipientsClient() {
         return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.uuidGenerator);
     }
 
+    /**
+     * Gets payout client.
+     *
+     * @return the payout client
+     */
     protected PayoutClient getPayoutClient() {
         return new PayoutClient(this.bitPayClient, this.accessTokens);
     }
 
+    /**
+     * Gets settlement client.
+     *
+     * @return the settlement client
+     */
     protected SettlementClient getSettlementClient() {
         return new SettlementClient(this.bitPayClient, this.accessTokens);
     }
 
+    /**
+     * Gets wallet client.
+     *
+     * @return the wallet client
+     */
     protected WalletClient getWalletClient() {
         return new WalletClient(this.bitPayClient);
     }

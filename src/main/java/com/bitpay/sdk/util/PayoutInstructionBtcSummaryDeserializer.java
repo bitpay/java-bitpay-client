@@ -22,7 +22,7 @@ public class PayoutInstructionBtcSummaryDeserializer extends JsonDeserializer<Pa
      * @param jp JsonParser
      * @param dc DeserializationContext
      * @return PayoutInstructionBtcSummary
-     * @throws IOException
+     * @throws IOException IOException
      */
     @Override
     public PayoutInstructionBtcSummary deserialize(JsonParser jp, DeserializationContext dc) throws IOException {

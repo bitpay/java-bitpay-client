@@ -26,11 +26,20 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Payout client.
+ */
 public class PayoutClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
 
+    /**
+     * Instantiates a new Payout client.
+     *
+     * @param bitPayClient the bit pay client
+     * @param accessTokens the access tokens
+     */
     public PayoutClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;

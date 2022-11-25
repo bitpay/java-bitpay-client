@@ -29,12 +29,22 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Payout recipients client.
+ */
 public class PayoutRecipientsClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
     private final UuidGenerator uuidGenerator;
 
+    /**
+     * Instantiates a new Payout recipients client.
+     *
+     * @param bitPayClient  the bit pay client
+     * @param accessTokens  the access tokens
+     * @param uuidGenerator the uuid generator
+     */
     public PayoutRecipientsClient(
         BitPayClient bitPayClient,
         AccessTokens accessTokens,
@@ -208,8 +218,7 @@ public class PayoutRecipientsClient {
      * @param recipientId String The id of the recipient to cancel.
      * @return True if the delete operation was successfull, false otherwise.
      * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException
-     *                                              class
+     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException                                              class
      */
     public Boolean deletePayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
@@ -241,9 +250,8 @@ public class PayoutRecipientsClient {
      *
      * @param recipientId String A BitPay recipient ID.
      * @return True if the notification was successfully sent, false otherwise.
+     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException                                              class
      * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException
-     *                                              class
      */
     public Boolean requestPayoutRecipientNotification(String recipientId)
         throws PayoutRecipientNotificationException, BitPayException {

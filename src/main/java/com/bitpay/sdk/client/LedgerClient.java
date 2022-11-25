@@ -18,11 +18,20 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Ledger client.
+ */
 public class LedgerClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
 
+    /**
+     * Instantiates a new Ledger client.
+     *
+     * @param bitPayClient the bit pay client
+     * @param accessTokens the access tokens
+     */
     public LedgerClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;

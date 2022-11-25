@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -41,7 +42,36 @@ public class BitPayClientTest {
     private HttpRequestFactory httpRequestFactory;
 
     @Test
-    public void it_should_test_get_request() throws IOException, URISyntaxException {
+    public void it_should_test_get_request_without_parameters() throws IOException, URISyntaxException {
+        // given
+        final String testUrl = "/test";
+        final HttpGet httpGet = Mockito.mock(HttpGet.class);
+        final List<BasicNameValuePair> parameters = new ArrayList<BasicNameValuePair>();
+        parameters.add(new BasicNameValuePair("key", "value"));
+
+        Mockito.when(this.httpRequestFactory.createHttpGet(BASE_URL + testUrl)).thenReturn(httpGet);
+
+        BitPayClient testedClass = this.getTestedClass();
+
+        // when
+        testedClass.get(testUrl, parameters);
+
+        // then
+        Mockito.verify(httpClient, Mockito.times(1)).execute(httpGet);
+        Mockito.verify(httpGet, Mockito.times(1)).setURI(new URI("http://localhost/test?key=value"));
+        Mockito.verify(httpGet, Mockito.times(1))
+            .addHeader(ArgumentMatchers.eq("x-signature"), ArgumentMatchers.anyString());
+        Mockito.verify(httpGet, Mockito.times(1))
+            .addHeader(ArgumentMatchers.eq("x-identity"), ArgumentMatchers.anyString());
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+        Mockito.verify(httpGet, Mockito.times(1))
+            .addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+    }
+
+    @Test
+    public void it_should_test_get_request_with_parameters() throws IOException, URISyntaxException {
         // given
         final String testUrl = "/test";
         final HttpGet httpGet = Mockito.mock(HttpGet.class);
@@ -65,7 +95,206 @@ public class BitPayClientTest {
         Mockito.verify(httpGet, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
         Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
         Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-        Mockito.verify(httpGet, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+        Mockito.verify(httpGet, Mockito.times(1))
+            .addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_when_something_is_wrong_for_get_requests()
+        throws IOException, URISyntaxException {
+        BitPayException exception1 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpGet httpGet = Mockito.mock(HttpGet.class);
+                Mockito.when(this.httpRequestFactory.createHttpGet(ArgumentMatchers.anyString())).thenReturn(httpGet);
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.get("[/]", new ArrayList<BasicNameValuePair>(), true);
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: GET failed\n" +
+                "Illegal character in hostname at index 16: http://localhost[/]?",
+            exception1.getMessage()
+        );
+
+        BitPayException exception2 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpGet httpGet = Mockito.mock(HttpGet.class);
+                Mockito.when(this.httpRequestFactory.createHttpGet(ArgumentMatchers.anyString())).thenReturn(httpGet);
+                Mockito.when(this.httpClient.execute(httpGet))
+                    .thenThrow(new ClientProtocolException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.get("/test", new ArrayList<BasicNameValuePair>(), true);
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: GET failed\n" +
+                "Exception message",
+            exception2.getMessage()
+        );
+
+
+        BitPayException exception3 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpGet httpGet = Mockito.mock(HttpGet.class);
+                Mockito.when(this.httpRequestFactory.createHttpGet(ArgumentMatchers.anyString())).thenReturn(httpGet);
+                Mockito.when(this.httpClient.execute(httpGet)).thenThrow(new IOException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.get("/test", new ArrayList<BasicNameValuePair>(), true);
+            },
+            "Error: GET failed\n" + "Exception message"
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: GET failed\n" +
+                "Exception message",
+            exception3.getMessage()
+        );
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_when_something_is_wrong_for_delete_requests()
+        throws IOException, URISyntaxException {
+        BitPayException exception1 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpDelete httpDelete = Mockito.mock(HttpDelete.class);
+                Mockito.when(this.httpRequestFactory.createHttpDelete(ArgumentMatchers.anyString()))
+                    .thenReturn(httpDelete);
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.delete("[/]", new ArrayList<BasicNameValuePair>());
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: DELETE failed\n" +
+                "Illegal character in hostname at index 16: http://localhost[/]?",
+            exception1.getMessage()
+        );
+
+        BitPayException exception2 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpDelete httpDelete = Mockito.mock(HttpDelete.class);
+                Mockito.when(this.httpRequestFactory.createHttpDelete(ArgumentMatchers.anyString()))
+                    .thenReturn(httpDelete);
+                Mockito.when(this.httpClient.execute(httpDelete))
+                    .thenThrow(new ClientProtocolException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.delete("/test", new ArrayList<BasicNameValuePair>());
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: DELETE failed\n" +
+                "Exception message",
+            exception2.getMessage()
+        );
+
+        BitPayException exception3 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpDelete httpDelete = Mockito.mock(HttpDelete.class);
+                Mockito.when(this.httpRequestFactory.createHttpDelete(ArgumentMatchers.anyString()))
+                    .thenReturn(httpDelete);
+                Mockito.when(this.httpClient.execute(httpDelete)).thenThrow(new IOException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.delete("/test", new ArrayList<BasicNameValuePair>());
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: DELETE failed\n" +
+                "Exception message",
+            exception3.getMessage()
+        );
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_when_something_is_wrong_for_post_requests()
+        throws IOException, URISyntaxException {
+        BitPayException exception1 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpPost httpPost = Mockito.mock(HttpPost.class);
+                Mockito.when(this.httpRequestFactory.createHttpPost(ArgumentMatchers.anyString()))
+                    .thenReturn(httpPost);
+                Mockito.when(this.httpClient.execute(httpPost))
+                    .thenThrow(new ClientProtocolException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.post("/test", "{\"key\":\"value\"}");
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: POST failed\n" +
+            "Exception message",
+            exception1.getMessage()
+        );
+
+
+        BitPayException exception2 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpPost httpPost = Mockito.mock(HttpPost.class);
+                Mockito.when(this.httpRequestFactory.createHttpPost(ArgumentMatchers.anyString()))
+                    .thenReturn(httpPost);
+                Mockito.when(this.httpClient.execute(httpPost)).thenThrow(new IOException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.post("/test", "{\"key\":\"value\"}");
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: POST failed\n" +
+                "Exception message",
+            exception2.getMessage()
+        );
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_when_something_is_wrong_for_put_requests()
+        throws IOException, URISyntaxException {
+        BitPayException exception1 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpPut httpPut = Mockito.mock(HttpPut.class);
+                Mockito.when(this.httpRequestFactory.createHttpPut(ArgumentMatchers.anyString()))
+                    .thenReturn(httpPut);
+                Mockito.when(this.httpClient.execute(httpPut))
+                    .thenThrow(new ClientProtocolException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.update("[/]", "{\"key\":\"value\"}");
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: PUT failed\n"
+                + "Exception message",
+            exception1.getMessage()
+        );
+
+        BitPayException exception2 = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                final HttpPut httpPut = Mockito.mock(HttpPut.class);
+                Mockito.when(this.httpRequestFactory.createHttpPut(ArgumentMatchers.anyString()))
+                    .thenReturn(httpPut);
+                Mockito.when(this.httpClient.execute(httpPut)).thenThrow(new IOException("Exception message"));
+                BitPayClient testedClass = this.getTestedClass();
+                testedClass.update("[/]", "{\"key\":\"value\"}");
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: PUT failed\n" +
+                "Exception message",
+            exception2.getMessage()
+        );
     }
 
     @Test
@@ -93,7 +322,8 @@ public class BitPayClientTest {
         Mockito.verify(httpDelete, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
         Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
         Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-        Mockito.verify(httpDelete, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+        Mockito.verify(httpDelete, Mockito.times(1))
+            .addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -120,7 +350,8 @@ public class BitPayClientTest {
         Mockito.verify(httpPost, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
         Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
         Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-        Mockito.verify(httpPost, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+        Mockito.verify(httpPost, Mockito.times(1))
+            .addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -147,7 +378,8 @@ public class BitPayClientTest {
         Mockito.verify(httpPut, Mockito.times(1)).addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
         Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-accept-version", Config.BITPAY_API_VERSION);
         Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-        Mockito.verify(httpPut, Mockito.times(1)).addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+        Mockito.verify(httpPut, Mockito.times(1))
+            .addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
     }
 
     @Test
@@ -164,6 +396,92 @@ public class BitPayClientTest {
 
         // then
         Assertions.assertEquals(responseContent, result);
+    }
+
+    @Test
+    public void it_should_return_data_value_from_httpResponse() throws BitPayException {
+        // given
+        final String responseContent = "{\"status\":\"success\",\"data\":{\"my\":\"data\"},\"message\":null}";
+        BitPayClient testedClass = this.getTestedClass();
+        HttpResponse httpResponse = Mockito.mock(HttpResponse.class);
+        HttpEntity httpEntity = new StringEntity(responseContent, "UTF-8");
+        Mockito.when(httpResponse.getEntity()).thenReturn(httpEntity);
+
+        // when
+        String result = testedClass.responseToJsonString(httpResponse);
+
+        // then
+        Assertions.assertEquals("{\"my\":\"data\"}", result);
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_for_missing_response() {
+        BitPayException exception = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                // given
+                BitPayClient testedClass = this.getTestedClass();
+
+                // when
+                testedClass.responseToJsonString(null);
+            }
+        );
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error: HTTP response is null",
+            exception.getMessage()
+        );
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_for_response_with_error() {
+        BitPayException exception = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                // given
+                final String responseContent = "{\"code\":\"500\",\"status\":\"error\",\"data\":{},\"message\":\"Error message text\"}";
+                BitPayClient testedClass = this.getTestedClass();
+                HttpResponse httpResponse = Mockito.mock(HttpResponse.class);
+                HttpEntity httpEntity = new StringEntity(responseContent, "UTF-8");
+                Mockito.when(httpResponse.getEntity()).thenReturn(httpEntity);
+
+                // when
+                String result = testedClass.responseToJsonString(httpResponse);
+
+                // then
+                Assertions.assertEquals(responseContent, result);
+            }
+        );
+        Assertions.assertEquals(
+            "Status: 500 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Error message text",
+            exception.getMessage()
+        );
+
+    }
+
+    @Test
+    public void it_should_throws_bitpayexception_for_response_with_errors() {
+        BitPayException exception = Assertions.assertThrows(
+            BitPayException.class,
+            () -> {
+                // given
+                final String responseContent = "{\"code\":\"500\",\"status\":\"errors\",\"errors\":[\"Error1\", \"Error2\"],\"data\":{},\"message\":\"Error message text\"}";
+                BitPayClient testedClass = this.getTestedClass();
+                HttpResponse httpResponse = Mockito.mock(HttpResponse.class);
+                HttpEntity httpEntity = new StringEntity(responseContent, "UTF-8");
+                Mockito.when(httpResponse.getEntity()).thenReturn(httpEntity);
+
+                // when
+                String result = testedClass.responseToJsonString(httpResponse);
+
+                // then
+                Assertions.assertEquals(responseContent, result);
+            }
+        );
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Multiple errors:\n" +
+                "Error1\n" + "Error2",
+            exception.getMessage()
+        );
     }
 
     private BitPayClient getTestedClass() {
