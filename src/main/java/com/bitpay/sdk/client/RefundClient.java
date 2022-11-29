@@ -39,6 +39,7 @@ public class RefundClient {
     /**
      * Instantiates a new Refund client.
      *
+     * @param guidGenerator GuidGenerator
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
@@ -61,9 +62,14 @@ public class RefundClient {
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
      */
-    public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
-                               Boolean buyerPaysRefundFee, String reference) throws
-        RefundCreationException, BitPayException {
+    public Refund create(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference
+    ) throws RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         params.put("guid", this.guidGenerator.execute());
@@ -121,7 +127,7 @@ public class RefundClient {
      * @throws RefundQueryException RefundQueryException class
      * @throws BitPayException      BitPayException class
      */
-    public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
+    public Refund getById(String refundId) throws RefundQueryException, BitPayException {
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -129,6 +135,34 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/" + refundId, params, true);
+            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+        } catch (JsonProcessingException e) {
+            throw new RefundQueryException(null,
+                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (BitPayException ex) {
+            throw new RefundQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundQueryException(null,
+                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Retrieve refund request on a BitPay invoice by Guid.
+     * @param guid Guid
+     * @return Refund
+     * @throws BitPayException BitPayException
+     */
+    public Refund getByGuid(String guid) throws BitPayException {
+        Refund refund;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+
+        try {
+            HttpResponse response = this.bitPayClient.get("refunds/guid/" + guid, params, true);
             refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (JsonProcessingException e) {
             throw new RefundQueryException(null,

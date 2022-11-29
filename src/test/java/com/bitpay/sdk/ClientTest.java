@@ -730,11 +730,10 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getRefund() throws BitPayException {
+    public void it_should_get_refund_by_id() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
-        final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", "merchantToken"));
@@ -759,6 +758,36 @@ public class ClientTest {
         );
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
+    }
+
+    @Test
+    public void it_should_get_refund_by_guid() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", "merchantToken"));
+
+        Mockito.when(this.bitPayClient.get("refunds/guid/" + EXAMPLE_UUID, params, true))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("getRefund.json"));
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Refund result = testedClass.getRefundByGuid(EXAMPLE_UUID);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).get(
+            "refunds/guid/" + EXAMPLE_UUID,
+            params,
+            true
+        );
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
