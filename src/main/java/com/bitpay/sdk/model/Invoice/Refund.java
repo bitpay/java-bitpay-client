@@ -63,7 +63,7 @@ public class Refund {
     //
 
     /**
-     * Gets guid.
+     * Gets a variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system.
      *
      * @return the guid
      */
@@ -74,7 +74,7 @@ public class Refund {
     }
 
     /**
-     * Sets guid.
+     * Sets a variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system.
      *
      * @param guid the guid
      */

@@ -564,6 +564,7 @@ public class Client {
     public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate, Boolean buyerPaysRefundFee, String reference) throws RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.getAccessToken(Facade.Merchant));
+        params.put("guid", this.getGuid());
         if (invoiceId == null && amount == null) {
             throw new RefundCreationException(null ,"Invoice ID, amount and currency are required to issue a refund.");
         }
