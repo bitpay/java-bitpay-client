@@ -474,6 +474,7 @@ public class Client {
      * @param guid The BitPay refund GUID.
      * @return A BitPay Refund object with the associated Refund object.
      * @throws BitPayException      BitPayException class
+     * @since 8.7.0
      */
     public Refund getRefundByGuid(String guid) throws BitPayException {
         return this.getRefundClient().getByGuid(guid);
