@@ -12,6 +12,7 @@ import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -33,6 +34,7 @@ public class RefundClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
+    private final GuidGenerator guidGenerator;
 
     /**
      * Instantiates a new Refund client.
@@ -40,9 +42,10 @@ public class RefundClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public RefundClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public RefundClient(BitPayClient bitPayClient, AccessTokens accessTokens, GuidGenerator guidGenerator) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
+        this.guidGenerator = guidGenerator;
     }
 
     /**
@@ -63,6 +66,7 @@ public class RefundClient {
         RefundCreationException, BitPayException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        params.put("guid", this.guidGenerator.execute());
         if (invoiceId == null && amount == null) {
             throw new RefundCreationException(null, "Invoice ID, amount and currency are required to issue a refund.");
         }

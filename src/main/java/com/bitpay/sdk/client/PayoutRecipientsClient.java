@@ -15,7 +15,7 @@ import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,23 +36,23 @@ public class PayoutRecipientsClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
-    private final UuidGenerator uuidGenerator;
+    private final GuidGenerator guidGenerator;
 
     /**
      * Instantiates a new Payout recipients client.
      *
      * @param bitPayClient  the bit pay client
      * @param accessTokens  the access tokens
-     * @param uuidGenerator the uuid generator
+     * @param guidGenerator the Guid generator
      */
     public PayoutRecipientsClient(
         BitPayClient bitPayClient,
         AccessTokens accessTokens,
-        UuidGenerator uuidGenerator
+        GuidGenerator guidGenerator
     ) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
-        this.uuidGenerator = uuidGenerator;
+        this.guidGenerator = guidGenerator;
     }
 
     /**
@@ -67,7 +67,7 @@ public class PayoutRecipientsClient {
         throws BitPayException,
         PayoutRecipientCreationException {
         recipients.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
-        recipients.setGuid(this.uuidGenerator.execute());
+        recipients.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
 
@@ -184,7 +184,7 @@ public class PayoutRecipientsClient {
     public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
         recipient.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
-        recipient.setGuid(this.uuidGenerator.execute());
+        recipient.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
 

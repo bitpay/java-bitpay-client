@@ -56,7 +56,7 @@ import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.KeyUtils;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +78,7 @@ import org.bitcoinj.core.ECKey;
  */
 public class Client {
 
-    private UuidGenerator uuidGenerator;
+    private GuidGenerator guidGenerator;
     private BitPayClient bitPayClient;
     private AccessTokens accessTokens;
 
@@ -113,7 +113,7 @@ public class Client {
             getBaseUrl(environment),
             null
         );
-        this.uuidGenerator = new UuidGenerator();
+        this.guidGenerator = new GuidGenerator();
     }
 
     /**
@@ -143,7 +143,7 @@ public class Client {
                 getBaseUrl(environment),
                 ecKey
             );
-            this.uuidGenerator = new UuidGenerator();
+            this.guidGenerator = new GuidGenerator();
         } catch (Exception e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Config) : " + e.getMessage());
@@ -174,7 +174,7 @@ public class Client {
                 getBaseUrl(config.getEnvironment()),
                 ecKey
             );
-            this.uuidGenerator = new UuidGenerator();
+            this.guidGenerator = new GuidGenerator();
         } catch (JsonProcessingException e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Config) : " + e.getMessage());
@@ -193,18 +193,18 @@ public class Client {
      * @param bitPayClient  BitPayClient
      * @param identity      Identity
      * @param accessTokens  accessToken
-     * @param uuidGenerator UuidGenerator
+     * @param GuidGenerator GuidGenerator
      */
     public Client(
         BitPayClient bitPayClient,
         String identity,
         AccessTokens accessTokens,
-        UuidGenerator uuidGenerator
+        GuidGenerator GuidGenerator
     ) {
         this.bitPayClient = bitPayClient;
         this.identity = identity;
         this.accessTokens = accessTokens;
-        this.uuidGenerator = uuidGenerator;
+        this.guidGenerator = GuidGenerator;
     }
 
     /**
@@ -1072,7 +1072,7 @@ public class Client {
      * @return the authorization client
      */
     protected AuthorizationClient getAuthorizationClient() {
-        return new AuthorizationClient(this.bitPayClient, this.uuidGenerator, this.accessTokens, this.identity);
+        return new AuthorizationClient(this.bitPayClient, this.guidGenerator, this.accessTokens, this.identity);
     }
 
     /**
@@ -1081,7 +1081,7 @@ public class Client {
      * @return the invoice client
      */
     protected InvoiceClient getInvoiceClient() {
-        return new InvoiceClient(this.bitPayClient, this.accessTokens, uuidGenerator);
+        return new InvoiceClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
@@ -1090,7 +1090,7 @@ public class Client {
      * @return the refund client
      */
     protected RefundClient getRefundClient() {
-        return new RefundClient(this.bitPayClient, this.accessTokens);
+        return new RefundClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
@@ -1117,7 +1117,7 @@ public class Client {
      * @return the payout recipients client
      */
     protected PayoutRecipientsClient getPayoutRecipientsClient() {
-        return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.uuidGenerator);
+        return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**

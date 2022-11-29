@@ -7,12 +7,12 @@ package com.bitpay.sdk.util;
 import java.util.UUID;
 
 /**
- * The type Uuid generator.
+ * The type Guid generator.
  */
-public class UuidGenerator {
+public class GuidGenerator {
 
     /**
-     * Generate UUID string.
+     * Generate GUID string based on UUID.
      *
      * @return the string
      */

@@ -23,7 +23,7 @@ import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.AccessTokens;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class ClientTest {
     @Mock
     private AccessTokens accessTokens;
     @Mock
-    private UuidGenerator uuidGenerator;
+    private GuidGenerator guidGenerator;
     @Mock
     private HttpResponse httpResponse;
     @Mock
@@ -132,7 +132,7 @@ public class ClientTest {
     public void it_should_authorize_client_by_pairing_code() throws BitPayException {
         // given
         String pairingCode = "123123123";
-        Mockito.when(this.uuidGenerator.execute()).thenReturn(EXAMPLE_UUID);
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.bitPayClient.post("tokens",
             "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
             .thenReturn(this.httpResponse);
@@ -153,7 +153,7 @@ public class ClientTest {
     @Test
     public void it_should_authorize_client_by_facade() throws BitPayException {
         // given
-        Mockito.when(this.uuidGenerator.execute()).thenReturn(EXAMPLE_UUID);
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.bitPayClient.post("tokens",
             "{\"count\":1,\"facade\":\"merchant\",\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"}"))
             .thenReturn(this.httpResponse);
@@ -175,7 +175,7 @@ public class ClientTest {
     public void it_should_test_requestClientAuthorization() throws BitPayException {
         // given
         String pairingCode = "123123123";
-        Mockito.when(this.uuidGenerator.execute()).thenReturn(EXAMPLE_UUID);
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.bitPayClient.post("tokens",
             "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
             .thenReturn(this.httpResponse);
@@ -244,7 +244,7 @@ public class ClientTest {
         Invoice result = testedClass.createInvoice(invoice);
 
         // then
-        Mockito.verify(this.uuidGenerator, Mockito.times(1)).execute();
+        Mockito.verify(this.guidGenerator, Mockito.times(1)).execute();
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), true);
         Mockito.verify(this.accessTokens, Mockito.times(1))
             .put(
@@ -271,7 +271,7 @@ public class ClientTest {
         Invoice result = testedClass.createInvoice(invoice);
 
         // then
-        Mockito.verify(this.uuidGenerator, Mockito.times(1)).execute();
+        Mockito.verify(this.guidGenerator, Mockito.times(1)).execute();
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false);
         Mockito.verify(this.accessTokens, Mockito.times(1))
             .put(
@@ -537,6 +537,7 @@ public class ClientTest {
             .thenReturn(this.httpResponse);
         Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -559,6 +560,7 @@ public class ClientTest {
         );
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(invoiceId, result.getInvoice());
+        Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
@@ -1318,7 +1320,7 @@ public class ClientTest {
         payoutRecipient.setLabel(label);
         payoutRecipient.setToken(PAYOUT_ACCESS_TOKEN);
 
-        Mockito.when(this.uuidGenerator.execute()).thenReturn(EXAMPLE_UUID);
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.update(
             "recipients/" + RECIPIENT_ID,
@@ -1809,7 +1811,7 @@ public class ClientTest {
             this.bitPayClient,
             IDENTITY,
             this.accessTokens,
-            this.uuidGenerator
+            this.guidGenerator
         );
     }
 }

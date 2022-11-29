@@ -13,7 +13,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -32,23 +32,23 @@ public class InvoiceClient {
 
     private final BitPayClient bitPayClient;
     private AccessTokens accessTokens;
-    private UuidGenerator uuidGenerator;
+    private GuidGenerator guidGenerator;
 
     /**
      * Instantiates a new Invoice client.
      *
      * @param bitPayClient  the bit pay client
      * @param accessTokens  the access tokens
-     * @param uuidGenerator the uuid generator
+     * @param guidGenerator the Guid generator
      */
     public InvoiceClient(
         BitPayClient bitPayClient,
         AccessTokens accessTokens,
-        UuidGenerator uuidGenerator
+        GuidGenerator guidGenerator
     ) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
-        this.uuidGenerator = uuidGenerator;
+        this.guidGenerator = guidGenerator;
     }
 
     /**
@@ -64,7 +64,7 @@ public class InvoiceClient {
     public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceCreationException {
         invoice.setToken(this.accessTokens.getAccessToken(facade));
-        invoice.setGuid(this.uuidGenerator.execute());
+        invoice.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
 
