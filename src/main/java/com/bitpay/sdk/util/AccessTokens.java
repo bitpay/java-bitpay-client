@@ -90,21 +90,21 @@ public class AccessTokens {
     }
 
     /**
-     * Add merchant token.
-     *
-     * @param token the token
-     */
-    public void addMerchant(String token) {
-        this.put(Facade.MERCHANT, token);
-    }
-
-    /**
      * Add pos token.
      *
      * @param token the token
      */
     public void addPos(String token) {
         this.put(Facade.POS, token);
+    }
+
+    /**
+     * Add merchant token.
+     *
+     * @param token the token
+     */
+    public void addMerchant(String token) {
+        this.put(Facade.MERCHANT, token);
     }
 
     /**
@@ -122,8 +122,12 @@ public class AccessTokens {
      * @param facade The facade name for which authorization is tested.
      * @return True if this client is authorized, false otherwise.
      */
-    public boolean tokenExist(String facade) {
+    public boolean tokenExists(String facade) {
         return this.data.containsKey(facade);
+    }
+
+    public boolean tokenExists(Facade facade) {
+        return this.tokenExists(facade.toString());
     }
 
     private void initData() {

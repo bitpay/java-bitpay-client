@@ -1014,17 +1014,12 @@ public class Client {
      * Gets facade based on access token.
      *
      * @return the facade based on access token
-     * @throws BitPayException the bit pay exception
      */
-    protected Facade getFacadeBasedOnAccessToken() throws BitPayException {
-        try {
-            this.accessTokens.getAccessToken(Facade.MERCHANT);
+    protected Facade getFacadeBasedOnAccessToken() {
+        if (this.accessTokens.tokenExists(Facade.MERCHANT)) {
             return Facade.MERCHANT;
-        } catch (BitPayException e) {
-            // check for POS facade
         }
 
-        this.accessTokens.getAccessToken(Facade.POS);
         return Facade.POS;
     }
 
