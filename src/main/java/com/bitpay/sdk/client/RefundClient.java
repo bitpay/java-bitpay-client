@@ -186,7 +186,7 @@ public class RefundClient {
      * @throws RefundQueryException RefundQueryException class
      * @throws BitPayException      BitPayException class
      */
-    public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
+    public List<Refund> getRefundsByInvoiceId(String invoiceId) throws RefundQueryException, BitPayException {
         List<Refund> refunds;
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
@@ -217,7 +217,7 @@ public class RefundClient {
      * @throws RefundUpdateException RefundUpdateException class
      * @throws BitPayException       BitPayException class
      */
-    public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
+    public Refund update(String refundId, String status) throws RefundUpdateException, BitPayException {
         if (Objects.isNull(refundId) || Objects.isNull(status)) {
             throw new RefundUpdateException(null,
                 "Updating the refund requires a refund ID and a new status to be set.");
@@ -249,7 +249,7 @@ public class RefundClient {
      * @throws BitPayException       BitPayException class
      * @since 8.7.0
      */
-    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+    public Refund updateByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
         if (Objects.isNull(guid) || Objects.isNull(status)) {
             throw new RefundUpdateException(null,
                 "Updating the refund requires a refund ID and a new status to be set.");
@@ -319,7 +319,7 @@ public class RefundClient {
      * @throws RefundCancellationException RefundCancellationException class
      * @throws BitPayException             BitPayException class
      */
-    public Refund cancelRefund(String refundId) throws RefundCancellationException, BitPayException {
+    public Refund cancel(String refundId) throws RefundCancellationException, BitPayException {
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -327,6 +327,34 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/" + refundId, params);
+            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+        } catch (BitPayException ex) {
+            throw new RefundCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundCancellationException(null,
+                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param guid The refund Guid for the refund to be canceled.
+     * @return An updated Refund Object.
+     * @throws RefundCancellationException RefundCancellationException class
+     * @throws BitPayException             BitPayException class
+     * @since 8.7.0
+     */
+    public Refund cancelByGuid(String guid) throws RefundCancellationException, BitPayException {
+        Refund refund;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+
+        try {
+            HttpResponse response = this.bitPayClient.delete("refunds/guid/" + guid, params);
             refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundCancellationException(ex.getStatusCode(), ex.getReasonPhrase());

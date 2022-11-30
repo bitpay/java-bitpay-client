@@ -927,7 +927,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_cancelRefund() throws BitPayException {
+    public void it_should_cancel_refund_by_id() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
@@ -954,6 +954,36 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("refunds/" + refundId, params);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
+    }
+
+    @Test
+    public void it_should_cancel_refund_by_guid() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String guid = EXAMPLE_UUID;
+        final String getRefundsJsonConvertedResponse = getPreparedJsonDataFromFile("getRefund.json");
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", merchantToken));
+
+        Mockito.when(this.bitPayClient.delete(
+            "refunds/guid/" + guid,
+            params
+        )).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getRefundsJsonConvertedResponse);
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Refund result = testedClass.cancelRefundByGuid(guid);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("refunds/guid/" + guid, params);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(guid, result.getGuid());
     }
 
     @Test
