@@ -74,7 +74,7 @@ public class Refund {
     }
 
     /**
-     * Sets a A variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system.
+     * Sets a variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system.
      *
      * @param guid the guid
      */
@@ -292,6 +292,7 @@ public class Refund {
 
     /**
      * Sets the refund lifecycle status of the request.
+     * Set to `created` in order to confirm the refund request and initiate the flow to send it to shopper.
      * {@link com.bitpay.sdk.model.Invoice.InvoiceStatus}
      *
      * @param status the status

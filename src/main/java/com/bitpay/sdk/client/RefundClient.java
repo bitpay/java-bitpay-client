@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -217,28 +218,48 @@ public class RefundClient {
      * @throws BitPayException       BitPayException class
      */
     public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
-        final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
-        if (refundId == null || status == null) {
+        if (Objects.isNull(refundId) || Objects.isNull(status)) {
             throw new RefundUpdateException(null,
                 "Updating the refund requires a refund ID and a new status to be set.");
         }
-        if (status != null) {
-            params.put("status", status);
-        }
 
-        JsonMapper mapper = JsonMapperFactory.create();
-        String json;
+        String json = getUpdateRefundJson(status);
         Refund refund;
 
         try {
-            json = mapper.writeValueAsString(params);
-        } catch (JsonProcessingException e) {
-            throw new RefundUpdateException(null, "failed to serialize object : " + e.getMessage());
+            HttpResponse response = this.bitPayClient.update("refunds/" + refundId, json);
+            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+        } catch (BitPayException ex) {
+            throw new RefundUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundUpdateException(null,
+                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
 
+        return refund;
+    }
+
+    /**
+     * Update status of refund request from preview to created.
+     *
+     * @param guid A BitPay refund Guid.
+     * @param status   The new status for the refund to be updated.
+     * @return A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
+     * @since 8.7.0
+     */
+    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+        if (Objects.isNull(guid) || Objects.isNull(status)) {
+            throw new RefundUpdateException(null,
+                "Updating the refund requires a refund ID and a new status to be set.");
+        }
+
+        String json = getUpdateRefundJson(status);
+        Refund refund;
+
         try {
-            HttpResponse response = this.bitPayClient.update("refunds/" + refundId, json);
+            HttpResponse response = this.bitPayClient.update("refunds/guid/" + guid, json);
             refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
@@ -315,5 +336,25 @@ public class RefundClient {
         }
 
         return refund;
+    }
+
+    private String getUpdateRefundJson(String status) throws BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+
+        if (Objects.nonNull(status)) {
+            params.put("status", status);
+        }
+
+        JsonMapper mapper = JsonMapperFactory.create();
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundUpdateException(null, "failed to serialize object : " + e.getMessage());
+        }
+
+        return json;
     }
 }
