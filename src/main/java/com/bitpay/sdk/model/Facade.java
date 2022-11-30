@@ -41,6 +41,12 @@ public enum Facade {
         this.value = value;
     }
 
+    /**
+     * Get Facade from value.
+     *
+     * @param text the text
+     * @return the facade
+     */
     public static Facade fromValue(final String text) {
         if (Objects.isNull(text)) {
             return null;

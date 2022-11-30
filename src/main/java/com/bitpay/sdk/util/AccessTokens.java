@@ -12,14 +12,25 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * This class provide container for tokens.
+ */
 public class AccessTokens {
 
     private Hashtable<String, String> data; // {facade, token}
 
+    /**
+     * Instantiates a new Access tokens.
+     */
     public AccessTokens() {
         initData();
     }
 
+    /**
+     * Instantiates a new Access tokens.
+     *
+     * @param configuration Configuration file
+     */
     public AccessTokens(Config configuration) {
         initData();
 
@@ -62,7 +73,7 @@ public class AccessTokens {
      * Add facade token to cache.
      *
      * @param facade Facade
-     * @param token Token
+     * @param token  Token
      */
     public void put(Facade facade, String token) {
         this.data.put(facade.toString(), token);
@@ -78,14 +89,29 @@ public class AccessTokens {
         this.data.put(key, value);
     }
 
-    public void addMerchant(String token) {
-        this.put(Facade.MERCHANT, token);
-    }
-
+    /**
+     * Add pos token.
+     *
+     * @param token the token
+     */
     public void addPos(String token) {
         this.put(Facade.POS, token);
     }
 
+    /**
+     * Add merchant token.
+     *
+     * @param token the token
+     */
+    public void addMerchant(String token) {
+        this.put(Facade.MERCHANT, token);
+    }
+
+    /**
+     * Add payout token.
+     *
+     * @param token the token
+     */
     public void addPayout(String token) {
         this.put(Facade.PAYOUT, token);
     }
@@ -96,8 +122,12 @@ public class AccessTokens {
      * @param facade The facade name for which authorization is tested.
      * @return True if this client is authorized, false otherwise.
      */
-    public boolean tokenExist(String facade) {
+    public boolean tokenExists(String facade) {
         return this.data.containsKey(facade);
+    }
+
+    public boolean tokenExists(Facade facade) {
+        return this.tokenExists(facade.toString());
     }
 
     private void initData() {

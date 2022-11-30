@@ -32,7 +32,7 @@ public class BitPayLogger {
     /**
      * The Level.
      */
-    int _level = OFF;
+    int level = OFF;
 
     /**
      * Instantiates a new Bit pay logger.
@@ -40,7 +40,7 @@ public class BitPayLogger {
      * @param level the level
      */
     public BitPayLogger(int level) {
-        _level = level;
+        this.level = level;
 
         String strLevel;
         switch (level) {
@@ -70,7 +70,7 @@ public class BitPayLogger {
      * @param message the message
      */
     public void info(String message) {
-        if (_level >= INFO) {
+        if (level >= INFO) {
             System.out.println("INFO: " + message);
         }
     }
@@ -81,7 +81,7 @@ public class BitPayLogger {
      * @param message the message
      */
     public void warn(String message) {
-        if (_level >= WARN) {
+        if (level >= WARN) {
             System.out.println("WARN: " + message);
         }
     }
@@ -92,7 +92,7 @@ public class BitPayLogger {
      * @param message the message
      */
     public void err(String message) {
-        if (_level >= ERR) {
+        if (level >= ERR) {
             System.out.println("ERR: " + message);
         }
     }
@@ -103,7 +103,7 @@ public class BitPayLogger {
      * @param message the message
      */
     public void debug(String message) {
-        if (_level >= DEBUG) {
+        if (level >= DEBUG) {
             System.out.println("DEBUG: " + message);
         }
     }

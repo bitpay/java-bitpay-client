@@ -22,7 +22,7 @@ public class DateSerializer extends JsonSerializer<Long> {
      * @param value Long eg 233345223232L
      * @param jgen JsonGenerator
      * @param provider SerializerProvider
-     * @throws IOException
+     * @throws IOException IOException
      */
     @Override
     public void serialize(Long value, JsonGenerator jgen, SerializerProvider provider) throws IOException {

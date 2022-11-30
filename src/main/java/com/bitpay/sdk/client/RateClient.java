@@ -13,10 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
 
+/**
+ * The type Rate client.
+ */
 public class RateClient {
 
     private final BitPayClient bitPayClient;
 
+    /**
+     * Instantiates a new Rate client.
+     *
+     * @param bitPayClient the bit pay client
+     */
     public RateClient(BitPayClient bitPayClient) {
         this.bitPayClient = bitPayClient;
     }

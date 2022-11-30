@@ -13,10 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
 
+/**
+ * The type Wallet client.
+ */
 public class WalletClient {
 
     private final BitPayClient bitPayClient;
 
+    /**
+     * Instantiates a new Wallet client.
+     *
+     * @param bitPayClient the bit pay client
+     */
     public WalletClient(BitPayClient bitPayClient) {
         this.bitPayClient = bitPayClient;
     }

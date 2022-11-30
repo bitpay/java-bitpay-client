@@ -24,11 +24,20 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Bill client.
+ */
 public class BillClient {
 
     private final BitPayClient bitPayClient;
     private final AccessTokens accessTokens;
 
+    /**
+     * Instantiates a new Bill client.
+     *
+     * @param bitPayClient the bit pay client
+     * @param accessTokens the access tokens
+     */
     public BillClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;

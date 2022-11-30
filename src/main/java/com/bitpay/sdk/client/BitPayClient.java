@@ -32,6 +32,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.bitcoinj.core.ECKey;
 
+/**
+ * The type Bit pay client.
+ */
 public class BitPayClient {
 
     private final HttpClient httpClient;
@@ -40,6 +43,14 @@ public class BitPayClient {
     private final ECKey ecKey;
     private static BitPayLogger logger = new BitPayLogger(BitPayLogger.OFF);
 
+    /**
+     * Instantiates a new Bit pay client.
+     *
+     * @param httpClient         the http client
+     * @param httpRequestFactory the http request factory
+     * @param baseUrl            the base url
+     * @param ecKey              the ECKey
+     */
     public BitPayClient(HttpClient httpClient, HttpRequestFactory httpRequestFactory, String baseUrl, ECKey ecKey) {
         this.httpClient = httpClient;
         this.baseUrl = baseUrl;
@@ -111,6 +122,14 @@ public class BitPayClient {
         return this.get(uri, null, false);
     }
 
+    /**
+     * Send DELETE request.
+     *
+     * @param uri        the uri
+     * @param parameters the parameters
+     * @return the http response
+     * @throws BitPayException the bit pay exception
+     */
     public HttpResponse delete(String uri, List<BasicNameValuePair> parameters) throws BitPayException {
         try {
 
@@ -258,13 +277,11 @@ public class BitPayClient {
             }
 
             node = rootNode.get("error");
-
             if (node != null) {
                 throw new BitPayException(null, "Error: " + node.asText());
             }
 
             node = rootNode.get("errors");
-
             if (node != null) {
                 String message = "Multiple errors:";
 
@@ -292,7 +309,6 @@ public class BitPayClient {
             }
 
             node = rootNode.get("data");
-
             if (node != null) {
                 jsonString = node.toString();
             }

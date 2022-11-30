@@ -5,6 +5,7 @@
 package com.bitpay.sdk.util;
 
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.model.Facade;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,15 +40,15 @@ public class AccessTokensTest {
     public void it_should_test_tokenExist() {
         // given
         AccessTokens testedClass = this.getTestedClass();
-        String key = "someKey";
         String value = "someValue";
 
         // when
-        testedClass.put(key, value);
+        testedClass.put(Facade.PAYOUT.toString(), value);
 
         // then
-        Assertions.assertFalse(testedClass.tokenExist("nonExistingFacade"));
-        Assertions.assertTrue(testedClass.tokenExist(key));
+        Assertions.assertFalse(testedClass.tokenExists("nonExistingFacade"));
+        Assertions.assertTrue(testedClass.tokenExists(Facade.PAYOUT.toString()));
+        Assertions.assertTrue(testedClass.tokenExists(Facade.PAYOUT));
     }
 
     private AccessTokens getTestedClass() {

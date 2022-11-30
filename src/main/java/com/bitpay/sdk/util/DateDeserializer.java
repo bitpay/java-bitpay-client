@@ -23,7 +23,7 @@ public class DateDeserializer extends JsonDeserializer<Long> {
      * @param jp JsonParser
      * @param dc DeserializationContext
      * @return Long eg. 233345223232L
-     * @throws IOException
+     * @throws IOException IOException
      */
     @Override
     public Long deserialize(JsonParser jp, DeserializationContext dc) throws IOException {

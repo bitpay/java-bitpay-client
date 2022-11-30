@@ -37,6 +37,7 @@ public class Rates {
     /**
      * Update rates.
      *
+     * @param rateClient the rate client
      * @throws RateQueryException the rate query exception
      */
     public void update(RateClient rateClient) throws RateQueryException {

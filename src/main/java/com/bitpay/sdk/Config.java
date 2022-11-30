@@ -1,6 +1,5 @@
 package com.bitpay.sdk;
 
-import com.bitpay.sdk.model.Facade;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -53,10 +52,11 @@ public class Config {
 
     /**
      * Gets environment.
-     *
+     * <p>
      * There are two environments available for merchants to use the following API.
      * To access these APIs, merchants need to combine the base URL + endpoint and make sure to have API credentials
      * for the corresponding environments.
+     * </p>
      *
      * @return the environment
      */
@@ -67,10 +67,11 @@ public class Config {
 
     /**
      * Sets environment.
-     *
+     * <p>
      * There are two environments available for merchants to use the following API.
      * To access these APIs, merchants need to combine the base URL + endpoint and make sure to have API credentials
      * for the corresponding environments.
+     * </p>
      *
      * @param environment the environment
      */
@@ -82,12 +83,11 @@ public class Config {
     /**
      * Gets config for specific environment.
      *
+     * @param env the env
+     * @return the env config
      * @see <a href="https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md#handling-your-client-private-key">
      *     Example of env config as JSON
      *     </a>
-     *
-     * @param env the env
-     * @return the env config
      */
     @JsonIgnore
     public JsonNode getEnvConfig(Environment env) {
@@ -97,17 +97,21 @@ public class Config {
     /**
      * Sets config for specific environment.
      *
+     * @param envConfig the env config
      * @see <a href="https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md#handling-your-client-private-key">
      *     Example of env config as JSON
      *     </a>
-     *
-     * @param envConfig the env config
      */
     @JsonProperty("EnvConfig")
     public void setEnvConfig(JsonNode envConfig) {
         this.envConfig = envConfig;
     }
 
+    /**
+     * Gets api tokens.
+     *
+     * @return the api tokens
+     */
     public ObjectNode getApiTokens() {
         ObjectNode envConfig = (ObjectNode) this.getEnvConfig(this.getEnvironment());
         ObjectNode apiTokens = null;
@@ -118,9 +122,5 @@ public class Config {
         }
 
         return apiTokens;
-    }
-
-    void addApiToken(Facade facade, String value) {
-        getApiTokens().put(facade.toString(), value);
     }
 }

@@ -17,11 +17,20 @@ import java.util.Objects;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
 
+/**
+ * The type Currency client.
+ */
 public class CurrencyClient {
 
     private final BitPayClient client;
     private List currenciesInfo;
 
+    /**
+     * Instantiates a new Currency client.
+     *
+     * @param client the client
+     * @throws BitPayException the bit pay exception
+     */
     public CurrencyClient(BitPayClient client) throws BitPayException {
         if (Objects.isNull(client)) {
             throw new BitPayException(null, "failed init Currency Client");
@@ -33,7 +42,8 @@ public class CurrencyClient {
      * Gets info for specific currency.
      *
      * @param currencyCode String Currency code for which the info will be retrieved.
-     * @return Map|null
+     * @return Map |null
+     * @throws BitPayException the bit pay exception
      */
     public Map getCurrencyInfo(String currencyCode) throws BitPayException {
         if (Objects.isNull(this.currenciesInfo)) {
@@ -54,7 +64,7 @@ public class CurrencyClient {
     /**
      * Load currencies info.
      *
-     * @throws BitPayException BitPayException class //TODO test and integrate
+     * @throws BitPayException BitPayException class
      */
     private void loadCurrencies() throws BitPayException {
         try {

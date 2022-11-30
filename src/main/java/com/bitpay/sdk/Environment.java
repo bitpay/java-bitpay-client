@@ -7,6 +7,9 @@ package com.bitpay.sdk;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Objects;
 
+/**
+ * The enum Environment.
+ */
 public enum Environment {
 
     /**
@@ -26,6 +29,12 @@ public enum Environment {
         this.value = value;
     }
 
+    /**
+     * Get Environment from value.
+     *
+     * @param text the text
+     * @return the environment
+     */
     public static Environment fromValue(final String text) {
         if (Objects.isNull(text)) {
             return null;

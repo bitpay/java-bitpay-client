@@ -25,12 +25,22 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
+/**
+ * The type Invoice client.
+ */
 public class InvoiceClient {
 
     private final BitPayClient bitPayClient;
     private AccessTokens accessTokens;
     private UuidGenerator uuidGenerator;
 
+    /**
+     * Instantiates a new Invoice client.
+     *
+     * @param bitPayClient  the bit pay client
+     * @param accessTokens  the access tokens
+     * @param uuidGenerator the uuid generator
+     */
     public InvoiceClient(
         BitPayClient bitPayClient,
         AccessTokens accessTokens,
@@ -116,7 +126,6 @@ public class InvoiceClient {
      * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay Invoice object.
-     * @throws BitPayException BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
     public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
