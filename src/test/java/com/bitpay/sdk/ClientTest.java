@@ -564,6 +564,44 @@ public class ClientTest {
     }
 
     @Test
+    public void it_should_test_createRefund_with_guid() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
+        final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
+
+        Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Refund result = testedClass.createRefund(
+            invoiceId,
+            10.00,
+            true,
+            false,
+            false,
+            "someReference",
+            EXAMPLE_UUID
+        );
+
+        // then
+        Mockito.verify(this.guidGenerator, Mockito.times(0)).execute();
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).post(
+            "refunds/",
+            createRefundJsonRequest,
+            true
+        );
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(invoiceId, result.getInvoice());
+        Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
+    }
+
+    @Test
     public void it_should_test_createRefund_using_refund_object() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";

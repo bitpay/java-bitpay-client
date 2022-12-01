@@ -450,10 +450,53 @@ public class Client {
      * @throws BitPayException         BitPayException class
      */
     public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
-                               Boolean buyerPaysRefundFee, String reference) throws
-        RefundCreationException, BitPayException {
-        return this.getRefundClient()
-            .createRefund(invoiceId, amount, preview, immediate, buyerPaysRefundFee, reference);
+                               Boolean buyerPaysRefundFee, String reference
+    ) throws RefundCreationException, BitPayException {
+        Refund refund = new Refund();
+        refund.setInvoice(invoiceId);
+        refund.setAmount(amount);
+        refund.setPreview(preview);
+        refund.setImmediate(immediate);
+        refund.setBuyerPaysRefundFee(buyerPaysRefundFee);
+        refund.setReference(reference);
+
+        return this.getRefundClient().createRefund(refund);
+    }
+
+    /**
+     * Create a refund for a BitPay invoice.
+     *
+     * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
+     * @param amount             Amount to be refunded in the currency indicated.
+     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
+     * @param reference          Present only if specified. Used as reference label for the refund. Max str length = 100
+     * @param guid               Variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException         BitPayException class
+     * @since 8.7.0
+     */
+    public Refund createRefund(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference,
+        String guid
+    ) throws RefundCreationException, BitPayException {
+        Refund refund = new Refund();
+        refund.setInvoice(invoiceId);
+        refund.setAmount(amount);
+        refund.setPreview(preview);
+        refund.setImmediate(immediate);
+        refund.setBuyerPaysRefundFee(buyerPaysRefundFee);
+        refund.setReference(reference);
+        refund.setGuid(guid);
+
+        return this.getRefundClient().createRefund(refund);
     }
 
     /**
