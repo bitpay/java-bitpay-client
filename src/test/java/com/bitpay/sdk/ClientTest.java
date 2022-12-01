@@ -564,6 +564,40 @@ public class ClientTest {
     }
 
     @Test
+    public void it_should_test_createRefund_using_refund_object() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
+        final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
+
+        Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+        Refund refundRequestObject = new Refund();
+        refundRequestObject.setPreview(true);
+        refundRequestObject.setReference("someReference");
+        refundRequestObject.setAmount(10.00);
+        refundRequestObject.setImmediate(false);
+        refundRequestObject.setInvoice("UZjwcYkWAKfTMn9J1yyfs4");
+        refundRequestObject.setBuyerPaysRefundFee(false);
+        refundRequestObject.setGuid("37bd36bd-6fcb-409c-a907-47f9244302aa");
+
+        // when
+        Refund result = testedClass.createRefund(refundRequestObject);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("refunds/", createRefundJsonRequest, true);
+        Mockito.verify(this.guidGenerator, Mockito.times(0)).execute();
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(invoiceId, result.getInvoice());
+        Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
+    }
+
+    @Test
     public void it_should_throws_refundCreationException_for_missing_invoice_id_and_amount_for_createRefund() {
         RefundCreationException exception = Assertions.assertThrows(
             RefundCreationException.class,

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -64,12 +65,42 @@ public class RefundClient {
     public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
                                Boolean buyerPaysRefundFee, String reference) throws
         RefundCreationException, BitPayException {
-        final Map<String, Object> params = new HashMap<>();
-        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        final Map<String, Object> params =
+            createBasicParamsForCreate(invoiceId, amount, preview, immediate, buyerPaysRefundFee, reference);
         params.put("guid", this.guidGenerator.execute());
+
+        return createRefundUsingParams(params);
+    }
+
+    public Refund createRefund(Refund refund) throws BitPayException {
+        final Map<String, Object> params =
+            createBasicParamsForCreate(
+                refund.getInvoice(),
+                refund.getAmount(),
+                refund.getPreview(),
+                refund.getImmediate(),
+                refund.getBuyerPaysRefundFee(),
+                refund.getReference()
+            );
+        String guid = Objects.isNull(refund.getGuid()) ? this.guidGenerator.execute() : refund.getGuid();
+        params.put("guid", guid);
+
+        return createRefundUsingParams(params);
+    }
+
+    private Map<String, Object> createBasicParamsForCreate(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference
+    ) throws BitPayException {
         if (invoiceId == null && amount == null) {
             throw new RefundCreationException(null, "Invoice ID, amount and currency are required to issue a refund.");
         }
+        final Map<String, Object> params = new HashMap<>();
+        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (invoiceId != null) {
             params.put("invoiceId", invoiceId);
         }
@@ -88,29 +119,7 @@ public class RefundClient {
         if (reference != null) {
             params.put("reference", reference);
         }
-
-        Refund refund;
-        JsonMapper mapper = JsonMapperFactory.create();
-
-        String json;
-
-        try {
-            json = mapper.writeValueAsString(params);
-        } catch (JsonProcessingException e) {
-            throw new RefundCreationException(null, "failed to serialize Refund object : " + e.getMessage());
-        }
-
-        try {
-            HttpResponse response = this.bitPayClient.post("refunds/", json, true);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
-        } catch (BitPayException ex) {
-            throw new RefundCreationException(ex.getStatusCode(), ex.getReasonPhrase());
-        } catch (Exception e) {
-            throw new RefundCreationException(null,
-                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
-        }
-
-        return refund;
+        return params;
     }
 
     /**
@@ -277,6 +286,31 @@ public class RefundClient {
             throw new RefundCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
             throw new RefundCancellationException(null,
+                "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    private Refund createRefundUsingParams(Map<String, Object> params) throws RefundCreationException {
+        Refund refund;
+        JsonMapper mapper = JsonMapperFactory.create();
+
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundCreationException(null, "failed to serialize Refund object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.bitPayClient.post("refunds/", json, true);
+            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+        } catch (BitPayException ex) {
+            throw new RefundCreationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundCreationException(null,
                 "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
         }
 

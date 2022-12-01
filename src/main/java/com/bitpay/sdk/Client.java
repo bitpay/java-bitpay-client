@@ -457,6 +457,20 @@ public class Client {
     }
 
     /**
+     * Create a refund for a BitPay invoice.
+     *
+     * @param refund Refund class which provided data - invoice id, amount, preview, immediate, buyerPaysRefundFee, reference and guid for create request
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException         BitPayException class
+     * @since 8.7.0
+     */
+    public Refund createRefund(Refund refund) throws
+        RefundCreationException, BitPayException {
+        return this.getRefundClient().createRefund(refund);
+    }
+
+    /**
      * Retrieve a previously made refund request on a BitPay invoice.
      *
      * @param refundId The BitPay refund ID.
