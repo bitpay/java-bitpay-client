@@ -792,6 +792,47 @@ public class Client {
     }
 
     /**
+     * Update the status of a BitPay invoice.
+     *
+     * @param guid A BitPay refund Guid.
+     * @param status   The new status for the refund to be updated.
+     * @return A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
+     */
+    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+        final Map<String, String> params = new HashMap<>();
+        params.put("token", this.getAccessToken(Facade.Merchant));
+        if (guid == null || status == null) {
+            throw new RefundUpdateException(null, "Updating the refund requires a refund ID and a new status to be set.");
+        }
+        if (status != null) {
+            params.put("status", status);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        Refund refund;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new RefundUpdateException(null, "failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.update("refunds/guid/" + guid, json);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (BitPayException ex) {
+            throw new RefundUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundUpdateException(null, "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
      * Send a refund notification.
      *
      * @param refundId A BitPay refund ID.
