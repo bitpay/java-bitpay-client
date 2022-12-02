@@ -27,7 +27,7 @@ public class EnvTest {
 
     @Test
     public void it_should_returns_bitpay_plugin_info() {
-        Assertions.assertEquals("BitPay_Java_Client_v8.6.2", Env.BitpayPluginInfo);
+        Assertions.assertEquals("BitPay_Java_Client_v8.7.0", Env.BitpayPluginInfo);
     }
 
     @Test
