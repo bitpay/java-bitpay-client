@@ -694,6 +694,35 @@ public class Client {
     }
 
     /**
+     * Retrieve a previously made refund request on a BitPay invoice.
+     *
+     * @param guid The BitPay refund Guid.
+     * @return A BitPay Refund object with the associated Refund object.
+     * @throws RefundQueryException RefundQueryException class
+     * @throws BitPayException       BitPayException class
+     * @since 8.7.0
+     */
+    public Refund getRefundByGuid(String guid) throws RefundQueryException, BitPayException {
+        Refund refund;
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+
+        try {
+            HttpResponse response = this.get("refunds/guid/" + guid, params, true);
+            refund = new ObjectMapper().readValue(this.responseToJsonString(response), Refund.class);
+        } catch (JsonProcessingException e) {
+            throw new RefundQueryException(null, "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        } catch (BitPayException ex) {
+            throw new RefundQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new RefundQueryException(null, "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
+        }
+
+        return refund;
+    }
+
+    /**
      * Retrieve all refund requests on a BitPay invoice.
      *
      * @param invoiceId The BitPay invoice object having the associated refunds.
