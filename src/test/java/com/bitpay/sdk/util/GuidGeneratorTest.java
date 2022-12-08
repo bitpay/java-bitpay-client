@@ -7,13 +7,13 @@ package com.bitpay.sdk.util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class UuidGeneratorTest {
+public class GuidGeneratorTest {
 
     @Test
     public void it_should_generate_uuid() {
         // given
         final int uuid4length = 36;
-        UuidGenerator testedClass = this.getTestedClass();
+        GuidGenerator testedClass = this.getTestedClass();
 
         String uuid1 = testedClass.execute();
         String uuid2 = testedClass.execute();
@@ -23,7 +23,7 @@ public class UuidGeneratorTest {
         Assertions.assertEquals(uuid4length, uuid2.length());
     }
 
-    private UuidGenerator getTestedClass() {
-        return new UuidGenerator();
+    private GuidGenerator getTestedClass() {
+        return new GuidGenerator();
     }
 }

@@ -56,7 +56,7 @@ import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.KeyUtils;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +78,7 @@ import org.bitcoinj.core.ECKey;
  */
 public class Client {
 
-    private UuidGenerator uuidGenerator;
+    private GuidGenerator guidGenerator;
     private BitPayClient bitPayClient;
     private AccessTokens accessTokens;
 
@@ -113,7 +113,7 @@ public class Client {
             getBaseUrl(environment),
             null
         );
-        this.uuidGenerator = new UuidGenerator();
+        this.guidGenerator = new GuidGenerator();
     }
 
     /**
@@ -143,7 +143,7 @@ public class Client {
                 getBaseUrl(environment),
                 ecKey
             );
-            this.uuidGenerator = new UuidGenerator();
+            this.guidGenerator = new GuidGenerator();
         } catch (Exception e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Config) : " + e.getMessage());
@@ -174,7 +174,7 @@ public class Client {
                 getBaseUrl(config.getEnvironment()),
                 ecKey
             );
-            this.uuidGenerator = new UuidGenerator();
+            this.guidGenerator = new GuidGenerator();
         } catch (JsonProcessingException e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Config) : " + e.getMessage());
@@ -193,18 +193,18 @@ public class Client {
      * @param bitPayClient  BitPayClient
      * @param identity      Identity
      * @param accessTokens  accessToken
-     * @param uuidGenerator UuidGenerator
+     * @param GuidGenerator GuidGenerator
      */
     public Client(
         BitPayClient bitPayClient,
         String identity,
         AccessTokens accessTokens,
-        UuidGenerator uuidGenerator
+        GuidGenerator GuidGenerator
     ) {
         this.bitPayClient = bitPayClient;
         this.identity = identity;
         this.accessTokens = accessTokens;
-        this.uuidGenerator = uuidGenerator;
+        this.guidGenerator = GuidGenerator;
     }
 
     /**
@@ -450,10 +450,67 @@ public class Client {
      * @throws BitPayException         BitPayException class
      */
     public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
-                               Boolean buyerPaysRefundFee, String reference) throws
+                               Boolean buyerPaysRefundFee, String reference
+    ) throws RefundCreationException, BitPayException {
+        Refund refund = new Refund();
+        refund.setInvoice(invoiceId);
+        refund.setAmount(amount);
+        refund.setPreview(preview);
+        refund.setImmediate(immediate);
+        refund.setBuyerPaysRefundFee(buyerPaysRefundFee);
+        refund.setReference(reference);
+
+        return this.getRefundClient().createRefund(refund);
+    }
+
+    /**
+     * Create a refund for a BitPay invoice.
+     *
+     * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
+     * @param amount             Amount to be refunded in the currency indicated.
+     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
+     * @param reference          Present only if specified. Used as reference label for the refund. Max str length = 100
+     * @param guid               Variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException         BitPayException class
+     * @since 8.7.0
+     */
+    public Refund createRefund(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference,
+        String guid
+    ) throws RefundCreationException, BitPayException {
+        Refund refund = new Refund();
+        refund.setInvoice(invoiceId);
+        refund.setAmount(amount);
+        refund.setPreview(preview);
+        refund.setImmediate(immediate);
+        refund.setBuyerPaysRefundFee(buyerPaysRefundFee);
+        refund.setReference(reference);
+        refund.setGuid(guid);
+
+        return this.getRefundClient().createRefund(refund);
+    }
+
+    /**
+     * Create a refund for a BitPay invoice.
+     *
+     * @param refund Refund class which provided data - invoice id, amount, preview, immediate, buyerPaysRefundFee, reference and guid for create request
+     * @return An updated Refund Object
+     * @throws RefundCreationException RefundCreationException class
+     * @throws BitPayException         BitPayException class
+     * @since 8.7.0
+     */
+    public Refund createRefund(Refund refund) throws
         RefundCreationException, BitPayException {
-        return this.getRefundClient()
-            .createRefund(invoiceId, amount, preview, immediate, buyerPaysRefundFee, reference);
+        return this.getRefundClient().createRefund(refund);
     }
 
     /**
@@ -1072,7 +1129,7 @@ public class Client {
      * @return the authorization client
      */
     protected AuthorizationClient getAuthorizationClient() {
-        return new AuthorizationClient(this.bitPayClient, this.uuidGenerator, this.accessTokens, this.identity);
+        return new AuthorizationClient(this.bitPayClient, this.guidGenerator, this.accessTokens, this.identity);
     }
 
     /**
@@ -1081,7 +1138,7 @@ public class Client {
      * @return the invoice client
      */
     protected InvoiceClient getInvoiceClient() {
-        return new InvoiceClient(this.bitPayClient, this.accessTokens, uuidGenerator);
+        return new InvoiceClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
@@ -1090,7 +1147,7 @@ public class Client {
      * @return the refund client
      */
     protected RefundClient getRefundClient() {
-        return new RefundClient(this.bitPayClient, this.accessTokens);
+        return new RefundClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
@@ -1117,7 +1174,7 @@ public class Client {
      * @return the payout recipients client
      */
     protected PayoutRecipientsClient getPayoutRecipientsClient() {
-        return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.uuidGenerator);
+        return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**

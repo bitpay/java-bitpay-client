@@ -9,7 +9,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Token;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
-import com.bitpay.sdk.util.UuidGenerator;
+import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import org.apache.http.HttpResponse;
 public class AuthorizationClient {
 
     private final BitPayClient bitPayClient;
-    private final UuidGenerator uuidGenerator;
+    private final GuidGenerator guidGenerator;
     private final AccessTokens accessToken;
     private final String identity;
 
@@ -30,18 +30,18 @@ public class AuthorizationClient {
      * Instantiates a new Authorization client.
      *
      * @param bitPayClient  the bit pay client
-     * @param uuidGenerator the uuid generator
+     * @param guidGenerator the guid generator
      * @param accessToken   the access token
      * @param identity      the identity
      */
     public AuthorizationClient(
         BitPayClient bitPayClient,
-        UuidGenerator uuidGenerator,
+        GuidGenerator guidGenerator,
         AccessTokens accessToken,
         String identity
     ) {
         this.bitPayClient = bitPayClient;
-        this.uuidGenerator = uuidGenerator;
+        this.guidGenerator = guidGenerator;
         this.accessToken = accessToken;
         this.identity = identity;
     }
@@ -55,7 +55,7 @@ public class AuthorizationClient {
     public void authorizeClient(String pairingCode) throws BitPayException {
         Token token = new Token();
         token.setId(this.identity);
-        token.setGuid(this.uuidGenerator.execute());
+        token.setGuid(this.guidGenerator.execute());
         token.setPairingCode(pairingCode);
 
         JsonMapper mapper = JsonMapperFactory.create();
@@ -97,7 +97,7 @@ public class AuthorizationClient {
     public String authorizeClient(Facade facade) throws BitPayException {
         Token token = new Token();
         token.setId(this.identity);
-        token.setGuid(this.uuidGenerator.execute());
+        token.setGuid(this.guidGenerator.execute());
         token.setFacade(facade.toString());
         token.setCount(1);
 
