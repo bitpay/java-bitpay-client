@@ -53,7 +53,7 @@ public class PayoutClient {
      * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
      */
-    public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
+    public Payout create(Payout payout) throws BitPayException, PayoutCreationException {
         String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         payout.setToken(token);
 
@@ -85,7 +85,7 @@ public class PayoutClient {
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
-    public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
+    public Payout get(String payoutId) throws BitPayException, PayoutQueryException {
         String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", token));
@@ -114,7 +114,7 @@ public class PayoutClient {
      * @throws BitPayException             BitPayException class
      * @throws PayoutCancellationException PayoutCancellationException class
      */
-    public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
+    public Boolean cancel(String payoutId) throws BitPayException, PayoutCancellationException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));

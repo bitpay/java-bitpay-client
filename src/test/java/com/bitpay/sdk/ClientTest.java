@@ -227,7 +227,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_createInvoice_by_merchant() throws IOException {
+    public void it_should_test_create_invoice_by_merchant() throws IOException {
         // given
         Invoice invoice = getInvoiceExample();
 
@@ -1865,7 +1865,7 @@ public class ClientTest {
      * @return json response
      */
     protected String getPreparedJsonDataFromFile(String fileName) {
-        final String pathname = "src/test/java/com/bitpay/sdk/jsonResponse/" + fileName;
+        final String pathname = "src/test/java/com/bitpay/sdk/json/" + fileName;
         File file = new File(pathname);
 
         String data = null;

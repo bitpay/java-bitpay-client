@@ -76,6 +76,7 @@ public class LedgerClient {
     }
 
     /**
+     * Ledgers are records of money movement.
      * Retrieve a list of ledgers using the merchant facade.
      *
      * @return A list of Ledger objects populated with the currency and current balance of each one.

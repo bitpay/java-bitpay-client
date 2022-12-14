@@ -45,7 +45,7 @@ public class CurrencyClient {
      * @return Map |null
      * @throws BitPayException the bit pay exception
      */
-    public Map getCurrencyInfo(String currencyCode) throws BitPayException {
+    public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
         if (Objects.isNull(this.currenciesInfo)) {
             this.loadCurrencies();
         }

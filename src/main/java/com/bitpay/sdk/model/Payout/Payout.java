@@ -716,7 +716,7 @@ public class Payout {
      */
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
-    public long getRequestDate() {
+    public Long getRequestDate() {
         return this.requestDate;
     }
 
@@ -727,7 +727,7 @@ public class Payout {
      */
     @JsonProperty("requestDate")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setRequestDate(long requestDate) {
+    public void setRequestDate(Long requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -738,7 +738,7 @@ public class Payout {
      */
     @JsonIgnore
     @JsonSerialize(using = DateSerializer.class)
-    public long getDateExecuted() {
+    public Long getDateExecuted() {
         return this.dateExecuted;
     }
 
@@ -749,7 +749,7 @@ public class Payout {
      */
     @JsonProperty("dateExecuted")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setDateExecuted(long dateExecuted) {
+    public void setDateExecuted(Long dateExecuted) {
         this.dateExecuted = dateExecuted;
     }
 

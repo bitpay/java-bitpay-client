@@ -83,7 +83,7 @@ public class PayoutRecipientsClient {
         try {
             HttpResponse response = this.bitPayClient.post("recipients", json, true);
             recipientsList = Arrays
-                .asList(new ObjectMapper()
+                .asList(JsonMapperFactory.create()
                     .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
             throw new PayoutRecipientCreationException(null,

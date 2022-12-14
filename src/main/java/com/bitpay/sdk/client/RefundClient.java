@@ -55,7 +55,7 @@ public class RefundClient {
      * @return Refund
      * @throws BitPayException BitPayException
      */
-    public Refund createRefund(Refund refund) throws BitPayException {
+    public Refund create(Refund refund) throws BitPayException {
         final Map<String, Object> params = createBasicParamsForCreate(refund);
 
         Refund result;
