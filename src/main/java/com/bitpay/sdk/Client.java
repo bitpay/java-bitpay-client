@@ -449,8 +449,13 @@ public class Client {
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
      */
-    public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
-                               Boolean buyerPaysRefundFee, String reference
+    public Refund createRefund(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference
     ) throws RefundCreationException, BitPayException {
         Refund refund = new Refund();
         refund.setInvoice(invoiceId);
@@ -522,7 +527,19 @@ public class Client {
      * @throws BitPayException      BitPayException class
      */
     public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
-        return this.getRefundClient().getRefund(refundId);
+        return this.getRefundClient().getById(refundId);
+    }
+
+    /**
+     * Retrieve a previously made refund request on a BitPay invoice.
+     *
+     * @param guid The BitPay refund GUID.
+     * @return A BitPay Refund object with the associated Refund object.
+     * @throws BitPayException      BitPayException class
+     * @since 8.7.0
+     */
+    public Refund getRefundByGuid(String guid) throws BitPayException {
+        return this.getRefundClient().getByGuid(guid);
     }
 
     /**
