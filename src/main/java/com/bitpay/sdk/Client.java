@@ -971,6 +971,7 @@ public class Client {
 
     /**
      * Gets a detailed reconciliation report of the activity within the settlement period.
+     * Required id & settlement token.
      *
      * @param settlement Settlement to generate report for.
      * @return A detailed BitPay Settlement object.

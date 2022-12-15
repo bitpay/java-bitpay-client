@@ -7,8 +7,8 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.WalletQueryException;
 import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.http.HttpResponse;
@@ -41,7 +41,8 @@ public class WalletClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("supportedwallets");
-            wallets = Arrays.asList(new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Wallet[].class));
+            wallets = Arrays.asList(
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Wallet[].class));
         } catch (JsonProcessingException e) {
             throw new WalletQueryException(null,
                 "failed to deserialize BitPay server response (Wallet) : " + e.getMessage());

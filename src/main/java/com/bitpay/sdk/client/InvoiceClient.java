@@ -282,7 +282,7 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("invoices/pay/" + invoiceId, json);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {

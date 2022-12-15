@@ -264,8 +264,68 @@ public class InvoiceClientTest extends AbstractClientTest {
         Assertions.assertEquals("BCH", result.getInvoiceBuyerProvidedInfo().getSelectedTransactionCurrency());
     }
 
-    private void it_should_pay_invoice() {
-        // @todo do we need it?
+    @Test
+    public void it_should_pay_invoice() throws BitPayException {
+        // given
+        AccessTokens accessTokens = this.getAccessTokens();
+        this.addServerJsonResponse(
+            "/invoices/pay/G3viJEJgE8Jk2oekSdgT2A",
+            "PUT",
+            getPreparedJsonDataFromFile("payInvoiceRequest.json"),
+            getPreparedJsonDataFromFile("payInvoiceResponse.json")
+        );
+
+        // when
+        Invoice result = this.getTestedClass(accessTokens).payInvoice("G3viJEJgE8Jk2oekSdgT2A", "complete");
+
+        // then
+        Assertions.assertEquals("USD", result.getCurrency());
+        Assertions.assertEquals("09ebf602-79c0-4abe-abea-d3f7d09de48a", result.getGuid());
+        Assertions.assertEquals("AShhrUJ2sEJ4stEzkt5AywcrDDE5A3SpeXsXdbU1TMVo", result.getToken());
+        Assertions.assertEquals(12.0, result.getPrice());
+        Assertions.assertEquals("medium", result.getTransactionSpeed());
+        Assertions.assertFalse(result.getFullNotifications());
+        Assertions.assertEquals("https://hookb.in/yDGknXr837sGkPZGa6Ed", result.getRedirectURL());
+        Assertions.assertEquals("0e5ab88f-839f-45e1-a5fe-57e01e17af8e", result.getOrderId());
+        Assertions.assertEquals("Example", result.getItemDesc());
+        Assertions.assertFalse(result.getPhysical());
+        Assertions.assertNull(result.getPaymentCurrencies());
+        Assertions.assertEquals(0, result.getAcceptanceWindow());
+        Assertions.assertEquals("Satoshi", result.getBuyer().getName());
+        Assertions.assertEquals("District of Columbia", result.getBuyer().getRegion());
+        Assertions.assertEquals("merchantName", result.getMerchantName());
+        Assertions.assertNull(result.getSelectedTransactionCurrency());
+        Assertions.assertEquals("https://link.test.bitpay.com/i/AwzYppkN5cDidQJi6g3kRs", result.getUniversalCodes().getBitpay());
+        Assertions.assertEquals(0, result.getItemizedDetails().size());
+        Assertions.assertTrue(result.getAutoRedirect());
+        Assertions.assertEquals("AwzYLpkN1cJidQJi2g1jRs", result.getId());
+        Assertions.assertEquals("https://test.bitpay.com/invoice?id=AwzYLpkN1cJidQJi2g1jRs", result.getUrl());
+        Assertions.assertEquals("complete", result.getStatus());
+        Assertions.assertFalse(result.getLowFeeDetected());
+        Assertions.assertEquals(1671107858009L, result.getInvoiceTime());
+        Assertions.assertEquals(1671108758009L, result.getExpirationTime());
+        Assertions.assertEquals(1671107858346L, result.getCurrentTime());
+        Assertions.assertEquals("false", result.getExceptionStatus());
+        Assertions.assertEquals(6, result.getTargetConfirmations());
+        Assertions.assertEquals(2, result.getTransactions().size());
+        Assertions.assertEquals(0, result.getRefundAddresses().size());
+        Assertions.assertFalse(result.getRefundAddressRequestPending());
+        Assertions.assertEquals("buyer@buyer.com", result.getBuyerProvidedEmail());
+        Assertions.assertEquals("Satoshi", result.getInvoiceBuyerProvidedInfo().getName());
+        Assertions.assertFalse(result.getExtendedNotifications());
+        Assertions.assertEquals("BTC", result.getTransactionCurrency());
+        Assertions.assertEquals(BigDecimal.valueOf(67900), result.getAmountPaid());
+        Assertions.assertEquals(BigDecimal.valueOf(0.000679), result.getDisplayAmountPaid());
+        Assertions.assertEquals(11, result.getExchangeRates().size());
+        Assertions.assertFalse(result.getIsCancelled());
+        Assertions.assertFalse(result.getBitpayIdRequired());
+        Assertions.assertEquals(11, result.getPaymentSubTotals().size());
+        Assertions.assertEquals(11, result.getPaymentTotals().size());
+        Assertions.assertEquals(11, result.getPaymentDisplayTotals().size());
+        Assertions.assertEquals(11, result.getPaymentDisplaySubTotals().size());
+        Assertions.assertFalse(result.getNonPayProPaymentReceived());
+        Assertions.assertFalse(result.getJsonPayProRequired());
+        Assertions.assertEquals(11, result.getPaymentCodes().size());
     }
 
     @Test
