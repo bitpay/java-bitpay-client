@@ -1726,8 +1726,8 @@ public class ClientTest {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", MERCHANT_TOKEN));
-        params.add(new BasicNameValuePair("dateStart", dateStart));
-        params.add(new BasicNameValuePair("dateEnd", dateEnd));
+        params.add(new BasicNameValuePair("startDate", dateStart));
+        params.add(new BasicNameValuePair("endDate", dateEnd));
         params.add(new BasicNameValuePair("currency", currency));
         params.add(new BasicNameValuePair("status", status));
         params.add(new BasicNameValuePair("limit", limit.toString()));
