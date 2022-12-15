@@ -568,6 +568,20 @@ public class Client {
     }
 
     /**
+     * Update the status of a BitPay invoice.
+     *
+     * @param guid A BitPay refund Guid.
+     * @param status   The new status for the refund to be updated.
+     * @return A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
+     * @since 8.7.0
+     */
+    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+        return this.getRefundClient().updateRefundByGuid(guid, status);
+    }
+
+    /**
      * Send a refund notification.
      *
      * @param refundId A BitPay refund ID.

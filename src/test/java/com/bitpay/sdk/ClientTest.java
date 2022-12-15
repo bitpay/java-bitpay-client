@@ -85,7 +85,8 @@ public class ClientTest {
     @Test
     public void it_should_provide_client_by_key() throws BitPayException {
         // given
-        String privateKey = "3082013102010104208ae30afbc7e93cb10cb983f70863e546b53f0b2c6158b1a71b576fd09790cff3a081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a124032200035d6a7e38d7c08b8a626e2390d0360a72a58bd1c5e1348e0eb810d4bbab3d3adf";
+        String privateKey =
+            "3082013102010104208ae30afbc7e93cb10cb983f70863e546b53f0b2c6158b1a71b576fd09790cff3a081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a124032200035d6a7e38d7c08b8a626e2390d0360a72a58bd1c5e1348e0eb810d4bbab3d3adf";
         String merchantToken = "merchantToken";
         AccessTokens tokens = new AccessTokens();
         tokens.addMerchant(merchantToken);
@@ -168,7 +169,8 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
-        Mockito.verify(this.accessTokens, Mockito.times(1)).put("merchant", "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
+        Mockito.verify(this.accessTokens, Mockito.times(1))
+            .put("merchant", "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
     }
 
     @Test
@@ -245,7 +247,8 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.guidGenerator, Mockito.times(1)).execute();
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), true);
+        Mockito.verify(this.bitPayClient, Mockito.times(1))
+            .post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), true);
         Mockito.verify(this.accessTokens, Mockito.times(1))
             .put(
                 "UZjwcYkWAKfTMn9J1yyfs4",
@@ -259,7 +262,8 @@ public class ClientTest {
         // given
         Invoice invoice = getInvoiceExample();
 
-        Mockito.when(this.bitPayClient.post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false))
+        Mockito
+            .when(this.bitPayClient.post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false))
             .thenReturn(this.httpResponse);
         Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createInvoiceResponse.json"));
@@ -272,7 +276,8 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.guidGenerator, Mockito.times(1)).execute();
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false);
+        Mockito.verify(this.bitPayClient, Mockito.times(1))
+            .post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false);
         Mockito.verify(this.accessTokens, Mockito.times(1))
             .put(
                 "UZjwcYkWAKfTMn9J1yyfs4",
@@ -527,7 +532,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_createRefund() throws BitPayException {
+    public void it_should_create_refund() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -895,7 +900,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_updateRefund() throws BitPayException {
+    public void it_should_update_refund_by_id() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String status = "complete";
@@ -924,6 +929,38 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1)).update("refunds/" + refundId, requestedJson);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
+    }
+
+    @Test
+    public void it_should_update_refund_by_guid() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String status = "complete";
+        final String guid = EXAMPLE_UUID;
+        final String getRefundsJsonConvertedResponse = getPreparedJsonDataFromFile("getRefund.json");
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", merchantToken));
+        params.add(new BasicNameValuePair("status", "complete"));
+        final String requestedJson = "{\"token\":\"merchantToken\",\"status\":\"complete\"}";
+
+        Mockito.when(this.bitPayClient.update(
+            "refunds/guid/" + guid,
+            requestedJson
+        )).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getRefundsJsonConvertedResponse);
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Refund result = testedClass.updateRefundByGuid(guid, status);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).update("refunds/guid/" + guid, requestedJson);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(guid, result.getGuid());
     }
 
     @Test
