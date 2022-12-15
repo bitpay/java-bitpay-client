@@ -129,7 +129,7 @@ public class AccessTokens {
     /**
      * Specified whether the client has authorization (a token) for the specified facade.
      *
-     * @param facade The facade name for which authorization is tested.
+     * @param facade The facade for which authorization is tested.
      * @return True if this client is authorized, false otherwise.
      */
     public boolean tokenExists(Facade facade) {

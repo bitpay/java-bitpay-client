@@ -449,8 +449,13 @@ public class Client {
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
      */
-    public Refund createRefund(String invoiceId, Double amount, Boolean preview, Boolean immediate,
-                               Boolean buyerPaysRefundFee, String reference
+    public Refund createRefund(
+        String invoiceId,
+        Double amount,
+        Boolean preview,
+        Boolean immediate,
+        Boolean buyerPaysRefundFee,
+        String reference
     ) throws RefundCreationException, BitPayException {
         Refund refund = new Refund();
         refund.setInvoice(invoiceId);
@@ -522,7 +527,19 @@ public class Client {
      * @throws BitPayException      BitPayException class
      */
     public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
-        return this.getRefundClient().getRefund(refundId);
+        return this.getRefundClient().getById(refundId);
+    }
+
+    /**
+     * Retrieve a previously made refund request on a BitPay invoice.
+     *
+     * @param guid The BitPay refund GUID.
+     * @return A BitPay Refund object with the associated Refund object.
+     * @throws BitPayException      BitPayException class
+     * @since 8.7.0
+     */
+    public Refund getRefundByGuid(String guid) throws BitPayException {
+        return this.getRefundClient().getByGuid(guid);
     }
 
     /**
@@ -534,7 +551,7 @@ public class Client {
      * @throws BitPayException      BitPayException class
      */
     public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
-        return this.getRefundClient().getRefunds(invoiceId);
+        return this.getRefundClient().getRefundsByInvoiceId(invoiceId);
     }
 
     /**
@@ -547,7 +564,21 @@ public class Client {
      * @throws BitPayException       BitPayException class
      */
     public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
-        return this.getRefundClient().updateRefund(refundId, status);
+        return this.getRefundClient().update(refundId, status);
+    }
+
+    /**
+     * Update the status of a BitPay invoice.
+     *
+     * @param guid A BitPay refund Guid.
+     * @param status   The new status for the refund to be updated.
+     * @return A BitPay generated Refund object.
+     * @throws RefundUpdateException RefundUpdateException class
+     * @throws BitPayException       BitPayException class
+     * @since 8.7.0
+     */
+    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+        return this.getRefundClient().updateByGuid(guid, status);
     }
 
     /**
@@ -571,7 +602,20 @@ public class Client {
      * @throws BitPayException             BitPayException class
      */
     public Refund cancelRefund(String refundId) throws RefundCancellationException, BitPayException {
-        return this.getRefundClient().cancelRefund(refundId);
+        return this.getRefundClient().cancel(refundId);
+    }
+
+    /**
+     * Cancel a previously submitted refund request on a BitPay invoice.
+     *
+     * @param guid The refund Guid for the refund to be canceled.
+     * @return An updated Refund Object.
+     * @throws RefundCancellationException RefundCancellationException class
+     * @throws BitPayException             BitPayException class
+     * @since 8.7.0
+     */
+    public Refund cancelRefundByGuid(String guid) throws RefundCancellationException, BitPayException {
+        return this.getRefundClient().cancelByGuid(guid);
     }
 
     /**
