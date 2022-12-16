@@ -12,8 +12,9 @@ import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.util.AccessTokens;
-import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -63,6 +65,10 @@ public class InvoiceClient {
      */
     public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceCreationException {
+        if (Objects.isNull(invoice) || Objects.isNull(facade)) {
+            throw new InvoiceCreationException(null, "missing required parameter");
+        }
+
         invoice.setToken(this.accessTokens.getAccessToken(facade));
         invoice.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
@@ -101,7 +107,7 @@ public class InvoiceClient {
     public Invoice getInvoice(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(facade)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
 
         Invoice invoice;
 
@@ -129,11 +135,15 @@ public class InvoiceClient {
      * @throws InvoiceQueryException InvoiceQueryException class
      */
     public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
+        if (Objects.isNull(guid) || Objects.isNull(facade)) {
+            throw new InvoiceQueryException(null, "missing required parameters");
+        }
+
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         Invoice invoice;
 
         try {
-            params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(facade)));
+            ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
             HttpResponse response = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
             invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
@@ -161,21 +171,21 @@ public class InvoiceClient {
      * @throws InvoiceQueryException InvoiceQueryException class
      */
     public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit, Integer offset) throws BitPayException, InvoiceQueryException {
+        if (Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
+            throw new InvoiceQueryException(null, "missing required parameter");
+        }
+
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
-        params.add(new BasicNameValuePair("dateStart", dateStart));
-        params.add(new BasicNameValuePair("dateEnd", dateEnd));
-        if (status != null) {
-            params.add(new BasicNameValuePair("status", status));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params,"dateStart", dateStart);
+        ParameterAdder.execute(params,"dateEnd", dateEnd);
+        ParameterAdder.execute(params,"orderId", orderId);
+        ParameterAdder.execute(params,"status", status);
+        if (Objects.nonNull(limit)) {
+            ParameterAdder.execute(params, "limit", limit.toString());
         }
-        if (orderId != null) {
-            params.add(new BasicNameValuePair("orderId", orderId));
-        }
-        if (limit != null) {
-            params.add(new BasicNameValuePair("limit", limit.toString()));
-        }
-        if (offset != null) {
-            params.add(new BasicNameValuePair("offset", offset.toString()));
+        if (Objects.nonNull(offset)) {
+            ParameterAdder.execute(params, "offset", offset.toString());
         }
 
         List<Invoice> invoices;
@@ -213,6 +223,10 @@ public class InvoiceClient {
         String buyerEmail,
         Boolean autoVerify
     ) throws BitPayException, InvoiceUpdateException {
+        if (Objects.isNull(invoiceId)) {
+            throw new InvoiceUpdateException(null, "missing required parameter");
+        }
+
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (buyerSms == null && smsCode == null) {
@@ -323,9 +337,9 @@ public class InvoiceClient {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (forceCancel) {
-            params.add(new BasicNameValuePair("forceCancel", forceCancel.toString()));
+            ParameterAdder.execute(params,"forceCancel", forceCancel.toString());
         }
         Invoice invoice;
 

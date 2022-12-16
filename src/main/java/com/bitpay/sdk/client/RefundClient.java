@@ -14,6 +14,7 @@ import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,11 +59,13 @@ public class RefundClient {
      * @throws BitPayException BitPayException
      */
     public Refund create(Refund refund) throws BitPayException {
-        final Map<String, Object> params = createBasicParamsForCreate(refund);
+        if (Objects.isNull(refund)) {
+            throw new RefundCreationException(null, "missing required parameter");
+        }
 
+        final Map<String, Object> params = createBasicParamsForCreate(refund);
         Refund result;
         JsonMapper mapper = JsonMapperFactory.create();
-
         String json;
 
         try {
@@ -93,10 +96,14 @@ public class RefundClient {
      * @throws BitPayException      BitPayException class
      */
     public Refund getById(String refundId) throws RefundQueryException, BitPayException {
+        if (Objects.isNull(refundId)) {
+            throw new RefundQueryException(null, "missing required parameter");
+        }
+
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/" + refundId, params, true);
@@ -121,10 +128,14 @@ public class RefundClient {
      * @throws BitPayException BitPayException
      */
     public Refund getByGuid(String guid) throws BitPayException {
+        if (Objects.isNull(guid)) {
+            throw new RefundQueryException(null, "missing required parameter");
+        }
+
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/guid/" + guid, params, true);
@@ -151,10 +162,14 @@ public class RefundClient {
      * @throws BitPayException      BitPayException class
      */
     public List<Refund> getRefundsByInvoiceId(String invoiceId) throws RefundQueryException, BitPayException {
+        if (Objects.isNull(invoiceId)) {
+            throw new RefundQueryException(null, "missing required parameter");
+        }
+
         List<Refund> refunds;
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
-        params.add(new BasicNameValuePair("invoiceId", invoiceId));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "invoiceId", invoiceId);
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/", params, true);
@@ -246,12 +261,14 @@ public class RefundClient {
      * @throws BitPayException         BitPayException class
      */
     public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
+        if (Objects.isNull(refundId)) {
+            throw new RefundCreationException(null, "missing required parameter");
+        }
+
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        Refund refund;
         JsonMapper mapper = JsonMapperFactory.create();
-
         Boolean result;
         String json;
 
@@ -286,10 +303,14 @@ public class RefundClient {
      * @throws BitPayException             BitPayException class
      */
     public Refund cancel(String refundId) throws RefundCancellationException, BitPayException {
+        if (Objects.isNull(refundId)) {
+            throw new RefundCancellationException(null, "missing required parameter");
+        }
+
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/" + refundId, params);
@@ -314,10 +335,14 @@ public class RefundClient {
      * @since 8.7.0
      */
     public Refund cancelByGuid(String guid) throws RefundCancellationException, BitPayException {
+        if (Objects.isNull(guid)) {
+            throw new RefundCancellationException(null, "missing required parameter");
+        }
+
         Refund refund;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/guid/" + guid, params);

@@ -10,6 +10,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -60,13 +61,17 @@ public class SettlementClient {
         offset = offset != null ? offset : 0;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        this.addParameter(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
-        this.addParameter(params, "startDate", dateStart);
-        this.addParameter(params, "endDate", dateEnd);
-        this.addParameter(params, "currency", currency);
-        this.addParameter(params, "status", status);
-        this.addParameter(params, "limit", limit.toString());
-        this.addParameter(params, "offset", offset.toString());
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "startDate", dateStart);
+        ParameterAdder.execute(params, "endDate", dateEnd);
+        ParameterAdder.execute(params, "currency", currency);
+        ParameterAdder.execute(params, "status", status);
+        if (Objects.nonNull(limit)) {
+            ParameterAdder.execute(params, "limit", limit.toString());
+        }
+        if (Objects.nonNull(offset)) {
+            ParameterAdder.execute(params, "offset", offset.toString());
+        }
 
         List<Settlement> settlements;
 
@@ -95,12 +100,15 @@ public class SettlementClient {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
+        if (Objects.isNull(settlementId)) {
+            throw new SettlementQueryException(null, "missing required parameter");
+        }
+
+        Settlement settlement;
         String token = this.accessTokens.getAccessToken(Facade.MERCHANT);
         final ObjectMapper objectMapper = JsonMapperFactory.create();
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", token));
-
-        Settlement settlement;
+        ParameterAdder.execute(params, "token", token);
 
         try {
             HttpResponse response = this.bitPayClient.get("settlements/" + settlementId, params);
@@ -132,7 +140,7 @@ public class SettlementClient {
             throw new SettlementQueryException(null, "missing id/token");
         }
 
-        params.add(new BasicNameValuePair("token", token));
+        ParameterAdder.execute(params, "token", token);
 
         Settlement reconciliationReport;
 
@@ -150,13 +158,5 @@ public class SettlementClient {
         }
 
         return reconciliationReport;
-    }
-
-    private void addParameter(List<BasicNameValuePair> params, String name, String value) {
-        if (Objects.isNull(value)) {
-            return;
-        }
-
-        params.add(new BasicNameValuePair(name, value));
     }
 }

@@ -46,6 +46,10 @@ public class CurrencyClient {
      * @throws BitPayException the bit pay exception
      */
     public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
+        if (Objects.isNull(currencyCode)) {
+            throw new BitPayException(null, "missing required parameter");
+        }
+
         if (Objects.isNull(this.currenciesInfo)) {
             this.loadCurrencies();
         }
