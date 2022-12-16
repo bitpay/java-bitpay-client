@@ -30,39 +30,11 @@ public class AuthorizationClientTest extends AbstractClientTest {
         final AccessTokens accessToken = new AccessTokens();
         AuthorizationClient authorizationClient = getAuthorizationClient(accessToken);
 
-        try {
-            String token = authorizationClient.authorizeClient(Facade.MERCHANT);
+        String token = authorizationClient.authorizeClient(Facade.MERCHANT);
 
-            Assertions.assertEquals("C4Lg7oW", token);
-            Assertions.assertEquals(accessToken.getAccessToken(Facade.MERCHANT),
-                "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
-        } finally {
-            httpServer.stop(0);
-        }
-    }
-
-    @Test
-    public void it_should_authorize_client_by_pairing_code() throws IOException {
-        // given
-        Mockito.when(this.uuidGenerator.execute()).thenReturn(AbstractClientTest.EXAMPLE_UUID);
-        this.addServerJsonResponse(
-            "/tokens",
-            "POST",
-            getPreparedJsonDataFromFile("authorizeClientByFacadeRequest.json"),
-            getPreparedJsonDataFromFile("authorizeClientByFacadeResponse.json")
-        );
-
-        final AccessTokens accessToken = new AccessTokens();
-        AuthorizationClient authorizationClient = getAuthorizationClient(accessToken);
-
-        try {
-            authorizationClient.authorizeClient("C4Lg7oW");
-
-            Assertions.assertEquals(accessToken.getAccessToken(Facade.MERCHANT),
-                "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
-        } finally {
-            httpServer.stop(0);
-        }
+        Assertions.assertEquals("C4Lg7oW", token);
+        Assertions.assertEquals(accessToken.getAccessToken(Facade.MERCHANT),
+            "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
     }
 
     private AuthorizationClient getAuthorizationClient(AccessTokens accessToken) {

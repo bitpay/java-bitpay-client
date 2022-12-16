@@ -106,7 +106,7 @@ public class PayoutClientTest extends AbstractClientTest {
         // given
         AccessTokens accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
-            "/payouts?token=somePayoutToken&startDate=2021-05-27&endDate=2021-05-31",
+            "/payouts/KMXZeQigXG6T5abzCJmTcH?token=somePayoutToken",
             "DELETE",
             null,
             getPreparedJsonDataFromFile("cancelPayoutResponse.json")

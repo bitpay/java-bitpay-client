@@ -45,6 +45,7 @@
     "buyer": {
       "email": "john@doe.com"
     },
+    "buyerSms": "+12223334444",
     "redirectURL": "https://merchantwebsite.com/shop/return",
     "autoRedirect": false,
     "closeURL": "https://merchantwebsite.com/shop/cancel",

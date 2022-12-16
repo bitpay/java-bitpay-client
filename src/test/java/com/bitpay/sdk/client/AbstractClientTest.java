@@ -22,8 +22,8 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bitcoinj.core.ECKey;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -43,20 +43,16 @@ public class AbstractClientTest {
     protected GuidGenerator uuidGenerator;
 
     public AbstractClientTest() {
-        try {
-            this.httpServer = HttpServer.create(new InetSocketAddress(8000), 0);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    @BeforeAll
-    public void beforeAll() {
+    @BeforeEach
+    public void beforeEach() throws IOException {
+        this.httpServer = HttpServer.create(new InetSocketAddress(8000), 0);
         this.httpServer.start();
     }
 
-    @AfterAll
-    public void afterAll() {
+    @AfterEach
+    public void afterEach() {
         this.httpServer.stop(0);
     }
 

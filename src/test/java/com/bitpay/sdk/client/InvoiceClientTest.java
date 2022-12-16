@@ -219,7 +219,7 @@ public class InvoiceClientTest extends AbstractClientTest {
             "/invoices/G3viJEJgE8Jk2oekSdgT2A",
             "PUT",
             getPreparedJsonDataFromFile("updateInvoiceRequest.json"),
-            getPreparedJsonDataFromFile("updateInvoicesResponse.json")
+            getPreparedJsonDataFromFile("updateInvoiceResponse.json")
         );
 
         // when
@@ -234,20 +234,20 @@ public class InvoiceClientTest extends AbstractClientTest {
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());
         Assertions.assertEquals("+12223334444", result.getBuyerSms());
-        Assertions.assertEquals("https://bitpay.com/invoice?id=KSnNNfoMDsbRzd1U9ypmVH", result.getUrl());
+        Assertions.assertEquals("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A", result.getUrl());
         Assertions.assertEquals("\"{ \"ref\" : 711454, \"item\" : \"test_item\" }\"", result.getPosData());
         Assertions.assertEquals("confirmed", result.getStatus());
         Assertions.assertEquals(20, result.getPrice());
         Assertions.assertEquals("USD", result.getCurrency());
-        Assertions.assertEquals("20210511_abcde", result.getOrderId());
-        Assertions.assertEquals(1620734545366L, result.getInvoiceTime());
-        Assertions.assertEquals(1620735445366L, result.getExpirationTime());
-        Assertions.assertEquals(1620744196444L, result.getCurrentTime());
+        Assertions.assertEquals("20210511_fghij", result.getOrderId());
+        Assertions.assertEquals(1620733980748L, result.getInvoiceTime());
+        Assertions.assertEquals(1620734880748L, result.getExpirationTime());
+        Assertions.assertEquals(1620734253073L, result.getCurrentTime());
         Assertions.assertEquals("payment#1234", result.getGuid());
-        Assertions.assertEquals("KSnNNfoMDsbRzd1U9ypmVH", result.getId());
+        Assertions.assertEquals("G3viJEJgE8Jk2oekSdgT2A", result.getId());
         Assertions.assertFalse(result.getLowFeeDetected());
-        Assertions.assertEquals(BigDecimal.valueOf(744500L), result.getAmountPaid());
-        Assertions.assertEquals(BigDecimal.valueOf(0.007445), result.getDisplayAmountPaid());
+        Assertions.assertEquals(BigDecimal.valueOf(739100L), result.getAmountPaid());
+        Assertions.assertEquals(BigDecimal.valueOf(0.007391), result.getDisplayAmountPaid());
         Assertions.assertEquals("false", result.getExceptionStatus());
         Assertions.assertEquals(6, result.getTargetConfirmations());
         Assertions.assertEquals(1, result.getTransactions().size());
