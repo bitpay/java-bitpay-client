@@ -51,12 +51,13 @@ import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
+import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.AccessTokens;
-import com.bitpay.sdk.util.KeyUtils;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -741,6 +742,20 @@ public class Client {
     }
 
     /**
+     * Retrieve the rates for a cryptocurrency / fiat pair. See https://bitpay.com/bitcoin-exchange-rates.
+     *
+     * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
+     *                     Current supported values are BTC and BCH.
+     * @param currency the fiat currency for which you want to fetch the baseCurrency rates
+     * @return A Rate object populated with the BitPay exchange rate table.
+     * @throws RateQueryException RateQueryException class
+     * @since 8.8.0
+     */
+    public Rate getRate(String baseCurrency, String currency) throws RateQueryException {
+        return this.getRatesClient().getRate(baseCurrency, currency);
+    }
+
+    /**
      * Retrieve the exchange rate table maintained by BitPay.  See https://bitpay.com/bitcoin-exchange-rates.
      *
      * @return A Rates object populated with the BitPay exchange rate table.
@@ -748,6 +763,19 @@ public class Client {
      */
     public Rates getRates() throws RateQueryException {
         return this.getRatesClient().getRates();
+    }
+
+    /**
+     * Retrieve the exchange rate table maintained by BitPay by baseCurrency. See https://bitpay.com/bitcoin-exchange-rates.
+     *
+     * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
+     *                     Current supported values are BTC and BCH.
+     * @return A Rates object populated with the BitPay exchange rate table.
+     * @throws RateQueryException RateQueryException class
+     * @since 8.8.0
+     */
+    public Rates getRates(String baseCurrency) throws RateQueryException {
+        return this.getRatesClient().getRates(baseCurrency);
     }
 
     /**
