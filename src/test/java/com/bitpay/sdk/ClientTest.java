@@ -14,6 +14,7 @@ import com.bitpay.sdk.model.Bill.Item;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Buyer;
 import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Payout.Payout;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
@@ -397,6 +399,30 @@ public class ClientTest {
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertFalse(result.isEmpty());
+    }
+
+    @Test
+    public void it_should_get_invoice_event_token() throws BitPayException {
+        // given
+        String merchantToken = "merchantToken";
+        List<BasicNameValuePair> expectedParams = new ArrayList<BasicNameValuePair>();
+        expectedParams.add(new BasicNameValuePair("token", merchantToken));
+        Mockito.when(this.bitPayClient.get(ArgumentMatchers.eq("invoices/GZRP3zgNHTDf8F5BmdChKz/events"), ArgumentMatchers.eq(expectedParams)))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("getInvoiceEventToken.json"));
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        InvoiceEventToken result = testedClass.getInvoiceEventToken("GZRP3zgNHTDf8F5BmdChKz");
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals("4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P", result.getToken());
+        Assertions.assertEquals(Arrays.asList("payment", "confirmation"), result.getEvents());
+        Assertions.assertEquals(Arrays.asList("subscribe", "unsubscribe"), result.getActions());
     }
 
     @Test
