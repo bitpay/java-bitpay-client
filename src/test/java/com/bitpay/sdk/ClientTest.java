@@ -532,6 +532,31 @@ public class ClientTest {
     }
 
     @Test
+    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
+        final String requestJson = "{\"token\":\"merchantToken\"}";
+
+        Mockito.when(this.bitPayClient.post(
+            ArgumentMatchers.eq("invoices/" + invoiceId + "/notifications"), ArgumentMatchers.eq(requestJson))
+        ).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn("\"Success\"");
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Boolean result = testedClass.requestInvoiceWebhookToBeResent(invoiceId);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices/" + invoiceId + "/notifications", requestJson);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertTrue(result);
+    }
+
+    @Test
     public void it_should_create_refund() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
