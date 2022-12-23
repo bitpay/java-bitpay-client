@@ -4,25 +4,10 @@
 
 package com.bitpay.sdk.model.Ledger;
 
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class LedgerTest {
-
-    @Test
-    public void it_should_change_entries() {
-        // given
-        List<LedgerEntry> expected = Collections.singletonList(new LedgerEntry());
-        Ledger testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setEntries(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getEntries());
-    }
 
     @Test
     public void it_should_change_currency() {
