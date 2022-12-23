@@ -382,6 +382,7 @@ public class Client {
      * @param invoiceId the id of the invoice for which you want to fetch an event token
      * @return InvoiceEventToken event token
      * @throws BitPayException BitPayException
+     * @since 8.8.0
      */
     public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
         return this.getInvoiceClient().getInvoiceEventToken(invoiceId);
