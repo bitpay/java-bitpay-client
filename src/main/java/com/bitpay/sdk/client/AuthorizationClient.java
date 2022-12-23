@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 
 /**
@@ -95,6 +96,9 @@ public class AuthorizationClient {
      * @throws BitPayException BitPayException class
      */
     public String authorizeClient(Facade facade) throws BitPayException {
+        if (Objects.isNull(facade)) {
+            throw new BitPayException(null, "missing required parameter");
+        }
         Token token = new Token();
         token.setId(this.identity);
         token.setGuid(this.guidGenerator.execute());

@@ -10,11 +10,13 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -49,10 +51,14 @@ public class LedgerClient {
      */
     public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
+        if (Objects.isNull(currency) || Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
+            throw new BitPayException(null, "missing mandatory fields");
+        }
+
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
-        params.add(new BasicNameValuePair("startDate", dateStart));
-        params.add(new BasicNameValuePair("endDate", dateEnd));
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params,"startDate", dateStart);
+        ParameterAdder.execute(params,"endDate", dateEnd);
 
         Ledger ledger = new Ledger();
 
@@ -76,6 +82,7 @@ public class LedgerClient {
     }
 
     /**
+     * Ledgers are records of money movement.
      * Retrieve a list of ledgers using the merchant facade.
      *
      * @return A list of Ledger objects populated with the currency and current balance of each one.
@@ -84,7 +91,7 @@ public class LedgerClient {
      */
     public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         List<Ledger> ledgers;
 

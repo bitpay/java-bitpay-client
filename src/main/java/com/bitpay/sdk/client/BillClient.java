@@ -13,6 +13,7 @@ import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -55,6 +57,9 @@ public class BillClient {
      */
     public Bill createBill(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
+        if (Objects.isNull(bill) || Objects.isNull(facade)) {
+            throw new BillCreationException(null, "missing required parameter");
+        }
         String token = this.accessTokens.getAccessToken(facade);
         bill.setToken(token);
         JsonMapper mapper = JsonMapperFactory.create();
@@ -89,9 +94,12 @@ public class BillClient {
      * @throws BillQueryException BillQueryException class
      */
     public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
+        if (Objects.isNull(billId) || Objects.isNull(facade)) {
+            throw new BillQueryException(null, "missing required parameter");
+        }
         String token = this.accessTokens.getAccessToken(facade);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", token));
+        ParameterAdder.execute(params, "token", token);
 
         Bill bill;
 
@@ -119,8 +127,8 @@ public class BillClient {
      */
     public List<Bill>getBills(String status) throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
-        params.add(new BasicNameValuePair("status", status));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "status", status);
 
         List<Bill> bills;
 
@@ -147,7 +155,7 @@ public class BillClient {
      */
     public List<Bill> getBills() throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         List<Bill> bills;
 
@@ -175,6 +183,9 @@ public class BillClient {
      * @throws BillUpdateException BillUpdateException class
      */
     public Bill updateBill(Bill bill, String billId) throws BitPayException, BillUpdateException {
+        if (Objects.isNull(billId) || Objects.isNull(bill)) {
+            throw new BillUpdateException(null, "missing required parameter");
+        }
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
         try {
@@ -205,6 +216,10 @@ public class BillClient {
      * @throws BillDeliveryException BillDeliveryException class
      */
     public String deliverBill(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
+        if (Objects.isNull(billId) || Objects.isNull(billToken)) {
+            throw new BillDeliveryException(null, "missing required parameter");
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put("token", billToken);
         JsonMapper mapper = JsonMapperFactory.create();

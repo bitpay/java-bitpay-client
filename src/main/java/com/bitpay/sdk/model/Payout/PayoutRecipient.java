@@ -31,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
     private String email = "";
-    private String guid = "";
+    private String guid;
     private String label = "";
     private String reference = "";
     private String notificationURL = "";

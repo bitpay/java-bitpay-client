@@ -14,8 +14,9 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
 import com.bitpay.sdk.util.AccessTokens;
-import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -64,8 +66,11 @@ public class PayoutRecipientsClient {
      * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients)
-        throws BitPayException,
-        PayoutRecipientCreationException {
+        throws BitPayException, PayoutRecipientCreationException {
+        if (Objects.isNull(recipients)) {
+            throw new PayoutRecipientCreationException(null, "missing required parameter");
+        }
+
         recipients.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipients.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
@@ -83,7 +88,7 @@ public class PayoutRecipientsClient {
         try {
             HttpResponse response = this.bitPayClient.post("recipients", json, true);
             recipientsList = Arrays
-                .asList(new ObjectMapper()
+                .asList(JsonMapperFactory.create()
                     .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
             throw new PayoutRecipientCreationException(null,
@@ -111,15 +116,13 @@ public class PayoutRecipientsClient {
         throws BitPayException, PayoutRecipientQueryException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
-        if (status != null) {
-            params.add(new BasicNameValuePair("status", status));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
+        ParameterAdder.execute(params, "status", status);
+        if (Objects.nonNull(limit)) {
+            ParameterAdder.execute(params, "limit", limit.toString());
         }
-        if (limit != null) {
-            params.add(new BasicNameValuePair("limit", limit.toString()));
-        }
-        if (offset != null) {
-            params.add(new BasicNameValuePair("offset", offset.toString()));
+        if (Objects.nonNull(offset)) {
+            ParameterAdder.execute(params, "offset", offset.toString());
         }
 
         List<PayoutRecipient> recipientsList;
@@ -151,8 +154,12 @@ public class PayoutRecipientsClient {
      */
     public PayoutRecipient getPayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
+        if (Objects.isNull(recipientId)) {
+            throw new PayoutRecipientQueryException(null, "missing required parameter");
+        }
+
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         PayoutRecipient recipient;
 
@@ -183,6 +190,9 @@ public class PayoutRecipientsClient {
      */
     public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
+        if (Objects.isNull(recipient) || Objects.isNull(recipientId)) {
+            throw new PayoutRecipientUpdateException(null, "missing required parameter");
+        }
         recipient.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipient.setGuid(this.guidGenerator.execute());
         JsonMapper mapper = JsonMapperFactory.create();
@@ -222,9 +232,12 @@ public class PayoutRecipientsClient {
      */
     public Boolean deletePayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
+        if (Objects.isNull(recipientId)) {
+            throw new PayoutRecipientCancellationException(null, "missing required parameter");
+        }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.PAYOUT)));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
         Boolean result;
@@ -255,6 +268,10 @@ public class PayoutRecipientsClient {
      */
     public Boolean requestPayoutRecipientNotification(String recipientId)
         throws PayoutRecipientNotificationException, BitPayException {
+        if (Objects.isNull(recipientId)) {
+            throw new PayoutRecipientNotificationException(null, "missing required parameter");
+        }
+
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 

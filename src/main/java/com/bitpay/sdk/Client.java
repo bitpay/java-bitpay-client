@@ -465,7 +465,7 @@ public class Client {
         refund.setBuyerPaysRefundFee(buyerPaysRefundFee);
         refund.setReference(reference);
 
-        return this.getRefundClient().createRefund(refund);
+        return this.getRefundClient().create(refund);
     }
 
     /**
@@ -501,7 +501,7 @@ public class Client {
         refund.setReference(reference);
         refund.setGuid(guid);
 
-        return this.getRefundClient().createRefund(refund);
+        return this.getRefundClient().create(refund);
     }
 
     /**
@@ -515,7 +515,7 @@ public class Client {
      */
     public Refund createRefund(Refund refund) throws
         RefundCreationException, BitPayException {
-        return this.getRefundClient().createRefund(refund);
+        return this.getRefundClient().create(refund);
     }
 
     /**
@@ -871,7 +871,7 @@ public class Client {
      * @throws PayoutCreationException PayoutCreationException class
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
-        return this.getPayoutClient().submitPayout(payout);
+        return this.getPayoutClient().create(payout);
     }
 
     /**
@@ -884,7 +884,7 @@ public class Client {
      * @throws PayoutQueryException PayoutQueryException class
      */
     public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
-        return this.getPayoutClient().getPayout(payoutId);
+        return this.getPayoutClient().get(payoutId);
     }
 
     /**
@@ -896,7 +896,7 @@ public class Client {
      * @throws PayoutCancellationException PayoutCancellationException class
      */
     public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
-        return this.getPayoutClient().cancelPayout(payoutId);
+        return this.getPayoutClient().cancel(payoutId);
     }
 
     /**
@@ -971,6 +971,7 @@ public class Client {
 
     /**
      * Gets a detailed reconciliation report of the activity within the settlement period.
+     * Required id & settlement token.
      *
      * @param settlement Settlement to generate report for.
      * @return A detailed BitPay Settlement object.

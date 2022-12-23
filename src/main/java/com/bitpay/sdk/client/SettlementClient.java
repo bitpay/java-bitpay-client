@@ -10,11 +10,13 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -55,18 +57,21 @@ public class SettlementClient {
     public List<Settlement> getSettlements(String currency, String dateStart, String dateEnd, String status,
                                            Integer limit, Integer offset) throws BitPayException,
         SettlementQueryException {
-        status = status != null ? status : "";
         limit = limit != null ? limit : 100;
         offset = offset != null ? offset : 0;
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", this.accessTokens.getAccessToken(Facade.MERCHANT)));
-        params.add(new BasicNameValuePair("dateStart", dateStart));
-        params.add(new BasicNameValuePair("dateEnd", dateEnd));
-        params.add(new BasicNameValuePair("currency", currency));
-        params.add(new BasicNameValuePair("status", status));
-        params.add(new BasicNameValuePair("limit", limit.toString()));
-        params.add(new BasicNameValuePair("offset", offset.toString()));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "startDate", dateStart);
+        ParameterAdder.execute(params, "endDate", dateEnd);
+        ParameterAdder.execute(params, "currency", currency);
+        ParameterAdder.execute(params, "status", status);
+        if (Objects.nonNull(limit)) {
+            ParameterAdder.execute(params, "limit", limit.toString());
+        }
+        if (Objects.nonNull(offset)) {
+            ParameterAdder.execute(params, "offset", offset.toString());
+        }
 
         List<Settlement> settlements;
 
@@ -95,12 +100,15 @@ public class SettlementClient {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
+        if (Objects.isNull(settlementId)) {
+            throw new SettlementQueryException(null, "missing required parameter");
+        }
+
+        Settlement settlement;
         String token = this.accessTokens.getAccessToken(Facade.MERCHANT);
         final ObjectMapper objectMapper = JsonMapperFactory.create();
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", token));
-
-        Settlement settlement;
+        ParameterAdder.execute(params, "token", token);
 
         try {
             HttpResponse response = this.bitPayClient.get("settlements/" + settlementId, params);
@@ -126,13 +134,19 @@ public class SettlementClient {
      */
     public Settlement getSettlementReconciliationReport(Settlement settlement) throws SettlementQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", settlement.getToken()));
+        final String id = settlement.getId();
+        final String token = settlement.getToken();
+        if (Objects.isNull(id) || Objects.isNull(token)) {
+            throw new SettlementQueryException(null, "missing id/token");
+        }
+
+        ParameterAdder.execute(params, "token", token);
 
         Settlement reconciliationReport;
 
         try {
             HttpResponse response =
-                this.bitPayClient.get("settlements/" + settlement.getId() + "/reconciliationreport", params);
+                this.bitPayClient.get("settlements/" + id + "/reconciliationreport", params);
             reconciliationReport =
                 new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
         } catch (JsonProcessingException e) {

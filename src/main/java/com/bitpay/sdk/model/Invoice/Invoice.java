@@ -1128,7 +1128,7 @@ public class Invoice {
      * ("paidOver") or not enough funds ("paidPartial") in the transaction to pay the BitPay invoice.
      * Possible values are:
      * <ul>
-     *     <li>false: default value (boolean) unless an exception is triggered.</li>
+     *     <li>"false": default value (boolean) unless an exception is triggered.</li>
      *     <li>"paidPartial": (string) if the consumer did not send enough funds when paying the invoice.</li>
      *     <li>"paidOver": (string) if the consumer sent to much funds when paying the invoice.</li>
      * </ul>
