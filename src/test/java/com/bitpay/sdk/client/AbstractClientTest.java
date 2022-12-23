@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bitcoinj.core.ECKey;
@@ -42,12 +43,15 @@ public class AbstractClientTest {
     @Mock
     protected GuidGenerator uuidGenerator;
 
+    private int port = 8000;
+
     public AbstractClientTest() {
     }
 
     @BeforeEach
     public void beforeEach() throws IOException {
-        this.httpServer = HttpServer.create(new InetSocketAddress(8000), 0);
+        this.port = ThreadLocalRandom.current().nextInt(8000, 9000);
+        this.httpServer = HttpServer.create(new InetSocketAddress(port), 0);
         this.httpServer.start();
     }
 
@@ -120,7 +124,7 @@ public class AbstractClientTest {
         return new BitPayClient(
             HttpClientBuilder.create().build(),
             new HttpRequestFactory(),
-            "http://localhost:8000/",
+            "http://localhost:" + this.port + "/",
             new ECKey()
         );
     }
