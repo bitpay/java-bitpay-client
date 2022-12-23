@@ -586,6 +586,37 @@ public class Client {
     }
 
     /**
+     * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
+     * so the client can request that BitPay resend it.
+     * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
+     * @return Boolean status of request
+     * @throws BitPayException
+     */
+    public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+
+        try {
+            json = mapper.writeValueAsString(params);
+        } catch (JsonProcessingException e) {
+            throw new InvoiceUpdateException(null, "failed to serialize object : " + e.getMessage());
+        }
+
+        try {
+            HttpResponse response = this.post("invoices/" + invoiceId + "/notifications", json);
+            String jsonString = this.responseToJsonString(response);
+            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode node = rootNode.get("status");
+            return node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
+        } catch (Exception e) {
+            throw new BitPayException(null, "failed to process request : " + e.getMessage());
+        }
+    }
+
+    /**
      * Create a refund for a BitPay invoice.
      *
      * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
