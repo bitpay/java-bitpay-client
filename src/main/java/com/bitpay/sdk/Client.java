@@ -48,6 +48,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
+import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
@@ -55,8 +56,8 @@ import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.AccessTokens;
-import com.bitpay.sdk.util.KeyUtils;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -751,18 +752,18 @@ public class Client {
     }
 
     /**
-     * Retrieve a list of ledgers by date range using the merchant facade.
+     * Retrieve a list of ledgers entries by currency & date range using the merchant facade.
      *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
-     * @return A Ledger object populated with the BitPay ledger entries list.
+     * @return List<LedgerEntry> Ledger entries list.
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
-    public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
+    public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
-        return this.getLedgerClient().getLedger(currency, dateStart, dateEnd);
+        return this.getLedgerClient().getLedgerEntries(currency, dateStart, dateEnd);
     }
 
     /**
