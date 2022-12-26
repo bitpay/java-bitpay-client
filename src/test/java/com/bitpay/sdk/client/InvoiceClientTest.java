@@ -375,6 +375,22 @@ public class InvoiceClientTest extends AbstractClientTest {
         Assertions.assertEquals("BCH", result.getInvoiceBuyerProvidedInfo().getSelectedTransactionCurrency());
     }
 
+    @Test
+    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
+        // given
+        AccessTokens accessTokens = this.getAccessTokens();
+        this.addServerJsonResponse(
+            "/invoices/Hpqc63wvE1ZjzeeH4kEycF/notifications",
+            "POST",
+            "{\"token\":\"someMerchantToken\"}",
+            getPreparedJsonDataFromFile("invoiceWebhookResponse.json")
+        );
+
+        // when
+        Boolean result = this.getTestedClass(accessTokens).requestInvoiceWebhookToBeResent("Hpqc63wvE1ZjzeeH4kEycF");
+        Assertions.assertTrue(result);
+    }
+
     private Invoice getInvoiceExample() {
         Invoice invoice = new Invoice(10.0, "USD");
         invoice.setOrderId(EXAMPLE_UUID);

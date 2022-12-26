@@ -65,13 +65,17 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.bitcoinj.core.ECKey;
 
 /**
@@ -435,6 +439,17 @@ public class Client {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         return this.getInvoiceClient().cancelInvoice(invoiceId, forceCancel);
+    }
+
+    /**
+     * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
+     * so the client can request that BitPay resend it.
+     * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
+     * @return Boolean status of request
+     * @throws BitPayException
+     */
+    public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
+        return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
     }
 
     /**
