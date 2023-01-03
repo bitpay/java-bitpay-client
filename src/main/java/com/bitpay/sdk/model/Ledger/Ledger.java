@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
-
 /**
  * Ledgers are records of money movement.
  *
@@ -14,7 +12,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {
 
-    private List<LedgerEntry> entries;
     private String currency;
     private Double balance;
 
@@ -22,26 +19,6 @@ public class Ledger {
      * Instantiates a new Ledger.
      */
     public Ledger() {
-    }
-
-    /**
-     * Gets Ledger entries.
-     *
-     * @return the entries
-     */
-    @JsonIgnore
-    public List<LedgerEntry> getEntries() {
-        return this.entries;
-    }
-
-    /**
-     * Sets Ledger entries.
-     *
-     * @param entries the entries
-     */
-    @JsonProperty("Entries")
-    public void setEntries(List<LedgerEntry> entries) {
-        this.entries = entries;
     }
 
     /**

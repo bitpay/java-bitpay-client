@@ -40,7 +40,7 @@ public class LedgerClient {
     }
 
     /**
-     * Retrieve a list of ledgers by date range using the merchant facade.
+     * Retrieve a list of ledgers entries by currency & date range using the merchant facade.
      *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
@@ -49,7 +49,7 @@ public class LedgerClient {
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
-    public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
+    public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
         if (Objects.isNull(currency) || Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
             throw new BitPayException(null, "missing mandatory fields");
@@ -60,16 +60,10 @@ public class LedgerClient {
         ParameterAdder.execute(params,"startDate", dateStart);
         ParameterAdder.execute(params,"endDate", dateEnd);
 
-        Ledger ledger = new Ledger();
-
         try {
             HttpResponse response = this.bitPayClient.get("ledgers/" + currency, params);
-            List<LedgerEntry> ledgerEntries;
-            ledgerEntries = Arrays.asList(new ObjectMapper()
+            return Arrays.asList(new ObjectMapper()
                 .readValue(this.bitPayClient.responseToJsonString(response), LedgerEntry[].class));
-            ledgerEntries.remove(null);
-            ledgerEntries.remove("");
-            ledger.setEntries(ledgerEntries);
         } catch (JsonProcessingException e) {
             throw new LedgerQueryException(null,
                 "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
@@ -77,8 +71,6 @@ public class LedgerClient {
             throw new LedgerQueryException(null,
                 "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
         }
-
-        return ledger;
     }
 
     /**

@@ -48,6 +48,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
+import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
@@ -438,6 +439,17 @@ public class Client {
     }
 
     /**
+     * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
+     * so the client can request that BitPay resend it.
+     * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
+     * @return Boolean status of request
+     * @throws BitPayException
+     */
+    public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
+        return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
+    }
+
+    /**
      * Create a refund for a BitPay invoice.
      *
      * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
@@ -779,18 +791,18 @@ public class Client {
     }
 
     /**
-     * Retrieve a list of ledgers by date range using the merchant facade.
+     * Retrieve a list of ledgers entries by currency & date range using the merchant facade.
      *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
-     * @return A Ledger object populated with the BitPay ledger entries list.
+     * @return List<LedgerEntry> Ledger entries list.
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
-    public Ledger getLedger(String currency, String dateStart, String dateEnd) throws BitPayException,
+    public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
-        return this.getLedgerClient().getLedger(currency, dateStart, dateEnd);
+        return this.getLedgerClient().getLedgerEntries(currency, dateStart, dateEnd);
     }
 
     /**
