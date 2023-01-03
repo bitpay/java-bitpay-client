@@ -37,6 +37,7 @@ import com.bitpay.sdk.exceptions.WalletQueryException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
@@ -52,9 +53,12 @@ import com.bitpay.sdk.model.Wallet.Wallet;
 import com.bitpay.sdk.util.BitPayLogger;
 import com.bitpay.sdk.util.KeyUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -446,6 +450,35 @@ public class Client {
         }
 
         return invoices;
+    }
+
+    /**
+     * Retrieves a bus token which can be used to subscribe to invoice events.
+     *
+     * @param invoiceId the id of the invoice for which you want to fetch an event token
+     * @return InvoiceEventToken event token
+     * @throws BitPayException BitPayException
+     * @since 8.8.0
+     */
+    public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        ObjectMapper mapper = JsonMapper
+            .builder()
+            .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .build();
+
+        try {
+            HttpResponse response = this.get("invoices/" + invoiceId + "/events", params);
+            return mapper.readValue(this.responseToJsonString(response), InvoiceEventToken.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (JsonProcessingException e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+        }
     }
 
     /**
@@ -1176,6 +1209,27 @@ public class Client {
     }
 
     /**
+     * Retrieve the rates for a cryptocurrency / fiat pair. See https://bitpay.com/bitcoin-exchange-rates.
+     *
+     * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
+     *                     Current supported values are BTC and BCH.
+     * @param currency the fiat currency for which you want to fetch the baseCurrency rates
+     * @return A Rate object populated with the BitPay exchange rate table.
+     * @throws RateQueryException RateQueryException class
+     * @since 8.8.0
+     */
+    public Rate getRate(String baseCurrency, String currency) throws RateQueryException {
+        try {
+            HttpResponse response = this.get("rates/" + baseCurrency + "/" + currency);
+            return new ObjectMapper().readValue(this.responseToJsonString(response), Rate.class);
+        } catch (JsonProcessingException e) {
+            throw new RateQueryException(null, "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new RateQueryException(null, "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        }
+    }
+
+    /**
      * Retrieve the exchange rate table maintained by BitPay.  See https://bitpay.com/bitcoin-exchange-rates.
      *
      * @return A Rates object populated with the BitPay exchange rate table.
@@ -1191,6 +1245,32 @@ public class Client {
             throw new RateQueryException(null, "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
         } catch (Exception e) {
             throw new RateQueryException(null, "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        }
+
+        return new Rates(rates, this);
+    }
+
+    /**
+     * Retrieve the exchange rate table maintained by BitPay by baseCurrency. See https://bitpay.com/bitcoin-exchange-rates.
+     *
+     * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
+     *                     Current supported values are BTC and BCH.
+     * @return A Rates object populated with the BitPay exchange rate table.
+     * @throws RateQueryException RateQueryException class
+     * @since 8.8.0
+     */
+    public Rates getRates(String baseCurrency) throws RateQueryException {
+        List<Rate> rates;
+
+        try {
+            HttpResponse response = this.get("rates/" + baseCurrency);
+            rates = Arrays.asList(new ObjectMapper().readValue(this.responseToJsonString(response), Rate[].class));
+        } catch (JsonProcessingException e) {
+            throw new RateQueryException(null,
+                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new RateQueryException(null,
+                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
         }
 
         return new Rates(rates, this);
