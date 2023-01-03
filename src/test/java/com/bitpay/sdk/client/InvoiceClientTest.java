@@ -378,6 +378,22 @@ public class InvoiceClientTest extends AbstractClientTest {
     }
 
     @Test
+    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
+        // given
+        AccessTokens accessTokens = this.getAccessTokens();
+        this.addServerJsonResponse(
+            "/invoices/Hpqc63wvE1ZjzeeH4kEycF/notifications",
+            "POST",
+            "{\"token\":\"someMerchantToken\"}",
+            getPreparedJsonDataFromFile("invoiceWebhookResponse.json")
+        );
+
+        // when
+        Boolean result = this.getTestedClass(accessTokens).requestInvoiceWebhookToBeResent("Hpqc63wvE1ZjzeeH4kEycF");
+        Assertions.assertTrue(result);
+    }
+
+    @Test
     public void it_should_retrieve_an_invoice_event_token() throws BitPayException {
         // given
         AccessTokens accessTokens = this.getAccessTokens();

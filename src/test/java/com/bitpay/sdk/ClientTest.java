@@ -17,6 +17,7 @@ import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
+import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
@@ -555,6 +556,31 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/" + invoiceId, expectedParams);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
+    }
+
+    @Test
+    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
+        final String requestJson = "{\"token\":\"merchantToken\"}";
+
+        Mockito.when(this.bitPayClient.post(
+            ArgumentMatchers.eq("invoices/" + invoiceId + "/notifications"), ArgumentMatchers.eq(requestJson))
+        ).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn("\"Success\"");
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Boolean result = testedClass.requestInvoiceWebhookToBeResent(invoiceId);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices/" + invoiceId + "/notifications", requestJson);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -1358,7 +1384,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getLedger() throws BitPayException {
+    public void it_should_get_ledger_entries() throws BitPayException {
         // given
         final String currency = "USD";
         final String dateStart = "2021-5-10";
@@ -1377,14 +1403,14 @@ public class ClientTest {
         Client testedClass = this.getTestedClass();
 
         // when
-        Ledger result = testedClass.getLedger(currency, dateStart, dateEnd);
+        List<LedgerEntry> result = testedClass.getLedgerEntries(currency, dateStart, dateEnd);
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("ledgers/" + currency, params);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
-        Assertions.assertEquals(3, result.getEntries().size());
-        Assertions.assertEquals("20210510_fghij", result.getEntries().get(0).getDescription());
+        Assertions.assertEquals(3, result.size());
+        Assertions.assertEquals("20210510_fghij", result.get(0).getDescription());
     }
 
     @Test
