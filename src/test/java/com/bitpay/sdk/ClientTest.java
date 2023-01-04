@@ -21,6 +21,7 @@ import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
+import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
@@ -1367,7 +1368,24 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getRates() throws BitPayException {
+    public void it_should_return_rate() throws BitPayException {
+        // given
+        Mockito.when(this.bitPayClient.get("rates/BCH/USD")).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn("{\"code\": \"USD\", \"name\": \"US Dollar\", \"rate\": 100.99}");
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Rate result = testedClass.getRate("BCH", "USD");
+
+        // then
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).get("rates/BCH/USD");
+        Assertions.assertEquals(100.99, result.getValue());
+    }
+
+    @Test
+    public void it_should_test_get_rates() throws BitPayException {
         // given
         Mockito.when(this.bitPayClient.get("rates")).thenReturn(this.httpResponse);
         Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
@@ -1380,6 +1398,23 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("rates");
+        Assertions.assertEquals(41248.11, result.getRate("USD"));
+    }
+
+    @Test
+    public void it_should_get_rates_by_base_currency() throws BitPayException {
+        // given
+        Mockito.when(this.bitPayClient.get("rates/USD")).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("getRates.json"));
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Rates result = testedClass.getRates("USD");
+
+        // then
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).get("rates/USD");
         Assertions.assertEquals(41248.11, result.getRate("USD"));
     }
 
