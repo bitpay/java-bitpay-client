@@ -46,6 +46,7 @@ import com.bitpay.sdk.exceptions.WalletQueryException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
@@ -378,6 +379,18 @@ public class Client {
         Integer offset
     ) throws BitPayException, InvoiceQueryException {
         return this.getInvoiceClient().getInvoices(dateStart, dateEnd, status, orderId, limit, offset);
+    }
+
+    /**
+     * Retrieves a bus token which can be used to subscribe to invoice events.
+     *
+     * @param invoiceId the id of the invoice for which you want to fetch an event token
+     * @return InvoiceEventToken event token
+     * @throws BitPayException BitPayException
+     * @since 8.8.0
+     */
+    public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
+        return this.getInvoiceClient().getInvoiceEventToken(invoiceId);
     }
 
     /**

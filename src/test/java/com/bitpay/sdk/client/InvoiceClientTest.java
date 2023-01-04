@@ -8,9 +8,11 @@ import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Buyer;
 import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.util.AccessTokens;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -389,6 +391,26 @@ public class InvoiceClientTest extends AbstractClientTest {
         // when
         Boolean result = this.getTestedClass(accessTokens).requestInvoiceWebhookToBeResent("Hpqc63wvE1ZjzeeH4kEycF");
         Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void it_should_retrieve_an_invoice_event_token() throws BitPayException {
+        // given
+        AccessTokens accessTokens = this.getAccessTokens();
+        this.addServerJsonResponse(
+            "/invoices/GZRP3zgNHTDf8F5BmdChKz/events?token=" + MERCHANT_TOKEN,
+            "GET",
+            null,
+            getPreparedJsonDataFromFile("getInvoiceEventToken.json")
+        );
+
+        // when
+        InvoiceEventToken result = this.getTestedClass(accessTokens).getInvoiceEventToken("GZRP3zgNHTDf8F5BmdChKz");
+
+        // then
+        Assertions.assertEquals("4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P", result.getToken());
+        Assertions.assertEquals(Arrays.asList("payment", "confirmation"), result.getEvents());
+        Assertions.assertEquals(Arrays.asList("subscribe", "unsubscribe"), result.getActions());
     }
 
     private Invoice getInvoiceExample() {

@@ -11,6 +11,7 @@ import com.bitpay.sdk.exceptions.InvoiceQueryException;
 import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
+import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -203,6 +204,29 @@ public class InvoiceClient {
         }
 
         return invoices;
+    }
+
+    /**
+     * Retrieves a bus token which can be used to subscribe to invoice events.
+     *
+     * @param invoiceId the id of the invoice for which you want to fetch an event token
+     * @return InvoiceEventToken event token
+     * @throws BitPayException BitPayException
+     */
+    public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+
+        try {
+            HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId + "/events", params);
+            return JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), InvoiceEventToken.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (JsonProcessingException e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+        } catch (Exception e) {
+            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+        }
     }
 
     /**
