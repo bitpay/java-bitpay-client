@@ -65,17 +65,13 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.bitcoinj.core.ECKey;
 
 /**
@@ -887,7 +883,7 @@ public class Client {
      * @throws PayoutCreationException PayoutCreationException class
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
-        return this.getPayoutClient().create(payout);
+        return this.getPayoutClient().submit(payout);
     }
 
     /**

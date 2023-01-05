@@ -45,7 +45,7 @@ public class LedgerClient {
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
-     * @return A Ledger object populated with the BitPay ledger entries list.
+     * @return A list of Ledger entries.
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
