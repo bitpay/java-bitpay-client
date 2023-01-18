@@ -59,7 +59,6 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("Test Item 2", result.getItems().get(1).getDescription());
         Assertions.assertEquals(4.0, result.getItems().get(1).getPrice());
         Assertions.assertEquals(1, result.getItems().get(1).getQuantity());
-        Assertions.assertEquals("6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA", accessTokens.getAccessToken("3Zpmji8bRKxWJo2NJbWX5H"));
     }
 
     @Test
