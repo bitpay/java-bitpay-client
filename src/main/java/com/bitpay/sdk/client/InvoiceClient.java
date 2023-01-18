@@ -72,7 +72,7 @@ public class InvoiceClient {
         }
 
         invoice.setToken(this.accessTokens.getAccessToken(facade));
-        invoice.setGuid(this.guidGenerator.execute());
+        invoice.setGuid(Objects.isNull(invoice.getGuid()) ? this.guidGenerator.execute() : invoice.getGuid());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
 
