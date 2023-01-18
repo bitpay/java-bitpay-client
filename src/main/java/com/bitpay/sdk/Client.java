@@ -590,7 +590,8 @@ public class Client {
     }
 
     /**
-     * Delete a previously created BitPay invoice.
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
      *
      * @param invoiceId The Id of the BitPay invoice to be canceled.
      * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
@@ -613,6 +614,57 @@ public class Client {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
             throw new InvoiceCancellationException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
+    /**
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
+     *
+     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
+     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
+     *             in Retrieve Invoice by GUID.
+     * @return Invoice Invoice
+     * @throws BitPayException BitPayException class
+     */
+    public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
+        return this.cancelInvoiceByGuid(guid, false);
+    }
+
+    /**
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
+     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
+     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
+     *             in Retrieve Invoice by GUID.
+     * @param forceCancel Parameter that will cancel the invoice even if no contact information is present.
+     *                    Note: Canceling a paid invoice without contact information requires a manual support
+     *                    process and is not recommended.
+     * @return Invoice Invoice
+     * @throws BitPayException BitPayException class
+     */
+    public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
+        if (Objects.isNull(guid) || Objects.isNull(forceCancel)) {
+            throw new InvoiceCancellationException(null, "missing required parameter");
+        }
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", this.getAccessToken(Facade.Merchant)));
+        if (forceCancel.equals(true)) {
+            params.add(new BasicNameValuePair("forceCancel", forceCancel.toString()));
+        }
+        Invoice invoice;
+
+        try {
+            HttpResponse response = this.delete("invoices/guid/" + guid, params);
+            invoice = new ObjectMapper().readValue(this.responseToJsonString(response), Invoice.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceCancellationException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
         return invoice;
