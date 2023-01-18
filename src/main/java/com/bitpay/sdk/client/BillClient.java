@@ -79,7 +79,6 @@ public class BillClient {
                 "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.accessTokens.put(bill.getId(), bill.getToken());
         return bill;
     }
 
@@ -202,7 +201,6 @@ public class BillClient {
                 "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
         }
 
-        this.accessTokens.put(bill.getId(), bill.getToken());
         return bill;
     }
 

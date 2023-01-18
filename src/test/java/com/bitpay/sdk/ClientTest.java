@@ -6,6 +6,7 @@ package com.bitpay.sdk;
 
 import com.bitpay.sdk.client.BitPayClient;
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.InvoiceCancellationException;
 import com.bitpay.sdk.exceptions.RefundCreationException;
 import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
@@ -480,7 +481,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_force_cancelInvoice() throws BitPayException {
+    public void it_should_force_cancel_invoice() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -492,7 +493,7 @@ public class ClientTest {
             ArgumentMatchers.eq("invoices/" + invoiceId), ArgumentMatchers.eq(expectedParams))
         ).thenReturn(this.httpResponse);
         Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
+            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -503,11 +504,11 @@ public class ClientTest {
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/" + invoiceId, expectedParams);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
-        Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
+        Assertions.assertEquals("payment#1234", result.getGuid());
     }
 
     @Test
-    public void it_should_test_cancelInvoice() throws BitPayException {
+    public void it_should_cancel_invoice() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -518,7 +519,7 @@ public class ClientTest {
             ArgumentMatchers.eq("invoices/" + invoiceId), ArgumentMatchers.eq(expectedParams))
         ).thenReturn(this.httpResponse);
         Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
+            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -529,7 +530,62 @@ public class ClientTest {
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/" + invoiceId, expectedParams);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
-        Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
+        Assertions.assertEquals("payment#1234", result.getGuid());
+    }
+
+    @Test
+    public void it_should_cancel_invoice_by_guid() throws BitPayException {
+        // given
+        final String merchantToken = "merchantToken";
+        final String guidId = "payment#1234";
+        List<BasicNameValuePair> expectedParams = new ArrayList<BasicNameValuePair>();
+        expectedParams.add(new BasicNameValuePair("token", merchantToken));
+
+        Mockito.when(this.bitPayClient.delete(
+            ArgumentMatchers.eq("invoices/guid/" + guidId), ArgumentMatchers.eq(expectedParams))
+        ).thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
+        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        Client testedClass = this.getTestedClass();
+
+        // when
+        Invoice result = testedClass.cancelInvoiceByGuid(guidId, false);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/guid/" + guidId, expectedParams);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+        Assertions.assertEquals(guidId, result.getGuid());
+    }
+
+    @Test
+    public void it_should_throws_exception_for_cancel_invoice_for_invalid_state_of_cancel() throws BitPayException {
+        InvoiceCancellationException exception = Assertions.assertThrows(
+            InvoiceCancellationException.class,
+            () -> {
+                final String merchantToken = "merchantToken";
+                final String guidId = "chc9kj52-04g0-4b6f-941d-3a844e352757";
+                List<BasicNameValuePair> expectedParams = new ArrayList<BasicNameValuePair>();
+                expectedParams.add(new BasicNameValuePair("token", merchantToken));
+
+                Mockito.when(this.bitPayClient.delete(
+                    ArgumentMatchers.eq("invoices/guid/" + guidId), ArgumentMatchers.eq(expectedParams))
+                ).thenReturn(this.httpResponse);
+                Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+                    .thenThrow(new BitPayException(null, "Error: Invalid invoice state for cancel"));
+                Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+                Client testedClass = this.getTestedClass();
+
+                // when
+                Invoice result = testedClass.cancelInvoiceByGuid(guidId, false);
+            }
+        );
+
+        Assertions.assertEquals(
+            "Status: 000000 -> Reason: BITPAY-INVOICE-CANCEL: Failed to cancel invoice -> Error: Invalid invoice state for cancel",
+            exception.getMessage()
+        );
     }
 
     @Test
@@ -1278,7 +1334,6 @@ public class ClientTest {
         Bill result = testedClass.updateBill(bill, BILL_ID);
 
         // then
-        Mockito.verify(this.accessTokens, Mockito.times(1)).put(BILL_ID, result.getToken());
         Mockito.verify(this.bitPayClient, Mockito.times(1)).update("bills/" + BILL_ID, updateBillApiRequest);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
@@ -1816,9 +1871,6 @@ public class ClientTest {
         // given
         final String settlementId = "DNFnN3fFjjzLn6if5bdGJC";
         final String settlementToken = "5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D";
-        Settlement settlement = new Settlement();
-        settlement.setId(settlementId);
-        settlement.setToken(settlementToken);
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", settlementToken));
@@ -1831,7 +1883,7 @@ public class ClientTest {
         Client testedClass = this.getTestedClass();
 
         // when
-        Settlement result = testedClass.getSettlementReconciliationReport(settlement);
+        Settlement result = testedClass.getSettlementReconciliationReport(settlementId, settlementToken);
 
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1))

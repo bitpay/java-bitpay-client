@@ -25,7 +25,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         );
 
         // when
-        List<PayoutRecipient> result = this.getTestedClass().submitPayoutRecipients(this.getExamplePayoutRecipients());
+        List<PayoutRecipient> result = this.getTestedClass().submit(this.getExamplePayoutRecipients());
 
         // then
         Assertions.assertEquals(2, result.size());
@@ -66,7 +66,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         );
 
         // when
-        List<PayoutRecipient> result = this.getTestedClass().getPayoutRecipients("invited", null, null);
+        List<PayoutRecipient> result = this.getTestedClass().getByFilters("invited", null, null);
 
         // then
         Assertions.assertEquals(2, result.size());
@@ -99,7 +99,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         );
 
         // when
-        PayoutRecipient result = this.getTestedClass().getPayoutRecipient("JA4cEtmBxCp5cybtnh1rds");
+        PayoutRecipient result = this.getTestedClass().get("JA4cEtmBxCp5cybtnh1rds");
 
         // then
         Assertions.assertNull(result.getGuid());
@@ -124,7 +124,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         payoutRecipient.setLabel("Bob123");
 
         // when
-        PayoutRecipient result = this.getTestedClass().updatePayoutRecipient("X3icwc4tE8KJ5hEPNPpDXW", payoutRecipient);
+        PayoutRecipient result = this.getTestedClass().update("X3icwc4tE8KJ5hEPNPpDXW", payoutRecipient);
 
         // then
         Assertions.assertEquals("Bob123", result.getLabel());
@@ -141,7 +141,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         );
 
         // when
-        Boolean result = this.getTestedClass().deletePayoutRecipient("X3icwc4tE8KJ5hEPNPpDXW");
+        Boolean result = this.getTestedClass().delete("X3icwc4tE8KJ5hEPNPpDXW");
 
         // then
         Assertions.assertTrue(result);

@@ -424,8 +424,21 @@ public class Client {
     }
 
     /**
-     * Delete a previously created BitPay invoice.
-     *
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
+     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
+     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
+     *             in Retrieve Invoice by GUID.
+     * @return Invoice Invoice
+     * @throws BitPayException BitPayException class
+     */
+    public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
+        return this.getInvoiceClient().cancelInvoiceByGuid(guid, false);
+    }
+
+    /**
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
      * @param invoiceId   The Id of the BitPay invoice to be canceled.
      * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
      * @return A BitPay generated Invoice object.
@@ -435,6 +448,22 @@ public class Client {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         return this.getInvoiceClient().cancelInvoice(invoiceId, forceCancel);
+    }
+
+    /**
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
+     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
+     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
+     *             in Retrieve Invoice by GUID.
+     * @param forceCancel Parameter that will cancel the invoice even if no contact information is present.
+     *                    Note: Canceling a paid invoice without contact information requires a manual support
+     *                    process and is not recommended.
+     * @return Invoice Invoice
+     * @throws BitPayException BitPayException class
+     */
+    public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
+        return this.getInvoiceClient().cancelInvoiceByGuid(guid, forceCancel);
     }
 
     /**
@@ -759,7 +788,7 @@ public class Client {
      * @throws RateQueryException RateQueryException class
      */
     public Rates getRates() throws RateQueryException {
-        return this.getRatesClient().getRates();
+        return this.getRateClient().getRates();
     }
 
     /**
@@ -798,7 +827,7 @@ public class Client {
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException,
         PayoutRecipientCreationException {
-        return this.getPayoutRecipientsClient().submitPayoutRecipients(recipients);
+        return this.getPayoutRecipientsClient().submit(recipients);
     }
 
     /**
@@ -814,7 +843,7 @@ public class Client {
      */
     public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit, Integer offset)
         throws BitPayException, PayoutRecipientQueryException {
-        return this.getPayoutRecipientsClient().getPayoutRecipients(status, limit, offset);
+        return this.getPayoutRecipientsClient().getByFilters(status, limit, offset);
     }
 
     /**
@@ -828,7 +857,7 @@ public class Client {
      */
     public PayoutRecipient getPayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
-        return this.getPayoutRecipientsClient().getPayoutRecipient(recipientId);
+        return this.getPayoutRecipientsClient().get(recipientId);
     }
 
     /**
@@ -843,7 +872,7 @@ public class Client {
      */
     public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
-        return this.getPayoutRecipientsClient().updatePayoutRecipient(recipientId, recipient);
+        return this.getPayoutRecipientsClient().update(recipientId, recipient);
     }
 
     /**
@@ -857,7 +886,7 @@ public class Client {
      */
     public Boolean deletePayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
-        return this.getPayoutRecipientsClient().deletePayoutRecipient(recipientId);
+        return this.getPayoutRecipientsClient().delete(recipientId);
     }
 
     /**
@@ -985,12 +1014,13 @@ public class Client {
      * Gets a detailed reconciliation report of the activity within the settlement period.
      * Required id & settlement token.
      *
-     * @param settlement Settlement to generate report for.
+     * @param settlementId Settlement ID.
+     * @param token Settlement token.
      * @return A detailed BitPay Settlement object.
      * @throws SettlementQueryException SettlementQueryException class
      */
-    public Settlement getSettlementReconciliationReport(Settlement settlement) throws SettlementQueryException {
-        return this.getSettlementClient().getSettlementReconciliationReport(settlement);
+    public Settlement getSettlementReconciliationReport(String settlementId, String token) throws SettlementQueryException {
+        return this.getSettlementClient().getSettlementReconciliationReport(settlementId, token);
     }
 
     /**
@@ -1009,7 +1039,7 @@ public class Client {
      *
      * @return the rates client
      */
-    public RateClient getRatesClient() {
+    public RateClient getRateClient() {
         return new RateClient(this.bitPayClient);
     }
 
@@ -1058,10 +1088,7 @@ public class Client {
         File privateKeyFile = new File(privateKey.value());
         if (privateKeyFile.exists() && KeyUtils.privateKeyExists(privateKey.value().replace("\"", ""))) {
             try {
-                if (KeyUtils.privateKeyExists(
-                    privateKey.value().replace("\"", ""))) {
-                    return KeyUtils.loadEcKey();
-                }
+                return KeyUtils.loadEcKey();
             } catch (Exception e) {
                 throw new BitPayException(null,
                     "When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " +
@@ -1074,8 +1101,6 @@ public class Client {
                 throw new BitPayException(null, "Private Key file not found");
             }
         }
-
-        throw new BitPayException(null, "Missing ECKey");
     }
 
     /**

@@ -65,7 +65,7 @@ public class PayoutRecipientsClient {
      * @throws BitPayException                  BitPayException class
      * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
      */
-    public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients)
+    public List<PayoutRecipient> submit(PayoutRecipients recipients)
         throws BitPayException, PayoutRecipientCreationException {
         if (Objects.isNull(recipients)) {
             throw new PayoutRecipientCreationException(null, "missing required parameter");
@@ -112,7 +112,7 @@ public class PayoutRecipientsClient {
      * @throws BitPayException               BitPayException class
      * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
-    public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit, Integer offset)
+    public List<PayoutRecipient> getByFilters(String status, Integer limit, Integer offset)
         throws BitPayException, PayoutRecipientQueryException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -152,7 +152,7 @@ public class PayoutRecipientsClient {
      * @throws BitPayException               BitPayException class
      * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
      */
-    public PayoutRecipient getPayoutRecipient(String recipientId)
+    public PayoutRecipient get(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
         if (Objects.isNull(recipientId)) {
             throw new PayoutRecipientQueryException(null, "missing required parameter");
@@ -188,7 +188,7 @@ public class PayoutRecipientsClient {
      * @throws BitPayException                BitPayException class
      * @throws PayoutRecipientUpdateException PayoutRecipientUpdateException class
      */
-    public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
+    public PayoutRecipient update(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
         if (Objects.isNull(recipient) || Objects.isNull(recipientId)) {
             throw new PayoutRecipientUpdateException(null, "missing required parameter");
@@ -230,7 +230,7 @@ public class PayoutRecipientsClient {
      * @throws BitPayException                      BitPayException class
      * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException                                              class
      */
-    public Boolean deletePayoutRecipient(String recipientId)
+    public Boolean delete(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
         if (Objects.isNull(recipientId)) {
             throw new PayoutRecipientCancellationException(null, "missing required parameter");

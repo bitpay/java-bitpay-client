@@ -128,15 +128,14 @@ public class SettlementClient {
     /**
      * Gets a detailed reconciliation report of the activity within the settlement period.
      *
-     * @param settlement Settlement to generate report for.
+     * @param settlementId Settlement ID.
+     * @param token Settlement token.
      * @return A detailed BitPay Settlement object.
      * @throws SettlementQueryException SettlementQueryException class
      */
-    public Settlement getSettlementReconciliationReport(Settlement settlement) throws SettlementQueryException {
+    public Settlement getSettlementReconciliationReport(String settlementId, String token) throws SettlementQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        final String id = settlement.getId();
-        final String token = settlement.getToken();
-        if (Objects.isNull(id) || Objects.isNull(token)) {
+        if (Objects.isNull(settlementId) || Objects.isNull(token)) {
             throw new SettlementQueryException(null, "missing id/token");
         }
 
@@ -146,7 +145,7 @@ public class SettlementClient {
 
         try {
             HttpResponse response =
-                this.bitPayClient.get("settlements/" + id + "/reconciliationreport", params);
+                this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
             reconciliationReport =
                 new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
         } catch (JsonProcessingException e) {
