@@ -306,7 +306,9 @@ public class Client {
      */
     public Invoice createInvoice(Invoice invoice, String facade, Boolean signRequest) throws BitPayException, InvoiceCreationException {
         invoice.setToken(this.getAccessToken(facade));
-        invoice.setGuid(this.getGuid());
+        if (invoice.getGuid().equals("")) {
+            invoice.setGuid(this.getGuid());
+        }
         ObjectMapper mapper = new ObjectMapper();
         String json;
 
