@@ -98,7 +98,7 @@ import org.bitcoinj.core.ECKey;
 /**
  * The type Client. Class is responsible for API calls.
  *
- * @version 8.7.0
+ * @version 8.8.0
  * @see <a href="https://bitpay.com/api/#rest-api">REST API</a>
  *
  */
