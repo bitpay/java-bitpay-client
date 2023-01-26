@@ -72,7 +72,7 @@ public class PayoutRecipientsClient {
         }
 
         recipients.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
-        recipients.setGuid(this.guidGenerator.execute());
+        recipients.setGuid(Objects.isNull(recipients.getGuid()) ? this.guidGenerator.execute() : recipients.getGuid());
         JsonMapper mapper = JsonMapperFactory.create();
         String json;
 

@@ -338,7 +338,7 @@ public class Settlement {
      *
      * @param withHoldings the with holdings
      */
-    @JsonProperty("withHoldings")
+    @JsonProperty("withholdings")
     public void setWithHoldings(List<WithHoldings> withHoldings) {
         this.withHoldings = withHoldings;
     }
@@ -358,7 +358,7 @@ public class Settlement {
      *
      * @param withHoldingsSum the with holdings sum
      */
-    @JsonProperty("withHoldingsSum")
+    @JsonProperty("withholdingsSum")
     public void setWithHoldingsSum(Float withHoldingsSum) {
         this.withHoldingsSum = withHoldingsSum;
     }
