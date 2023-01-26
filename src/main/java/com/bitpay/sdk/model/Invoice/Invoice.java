@@ -26,7 +26,7 @@ public class Invoice {
 
     private String currency;
 
-    private String guid = "";
+    private String guid;
     private String token = "";
 
     private Double price;
