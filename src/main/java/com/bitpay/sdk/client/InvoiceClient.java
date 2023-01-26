@@ -381,6 +381,31 @@ public class InvoiceClient {
         return invoice;
     }
 
+    public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
+        if (Objects.isNull(guid) || Objects.isNull(forceCancel)) {
+            throw new InvoiceCancellationException(null, "missing required parameter");
+        }
+
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        if (forceCancel.equals(true)) {
+            ParameterAdder.execute(params,"forceCancel", forceCancel.toString());
+        }
+        Invoice invoice;
+
+        try {
+            HttpResponse response = this.bitPayClient.delete("invoices/guid/" + guid, params);
+            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+        } catch (BitPayException ex) {
+            throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceCancellationException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+        }
+
+        return invoice;
+    }
+
     public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));

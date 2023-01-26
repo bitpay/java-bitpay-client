@@ -17,7 +17,6 @@ public class SettlementClientTest extends AbstractClientTest {
     public void it_should_get_settlements() throws BitPayException {
         // given
         this.addServerJsonResponse(
-           //
             "/settlements?token=someMerchantToken&startDate=2021-5-10&endDate=2021-5-12&status=processing&limit=100&offset=0",
             "GET",
             null,
@@ -25,7 +24,8 @@ public class SettlementClientTest extends AbstractClientTest {
         );
 
         // when
-        List<Settlement> result = this.getTestedClass().getSettlements(null, "2021-5-10", "2021-5-12", "processing", null, null);
+        List<Settlement> result =
+            this.getTestedClass().getSettlements(null, "2021-5-10", "2021-5-12", "processing", null, null);
 
         // then
         Assertions.assertEquals(2, result.size());
@@ -51,7 +51,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertNull(result.get(0).getWithHoldingsSum());
         Assertions.assertEquals(22.09f, result.get(0).getTotalAmount());
         Assertions.assertNull(result.get(0).getLedgerEntries());
-        Assertions.assertEquals("2gBtViSiBWSEJGo1LfaMFHoaBRzE2jek2VitKAYeenj2SRiTVSCgRvs1WTN8w4w8Lc", result.get(0).getToken());
+        Assertions.assertEquals("2gBtViSiBWSEJGo1LfaMFHoaBRzE2jek2VitKAYeenj2SRiTVSCgRvs1WTN8w4w8Lc",
+            result.get(0).getToken());
 
         Assertions.assertEquals("RPWTabW8urd3xWv2To989v", result.get(1).getId());
         Assertions.assertEquals("YJCgTf3jrXHkUVzLQ7y4eg", result.get(1).getAccountId());
@@ -74,7 +75,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertNull(result.get(1).getWithHoldingsSum());
         Assertions.assertEquals(35.88f, result.get(1).getTotalAmount());
         Assertions.assertNull(result.get(1).getLedgerEntries());
-        Assertions.assertEquals("2gBtViSiBWSEJitKAYSCgRvs1WTN8w4Go1Leenj2SRiTVFHoaBRzE2jek2VfaMw8Lc", result.get(1).getToken());
+        Assertions.assertEquals("2gBtViSiBWSEJitKAYSCgRvs1WTN8w4Go1Leenj2SRiTVFHoaBRzE2jek2VfaMw8Lc",
+            result.get(1).getToken());
     }
 
     @Test
@@ -113,7 +115,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertNull(result.getWithHoldingsSum());
         Assertions.assertEquals(35.88f, result.getTotalAmount());
         Assertions.assertNull(result.getLedgerEntries());
-        Assertions.assertEquals("2GrR6GDeYxUFYM9sDKViy6nFFTy4Rjvm1SYdLBjK46jkeJdgUTRccRfhtwkhNcuZky", result.getToken());
+        Assertions
+            .assertEquals("2GrR6GDeYxUFYM9sDKViy6nFFTy4Rjvm1SYdLBjK46jkeJdgUTRccRfhtwkhNcuZky", result.getToken());
     }
 
     @Test
@@ -126,12 +129,10 @@ public class SettlementClientTest extends AbstractClientTest {
             null,
             getPreparedJsonDataFromFile("getSettlementReconciliationReportResponse.json")
         );
-        Settlement requestParam = new Settlement();
-        requestParam.setId("RvNuCTMAkURKimwgvSVEMP");
-        requestParam.setToken("5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D");
 
         // when
-        Settlement result = this.getTestedClass().getSettlementReconciliationReport(requestParam);
+        Settlement result = this.getTestedClass().getSettlementReconciliationReport("RvNuCTMAkURKimwgvSVEMP",
+            "5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D");
 
         // then
         Assertions.assertEquals("RvNuCTMAkURKimwgvSVEMP", result.getId());
@@ -167,7 +168,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertEquals(5.0f, result.getLedgerEntries().get(0).getInvoiceData().getPrice());
         Assertions.assertEquals("EUR", result.getLedgerEntries().get(0).getInvoiceData().getCurrency());
         Assertions.assertEquals("BCH", result.getLedgerEntries().get(0).getInvoiceData().getTransactionCurrency());
-        Assertions.assertEquals(100.0, result.getLedgerEntries().get(0).getInvoiceData().getPayoutPercentage().get("USD"));
+        Assertions
+            .assertEquals(100.0, result.getLedgerEntries().get(0).getInvoiceData().getPayoutPercentage().get("USD"));
     }
 
     private SettlementClient getTestedClass() {

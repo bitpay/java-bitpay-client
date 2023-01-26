@@ -55,7 +55,7 @@ public class PayoutClient {
      * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
      */
-    public Payout create(Payout payout) throws BitPayException, PayoutCreationException {
+    public Payout submit(Payout payout) throws BitPayException, PayoutCreationException {
         if (Objects.isNull(payout)) {
             throw new PayoutCreationException(null, "missing required parameter");
         }

@@ -378,6 +378,54 @@ public class InvoiceClientTest extends AbstractClientTest {
     }
 
     @Test
+    public void it_should_cancel_invoice_by_guid() throws BitPayException {
+        // given
+        final String guidId = "payment#1234";
+        AccessTokens accessTokens = this.getAccessTokens();
+        this.addServerJsonResponse(
+            "/invoices/guid/" + guidId + "?token=" + MERCHANT_TOKEN,
+            "DELETE",
+            null,
+            getPreparedJsonDataFromFile("cancelInvoiceSuccessResponse.json")
+        );
+
+        // when
+        Invoice result = this.getTestedClass(accessTokens).cancelInvoiceByGuid("payment#1234", false);
+
+        // then
+        Assertions.assertEquals("payment#1234", result.getGuid());
+        Assertions.assertEquals("+12223334444", result.getInvoiceBuyerProvidedInfo().getSms());
+        Assertions.assertEquals("https://bitpay.com/invoice?id=G3viJEJgE8Jk2oekSdgT2A", result.getUrl());
+        Assertions.assertEquals("\"{ \"ref\" : 711454, \"item\" : \"test_item\" }\"", result.getPosData());
+        Assertions.assertEquals("expired", result.getStatus());
+        Assertions.assertEquals(20, result.getPrice());
+        Assertions.assertEquals("USD", result.getCurrency());
+        Assertions.assertEquals("20210511_fghij", result.getOrderId());
+        Assertions.assertEquals(1620733980748L, result.getInvoiceTime());
+        Assertions.assertEquals(1620734880748L, result.getExpirationTime());
+        Assertions.assertEquals(1620734253073L, result.getCurrentTime());
+        Assertions.assertEquals("payment#1234", result.getGuid());
+        Assertions.assertEquals("G3viJEJgE8Jk2oekSdgT2A", result.getId());
+        Assertions.assertFalse(result.getLowFeeDetected());
+        Assertions.assertEquals(BigDecimal.valueOf(739100L), result.getAmountPaid());
+        Assertions.assertEquals(BigDecimal.valueOf(0.007391), result.getDisplayAmountPaid());
+        Assertions.assertEquals("false", result.getExceptionStatus());
+        Assertions.assertEquals(6, result.getTargetConfirmations());
+        Assertions.assertEquals(0, result.getTransactions().size());
+        Assertions.assertEquals("medium", result.getTransactionSpeed());
+        Assertions.assertEquals("john@doe.com", result.getBuyer().getEmail());
+        Assertions.assertEquals("https://merchantwebsite.com/shop/return", result.getRedirectURL());
+        Assertions.assertFalse(result.getAutoRedirect());
+        Assertions.assertEquals("https://merchantwebsite.com/shop/cancel", result.getCloseURL());
+        Assertions.assertEquals(new ArrayList<>(), result.getRefundAddresses());
+        Assertions.assertFalse(result.getRefundAddressRequestPending());
+        Assertions.assertEquals("john@doe.com", result.getBuyerProvidedEmail());
+        Assertions.assertEquals("john@doe.com", result.getInvoiceBuyerProvidedInfo().getEmailAddress());
+        Assertions.assertEquals("bitpay", result.getInvoiceBuyerProvidedInfo().getSelectedWallet());
+        Assertions.assertEquals("BCH", result.getInvoiceBuyerProvidedInfo().getSelectedTransactionCurrency());
+    }
+
+    @Test
     public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
         // given
         AccessTokens accessTokens = this.getAccessTokens();

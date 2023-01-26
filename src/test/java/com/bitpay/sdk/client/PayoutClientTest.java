@@ -25,7 +25,7 @@ public class PayoutClientTest extends AbstractClientTest {
         );
 
         // when
-        Payout result = this.getTestedClass(accessTokens).create(this.getExamplePayout());
+        Payout result = this.getTestedClass(accessTokens).submit(this.getExamplePayout());
 
         // then
         Assertions.assertNull(result.getAccount());
