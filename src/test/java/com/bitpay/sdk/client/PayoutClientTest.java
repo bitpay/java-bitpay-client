@@ -47,7 +47,6 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertNull(result.getPercentFee());
         Assertions.assertNull(result.getRate());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
-        Assertions.assertEquals("", result.getRedirectUrl());
         Assertions.assertEquals("payout_20210527", result.getReference());
         Assertions.assertEquals(1622112457834L, result.getRequestDate());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.getShopperId());
@@ -91,7 +90,6 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertNull(result.getPercentFee());
         Assertions.assertNull(result.getRate());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
-        Assertions.assertEquals("", result.getRedirectUrl());
         Assertions.assertEquals("payout_20210527", result.getReference());
         Assertions.assertEquals(1622112457834L, result.getRequestDate());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.getShopperId());
@@ -153,7 +151,6 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertNull(result.get(0).getPercentFee());
         Assertions.assertNull(result.get(0).getRate());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(0).getRecipientId());
-        Assertions.assertEquals("", result.get(0).getRedirectUrl());
         Assertions.assertEquals("payout_20210527", result.get(0).getReference());
         Assertions.assertEquals(1622112457834L, result.get(0).getRequestDate());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(0).getShopperId());
@@ -180,7 +177,6 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertNull(result.get(1).getPercentFee());
         Assertions.assertNull(result.get(1).getRate());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(1).getRecipientId());
-        Assertions.assertEquals("", result.get(1).getRedirectUrl());
         Assertions.assertEquals("payout_20210528", result.get(1).getReference());
         Assertions.assertEquals(1622197423765L, result.get(1).getRequestDate());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(1).getShopperId());

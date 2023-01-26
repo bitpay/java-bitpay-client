@@ -36,7 +36,6 @@ public class Payout {
     private String reference = "";
     private String notificationEmail = "";
     private String notificationURL = "";
-    private String redirectUrl = "";
     private String ledgerCurrency = "";
 
     private String id;
@@ -320,33 +319,6 @@ public class Payout {
     @JsonProperty("notificationURL")
     public void setNotificationURL(String notificationURL) {
         this.notificationURL = notificationURL;
-    }
-
-    /**
-     * Gets redirect url.
-     * The shopper will be redirected to this URL when clicking on the Return button after a successful payment or
-     * when clicking on the Close button if a separate closeURL is not specified.
-     * Be sure to include "http://" or "https://" in the url.
-     *
-     * @return the redirect url
-     */
-    @JsonProperty("redirectUrl")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getRedirectUrl() {
-        return this.redirectUrl;
-    }
-
-    /**
-     * Sets redirect url.
-     * The shopper will be redirected to this URL when clicking on the Return button after a successful payment or
-     * when clicking on the Close button if a separate closeURL is not specified.
-     * Be sure to include "http://" or "https://" in the url.
-     *
-     * @param redirectUrl the redirect url
-     */
-    @JsonProperty("redirectUrl")
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
     }
 
     // Response fields

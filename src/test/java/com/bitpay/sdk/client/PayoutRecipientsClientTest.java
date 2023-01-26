@@ -21,7 +21,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
             "/recipients",
             "POST",
             getPreparedJsonDataFromFile("submitPayoutRecipientsRequest.json"),
-            getPreparedJsonDataFromFile("getPayoutsResponse.json")
+            getPreparedJsonDataFromFile("submitPayoutRecipientsResponse.json")
         );
 
         // when
@@ -31,28 +31,20 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         Assertions.assertEquals(2, result.size());
 
         Assertions.assertNull(result.get(0).getGuid());
-        Assertions.assertEquals("john@doe.com", result.get(0).getEmail());
-        Assertions.assertEquals("John Doe", result.get(0).getLabel());
-        Assertions.assertEquals("payout_20210527", result.get(0).getReference());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(0).getNotificationURL());
-        Assertions.assertNull(result.get(0).getAccount());
-        Assertions.assertEquals("complete", result.get(0).getStatus());
-        Assertions.assertEquals("JMwv8wQCXANoU2ZZQ9a9GH", result.get(0).getId());
-        Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(0).getShopperId());
-        Assertions.assertEquals("9pVLfvdjt59q1JiY2JEsf2uzeeEpSqDwwfRAzuFr9CcrxZX25rTnP6HdRhsMBGLArz", result.get(0).getToken());
-        Assertions.assertNull(result.get(0).getSupportPhone());
+        Assertions.assertEquals("alice@email.com", result.get(0).getEmail());
+        Assertions.assertEquals("Alice", result.get(0).getLabel());
+        Assertions.assertEquals("invited", result.get(0).getStatus());
+        Assertions.assertEquals("JA4cEtmBxCp5cybtnh1rds", result.get(0).getId());
+        Assertions.assertEquals("2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXcejgPXVmZ4Ae3oGaCGBFKQf", result.get(0).getToken());
+        Assertions.assertNull(result.get(0).getShopperId());
 
         Assertions.assertNull(result.get(0).getGuid());
-        Assertions.assertEquals("jane@doe.com", result.get(1).getEmail());
-        Assertions.assertEquals("Jane Doe", result.get(1).getLabel());
-        Assertions.assertEquals("payout_20210528", result.get(1).getReference());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(1).getNotificationURL());
-        Assertions.assertNull(result.get(1).getAccount());
-        Assertions.assertEquals("cancelled", result.get(1).getStatus());
-        Assertions.assertEquals("KMXZeQigXG6T5abzCJmTcH", result.get(1).getId());
-        Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(1).getShopperId());
-        Assertions.assertEquals("9pVLfvdjt59q1JiY2JEsf2hr5FsjimfY4qRLFi85tMiXSCkJ9mQ2oSQqYKVangKaro", result.get(1).getToken());
-        Assertions.assertNull(result.get(1).getSupportPhone());
+        Assertions.assertEquals("bob@email.com", result.get(1).getEmail());
+        Assertions.assertEquals("Bob", result.get(1).getLabel());
+        Assertions.assertEquals("invited", result.get(1).getStatus());
+        Assertions.assertEquals("X3icwc4tE8KJ5hEPNPpDXW", result.get(1).getId());
+        Assertions.assertNull(result.get(1).getShopperId());
+        Assertions.assertEquals("2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXrrBAB9vRY3BVxGLbAa6uEx7", result.get(1).getToken());
     }
 
     @Test

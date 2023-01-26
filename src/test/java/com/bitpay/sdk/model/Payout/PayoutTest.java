@@ -127,19 +127,6 @@ public class PayoutTest {
     }
 
     @Test
-    public void it_should_change_redirectUrl() {
-        // given
-        String expected = "expectedString";
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setRedirectUrl(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getRedirectUrl());
-    }
-
-    @Test
     public void it_should_not_allow_to_set_invalid_ledger_currency() {
         Assertions.assertThrows(BitPayException.class, () -> {
             final String invalidLedgerCurrency = "INVALID_LEDGER";

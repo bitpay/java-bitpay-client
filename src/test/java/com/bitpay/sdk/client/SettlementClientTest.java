@@ -47,8 +47,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertEquals(1620637200000L, result.get(0).getClosingDate());
         Assertions.assertEquals(1.27f, result.get(0).getOpeningBalance());
         Assertions.assertEquals(20.82f, result.get(0).getLedgerEntriesSum());
-        Assertions.assertNull(result.get(0).getWithHoldings());
-        Assertions.assertNull(result.get(0).getWithHoldingsSum());
+        Assertions.assertEquals(0, result.get(0).getWithHoldings().size());
+        Assertions.assertEquals(0,result.get(0).getWithHoldingsSum());
         Assertions.assertEquals(22.09f, result.get(0).getTotalAmount());
         Assertions.assertNull(result.get(0).getLedgerEntries());
         Assertions.assertEquals("2gBtViSiBWSEJGo1LfaMFHoaBRzE2jek2VitKAYeenj2SRiTVSCgRvs1WTN8w4w8Lc",
@@ -71,8 +71,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertEquals(1620723600000L, result.get(1).getClosingDate());
         Assertions.assertEquals(23.27f, result.get(1).getOpeningBalance());
         Assertions.assertEquals(20.82f, result.get(1).getLedgerEntriesSum());
-        Assertions.assertNull(result.get(1).getWithHoldings());
-        Assertions.assertNull(result.get(1).getWithHoldingsSum());
+        Assertions.assertEquals("Pending Refunds", result.get(1).getWithHoldings().get(0).getDescription());
+        Assertions.assertEquals(8.21f, result.get(1).getWithHoldingsSum());
         Assertions.assertEquals(35.88f, result.get(1).getTotalAmount());
         Assertions.assertNull(result.get(1).getLedgerEntries());
         Assertions.assertEquals("2gBtViSiBWSEJitKAYSCgRvs1WTN8w4Go1Leenj2SRiTVFHoaBRzE2jek2VfaMw8Lc",
@@ -111,8 +111,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertEquals(1620723600000L, result.getClosingDate());
         Assertions.assertEquals(23.27f, result.getOpeningBalance());
         Assertions.assertEquals(20.82f, result.getLedgerEntriesSum());
-        Assertions.assertNull(result.getWithHoldings());
-        Assertions.assertNull(result.getWithHoldingsSum());
+        Assertions.assertEquals(8.21f, result.getWithHoldings().get(0).getAmount());
+        Assertions.assertEquals(8.21f, result.getWithHoldingsSum());
         Assertions.assertEquals(35.88f, result.getTotalAmount());
         Assertions.assertNull(result.getLedgerEntries());
         Assertions
@@ -154,8 +154,8 @@ public class SettlementClientTest extends AbstractClientTest {
         Assertions.assertEquals(1535029200000L, result.getClosingDate());
         Assertions.assertEquals(23.13f, result.getOpeningBalance());
         Assertions.assertEquals(2956.77f, result.getLedgerEntriesSum());
-        Assertions.assertNull(result.getWithHoldings());
-        Assertions.assertNull(result.getWithHoldingsSum());
+        Assertions.assertEquals(1, result.getWithHoldings().size());
+        Assertions.assertEquals(590.08f, result.getWithHoldingsSum());
         Assertions.assertEquals(2389.82f, result.getTotalAmount());
 
         Assertions.assertEquals(42, result.getLedgerEntries().size());
