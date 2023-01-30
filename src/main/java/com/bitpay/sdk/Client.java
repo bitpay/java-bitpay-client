@@ -295,7 +295,7 @@ public class Client {
      * @return Map|null
      * @throws BitPayException the bit pay exception
      */
-    public Map getCurrencyInfo(String currencyCode) throws BitPayException {
+    public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
         CurrencyClient client = new CurrencyClient(this.bitPayClient);
         return client.getCurrencyInfo(currencyCode);
     }
@@ -339,6 +339,19 @@ public class Client {
         } catch (Exception e) {
             throw new InvoiceQueryException(null, e.getMessage());
         }
+    }
+
+    /**
+     * Retrieve a BitPay invoice by guid using the specified facade.  The client must have been previously authorized for the specified facade.
+     *
+     * @param guid        The guid of the invoice to retrieve.
+     * @return A BitPay Invoice object.
+     * @throws InvoiceQueryException InvoiceQueryException class
+     */
+    public Invoice getInvoiceByGuid(String guid) throws InvoiceQueryException {
+        Facade facade = getFacadeBasedOnAccessToken();
+        boolean signRequest = isSignRequest(facade);
+        return this.getInvoiceClient().getInvoiceByGuid(guid, facade, signRequest);
     }
 
     /**
@@ -806,7 +819,7 @@ public class Client {
      * @since 8.8.0
      */
     public Rate getRate(String baseCurrency, String currency) throws RateQueryException {
-        return this.getRatesClient().getRate(baseCurrency, currency);
+        return this.getRateClient().getRate(baseCurrency, currency);
     }
 
     /**
@@ -829,7 +842,7 @@ public class Client {
      * @since 8.8.0
      */
     public Rates getRates(String baseCurrency) throws RateQueryException {
-        return this.getRatesClient().getRates(baseCurrency);
+        return this.getRateClient().getRates(baseCurrency);
     }
 
     /**

@@ -89,7 +89,7 @@ class BitPaySetup {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            client = Client.createClient(new PrivateKey(privateKey), new AccessTokens());
+            client = new Client(env, new PrivateKey(privateKey), new AccessTokens(), null, null);
             pairingCodeMerchant = client.authorizeClient(Facade.MERCHANT);
             pairingCodePayout = client.authorizeClient(Facade.PAYOUT);
 

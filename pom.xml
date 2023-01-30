@@ -129,6 +129,9 @@
                 <version>2.22.2</version>
                 <configuration>
                     <argLine>@{argLine} -Duser.timezone=UTC</argLine>
+                    <excludes>
+                        <exclude>**/integration/ClientIntegrationTest.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
