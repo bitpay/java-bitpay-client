@@ -35,8 +35,8 @@ import org.apache.http.message.BasicNameValuePair;
 public class InvoiceClient {
 
     private final BitPayClient bitPayClient;
-    private AccessTokens accessTokens;
-    private GuidGenerator guidGenerator;
+    private final AccessTokens accessTokens;
+    private final GuidGenerator guidGenerator;
 
     /**
      * Instantiates a new Invoice client.
@@ -90,7 +90,8 @@ public class InvoiceClient {
         } catch (BitPayException ex) {
             throw new InvoiceCreationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
-            throw new InvoiceCreationException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+            throw new InvoiceCreationException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
         return invoice;
@@ -119,9 +120,11 @@ public class InvoiceClient {
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         } catch (Exception e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
         return invoice;
@@ -151,9 +154,11 @@ public class InvoiceClient {
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         } catch (Exception e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoice) : " + e.getMessage());
         }
 
         return invoice;
@@ -172,17 +177,18 @@ public class InvoiceClient {
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit, Integer offset) throws BitPayException, InvoiceQueryException {
+    public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit,
+                                     Integer offset) throws BitPayException, InvoiceQueryException {
         if (Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
             throw new InvoiceQueryException(null, "missing required parameter");
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
-        ParameterAdder.execute(params,"dateStart", dateStart);
-        ParameterAdder.execute(params,"dateEnd", dateEnd);
-        ParameterAdder.execute(params,"orderId", orderId);
-        ParameterAdder.execute(params,"status", status);
+        ParameterAdder.execute(params, "dateStart", dateStart);
+        ParameterAdder.execute(params, "dateEnd", dateEnd);
+        ParameterAdder.execute(params, "orderId", orderId);
+        ParameterAdder.execute(params, "status", status);
         if (Objects.nonNull(limit)) {
             ParameterAdder.execute(params, "limit", limit.toString());
         }
@@ -194,13 +200,16 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("invoices", params);
-            invoices = Arrays.asList(new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
+            invoices = Arrays.asList(
+                new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
         } catch (Exception e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
         }
 
         return invoices;
@@ -219,13 +228,16 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId + "/events", params);
-            return JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), InvoiceEventToken.class);
+            return JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), InvoiceEventToken.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
         } catch (Exception e) {
-            throw new InvoiceQueryException(null, "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
+            throw new InvoiceQueryException(null,
+                "failed to deserialize BitPay server response (Invoices) : " + e.getMessage());
         }
     }
 
@@ -254,10 +266,9 @@ public class InvoiceClient {
 
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
-        if (buyerSms == null && smsCode == null) {
-            throw new InvoiceUpdateException(null,
-                "Updating the invoice requires Mobile Phone Number for SMS reception.");
-        }
+        validateRequiredField(buyerSms, buyerEmail);
+        validateSmsCode(buyerSms, smsCode, autoVerify);
+
         if (buyerSms != null) {
             params.put("buyerSms", buyerSms);
         }
@@ -294,6 +305,27 @@ public class InvoiceClient {
         return invoice;
     }
 
+    private void validateSmsCode(String buyerSms, String smsCode, Boolean autoVerify) throws InvoiceUpdateException {
+        if (Objects.isNull(autoVerify)) {
+            return;
+        }
+
+        if (autoVerify) {
+            return;
+        }
+
+        if (Objects.nonNull(buyerSms) && Objects.nonNull(smsCode)) {
+            return;
+        }
+
+        if (Objects.isNull(buyerSms) && Objects.isNull(smsCode)) {
+            return;
+        }
+
+        throw new InvoiceUpdateException(null,
+            "If provided alongside a valid SMS, will bypass the need to complete an SMS challenge");
+    }
+
     /**
      * Pay a BitPay invoice with a mock transaction.
      *
@@ -321,7 +353,8 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("invoices/pay/" + invoiceId, json);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -362,9 +395,9 @@ public class InvoiceClient {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (forceCancel) {
-            ParameterAdder.execute(params,"forceCancel", forceCancel.toString());
+            ParameterAdder.execute(params, "forceCancel", forceCancel.toString());
         }
         Invoice invoice;
 
@@ -387,9 +420,9 @@ public class InvoiceClient {
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        ParameterAdder.execute(params,"token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (forceCancel.equals(true)) {
-            ParameterAdder.execute(params,"forceCancel", forceCancel.toString());
+            ParameterAdder.execute(params, "forceCancel", forceCancel.toString());
         }
         Invoice invoice;
 
@@ -425,6 +458,17 @@ public class InvoiceClient {
             return jsonString.replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
         } catch (Exception e) {
             throw new BitPayException(null, "failed to process request : " + e.getMessage());
+        }
+    }
+
+    private void validateRequiredField(String buyerSms, String buyerEmail) throws InvoiceUpdateException {
+        if (buyerSms == null && buyerEmail == null) {
+            throw new InvoiceUpdateException(null,
+                "Updating the invoice requires Mobile Phone Number for SMS reception.");
+        }
+
+        if (Objects.nonNull(buyerSms) && Objects.nonNull(buyerEmail)) {
+            throw new InvoiceUpdateException(null, "Updating an invoice will require EITHER an SMS or E-mail)");
         }
     }
 }
