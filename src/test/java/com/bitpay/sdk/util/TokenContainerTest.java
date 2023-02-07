@@ -12,12 +12,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class AccessTokensTest {
+public class TokenContainerTest {
 
     @Test
     public void it_should_throws_exception_for_non_existing_access_token() {
         Assertions.assertThrows(BitPayException.class, () -> {
-            AccessTokens testedClass = this.getTestedClass();
+            TokenContainer testedClass = this.getTestedClass();
             testedClass.getAccessToken("nonExisting");
         });
     }
@@ -25,7 +25,7 @@ public class AccessTokensTest {
     @Test
     public void it_should_test_getAccessToken() throws BitPayException {
         // given
-        AccessTokens testedClass = this.getTestedClass();
+        TokenContainer testedClass = this.getTestedClass();
         String key = "someKey";
         String value = "someValue";
 
@@ -39,7 +39,7 @@ public class AccessTokensTest {
     @Test
     public void it_should_test_tokenExist() {
         // given
-        AccessTokens testedClass = this.getTestedClass();
+        TokenContainer testedClass = this.getTestedClass();
         String value = "someValue";
 
         // when
@@ -51,7 +51,7 @@ public class AccessTokensTest {
         Assertions.assertTrue(testedClass.tokenExists(Facade.PAYOUT));
     }
 
-    private AccessTokens getTestedClass() {
-        return new AccessTokens();
+    private TokenContainer getTestedClass() {
+        return new TokenContainer();
     }
 }

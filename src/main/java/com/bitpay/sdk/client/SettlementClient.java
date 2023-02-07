@@ -8,7 +8,7 @@ import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Settlement.Settlement;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,7 +26,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class SettlementClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
 
     /**
      * Instantiates a new Settlement client.
@@ -34,7 +34,7 @@ public class SettlementClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public SettlementClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public SettlementClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }

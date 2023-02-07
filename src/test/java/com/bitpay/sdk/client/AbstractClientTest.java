@@ -4,7 +4,7 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -129,8 +129,8 @@ public class AbstractClientTest {
         );
     }
 
-    protected AccessTokens getAccessTokens() {
-        AccessTokens accessTokens = new AccessTokens();
+    protected TokenContainer getAccessTokens() {
+        TokenContainer accessTokens = new TokenContainer();
         accessTokens.addMerchant(MERCHANT_TOKEN);
         accessTokens.addPayout(PAYOUT_TOKEN);
 

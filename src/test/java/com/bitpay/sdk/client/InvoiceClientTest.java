@@ -9,7 +9,7 @@ import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Buyer;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +23,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     public void it_should_create_invoice() throws BitPayException {
         // given
         Invoice invoice = getInvoiceExample();
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices",
             "POST",
@@ -70,7 +70,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_invoice() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/G3viJEJgE8Jk2oekSdgT2A?token=someMerchantToken",
             "GET",
@@ -116,7 +116,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_invoice_by_guid() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/guid/payment#1234?token=someMerchantToken",
             "GET",
@@ -162,7 +162,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_invoices() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices?token=someMerchantToken&dateStart=2021-5-10&dateEnd=2021-5-12&status=complete",
             "GET",
@@ -216,7 +216,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_update_invoice() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/G3viJEJgE8Jk2oekSdgT2A",
             "PUT",
@@ -269,7 +269,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_pay_invoice() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/pay/G3viJEJgE8Jk2oekSdgT2A",
             "PUT",
@@ -333,7 +333,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_cancel_invoice() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/Hpqc63wvE1ZjzeeH4kEycF?token=" + MERCHANT_TOKEN,
             "DELETE",
@@ -381,7 +381,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     public void it_should_cancel_invoice_by_guid() throws BitPayException {
         // given
         final String guidId = "payment#1234";
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/guid/" + guidId + "?token=" + MERCHANT_TOKEN,
             "DELETE",
@@ -428,7 +428,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/Hpqc63wvE1ZjzeeH4kEycF/notifications",
             "POST",
@@ -444,7 +444,7 @@ public class InvoiceClientTest extends AbstractClientTest {
     @Test
     public void it_should_retrieve_an_invoice_event_token() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/invoices/GZRP3zgNHTDf8F5BmdChKz/events?token=" + MERCHANT_TOKEN,
             "GET",
@@ -487,7 +487,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         return invoice;
     }
 
-    private InvoiceClient getTestedClass(AccessTokens accessTokens) {
+    private InvoiceClient getTestedClass(TokenContainer accessTokens) {
         return new InvoiceClient(this.getBitPayClient(), accessTokens, this.uuidGenerator);
     }
 }

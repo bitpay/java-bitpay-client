@@ -21,7 +21,7 @@ import java.util.List;
 public class Bill {
 
     private String currency;
-    private String token = "";
+    private String token;
     private String email;
     private List<Item> items;
     private String number;

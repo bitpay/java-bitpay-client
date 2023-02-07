@@ -27,16 +27,16 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
 
-    private String token = "";
+    private String token;
 
     private Double amount = 0.0;
-    private String currency = "";
+    private String currency;
     private Long effectiveDate;
 
-    private String reference = "";
-    private String notificationEmail = "";
-    private String notificationURL = "";
-    private String ledgerCurrency = "";
+    private String reference;
+    private String notificationEmail;
+    private String notificationURL;
+    private String ledgerCurrency;
 
     private String id;
     private String shopperId;
@@ -63,8 +63,6 @@ public class Payout {
     public Payout() {
         amount = 0.0;
         currency = "USD";
-        notificationEmail = "";
-        notificationURL = "";
     }
 
     /**

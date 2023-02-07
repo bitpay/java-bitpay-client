@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Refund;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
@@ -35,7 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class RefundClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
 
     /**
@@ -45,7 +45,7 @@ public class RefundClient {
      * @param accessTokens the access tokens
      * @param guidGenerator GUID generator
      */
-    public RefundClient(BitPayClient bitPayClient, AccessTokens accessTokens, GuidGenerator guidGenerator) {
+    public RefundClient(BitPayClient bitPayClient, TokenContainer accessTokens, GuidGenerator guidGenerator) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
         this.guidGenerator = guidGenerator;

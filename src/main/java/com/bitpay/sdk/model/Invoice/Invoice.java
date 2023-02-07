@@ -27,19 +27,19 @@ public class Invoice {
     private String currency;
 
     private String guid;
-    private String token = "";
+    private String token;
 
     private Double price;
-    private String posData = "";
-    private String notificationURL = "";
-    private String transactionSpeed = "";
+    private String posData;
+    private String notificationURL;
+    private String transactionSpeed;
     private boolean fullNotifications = false;
-    private String notificationEmail = "";
-    private String redirectURL = "";
-    private String closeURL = "";
-    private String orderId = "";
-    private String itemDesc = "";
-    private String itemCode = "";
+    private String notificationEmail;
+    private String redirectURL;
+    private String closeURL;
+    private String orderId;
+    private String itemDesc;
+    private String itemCode;
     private boolean physical = false;
     private List<String> paymentCurrencies;
     private long acceptanceWindow;

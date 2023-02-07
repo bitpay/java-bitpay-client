@@ -5,7 +5,7 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class AuthorizationClientTest extends AbstractClientTest {
             getPreparedJsonDataFromFile("authorizeClientByFacadeResponse.json")
         );
 
-        final AccessTokens accessToken = new AccessTokens();
+        final TokenContainer accessToken = new TokenContainer();
         AuthorizationClient authorizationClient = getAuthorizationClient(accessToken);
 
         String token = authorizationClient.authorizeClient(Facade.MERCHANT);
@@ -37,7 +37,7 @@ public class AuthorizationClientTest extends AbstractClientTest {
             "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
     }
 
-    private AuthorizationClient getAuthorizationClient(AccessTokens accessToken) {
+    private AuthorizationClient getAuthorizationClient(TokenContainer accessToken) {
         return new AuthorizationClient(
             getBitPayClient(),
             this.uuidGenerator,

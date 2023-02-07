@@ -19,7 +19,7 @@ public class PayoutInstruction {
     private String email;
     private String recipientId;
     private String shopperId;
-    private String label = "";
+    private String label;
     private String walletProvider;
     private String id;
 

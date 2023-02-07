@@ -12,7 +12,7 @@ import java.util.List;
 public class PayoutRecipients {
     private String guid;
     private List<PayoutRecipient> recipients = Collections.emptyList();
-    private String token = "";
+    private String token;
 
     /**
      * Constructor, create an recipient-full request PayoutBatch object.

@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.BillUpdateException;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +32,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class BillClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
 
     /**
      * Instantiates a new Bill client.
@@ -40,7 +40,7 @@ public class BillClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public BillClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public BillClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }

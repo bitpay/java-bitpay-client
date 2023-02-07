@@ -20,11 +20,11 @@ import java.util.List;
 public class Token {
 
     private String guid;
-    private String id = "";
-    private String pairingCode = "";
+    private String id;
+    private String pairingCode;
     private long pairingExpiration;
-    private String facade = "";
-    private String label = "";
+    private String facade;
+    private String label;
     private int count = 0;
     private List<Policy> policies;
     private String resource;
