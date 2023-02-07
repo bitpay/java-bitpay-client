@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +16,7 @@ import java.util.Objects;
  */
 public class InvoiceEventToken {
 
-    private String token;
+    private String token = DEFAULT_NON_SENT_VALUE;
     private List<String> events;
     private List<String> actions;
 

@@ -11,7 +11,7 @@ import com.bitpay.sdk.exceptions.PayoutNotificationException;
 import com.bitpay.sdk.exceptions.PayoutQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,7 +34,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class PayoutClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
 
     /**
      * Instantiates a new Payout client.
@@ -42,7 +42,7 @@ public class PayoutClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public PayoutClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public PayoutClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }

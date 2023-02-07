@@ -7,7 +7,6 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,7 @@ import org.apache.http.util.EntityUtils;
 public class CurrencyClient {
 
     private final BitPayClient client;
-    private List currenciesInfo;
+    private List<Map<String, String>> currenciesInfo;
 
     /**
      * Instantiates a new Currency client.
@@ -45,6 +44,7 @@ public class CurrencyClient {
      * @return Map |null
      * @throws BitPayException the bit pay exception
      */
+    @SuppressWarnings (value="unchecked")
     public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
         if (Objects.isNull(currencyCode)) {
             throw new BitPayException(null, "missing required parameter");
@@ -55,7 +55,7 @@ public class CurrencyClient {
         }
 
         for (Object currency : this.currenciesInfo) {
-            Map currencyInfo = new ObjectMapper().convertValue(currency, Map.class);
+            Map<String, Object> currencyInfo = JsonMapperFactory.create().convertValue(currency, Map.class);
 
             if (currencyInfo.get("code").toString().equals(currencyCode)) {
                 return currencyInfo;
@@ -70,6 +70,7 @@ public class CurrencyClient {
      *
      * @throws BitPayException BitPayException class
      */
+    @SuppressWarnings (value="unchecked")
     private void loadCurrencies() throws BitPayException {
         try {
             HttpEntity newEntity = this.client.get("currencies").getEntity();
@@ -87,7 +88,9 @@ public class CurrencyClient {
                 jsonString = node.toString();
             }
 
-            this.currenciesInfo = new ArrayList(Arrays.asList(new ObjectMapper().readValue(jsonString, Map[].class)));
+            this.currenciesInfo = new ArrayList(Arrays.asList(
+                JsonMapperFactory.create().readValue(jsonString, Map[].class))
+            );
 
         } catch (Exception e) {
             // No action required

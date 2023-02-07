@@ -26,7 +26,7 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -67,7 +67,7 @@ public class ClientTest {
     @Mock
     private BitPayClient bitPayClient;
     @Mock
-    private AccessTokens accessTokens;
+    private TokenContainer accessTokens;
     @Mock
     private GuidGenerator guidGenerator;
     @Mock
@@ -93,7 +93,7 @@ public class ClientTest {
         String privateKey =
             "3082013102010104208ae30afbc7e93cb10cb983f70863e546b53f0b2c6158b1a71b576fd09790cff3a081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a124032200035d6a7e38d7c08b8a626e2390d0360a72a58bd1c5e1348e0eb810d4bbab3d3adf";
         String merchantToken = "merchantToken";
-        AccessTokens tokens = new AccessTokens();
+        TokenContainer tokens = new TokenContainer();
         tokens.addMerchant(merchantToken);
 
         // when
@@ -122,7 +122,7 @@ public class ClientTest {
             new Client(
                 Environment.TEST,
                 new PrivateKey("invalid"),
-                Mockito.mock(AccessTokens.class),
+                Mockito.mock(TokenContainer.class),
                 new HttpHost("http://localhost"),
                 Mockito.mock(CredentialsProvider.class)
             );
@@ -678,7 +678,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_createRefund_with_guid() throws BitPayException {
+    public void it_should_create_refund_with_guid() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -716,7 +716,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_createRefund_using_refund_object() throws BitPayException {
+    public void it_should_create_refund_using_refund_object() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -793,7 +793,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_refundCreationException_for_api_issue_for_createRefund() {
+    public void it_should_throws_refundCreationException_for_api_issue_for_create_refund() {
         RefundCreationException exception = Assertions.assertThrows(
             RefundCreationException.class,
             () -> {
@@ -817,7 +817,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_refundQueryException_for_api_issue_for_getRefund() {
+    public void it_should_throws_refundQueryException_for_api_issue_for_get_refund() {
         RefundQueryException exception = Assertions.assertThrows(
             RefundQueryException.class,
             () -> {
@@ -842,7 +842,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_refundQueryException_for_api_issue_for_getRefunds() {
+    public void it_should_throws_refundQueryException_for_api_issue_for_get_refunds() {
         RefundQueryException exception = Assertions.assertThrows(
             RefundQueryException.class,
             () -> {
@@ -867,7 +867,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_refundUpdateException_for_api_issue_for_getRefunds() {
+    public void it_should_throws_refundUpdateException_for_api_issue_for_get_refunds() {
         RefundQueryException exception = Assertions.assertThrows(
             RefundQueryException.class,
             () -> {
@@ -892,7 +892,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_refundUpdateException_for_api_issue_for_updateRefund() {
+    public void it_should_throws_refundUpdateException_for_api_issue_for_update_refund() {
         RefundUpdateException exception = Assertions.assertThrows(
             RefundUpdateException.class,
             () -> {
@@ -977,7 +977,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getRefunds() throws BitPayException {
+    public void it_should_test_get_refunds() throws BitPayException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "Hpqc63wvE1ZjzeeH4kEycF";

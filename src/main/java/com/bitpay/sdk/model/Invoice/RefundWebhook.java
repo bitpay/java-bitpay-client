@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,11 +21,11 @@ import java.util.Date;
 public class RefundWebhook {
 
 	private String id;
-	private String invoice;
-	private String supportRequest;
-	private String status;
+	private String invoice = DEFAULT_NON_SENT_VALUE;
+	private String supportRequest = DEFAULT_NON_SENT_VALUE;
+	private String status = DEFAULT_NON_SENT_VALUE;
 	private Double amount;
-	private String currency;
+	private String currency = DEFAULT_NON_SENT_VALUE;
 	private Date lastRefundNotification;
 	private Double refundFee;
 	private boolean immediate;

@@ -1,5 +1,7 @@
 package com.bitpay.sdk.model.Payout;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,7 +14,7 @@ import java.util.List;
 public class PayoutRecipients {
     private String guid;
     private List<PayoutRecipient> recipients = Collections.emptyList();
-    private String token = "";
+    private String token = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an recipient-full request PayoutBatch object.

@@ -4,10 +4,11 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class InvoiceTransaction {
     private int confirmations;
     private Date time;
     private Date receivedTime;
-    private String txid;
+    private String txid = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Invoice transaction.

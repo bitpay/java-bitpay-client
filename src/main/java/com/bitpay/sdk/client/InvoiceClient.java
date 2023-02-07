@@ -12,7 +12,7 @@ import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
@@ -35,7 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class InvoiceClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
 
     /**
@@ -47,7 +47,7 @@ public class InvoiceClient {
      */
     public InvoiceClient(
         BitPayClient bitPayClient,
-        AccessTokens accessTokens,
+        TokenContainer accessTokens,
         GuidGenerator guidGenerator
     ) {
         this.bitPayClient = bitPayClient;

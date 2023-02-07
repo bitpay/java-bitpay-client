@@ -1,5 +1,7 @@
 package com.bitpay.sdk.model.Payout;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.bitpay.sdk.exceptions.PayoutBatchCreationException;
 import com.bitpay.sdk.util.PayoutInstructionBtcSummaryDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -16,17 +18,17 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstruction {
     private Double amount;
-    private String email;
-    private String recipientId;
-    private String shopperId;
-    private String label = "";
-    private String walletProvider;
+    private String email = DEFAULT_NON_SENT_VALUE;
+    private String recipientId = DEFAULT_NON_SENT_VALUE;
+    private String shopperId = DEFAULT_NON_SENT_VALUE;
+    private String label = DEFAULT_NON_SENT_VALUE;
+    private String walletProvider = DEFAULT_NON_SENT_VALUE;
     private String id;
 
     private PayoutInstructionBtcSummary btc;
     private List<PayoutInstructionTransaction> transactions;
     private String status;
-    private String address;
+    private String address = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an empty PayoutInstruction object.

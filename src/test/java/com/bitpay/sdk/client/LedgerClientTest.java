@@ -7,7 +7,7 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class LedgerClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_ledgers() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/ledgers?token=" + MERCHANT_TOKEN,
             "GET",
@@ -41,7 +41,7 @@ public class LedgerClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_ledger_entries() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/ledgers/USD?token=" + MERCHANT_TOKEN + "&startDate=2021-5-10&endDate=2021-5-31",
             "GET",
@@ -67,7 +67,7 @@ public class LedgerClientTest extends AbstractClientTest {
         Assertions.assertEquals("XCkhgHKP2pSme4qszMpM3B", secondEntry.getId());
     }
 
-    private LedgerClient getTestedClass(AccessTokens accessTokens) {
+    private LedgerClient getTestedClass(TokenContainer accessTokens) {
         return new LedgerClient(this.getBitPayClient(), accessTokens);
     }
 }

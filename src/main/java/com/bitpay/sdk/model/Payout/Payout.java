@@ -1,5 +1,7 @@
 package com.bitpay.sdk.model.Payout;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.util.DateDeserializer;
@@ -27,19 +29,19 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
 
-    private String token = "";
+    private String token = DEFAULT_NON_SENT_VALUE;
 
     private Double amount = 0.0;
-    private String currency = "";
+    private String currency = DEFAULT_NON_SENT_VALUE;
     private Long effectiveDate;
 
-    private String reference = "";
-    private String notificationEmail = "";
-    private String notificationURL = "";
-    private String ledgerCurrency = "";
+    private String reference = DEFAULT_NON_SENT_VALUE;
+    private String notificationEmail = DEFAULT_NON_SENT_VALUE;
+    private String notificationURL = DEFAULT_NON_SENT_VALUE;
+    private String ledgerCurrency = DEFAULT_NON_SENT_VALUE;
 
     private String id;
-    private String shopperId;
+    private String shopperId = DEFAULT_NON_SENT_VALUE;
     private String recipientId;
     private PayoutInstruction exchangeRates;
     private String account;
@@ -63,8 +65,6 @@ public class Payout {
     public Payout() {
         amount = 0.0;
         currency = "USD";
-        notificationEmail = "";
-        notificationURL = "";
     }
 
     /**
@@ -132,6 +132,7 @@ public class Payout {
      * @return the amount
      */
     @JsonProperty("amount")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getAmount() {
         return this.amount;
     }
@@ -152,6 +153,7 @@ public class Payout {
      * @return the currency
      */
     @JsonProperty("currency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCurrency() {
         return this.currency;
     }
@@ -180,6 +182,7 @@ public class Payout {
      * @see <a href="https://bitpay.com/api/#rest-api-resources-payouts">Supported ledger currency codes</a>
      */
     @JsonProperty("ledgerCurrency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getLedgerCurrency() {
         return this.ledgerCurrency;
     }
@@ -209,6 +212,7 @@ public class Payout {
      */
     @JsonProperty("effectiveDate")
     @JsonSerialize(using = DateSerializer.class)
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Long getEffectiveDate() {
         return this.effectiveDate;
     }
@@ -258,6 +262,7 @@ public class Payout {
      * @return the reference
      */
     @JsonProperty("reference")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getReference() {
         return this.reference;
     }
@@ -356,6 +361,7 @@ public class Payout {
      * @return the shopper id
      */
     @JsonProperty("shopperId")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getShopperId() {
         return this.shopperId;
     }
@@ -383,6 +389,7 @@ public class Payout {
      * @return the recipient id
      */
     @JsonProperty("recipientId")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRecipientId() {
         return this.recipientId;
     }
@@ -470,6 +477,7 @@ public class Payout {
      * @return the email
      */
     @JsonProperty("email")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
         return this.email;
     }

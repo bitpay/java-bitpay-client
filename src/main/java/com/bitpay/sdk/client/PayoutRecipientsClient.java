@@ -13,7 +13,7 @@ import com.bitpay.sdk.exceptions.PayoutRecipientUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
@@ -37,7 +37,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class PayoutRecipientsClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
 
     /**
@@ -49,7 +49,7 @@ public class PayoutRecipientsClient {
      */
     public PayoutRecipientsClient(
         BitPayClient bitPayClient,
-        AccessTokens accessTokens,
+        TokenContainer accessTokens,
         GuidGenerator guidGenerator
     ) {
         this.bitPayClient = bitPayClient;

@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model.Bill;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,27 +22,27 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {
 
-    private String currency;
-    private String token = "";
-    private String email;
+    private String currency = DEFAULT_NON_SENT_VALUE;
+    private String token = DEFAULT_NON_SENT_VALUE;
+    private String email = DEFAULT_NON_SENT_VALUE;
     private List<Item> items;
-    private String number;
-    private String name;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private String zip;
-    private String country;
+    private String number = DEFAULT_NON_SENT_VALUE;
+    private String name = DEFAULT_NON_SENT_VALUE;
+    private String address1 = DEFAULT_NON_SENT_VALUE;
+    private String address2 = DEFAULT_NON_SENT_VALUE;
+    private String city = DEFAULT_NON_SENT_VALUE;
+    private String state = DEFAULT_NON_SENT_VALUE;
+    private String zip = DEFAULT_NON_SENT_VALUE;
+    private String country = DEFAULT_NON_SENT_VALUE;
     private List<String> cc;
-    private String phone;
-    private String dueDate;
+    private String phone = DEFAULT_NON_SENT_VALUE;
+    private String dueDate = DEFAULT_NON_SENT_VALUE;
     private boolean passProcessingFee;
-    private String status;
-    private String url;
-    private String createDate;
-    private String id;
-    private String merchant;
+    private String status = DEFAULT_NON_SENT_VALUE;
+    private String url = DEFAULT_NON_SENT_VALUE;
+    private String createDate = DEFAULT_NON_SENT_VALUE;
+    private String id = DEFAULT_NON_SENT_VALUE;
+    private String merchant = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an empty Bill object.

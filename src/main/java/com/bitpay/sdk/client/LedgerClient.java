@@ -9,7 +9,7 @@ import com.bitpay.sdk.exceptions.LedgerQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +26,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class LedgerClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
 
     /**
      * Instantiates a new Ledger client.
@@ -34,7 +34,7 @@ public class LedgerClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public LedgerClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public LedgerClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }

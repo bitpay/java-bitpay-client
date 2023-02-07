@@ -4,12 +4,14 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Hashtable;
 
 /**
@@ -20,9 +22,9 @@ import java.util.Hashtable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
 
-    private String supportRequest;
-    private String currency;
-    private String refundRequestEid;
+    private String supportRequest = DEFAULT_NON_SENT_VALUE;
+    private String currency = DEFAULT_NON_SENT_VALUE;
+    private String refundRequestEid = DEFAULT_NON_SENT_VALUE;
     private Hashtable<String, Double> amounts;
 
     /**
@@ -37,6 +39,7 @@ public class RefundInfo {
      * @return the support request
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getSupportRequest() {
         return this.supportRequest;
     }
@@ -57,6 +60,7 @@ public class RefundInfo {
      * @return the currency
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCurrency() {
         return this.currency;
     }
@@ -80,6 +84,7 @@ public class RefundInfo {
      *
      * @return Refund Request Eid
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getRefundRequestEid() {
         return this.refundRequestEid;
     }
@@ -101,6 +106,7 @@ public class RefundInfo {
      * @return the amounts
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Hashtable<String, Double> getAmounts() {
         return this.amounts;
     }

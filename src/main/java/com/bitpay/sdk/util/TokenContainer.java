@@ -15,14 +15,14 @@ import java.util.Map;
 /**
  * This class provide container for tokens.
  */
-public class AccessTokens {
+public class TokenContainer {
 
     private Hashtable<String, String> data; // {facade, token}
 
     /**
      * Instantiates a new Access tokens.
      */
-    public AccessTokens() {
+    public TokenContainer() {
         initData();
     }
 
@@ -31,7 +31,7 @@ public class AccessTokens {
      *
      * @param configuration Configuration file
      */
-    public AccessTokens(Config configuration) {
+    public TokenContainer(Config configuration) {
         initData();
 
         Iterator<Map.Entry<String, JsonNode>> tokens = configuration.getApiTokens().fields();
