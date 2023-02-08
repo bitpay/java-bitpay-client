@@ -57,12 +57,13 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.KeyUtils;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -1246,12 +1247,11 @@ public class Client {
     protected Config buildConfigFromFile(ConfigFilePath configFilePath) throws BitPayException {
         try {
             byte[] jsonData = Files.readAllBytes(Paths.get(configFilePath.value()));
-            //create ObjectMapper instance
-            ObjectMapper mapper = new ObjectMapper();
+            JsonMapper mapper = JsonMapperFactory.create();
             //read JSON like DOM Parser
             JsonNode rootNode = mapper.readTree(jsonData);
             JsonNode bitPayConfiguration = rootNode.path("BitPayConfiguration");
-            return new ObjectMapper().readValue(bitPayConfiguration.toString(), Config.class);
+            return mapper.readValue(bitPayConfiguration.toString(), Config.class);
         } catch (JsonProcessingException e) {
             throw new BitPayException(null, "failed to read configuration file : " + e.getMessage());
         } catch (Exception e) {

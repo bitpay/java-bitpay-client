@@ -11,12 +11,11 @@ import com.bitpay.sdk.exceptions.PayoutNotificationException;
 import com.bitpay.sdk.exceptions.PayoutQueryException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,7 +71,8 @@ public class PayoutClient {
         }
         try {
             HttpResponse response = this.bitPayClient.post("payouts", json, true);
-            payout = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
+            payout = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
         } catch (Exception e) {
             throw new PayoutCreationException(null,
                 "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
@@ -103,7 +103,8 @@ public class PayoutClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("payouts/" + payoutId, params, true);
-            payout = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
+            payout = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
         } catch (JsonProcessingException e) {
             throw new PayoutQueryException(null,
                 "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
@@ -192,7 +193,8 @@ public class PayoutClient {
         try {
             HttpResponse response = this.bitPayClient.get("payouts", params, true);
             payouts = Arrays
-                .asList(new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Payout[].class));
+                .asList(JsonMapperFactory.create()
+                    .readValue(this.bitPayClient.responseToJsonString(response), Payout[].class));
         } catch (JsonProcessingException e) {
             throw new PayoutQueryException(null,
                 "failed to deserialize BitPay server response (Payout) : " + e.getMessage());

@@ -78,8 +78,8 @@ public class SettlementClient {
         try {
             HttpResponse response = this.bitPayClient.get("settlements", params);
             settlements =
-                Arrays.asList(
-                    new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Settlement[].class));
+                Arrays.asList(JsonMapperFactory.create()
+                    .readValue(this.bitPayClient.responseToJsonString(response), Settlement[].class));
         } catch (JsonProcessingException e) {
             throw new SettlementQueryException(null,
                 "failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
@@ -146,8 +146,8 @@ public class SettlementClient {
         try {
             HttpResponse response =
                 this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
-            reconciliationReport =
-                new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
+            reconciliationReport = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
         } catch (JsonProcessingException e) {
             throw new SettlementQueryException(null,
                 "failed to deserialize BitPay server response (ReconciliationReport) : " + e.getMessage());

@@ -12,12 +12,11 @@ import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +115,7 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId, params, signRequest);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -150,7 +149,7 @@ public class InvoiceClient {
         try {
             ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
             HttpResponse response = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -201,7 +200,7 @@ public class InvoiceClient {
         try {
             HttpResponse response = this.bitPayClient.get("invoices", params);
             invoices = Arrays.asList(
-                new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -294,7 +293,7 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("invoices/" + invoiceId, json);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -403,7 +402,7 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("invoices/" + invoiceId, params);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -428,7 +427,7 @@ public class InvoiceClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("invoices/guid/" + guid, params);
-            invoice = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {

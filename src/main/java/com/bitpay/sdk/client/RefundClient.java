@@ -11,13 +11,12 @@ import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Refund;
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +75,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.post("refunds/", json, true);
-            result = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            result = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundCreationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -107,7 +107,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/" + refundId, params, true);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (JsonProcessingException e) {
             throw new RefundQueryException(null,
                 "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
@@ -139,7 +140,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("refunds/guid/" + guid, params, true);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (JsonProcessingException e) {
             throw new RefundQueryException(null,
                 "failed to deserialize BitPay server response (Refund) : " + e.getMessage());
@@ -209,7 +211,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("refunds/" + refundId, json);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -241,7 +244,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("refunds/guid/" + guid, json);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -314,7 +318,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/" + refundId, params);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -346,7 +351,8 @@ public class RefundClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("refunds/guid/" + guid, params);
-            refund = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
+            refund = JsonMapperFactory.create()
+                .readValue(this.bitPayClient.responseToJsonString(response), Refund.class);
         } catch (BitPayException ex) {
             throw new RefundCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
