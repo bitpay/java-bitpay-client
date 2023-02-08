@@ -8,7 +8,7 @@ import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Bill.Item;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +20,7 @@ public class BillClientTest extends AbstractClientTest {
     @Test
     public void it_should_create_bill() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         this.addServerJsonResponse(
             "/bills",
@@ -64,7 +64,7 @@ public class BillClientTest extends AbstractClientTest {
     @Test
     public void it_should_return_bill() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         this.addServerJsonResponse(
             "/bills/3Zpmji8bRKxWJo2NJbWX5H?token=someMerchantToken",
@@ -107,7 +107,7 @@ public class BillClientTest extends AbstractClientTest {
     @Test
     public void it_should_return_bills() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         this.addServerJsonResponse(
             "/bills?token=someMerchantToken",
@@ -152,7 +152,7 @@ public class BillClientTest extends AbstractClientTest {
     @Test
     public void it_should_return_bills_by_status() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         this.addServerJsonResponse(
             "/bills?token=someMerchantToken&status=draft",
@@ -198,7 +198,7 @@ public class BillClientTest extends AbstractClientTest {
     public void it_should_update_bill() throws BitPayException {
         // given
         final String billId = "3Zpmji8bRKxWJo2NJbWX5H";
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         Bill billToUpdate = this.getBill();
         billToUpdate.setStatus("draft");
@@ -256,7 +256,7 @@ public class BillClientTest extends AbstractClientTest {
     public void it_should_deliver_bill() throws BitPayException {
         // given
         final String billId = "3Zpmji8bRKxWJo2NJbWX5H";
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         BillClient client = this.getBillClient(accessTokens);
         Bill billToUpdate = this.getBill();
         billToUpdate.setStatus("draft");
@@ -322,7 +322,7 @@ public class BillClientTest extends AbstractClientTest {
         return bill;
     }
 
-    private BillClient getBillClient(AccessTokens accessTokens) {
+    private BillClient getBillClient(TokenContainer accessTokens) {
         if (Objects.isNull(accessTokens)) {
             accessTokens = this.getAccessTokens();
         }

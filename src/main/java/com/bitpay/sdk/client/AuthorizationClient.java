@@ -7,7 +7,7 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Token;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +24,7 @@ public class AuthorizationClient {
 
     private final BitPayClient bitPayClient;
     private final GuidGenerator guidGenerator;
-    private final AccessTokens accessToken;
+    private final TokenContainer accessToken;
     private final String identity;
 
     /**
@@ -38,7 +38,7 @@ public class AuthorizationClient {
     public AuthorizationClient(
         BitPayClient bitPayClient,
         GuidGenerator guidGenerator,
-        AccessTokens accessToken,
+        TokenContainer accessToken,
         String identity
     ) {
         this.bitPayClient = bitPayClient;

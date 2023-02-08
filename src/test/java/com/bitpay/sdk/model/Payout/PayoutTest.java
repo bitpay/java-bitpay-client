@@ -5,6 +5,7 @@
 package com.bitpay.sdk.model.Payout;
 
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.model.ModelConfiguration;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -21,8 +22,8 @@ public class PayoutTest {
         // then
         Assertions.assertEquals(0.0, testedClass.getAmount());
         Assertions.assertEquals("USD", testedClass.getCurrency());
-        Assertions.assertEquals("", testedClass.getNotificationEmail());
-        Assertions.assertEquals("", testedClass.getNotificationURL());
+        Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, testedClass.getNotificationEmail());
+        Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, testedClass.getNotificationURL());
     }
 
     @Test

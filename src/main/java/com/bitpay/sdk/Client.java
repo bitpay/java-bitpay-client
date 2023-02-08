@@ -57,12 +57,13 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
-import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.KeyUtils;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -83,7 +84,7 @@ public class Client {
 
     private GuidGenerator guidGenerator;
     private BitPayClient bitPayClient;
-    private AccessTokens accessTokens;
+    private TokenContainer accessTokens;
 
     /**
      * Return the identity of this client (i.e. the public key).
@@ -108,7 +109,7 @@ public class Client {
      * @throws BitPayException the bit pay exception
      */
     public Client(PosToken token, Environment environment) throws BitPayException {
-        this.accessTokens = new AccessTokens();
+        this.accessTokens = new TokenContainer();
         this.accessTokens.addPos(token.value());
         this.bitPayClient = new BitPayClient(
             getHttpClient(null, null),
@@ -132,7 +133,7 @@ public class Client {
     public Client(
         Environment environment,
         PrivateKey privateKey,
-        AccessTokens accessTokens,
+        TokenContainer accessTokens,
         HttpHost proxyDetails,
         CredentialsProvider proxyCredentials
     ) throws BitPayException {
@@ -164,7 +165,7 @@ public class Client {
     public Client(ConfigFilePath configFilePath, HttpHost proxy, CredentialsProvider proxyCredentials) throws BitPayException {
         try {
             Config config = this.buildConfigFromFile(configFilePath);
-            this.accessTokens = new AccessTokens(config);
+            this.accessTokens = new TokenContainer(config);
             ECKey ecKey = this.getEcKey(config);
             if (Objects.isNull(ecKey)) {
                 throw new BitPayException(null, "Missing ECKey");
@@ -201,7 +202,7 @@ public class Client {
     public Client(
         BitPayClient bitPayClient,
         String identity,
-        AccessTokens accessTokens,
+        TokenContainer accessTokens,
         GuidGenerator GuidGenerator
     ) {
         this.bitPayClient = bitPayClient;
@@ -229,7 +230,7 @@ public class Client {
      * @return the client
      * @throws BitPayException the bit pay exception
      */
-    public static Client createClient(PrivateKey privateKey, AccessTokens tokens) throws BitPayException {
+    public static Client createClient(PrivateKey privateKey, TokenContainer tokens) throws BitPayException {
         return new Client(Environment.PROD, privateKey, tokens, null, null);
     }
 
@@ -1246,12 +1247,11 @@ public class Client {
     protected Config buildConfigFromFile(ConfigFilePath configFilePath) throws BitPayException {
         try {
             byte[] jsonData = Files.readAllBytes(Paths.get(configFilePath.value()));
-            //create ObjectMapper instance
-            ObjectMapper mapper = new ObjectMapper();
+            JsonMapper mapper = JsonMapperFactory.create();
             //read JSON like DOM Parser
             JsonNode rootNode = mapper.readTree(jsonData);
             JsonNode bitPayConfiguration = rootNode.path("BitPayConfiguration");
-            return new ObjectMapper().readValue(bitPayConfiguration.toString(), Config.class);
+            return mapper.readValue(bitPayConfiguration.toString(), Config.class);
         } catch (JsonProcessingException e) {
             throw new BitPayException(null, "failed to read configuration file : " + e.getMessage());
         } catch (Exception e) {

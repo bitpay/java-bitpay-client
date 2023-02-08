@@ -101,7 +101,7 @@ public class ClientIntegrationTest {
      */
     @Test
     public void it_should_test_invoice_requests() throws BitPayException {
-        Invoice invoice = this.client.createInvoice(GetInvoiceExample());
+        Invoice invoice = this.client.createInvoice(getExampledInvoice());
         String invoiceToken = invoice.getToken();
         String invoiceId = invoice.getId();
 
@@ -134,7 +134,7 @@ public class ClientIntegrationTest {
         Invoice cancelInvoice = this.client.cancelInvoice(invoiceId);
         Assertions.assertTrue(cancelInvoice.getIsCancelled());
 
-        Invoice invoiceToCancelByGuid = this.client.createInvoice(GetInvoiceExample());
+        Invoice invoiceToCancelByGuid = this.client.createInvoice(getExampledInvoice());
         Invoice cancelInvoiceByGuid = this.client.cancelInvoiceByGuid(invoiceToCancelByGuid.getGuid());
         Assertions.assertTrue(cancelInvoiceByGuid.getIsCancelled());
     }
@@ -156,7 +156,7 @@ public class ClientIntegrationTest {
      */
     @Test
     public void it_should_test_refunds_requests() throws BitPayException {
-        Invoice invoice = this.client.createInvoice(GetInvoiceExample());
+        Invoice invoice = this.client.createInvoice(getExampledInvoice());
         String invoiceId = invoice.getId();
         this.client.payInvoice(invoiceId, "complete");
 
@@ -370,7 +370,7 @@ public class ClientIntegrationTest {
         Assertions.assertFalse(supportedWallets.isEmpty());
     }
 
-    private Invoice GetInvoiceExample() throws BitPayException {
+    private Invoice getExampledInvoice() throws BitPayException {
         Invoice invoice = new Invoice();
         invoice.setPrice(10.00);
         invoice.setCurrency("USD");

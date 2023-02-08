@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,12 +26,12 @@ public class Refund {
 
     private String guid;
     private Double amount;
-    private String currency;
-    private String invoice;
+    private String currency = DEFAULT_NON_SENT_VALUE;
+    private String invoice = DEFAULT_NON_SENT_VALUE;
     private Boolean preview;
     private Boolean immediate;
     private Boolean buyerPaysRefundFee;
-    private String reference;
+    private String reference = DEFAULT_NON_SENT_VALUE;
     private Double refundFee;
     private Date lastRefundNotification;
 
@@ -46,12 +48,12 @@ public class Refund {
     /**
      * The currency used for the invoice transaction.
      */
-    private String transactionCurrency;
+    private String transactionCurrency = DEFAULT_NON_SENT_VALUE;
 
 
     private String id;
     private Date requestDate;
-    private String status;
+    private String status = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Refund.
@@ -245,6 +247,7 @@ public class Refund {
      * @return the id
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getId() {
         return this.id;
     }
@@ -265,6 +268,7 @@ public class Refund {
      * @return the request date
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Date getRequestDate() {
         return this.requestDate;
     }
@@ -286,6 +290,7 @@ public class Refund {
      * @return the status
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getStatus() {
         return this.status;
     }
@@ -309,6 +314,7 @@ public class Refund {
      * @see Refund
      */
     @JsonProperty("transactionAmount")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public BigDecimal getTransactionAmount() {
         return this.transactionAmount;
     }
@@ -332,6 +338,7 @@ public class Refund {
      * @see Refund
      */
     @JsonProperty("transactionRefundFee")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public BigDecimal getTransactionRefundFee() {
         return this.transactionRefundFee;
     }
@@ -355,6 +362,7 @@ public class Refund {
      * @see Refund
      */
     @JsonProperty("transactionCurrency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getTransactionCurrency() {
         return this.transactionCurrency;
     }
@@ -366,7 +374,6 @@ public class Refund {
      * @see Refund
      */
     @JsonProperty("transactionCurrency")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public void setTransactionCurrency(String transactionCurrency) {
         this.transactionCurrency = transactionCurrency;
     }
@@ -377,6 +384,7 @@ public class Refund {
      * @return the last refund notification
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Date getLastRefundNotification() {
         return this.lastRefundNotification;
     }
@@ -397,6 +405,7 @@ public class Refund {
      * @return the refund fee
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Double getRefundFee() {
         return this.refundFee;
     }

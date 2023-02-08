@@ -1,5 +1,7 @@
 package com.bitpay.sdk.model.Payout;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,18 +32,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
-    private String email = "";
+    private String email = DEFAULT_NON_SENT_VALUE;
     private String guid;
-    private String label = "";
-    private String reference = "";
-    private String notificationURL = "";
+    private String label = DEFAULT_NON_SENT_VALUE;
+    private String reference = DEFAULT_NON_SENT_VALUE;
+    private String notificationURL = DEFAULT_NON_SENT_VALUE;
 
-    private String account;
-    private String status;
-    private String id;
-    private String shopperId;
-    private String token;
-    private String supportPhone;
+    private String account = DEFAULT_NON_SENT_VALUE;
+    private String status = DEFAULT_NON_SENT_VALUE;
+    private String id = DEFAULT_NON_SENT_VALUE;
+    private String shopperId = DEFAULT_NON_SENT_VALUE;
+    private String token = DEFAULT_NON_SENT_VALUE;
+    private String supportPhone = DEFAULT_NON_SENT_VALUE;
 
 
     /**
@@ -168,6 +170,7 @@ public class PayoutRecipient {
      * @return the notification url
      */
     @JsonProperty("notificationURL")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getNotificationURL() {
         return this.notificationURL;
     }
@@ -190,6 +193,7 @@ public class PayoutRecipient {
      * @return the reference
      */
     @JsonProperty("reference")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getReference() {
         return this.reference;
     }

@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 BitPay
+ */
 package com.bitpay.sdk;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +32,7 @@ public class Config {
     /**
      * BitPay Plugin Info Version.
      */
-    public static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v8.5.2208";
+    public static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v9.0.0-beta1";
     /**
      * BitPay Api Frame.
      */
@@ -118,7 +121,7 @@ public class Config {
         apiTokens = (ObjectNode) envConfig.get(API_TOKENS_KEY);
         if (Objects.isNull(apiTokens)) {
             apiTokens = (ObjectNode) JsonNodeFactory.instance.objectNode();
-            envConfig.put(API_TOKENS_KEY, apiTokens);
+            envConfig.putIfAbsent(API_TOKENS_KEY, apiTokens);
         }
 
         return apiTokens;

@@ -1,7 +1,10 @@
 package com.bitpay.sdk.model.Ledger;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -12,16 +15,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String name;
-    private String address1;
-    private String address2;
-    private String city;
-    private String state;
-    private String zip;
-    private String country;
-    private String phone;
+    private String name = DEFAULT_NON_SENT_VALUE;
+    private String address1 = DEFAULT_NON_SENT_VALUE;
+    private String address2 = DEFAULT_NON_SENT_VALUE;
+    private String city = DEFAULT_NON_SENT_VALUE;
+    private String state = DEFAULT_NON_SENT_VALUE;
+    private String zip = DEFAULT_NON_SENT_VALUE;
+    private String country = DEFAULT_NON_SENT_VALUE;
+    private String phone = DEFAULT_NON_SENT_VALUE;
     private boolean notify;
-    private String email;
+    private String email = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Buyer.
@@ -36,6 +39,7 @@ public class Buyer {
      *
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getName() {
         return this.name;
     }
@@ -56,6 +60,7 @@ public class Buyer {
      * @return the address 1
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress1() {
         return this.address1;
     }
@@ -76,6 +81,7 @@ public class Buyer {
      * @return the address 2
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getAddress2() {
         return this.address2;
     }
@@ -96,6 +102,7 @@ public class Buyer {
      * @return the country
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCountry() {
         return this.country;
     }
@@ -116,6 +123,7 @@ public class Buyer {
      * @return the phone
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getPhone() {
         return this.phone;
     }
@@ -137,6 +145,7 @@ public class Buyer {
      * @return the notify
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean getNotify() {
         return this.notify;
     }
@@ -158,6 +167,7 @@ public class Buyer {
      * @return the state
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getState() {
         return this.state;
     }
@@ -178,6 +188,7 @@ public class Buyer {
      * @return the zip
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getZip() {
         return this.zip;
     }
@@ -198,6 +209,7 @@ public class Buyer {
      * @return the city
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getCity() {
         return this.city;
     }
@@ -218,6 +230,7 @@ public class Buyer {
      * @return the email
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getEmail() {
         return this.email;
     }

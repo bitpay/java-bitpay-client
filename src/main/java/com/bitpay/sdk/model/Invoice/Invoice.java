@@ -4,13 +4,14 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -24,57 +25,57 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice {
 
-    private String currency;
+    private String currency = DEFAULT_NON_SENT_VALUE;
 
     private String guid;
-    private String token = "";
+    private String token;
 
     private Double price;
-    private String posData = "";
-    private String notificationURL = "";
-    private String transactionSpeed = "";
+    private String posData;
+    private String notificationURL = DEFAULT_NON_SENT_VALUE;
+    private String transactionSpeed = DEFAULT_NON_SENT_VALUE;
     private boolean fullNotifications = false;
-    private String notificationEmail = "";
-    private String redirectURL = "";
-    private String closeURL = "";
-    private String orderId = "";
-    private String itemDesc = "";
-    private String itemCode = "";
+    private String notificationEmail = DEFAULT_NON_SENT_VALUE;
+    private String redirectURL = DEFAULT_NON_SENT_VALUE;
+    private String closeURL = DEFAULT_NON_SENT_VALUE;
+    private String orderId = DEFAULT_NON_SENT_VALUE;
+    private String itemDesc = DEFAULT_NON_SENT_VALUE;
+    private String itemCode = DEFAULT_NON_SENT_VALUE;
     private boolean physical = false;
     private List<String> paymentCurrencies;
     private long acceptanceWindow;
     private Buyer buyer;
-    private String buyerSms;
-    private String merchantName;
-    private String selectedTransactionCurrency;
-    private String forcedBuyerSelectedWallet;
+    private String buyerSms = DEFAULT_NON_SENT_VALUE;
+    private String merchantName = DEFAULT_NON_SENT_VALUE;
+    private String selectedTransactionCurrency = DEFAULT_NON_SENT_VALUE;
+    private String forcedBuyerSelectedWallet = DEFAULT_NON_SENT_VALUE;
     private InvoiceTransactionDetails transactionDetails;
     private InvoiceUniversalCodes universalCodes;
     private List<InvoiceItemizedDetails> itemizedDetails;
     private boolean autoRedirect = false;
 
     private String id;
-    private String url;
-    private String status;
+    private String url = DEFAULT_NON_SENT_VALUE;
+    private String status = DEFAULT_NON_SENT_VALUE;
     private boolean lowFeeDetected;
     private long invoiceTime;
     private long expirationTime;
     private long currentTime;
-    private String exceptionStatus;
+    private String exceptionStatus = DEFAULT_NON_SENT_VALUE;
     private long targetConfirmations;
     private List<InvoiceTransaction> transactions;
     private ArrayList refundAddresses;
     private boolean refundAddressRequestPending;
-    private String buyerProvidedEmail;
+    private String buyerProvidedEmail = DEFAULT_NON_SENT_VALUE;
     private InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
     private SupportedTransactionCurrencies supportedTransactionCurrencies = new SupportedTransactionCurrencies();
     private MinerFees minerFees = new MinerFees();
     private Shopper shopper = new Shopper();
-    private String billId;
+    private String billId = DEFAULT_NON_SENT_VALUE;
     private ArrayList<RefundInfo> refundInfo;
     private boolean extendedNotifications = false;
-    private String transactionCurrency;
-    private String forcedBuyerSelectedTransactionCurrency;
+    private String transactionCurrency = DEFAULT_NON_SENT_VALUE;
+    private String forcedBuyerSelectedTransactionCurrency = DEFAULT_NON_SENT_VALUE;
     private BigDecimal amountPaid;
     private BigDecimal displayAmountPaid;
     private Hashtable<String, Hashtable<String, String>> exchangeRates;
@@ -126,11 +127,11 @@ public class Invoice {
      * Sets a passthru variable provided by the merchant and designed to be used by the merchant to correlate
      * the invoice with an order ID in their system, which can be used as a lookup variable in Retrieve Invoice by GUID.
      *
-     * @param _guid the guid
+     * @param guid the guid
      */
     @JsonProperty("guid")
-    public void setGuid(String _guid) {
-        this.guid = _guid;
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     /**
@@ -151,11 +152,11 @@ public class Invoice {
      * This token is derived from the API token initially used to create the invoice and is tied
      * to the specific resource id created.
      *
-     * @param _token the token
+     * @param token the token
      */
     @JsonProperty("token")
-    public void setToken(String _token) {
-        this.token = _token;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     // Required fields
@@ -174,11 +175,11 @@ public class Invoice {
     /**
      * Sets fixed price amount for the checkout, in the "currency" of the invoice object.
      *
-     * @param _price the price
+     * @param price the price
      */
     @JsonProperty("price")
-    public void setPrice(Double _price) {
-        this.price = _price;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     /**
@@ -230,11 +231,11 @@ public class Invoice {
      * Sets order id. Can be used by the merchant to assign their own internal Id to an invoice.
      * If used, there should be a direct match between an orderId and an invoice id.
      *
-     * @param _orderId the order id
+     * @param orderId the order id
      */
     @JsonProperty("orderId")
-    public void setOrderId(String _orderId) {
-        this.orderId = _orderId;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     /**
@@ -251,11 +252,11 @@ public class Invoice {
     /**
      * Sets item description. Will be added as a line item on the BitPay checkout page, under the merchant name.
      *
-     * @param _itemDesc the item desc
+     * @param itemDesc the item desc
      */
     @JsonProperty("itemDesc")
-    public void setItemDesc(String _itemDesc) {
-        this.itemDesc = _itemDesc;
+    public void setItemDesc(String itemDesc) {
+        this.itemDesc = itemDesc;
     }
 
     /**
@@ -264,7 +265,7 @@ public class Invoice {
      * @return the item code
      */
     @JsonProperty("itemCode")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonInclude(value = JsonInclude.Include.NON_DEFAULT, content = JsonInclude.Include.NON_DEFAULT)
     public String getItemCode() {
         return this.itemCode;
     }
@@ -272,11 +273,11 @@ public class Invoice {
     /**
      * Sets item code. "bitcoindonation" for donations, otherwise do not include the field in the request.
      *
-     * @param _itemCode the item code
+     * @param itemCode the item code
      */
     @JsonProperty("itemCode")
-    public void setItemCode(String _itemCode) {
-        this.itemCode = _itemCode;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
     }
 
     /**
@@ -300,11 +301,11 @@ public class Invoice {
      * e.g.: "posData": "\"{ \"ref\" : 711454, \"item\" : \"test_item\" }\"".
 
      *
-     * @param _posData the pos data
+     * @param posData the pos data
      */
     @JsonProperty("posData")
-    public void setPosData(String _posData) {
-        this.posData = _posData;
+    public void setPosData(String posData) {
+        this.posData = posData;
     }
 
     /**
@@ -321,11 +322,11 @@ public class Invoice {
     /**
      * Sets URL to which BitPay sends webhook notifications. HTTPS is mandatory.
      *
-     * @param _notificationURL the notification url
+     * @param notificationURL the notification url
      */
     @JsonProperty("notificationURL")
-    public void setNotificationURL(String _notificationURL) {
-        this.notificationURL = _notificationURL;
+    public void setNotificationURL(String notificationURL) {
+        this.notificationURL = notificationURL;
     }
 
     /**
@@ -396,11 +397,11 @@ public class Invoice {
      * reaches the status "complete" (regardless of this setting).
      * </p>
      *
-     * @param _transactionSpeed the transaction speed
+     * @param transactionSpeed the transaction speed
      */
     @JsonProperty("transactionSpeed")
-    public void setTransactionSpeed(String _transactionSpeed) {
-        this.transactionSpeed = _transactionSpeed;
+    public void setTransactionSpeed(String transactionSpeed) {
+        this.transactionSpeed = transactionSpeed;
     }
 
     /**
@@ -860,6 +861,7 @@ public class Invoice {
      * @return the forced buyer selected transaction currency
      */
     @JsonProperty("forcedBuyerSelectedTransactionCurrency")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getForcedBuyerSelectedTransactionCurrency() {
         return this.forcedBuyerSelectedTransactionCurrency;
     }

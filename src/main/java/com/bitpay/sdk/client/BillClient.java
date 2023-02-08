@@ -11,11 +11,10 @@ import com.bitpay.sdk.exceptions.BillUpdateException;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +31,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class BillClient {
 
     private final BitPayClient bitPayClient;
-    private final AccessTokens accessTokens;
+    private final TokenContainer accessTokens;
 
     /**
      * Instantiates a new Bill client.
@@ -40,7 +39,7 @@ public class BillClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public BillClient(BitPayClient bitPayClient, AccessTokens accessTokens) {
+    public BillClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }
@@ -104,7 +103,7 @@ public class BillClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("bills/" + billId, params, signRequest);
-            bill = new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Bill.class);
+            bill = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill.class);
         } catch (JsonProcessingException e) {
             throw new BillQueryException(null,
                 "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
@@ -133,7 +132,7 @@ public class BillClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("bills", params);
-            bills = Arrays.asList(new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
+            bills = Arrays.asList(JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
         } catch (JsonProcessingException e) {
             throw new BillQueryException(null,
                 "failed to deserialize BitPay server response (Bills) : " + e.getMessage());
@@ -160,7 +159,7 @@ public class BillClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("bills", params);
-            bills = Arrays.asList(new ObjectMapper().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
+            bills = Arrays.asList(JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
         } catch (JsonProcessingException e) {
             throw new BillQueryException(null,
                 "failed to deserialize BitPay server response (Bills) : " + e.getMessage());

@@ -4,8 +4,11 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -16,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shopper {
 
-    private String user;
+    private String user = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Shopper.
@@ -30,6 +33,7 @@ public class Shopper {
      * @return the name
      */
     @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getName() {
         return this.user;
     }

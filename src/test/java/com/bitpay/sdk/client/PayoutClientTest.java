@@ -6,7 +6,7 @@ package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.util.AccessTokens;
+import com.bitpay.sdk.util.TokenContainer;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class PayoutClientTest extends AbstractClientTest {
     @Test
     public void it_should_submit_payout() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/payouts",
             "POST",
@@ -59,7 +59,7 @@ public class PayoutClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_payout() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/payouts/JMwv8wQCXANoU2ZZQ9a9GH?token=" + PAYOUT_TOKEN,
             "GET",
@@ -102,7 +102,7 @@ public class PayoutClientTest extends AbstractClientTest {
     @Test
     public void it_should_cancel_payout() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/payouts/KMXZeQigXG6T5abzCJmTcH?token=somePayoutToken",
             "DELETE",
@@ -120,7 +120,7 @@ public class PayoutClientTest extends AbstractClientTest {
     @Test
     public void it_should_get_payouts() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/payouts?token=somePayoutToken&startDate=2021-05-27&endDate=2021-05-31",
             "GET",
@@ -189,7 +189,7 @@ public class PayoutClientTest extends AbstractClientTest {
     @Test
     public void it_should_request_payout_notification() throws BitPayException {
         // given
-        AccessTokens accessTokens = this.getAccessTokens();
+        TokenContainer accessTokens = this.getAccessTokens();
         this.addServerJsonResponse(
             "/payouts/JMwv8wQCXANoU2ZZQ9a9GH/notifications",
             "POST",
@@ -219,7 +219,7 @@ public class PayoutClientTest extends AbstractClientTest {
         return payout;
     }
 
-    private PayoutClient getTestedClass(AccessTokens accessTokens) {
+    private PayoutClient getTestedClass(TokenContainer accessTokens) {
         return new PayoutClient(this.getBitPayClient(), accessTokens);
     }
 }

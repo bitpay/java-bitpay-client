@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.model.Invoice;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,15 +18,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String name;
-    private String address1;
-    private String address2;
-    private String locality;
-    private String region;
-    private String postalCode;
-    private String country;
-    private String email;
-    private String phone;
+    private String name = DEFAULT_NON_SENT_VALUE;
+    private String address1 = DEFAULT_NON_SENT_VALUE;
+    private String address2 = DEFAULT_NON_SENT_VALUE;
+    private String locality = DEFAULT_NON_SENT_VALUE;
+    private String region = DEFAULT_NON_SENT_VALUE;
+    private String postalCode = DEFAULT_NON_SENT_VALUE;
+    private String country = DEFAULT_NON_SENT_VALUE;
+    private String email = DEFAULT_NON_SENT_VALUE;
+    private String phone = DEFAULT_NON_SENT_VALUE;
     private boolean notify;
 
     /**

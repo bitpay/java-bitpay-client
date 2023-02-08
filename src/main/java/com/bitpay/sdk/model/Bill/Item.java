@@ -3,6 +3,8 @@
  */
 package com.bitpay.sdk.model.Bill;
 
+import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Item {
 
     private String id;
-    private String description;
+    private String description = DEFAULT_NON_SENT_VALUE;
     private Double price;
     private Integer quantity;
 
