@@ -91,7 +91,7 @@ public class SettlementClientTest extends AbstractClientTest {
         );
 
         // when
-        Settlement result = this.getTestedClass().getSettlement("DNFnN3fFjjzLn6if5bdGJC");
+        Settlement result = this.getTestedClass().get("DNFnN3fFjjzLn6if5bdGJC");
 
         // then
         Assertions.assertEquals("RPWTabW8urd3xWv2To989v", result.getId());

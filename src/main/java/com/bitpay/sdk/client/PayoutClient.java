@@ -132,7 +132,7 @@ public class PayoutClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
-        Boolean result;
+        boolean result;
         JsonMapper mapper = JsonMapperFactory.create();
 
         try {
@@ -214,7 +214,7 @@ public class PayoutClient {
      * @throws BitPayException             BitPayException class
      * @throws PayoutNotificationException PayoutNotificationException class
      */
-    public Boolean requestPayoutNotification(String payoutId)
+    public Boolean requestNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
         if (Objects.isNull(payoutId)) {
             throw new PayoutNotificationException(null, "missing required parameter");
@@ -225,7 +225,7 @@ public class PayoutClient {
 
         JsonMapper mapper = JsonMapperFactory.create();
 
-        Boolean result;
+        boolean result;
         String json;
 
         try {

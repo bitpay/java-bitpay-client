@@ -224,6 +224,9 @@ public class ClientIntegrationTest {
         PayoutRecipient updateRecipient = this.client.updatePayoutRecipient(recipientId, updateRecipientRequest);
         Assertions.assertEquals(updatedLabel, updateRecipient.getLabel());
 
+        Boolean requestPayoutRecipientNotification = this.client.requestPayoutRecipientNotification(recipientId);
+        Assertions.assertTrue(requestPayoutRecipientNotification);
+
         Boolean removeRecipient = this.client.deletePayoutRecipient(recipientId);
         Assertions.assertTrue(removeRecipient);
     }
