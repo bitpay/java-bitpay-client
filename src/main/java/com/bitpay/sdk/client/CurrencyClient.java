@@ -45,7 +45,7 @@ public class CurrencyClient {
      * @throws BitPayException the bit pay exception
      */
     @SuppressWarnings (value="unchecked")
-    public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
+    public Map<String, Object> getInfo(String currencyCode) throws BitPayException {
         if (Objects.isNull(currencyCode)) {
             throw new BitPayException(null, "missing required parameter");
         }

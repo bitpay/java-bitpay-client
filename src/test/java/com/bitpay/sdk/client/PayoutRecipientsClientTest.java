@@ -58,7 +58,7 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
         );
 
         // when
-        List<PayoutRecipient> result = this.getTestedClass().getByFilters("invited", null, null);
+        List<PayoutRecipient> result = this.getTestedClass().getRecipientsByFilters("invited", null, null);
 
         // then
         Assertions.assertEquals(2, result.size());

@@ -198,7 +198,7 @@ public class PayoutClientTest extends AbstractClientTest {
         );
 
         // when
-        Boolean result = this.getTestedClass(accessTokens).requestPayoutNotification("JMwv8wQCXANoU2ZZQ9a9GH");
+        Boolean result = this.getTestedClass(accessTokens).requestNotification("JMwv8wQCXANoU2ZZQ9a9GH");
 
         // then
         Assertions.assertTrue(result);

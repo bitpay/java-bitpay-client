@@ -23,7 +23,7 @@ public class RateClientTest extends AbstractClientTest {
         );
 
         // when
-        Rate rate = this.getTestedClass().getRate("BCH", "USD");
+        Rate rate = this.getTestedClass().get("BCH", "USD");
 
         // then
         Assertions.assertEquals(100.99, rate.getValue());

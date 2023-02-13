@@ -96,9 +96,7 @@ public class RefundClient {
      * @throws BitPayException      BitPayException class
      */
     public Refund getById(String refundId) throws RefundQueryException, BitPayException {
-        if (Objects.isNull(refundId)) {
-            throw new RefundQueryException(null, "missing required parameter");
-        }
+        validateRefundId(refundId);
 
         Refund refund;
 
@@ -129,9 +127,7 @@ public class RefundClient {
      * @throws BitPayException BitPayException
      */
     public Refund getByGuid(String guid) throws BitPayException {
-        if (Objects.isNull(guid)) {
-            throw new RefundQueryException(null, "missing required parameter");
-        }
+        validateRefundId(guid);
 
         Refund refund;
 
@@ -164,9 +160,7 @@ public class RefundClient {
      * @throws BitPayException      BitPayException class
      */
     public List<Refund> getRefundsByInvoiceId(String invoiceId) throws RefundQueryException, BitPayException {
-        if (Objects.isNull(invoiceId)) {
-            throw new RefundQueryException(null, "missing required parameter");
-        }
+        validateRefundId(invoiceId);
 
         List<Refund> refunds;
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -419,5 +413,11 @@ public class RefundClient {
         params.put("guid", guid);
 
         return params;
+    }
+
+    private void validateRefundId(String refundId) throws RefundQueryException {
+        if (Objects.isNull(refundId)) {
+            throw new RefundQueryException(null, "missing required parameter");
+        }
     }
 }

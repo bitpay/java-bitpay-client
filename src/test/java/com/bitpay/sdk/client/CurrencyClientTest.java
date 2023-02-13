@@ -23,7 +23,7 @@ public class CurrencyClientTest extends AbstractClientTest {
         );
 
         // when
-        Map<String, Object> result = client.getCurrencyInfo("USD");
+        Map<String, Object> result = client.getInfo("USD");
 
         // then
         Assertions.assertEquals("USD", result.get("code"));

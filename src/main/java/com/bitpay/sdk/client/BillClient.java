@@ -54,7 +54,7 @@ public class BillClient {
      * @throws BitPayException       BitPayException class
      * @throws BillCreationException BillCreationException class
      */
-    public Bill createBill(Bill bill, Facade facade, boolean signRequest)
+    public Bill create(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
         if (Objects.isNull(bill) || Objects.isNull(facade)) {
             throw new BillCreationException(null, "missing required parameter");
@@ -91,7 +91,7 @@ public class BillClient {
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
      */
-    public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
+    public Bill get(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
         if (Objects.isNull(billId) || Objects.isNull(facade)) {
             throw new BillQueryException(null, "missing required parameter");
         }
@@ -180,7 +180,7 @@ public class BillClient {
      * @throws BitPayException     BitPayException class
      * @throws BillUpdateException BillUpdateException class
      */
-    public Bill updateBill(Bill bill, String billId) throws BitPayException, BillUpdateException {
+    public Bill update(Bill bill, String billId) throws BitPayException, BillUpdateException {
         if (Objects.isNull(billId) || Objects.isNull(bill)) {
             throw new BillUpdateException(null, "missing required parameter");
         }
@@ -212,7 +212,7 @@ public class BillClient {
      * @return A response status returned from the API.
      * @throws BillDeliveryException BillDeliveryException class
      */
-    public String deliverBill(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
+    public String deliver(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
         if (Objects.isNull(billId) || Objects.isNull(billToken)) {
             throw new BillDeliveryException(null, "missing required parameter");
         }

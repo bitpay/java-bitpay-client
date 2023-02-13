@@ -39,7 +39,7 @@ public class RateClient {
      * @throws RateQueryException RateQueryException class
      * @since 8.8.0
      */
-    public Rate getRate(String baseCurrency, String currency) throws RateQueryException {
+    public Rate get(String baseCurrency, String currency) throws RateQueryException {
         try {
             HttpResponse response = this.bitPayClient.get("rates/" + baseCurrency + "/" + currency);
             final String content = this.bitPayClient.responseToJsonString(response);

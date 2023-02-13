@@ -30,7 +30,7 @@ public class BillClientTest extends AbstractClientTest {
         );
 
         // when
-        Bill result = client.createBill(getBill(), Facade.MERCHANT, true);
+        Bill result = client.create(getBill(), Facade.MERCHANT, true);
 
         // then
         Assertions.assertEquals("USD", result.getCurrency());
@@ -74,7 +74,7 @@ public class BillClientTest extends AbstractClientTest {
         );
 
         // when
-        Bill result = client.getBill("3Zpmji8bRKxWJo2NJbWX5H", Facade.MERCHANT, true);
+        Bill result = client.get("3Zpmji8bRKxWJo2NJbWX5H", Facade.MERCHANT, true);
 
         // then
         Assertions.assertEquals("USD", result.getCurrency());
@@ -217,7 +217,7 @@ public class BillClientTest extends AbstractClientTest {
         );
 
         // when
-        Bill result = client.updateBill(billToUpdate, billId);
+        Bill result = client.update(billToUpdate, billId);
 
         // then
         Assertions.assertEquals(billId, result.getId());
@@ -275,7 +275,7 @@ public class BillClientTest extends AbstractClientTest {
         );
 
         // when
-        String result = client.deliverBill(billId, "6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA", false);
+        String result = client.deliver(billId, "6EBQR37MgDJPfEiLY3jtRq7eTP2aodR5V5wmXyyZhru5FM5yF4RCGKYQtnT7nhwHjA", false);
 
         // then
         Assertions.assertEquals("Success", result);

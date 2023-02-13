@@ -99,7 +99,7 @@ public class SettlementClient {
      * @throws BitPayException          BitPayException class
      * @throws SettlementQueryException SettlementQueryException class
      */
-    public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
+    public Settlement get(String settlementId) throws BitPayException, SettlementQueryException {
         if (Objects.isNull(settlementId)) {
             throw new SettlementQueryException(null, "missing required parameter");
         }

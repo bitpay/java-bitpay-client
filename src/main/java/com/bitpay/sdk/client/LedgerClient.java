@@ -40,7 +40,7 @@ public class LedgerClient {
     }
 
     /**
-     * Retrieve a list of ledgers entries by currency & date range using the merchant facade.
+     * Retrieve a list of ledgers entries by currency and date range using the merchant facade.
      *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
@@ -49,7 +49,7 @@ public class LedgerClient {
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
-    public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
+    public List<LedgerEntry> getEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
         if (Objects.isNull(currency) || Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
             throw new BitPayException(null, "missing mandatory fields");

@@ -33,7 +33,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).createInvoice(invoice, Facade.MERCHANT, true);
+        Invoice result = this.getTestedClass(accessTokens).create(invoice, Facade.MERCHANT, true);
 
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());
@@ -80,7 +80,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).getInvoice("G3viJEJgE8Jk2oekSdgT2A", Facade.MERCHANT, true);
+        Invoice result = this.getTestedClass(accessTokens).get("G3viJEJgE8Jk2oekSdgT2A", Facade.MERCHANT, true);
 
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());
@@ -126,7 +126,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).getInvoiceByGuid("payment#1234", Facade.MERCHANT, true);
+        Invoice result = this.getTestedClass(accessTokens).getByGuid("payment#1234", Facade.MERCHANT, true);
 
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());
@@ -226,7 +226,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).updateInvoice(
+        Invoice result = this.getTestedClass(accessTokens).update(
     "G3viJEJgE8Jk2oekSdgT2A",
             "+12223334444",
             null,
@@ -279,7 +279,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).payInvoice("G3viJEJgE8Jk2oekSdgT2A", "complete");
+        Invoice result = this.getTestedClass(accessTokens).pay("G3viJEJgE8Jk2oekSdgT2A", "complete");
 
         // then
         Assertions.assertEquals("USD", result.getCurrency());
@@ -343,7 +343,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).cancelInvoice("Hpqc63wvE1ZjzeeH4kEycF");
+        Invoice result = this.getTestedClass(accessTokens).cancel("Hpqc63wvE1ZjzeeH4kEycF");
 
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());
@@ -391,7 +391,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         );
 
         // when
-        Invoice result = this.getTestedClass(accessTokens).cancelInvoiceByGuid("payment#1234", false);
+        Invoice result = this.getTestedClass(accessTokens).cancelByGuid("payment#1234", false);
 
         // then
         Assertions.assertEquals("payment#1234", result.getGuid());

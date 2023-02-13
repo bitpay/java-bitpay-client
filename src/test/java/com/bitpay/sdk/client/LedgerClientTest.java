@@ -50,7 +50,7 @@ public class LedgerClientTest extends AbstractClientTest {
         );
 
         // when
-        List<LedgerEntry> result = this.getTestedClass(accessTokens).getLedgerEntries("USD", "2021-5-10", "2021-5-31");
+        List<LedgerEntry> result = this.getTestedClass(accessTokens).getEntries("USD", "2021-5-10", "2021-5-31");
         LedgerEntry secondEntry = result.get(1);
 
         // then

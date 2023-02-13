@@ -64,7 +64,7 @@ public class InvoiceClient {
      * @throws BitPayException          BitPayException class
      * @throws InvoiceCreationException InvoiceCreationException class
      */
-    public Invoice createInvoice(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
+    public Invoice create(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceCreationException {
         if (Objects.isNull(invoice) || Objects.isNull(facade)) {
             throw new InvoiceCreationException(null, "missing required parameter");
@@ -106,7 +106,7 @@ public class InvoiceClient {
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getInvoice(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
+    public Invoice get(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
         InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
@@ -138,7 +138,7 @@ public class InvoiceClient {
      * @return A BitPay Invoice object.
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
+    public Invoice getByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
         if (Objects.isNull(guid) || Objects.isNull(facade)) {
             throw new InvoiceQueryException(null, "missing required parameters");
         }
@@ -252,7 +252,7 @@ public class InvoiceClient {
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice updateInvoice(
+    public Invoice update(
         String invoiceId,
         String buyerSms,
         String smsCode,
@@ -304,27 +304,6 @@ public class InvoiceClient {
         return invoice;
     }
 
-    private void validateSmsCode(String buyerSms, String smsCode, Boolean autoVerify) throws InvoiceUpdateException {
-        if (Objects.isNull(autoVerify)) {
-            return;
-        }
-
-        if (autoVerify) {
-            return;
-        }
-
-        if (Objects.nonNull(buyerSms) && Objects.nonNull(smsCode)) {
-            return;
-        }
-
-        if (Objects.isNull(buyerSms) && Objects.isNull(smsCode)) {
-            return;
-        }
-
-        throw new InvoiceUpdateException(null,
-            "If provided alongside a valid SMS, will bypass the need to complete an SMS challenge");
-    }
-
     /**
      * Pay a BitPay invoice with a mock transaction.
      *
@@ -334,7 +313,7 @@ public class InvoiceClient {
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
+    public Invoice pay(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (status != null) {
@@ -372,9 +351,9 @@ public class InvoiceClient {
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException              BitPayException class
      */
-    public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
+    public Invoice cancel(String invoiceId) throws InvoiceCancellationException, BitPayException {
         try {
-            return this.cancelInvoice(invoiceId, false);
+            return this.cancel(invoiceId, false);
         } catch (BitPayException ex) {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -391,7 +370,7 @@ public class InvoiceClient {
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException              BitPayException class
      */
-    public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
+    public Invoice cancel(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
@@ -413,7 +392,7 @@ public class InvoiceClient {
         return invoice;
     }
 
-    public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
+    public Invoice cancelByGuid(String guid, Boolean forceCancel) throws BitPayException {
         if (Objects.isNull(guid) || Objects.isNull(forceCancel)) {
             throw new InvoiceCancellationException(null, "missing required parameter");
         }
@@ -469,5 +448,26 @@ public class InvoiceClient {
         if (Objects.nonNull(buyerSms) && Objects.nonNull(buyerEmail)) {
             throw new InvoiceUpdateException(null, "Updating an invoice will require EITHER an SMS or E-mail)");
         }
+    }
+
+    private void validateSmsCode(String buyerSms, String smsCode, Boolean autoVerify) throws InvoiceUpdateException {
+        if (Objects.isNull(autoVerify)) {
+            return;
+        }
+
+        if (autoVerify) {
+            return;
+        }
+
+        if (Objects.nonNull(buyerSms) && Objects.nonNull(smsCode)) {
+            return;
+        }
+
+        if (Objects.isNull(buyerSms) && Objects.isNull(smsCode)) {
+            return;
+        }
+
+        throw new InvoiceUpdateException(null,
+            "If provided alongside a valid SMS, will bypass the need to complete an SMS challenge");
     }
 }
