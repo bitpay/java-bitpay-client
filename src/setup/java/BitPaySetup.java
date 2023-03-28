@@ -3,6 +3,7 @@ package com.bitpay.sdk;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.KeyUtils;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -89,7 +90,7 @@ class BitPaySetup {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            client = new Client(env, new PrivateKey(privateKey), new AccessTokens(), null, null);
+            client = new Client(env, new PrivateKey(privateKey), new TokenContainer(), null, null);
             pairingCodeMerchant = client.authorizeClient(Facade.MERCHANT);
             pairingCodePayout = client.authorizeClient(Facade.PAYOUT);
 
