@@ -97,7 +97,7 @@ public class ClientTest {
         tokens.addMerchant(merchantToken);
 
         // when
-        Client bitpay = Client.createClient(new PrivateKey(privateKey), tokens);
+        Client bitpay = Client.createClientByPrivateKey(new PrivateKey(privateKey), tokens, Environment.TEST);
 
         // then
         Assertions.assertEquals(merchantToken, bitpay.getAccessToken(Facade.MERCHANT));
@@ -109,7 +109,7 @@ public class ClientTest {
         String path = System.getProperty("user.dir") + "/src/test/java/com/bitpay/sdk/BitPay.config.json";
 
         // when
-        Client bitpay = Client.createClient(new ConfigFilePath(path));
+        Client bitpay = Client.createClientByConfigFilePath(new ConfigFilePath(path));
 
         // then
         Assertions.assertEquals("merchantToken", bitpay.getAccessToken(Facade.MERCHANT));

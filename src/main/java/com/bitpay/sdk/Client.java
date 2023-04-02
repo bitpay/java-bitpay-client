@@ -82,9 +82,9 @@ import org.bitcoinj.core.ECKey;
  */
 public class Client {
 
-    private GuidGenerator guidGenerator;
-    private BitPayClient bitPayClient;
-    private TokenContainer accessTokens;
+    private final GuidGenerator guidGenerator;
+    private final BitPayClient bitPayClient;
+    private final TokenContainer accessTokens;
 
     /**
      * Return the identity of this client (i.e. the public key).
@@ -109,6 +109,10 @@ public class Client {
      * @throws BitPayException the bit pay exception
      */
     public Client(PosToken token, Environment environment) throws BitPayException {
+        if (Objects.isNull(token) || Objects.isNull(environment)) {
+            throw new BitPayException(null, "Missing required constructor parameters");
+        }
+
         this.accessTokens = new TokenContainer();
         this.accessTokens.addPos(token.value());
         this.bitPayClient = new BitPayClient(
@@ -179,10 +183,7 @@ public class Client {
                 ecKey
             );
             this.guidGenerator = new GuidGenerator();
-        } catch (JsonProcessingException e) {
-            throw new BitPayException(null,
-                "failed to deserialize BitPay server response (Config) : " + e.getMessage());
-        } catch (URISyntaxException e) {
+        } catch (JsonProcessingException | URISyntaxException e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Config) : " + e.getMessage());
         } catch (Exception e) {
@@ -223,15 +224,33 @@ public class Client {
     }
 
     /**
+     * Create pos (light) client.
+     *
+     * @param token the token
+     * @return the client
+     * @throws BitPayException the bit pay exception
+     */
+    public static Client createPosClient(PosToken token, Environment environment) throws BitPayException {
+        return new Client(token, environment);
+    }
+
+    /**
      * Create standard client.
      *
      * @param privateKey the private key
      * @param tokens     the tokens
-     * @return the client
-     * @throws BitPayException the bit pay exception
+     * @param environment environment
+     * @return Client Client
+     * @throws BitPayException BitPayException
      */
-    public static Client createClient(PrivateKey privateKey, TokenContainer tokens) throws BitPayException {
-        return new Client(Environment.PROD, privateKey, tokens, null, null);
+    public static Client createClientByPrivateKey(
+        PrivateKey privateKey,
+        TokenContainer tokens,
+        Environment environment
+    ) throws BitPayException {
+        Environment env = Objects.isNull(environment) ? Environment.PROD : environment;
+
+        return new Client(env, privateKey, tokens, null, null);
     }
 
     /**
@@ -241,7 +260,7 @@ public class Client {
      * @return the client
      * @throws BitPayException the bit pay exception
      */
-    public static Client createClient(ConfigFilePath configFilePath) throws BitPayException {
+    public static Client createClientByConfigFilePath(ConfigFilePath configFilePath) throws BitPayException {
         return new Client(configFilePath, null, null);
     }
 
@@ -302,7 +321,7 @@ public class Client {
     }
 
     /**
-     * Create a BitPay invoice using the Merchant facade.
+     * Create a BitPay invoice.
      *
      * @param invoice An Invoice object with request parameters defined.
      * @return A BitPay generated Invoice object.
@@ -313,6 +332,27 @@ public class Client {
             InvoiceClient client = createInvoiceClient();
             Facade facade = getFacadeBasedOnAccessToken();
             boolean signRequest = isSignRequest(facade);
+
+            return client.create(invoice, facade, signRequest);
+        } catch (BitPayException ex) {
+            throw new InvoiceCreationException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceCreationException(null, e.getMessage());
+        }
+    }
+
+    /**
+     * Create a BitPay invoice.
+     *
+     * @param invoice An Invoice object with request parameters defined.
+     * @param facade The facade used to create it.
+     * @param signRequest Signed request.
+     * @return A BitPay generated Invoice object.
+     * @throws InvoiceCreationException InvoiceCreationException class
+     */
+    public Invoice createInvoice(Invoice invoice, Facade facade, boolean signRequest) throws InvoiceCreationException {
+        try {
+            InvoiceClient client = createInvoiceClient();
 
             return client.create(invoice, facade, signRequest);
         } catch (BitPayException ex) {
@@ -343,7 +383,27 @@ public class Client {
     }
 
     /**
-     * Retrieve a BitPay invoice by guid using the specified facade.  The client must have been previously authorized for the specified facade.
+     * Retrieve a BitPay invoice by invoice id.
+     *
+     * @param invoiceId The id of the invoice to retrieve.
+     * @param facade The facade used to create it.
+     * @param signRequest Signed request.
+     * @return A BitPay Invoice object.
+     * @throws BitPayException the bit pay exception
+     */
+    public Invoice getInvoice(String invoiceId, Facade facade, boolean signRequest) throws BitPayException {
+        try {
+            return this.createInvoiceClient().get(invoiceId, facade, signRequest);
+        } catch (BitPayException ex) {
+            throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
+        } catch (Exception e) {
+            throw new InvoiceQueryException(null, e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieve a BitPay invoice by guid using the specified facade.
+     * The client must have been previously authorized for the specified facade.
      *
      * @param guid        The guid of the invoice to retrieve.
      * @return A BitPay Invoice object.
@@ -395,7 +455,7 @@ public class Client {
     /**
      * Retrieves a bus token which can be used to subscribe to invoice events.
      *
-     * @param invoiceId the id of the invoice for which you want to fetch an event token
+     * @param invoiceId the id of the invoice for which you want to fetch an event token.
      * @return InvoiceEventToken event token
      * @throws BitPayException BitPayException
      * @since 8.8.0
@@ -427,7 +487,7 @@ public class Client {
     }
 
     /**
-     * Pay a BitPay invoice with a mock transaction.
+     * Pay a BitPay invoice with a mock transaction. Available only on test env.
      *
      * @param invoiceId The id of the invoice to updated.
      * @param status    The status of the invoice to be updated, can be "confirmed" or "complete".
@@ -454,19 +514,6 @@ public class Client {
     /**
      * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
      * the point where it may have been paid, unless using forceCancel parameter.
-     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
-     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
-     *             in Retrieve Invoice by GUID.
-     * @return Invoice Invoice
-     * @throws BitPayException BitPayException class
-     */
-    public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
-        return this.createInvoiceClient().cancelByGuid(guid, false);
-    }
-
-    /**
-     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
-     * the point where it may have been paid, unless using forceCancel parameter.
      * @param invoiceId   The Id of the BitPay invoice to be canceled.
      * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
      * @return A BitPay generated Invoice object.
@@ -476,6 +523,19 @@ public class Client {
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
         return this.createInvoiceClient().cancel(invoiceId, forceCancel);
+    }
+
+    /**
+     * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
+     * the point where it may have been paid, unless using forceCancel parameter.
+     * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
+     *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
+     *             in Retrieve Invoice by GUID.
+     * @return Invoice Invoice
+     * @throws BitPayException BitPayException class
+     */
+    public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
+        return this.createInvoiceClient().cancelByGuid(guid, false);
     }
 
     /**
@@ -876,7 +936,7 @@ public class Client {
      * Submit BitPay Payout Recipients.
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
-     * @return array A list of BitPay PayoutRecipients objects..
+     * @return array A list of BitPay PayoutRecipients objects.
      * @throws BitPayException                  BitPayException class
      * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
      */
@@ -934,7 +994,7 @@ public class Client {
      * Cancel a BitPay Payout recipient.
      *
      * @param recipientId String The id of the recipient to cancel.
-     * @return True if the delete operation was successfull, false otherwise.
+     * @return True if the delete operation was successful, false otherwise.
      * @throws BitPayException                      BitPayException class
      * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException
      *                                              class
@@ -1101,7 +1161,6 @@ public class Client {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     /**
      * Sets the logger level of reporting.
