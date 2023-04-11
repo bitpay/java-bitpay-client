@@ -219,6 +219,71 @@ public class RefundTest {
         Assertions.assertEquals(expected, testedClass.getStatus());
     }
 
+    @Test
+    public void it_should_manipulate_notification_url() {
+        // given
+        String expected = "expectedString";
+        Refund testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setNotificationUrl(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getNotificationUrl());
+    }
+
+    @Test
+    public void it_should_manipulate_refund_address() {
+        // given
+        String expected = "expectedString";
+        Refund testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setRefundAddress(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getRefundAddress());
+    }
+
+    @Test
+    public void it_should_manipulate_support_request() {
+        // given
+        String expected = "expectedString";
+        Refund testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setSupportRequest(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getSupportRequest());
+    }
+
+    @Test
+    public void it_should_manipulate_tx_id() {
+        // given
+        String expected = "expectedString";
+        Refund testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setTxid(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getTxid());
+    }
+
+    @Test
+    public void it_should_manipulate_type() {
+        // given
+        String expected = "expectedString";
+        Refund testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setType(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getType());
+    }
+
     private Refund getTestedClass() {
         return new Refund();
     }

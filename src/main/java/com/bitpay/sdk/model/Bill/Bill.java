@@ -40,7 +40,7 @@ public class Bill {
     private boolean passProcessingFee;
     private String status = DEFAULT_NON_SENT_VALUE;
     private String url = DEFAULT_NON_SENT_VALUE;
-    private String createDate = DEFAULT_NON_SENT_VALUE;
+    private String createdDate = DEFAULT_NON_SENT_VALUE;
     private String id = DEFAULT_NON_SENT_VALUE;
     private String merchant = DEFAULT_NON_SENT_VALUE;
 
@@ -470,18 +470,19 @@ public class Bill {
      * @return the create date
      */
     @JsonIgnore
-    public String getCreateDate() {
-        return this.createDate;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getCreatedDate() {
+        return this.createdDate;
     }
 
     /**
      * Sets date and time of Bill creation, ISO-8601 format yyyy-mm-ddThh:mm:ssZ. (UTC).
      *
-     * @param createDate the create date
+     * @param createdDate the create date
      */
-    @JsonProperty("createDate")
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    @JsonProperty("createdDate")
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
     /**

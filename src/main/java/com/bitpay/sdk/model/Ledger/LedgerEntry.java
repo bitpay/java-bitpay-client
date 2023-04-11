@@ -2,6 +2,7 @@ package com.bitpay.sdk.model.Ledger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -25,6 +26,7 @@ public class LedgerEntry {
     private String invoiceCurrency;
     private String transactionCurrency;
     private String id;
+    private String supportRequest;
 
     /**
      * Instantiates a new Ledger entry.
@@ -319,5 +321,23 @@ public class LedgerEntry {
     @JsonProperty("id")
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Gets the refund requestId.
+     * @return refund requestId
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getSupportRequest() {
+        return supportRequest;
+    }
+
+    /**
+     * Sets the refund requestId.
+     * @param supportRequest refund request id
+     */
+    @JsonProperty("supportRequest")
+    public void setSupportRequest(String supportRequest) {
+        this.supportRequest = supportRequest;
     }
 }

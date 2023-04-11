@@ -7,6 +7,8 @@ package com.bitpay.sdk.model.Payout;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.ModelConfiguration;
 import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -192,8 +194,11 @@ public class PayoutTest {
     @Test
     public void it_should_change_exchangeRates() {
         // given
-        PayoutInstruction expected = Mockito.mock(PayoutInstruction.class);
         Payout testedClass = this.getTestedClass();
+        Map<String, Map<String, Double>> expected = new HashMap<String, Map<String, Double>>();
+        Map<String, Double> exchangeRateBtc = new HashMap<String, Double>();
+        exchangeRateBtc.put("GBP", 27883.962246420004);
+        expected.put("BTC", exchangeRateBtc);
 
         // when
         testedClass.setExchangeRates(expected);
@@ -203,16 +208,16 @@ public class PayoutTest {
     }
 
     @Test
-    public void it_should_change_account() {
+    public void it_should_change_account_id() {
         // given
         String expected = "expectedString";
         Payout testedClass = this.getTestedClass();
 
         // when
-        testedClass.setAccount(expected);
+        testedClass.setAccountId(expected);
 
         // then
-        Assertions.assertEquals(expected, testedClass.getAccount());
+        Assertions.assertEquals(expected, testedClass.getAccountId());
     }
 
     @Test
@@ -242,19 +247,6 @@ public class PayoutTest {
     }
 
     @Test
-    public void it_should_change_supportPhone() {
-        // given
-        String expected = "expectedString";
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setSupportPhone(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getSupportPhone());
-    }
-
-    @Test
     public void it_should_change_status() {
         // given
         String expected = "expectedString";
@@ -278,71 +270,6 @@ public class PayoutTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getMessage());
-    }
-
-    @Test
-    public void it_should_change_percentFee() {
-        // given
-        Double expected = 12.34;
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setPercentFee(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getPercentFee());
-    }
-
-    @Test
-    public void it_should_change_fee() {
-        // given
-        Double expected = 12.34;
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setFee(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getFee());
-    }
-
-    @Test
-    public void it_should_change_depositTotal() {
-        // given
-        Double expected = 12.34;
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setDepositTotal(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getDepositTotal());
-    }
-
-    @Test
-    public void it_should_change_rate() {
-        // given
-        Double expected = 12.34;
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setRate(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getRate());
-    }
-
-    @Test
-    public void it_should_change_btc() {
-        // given
-        Double expected = 12.34;
-        Payout testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setBtc(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getBtc());
     }
 
     @Test
@@ -383,6 +310,19 @@ public class PayoutTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getTransactions());
+    }
+
+    @Test
+    public void it_should_change_code() {
+        // given
+        Integer expected = 100;
+        Payout testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setCode(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getCode());
     }
 
     private Payout getTestedClass() {

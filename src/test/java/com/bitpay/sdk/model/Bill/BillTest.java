@@ -192,8 +192,8 @@ public class BillTest {
         final String createDate = "2021-05-21T09:51:04.126Z";
         Bill testedClass = this.getTestedClass();
 
-        testedClass.setCreateDate(createDate);
-        Assertions.assertSame(createDate, testedClass.getCreateDate());
+        testedClass.setCreatedDate(createDate);
+        Assertions.assertSame(createDate, testedClass.getCreatedDate());
     }
 
     @Test

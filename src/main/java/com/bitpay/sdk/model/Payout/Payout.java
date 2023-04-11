@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -39,24 +40,19 @@ public class Payout {
     private String notificationEmail = DEFAULT_NON_SENT_VALUE;
     private String notificationURL = DEFAULT_NON_SENT_VALUE;
     private String ledgerCurrency = DEFAULT_NON_SENT_VALUE;
-
+    private String groupId = DEFAULT_NON_SENT_VALUE;
     private String id;
     private String shopperId = DEFAULT_NON_SENT_VALUE;
     private String recipientId;
-    private PayoutInstruction exchangeRates;
-    private String account;
+    private Map<String, Map<String, Double>> exchangeRates;
+    private String accountId = DEFAULT_NON_SENT_VALUE;
     private String email;
     private String label;
-    private String supportPhone;
     private String status;
     private String message;
-    private Double percentFee;
-    private Double fee;
-    private Double depositTotal;
-    private Double rate;
-    private Double btc;
     private Long requestDate;
     private Long dateExecuted;
+    private Integer code;
     private List<PayoutInstructionTransaction> transactions = Collections.emptyList();
 
     /**
@@ -202,6 +198,28 @@ public class Payout {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
         }
         this.ledgerCurrency = ledgerCurrency;
+    }
+
+    /**
+     * Added to the payouts made at the same time through the `Create Payout Group` request.
+     * Can be used for querying or deleting.
+     *
+     * @return group id
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getGroupId() {
+        return groupId;
+    }
+
+    /**
+     * Added to the payouts made at the same time through the `Create Payout Group` request.
+     * Can be used for querying or deleting.
+     * @param groupId group id
+     */
+    @JsonProperty("groupId")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
     /**
@@ -412,7 +430,7 @@ public class Payout {
      */
     @JsonProperty("exchangeRates")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public PayoutInstruction getExchangeRates() {
+    public Map<String, Map<String, Double>> getExchangeRates() {
         return this.exchangeRates;
     }
 
@@ -422,28 +440,31 @@ public class Payout {
      * @param exchangeRates the exchange rates
      */
     @JsonProperty("exchangeRates")
-    public void setExchangeRates(PayoutInstruction exchangeRates) {
+    public void setExchangeRates(Map<String, Map<String, Double>> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
     /**
-     * Gets account.
+     * Gets BitPay account id that is associated to the payout,
+     * assigned by BitPay for a given account during the onboarding process.
      *
-     * @return the account
+     * @return the account id
      */
     @JsonIgnore
-    public String getAccount() {
-        return this.account;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getAccountId() {
+        return this.accountId;
     }
 
     /**
-     * Sets account.
+     * Sets BitPay account id that is associated to the payout,
+     * assigned by BitPay for a given account during the onboarding process.
      *
-     * @param account the account
+     * @param accountId the account id
      */
-    @JsonProperty("account")
-    public void setAccount(String account) {
-        this.account = account;
+    @JsonProperty("accountId")
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     /**
@@ -520,26 +541,6 @@ public class Payout {
     }
 
     /**
-     * Gets support phone.
-     *
-     * @return the support phone
-     */
-    @JsonIgnore
-    public String getSupportPhone() {
-        return this.supportPhone;
-    }
-
-    /**
-     * Sets support phone.
-     *
-     * @param supportPhone the support phone
-     */
-    @JsonProperty("supportPhone")
-    public void setSupportPhone(String supportPhone) {
-        this.supportPhone = supportPhone;
-    }
-
-    /**
      * Gets payout request status, the possible values are:
      * <ul>
      *     <li>new - initial status when the payout batch is created</li>
@@ -590,106 +591,6 @@ public class Payout {
     }
 
     /**
-     * Gets percent fee.
-     *
-     * @return the percent fee
-     */
-    @JsonIgnore
-    public Double getPercentFee() {
-        return this.percentFee;
-    }
-
-    /**
-     * Sets percent fee.
-     *
-     * @param percentFee the percent fee
-     */
-    @JsonProperty("percentFee")
-    public void setPercentFee(Double percentFee) {
-        this.percentFee = percentFee;
-    }
-
-    /**
-     * Gets fee.
-     *
-     * @return the fee
-     */
-    @JsonIgnore
-    public Double getFee() {
-        return this.fee;
-    }
-
-    /**
-     * Sets fee.
-     *
-     * @param fee the fee
-     */
-    @JsonProperty("fee")
-    public void setFee(Double fee) {
-        this.fee = fee;
-    }
-
-    /**
-     * Gets deposit total.
-     *
-     * @return the deposit total
-     */
-    @JsonIgnore
-    public Double getDepositTotal() {
-        return this.depositTotal;
-    }
-
-    /**
-     * Sets deposit total.
-     *
-     * @param depositTotal the deposit total
-     */
-    @JsonProperty("depositTotal")
-    public void setDepositTotal(Double depositTotal) {
-        this.depositTotal = depositTotal;
-    }
-
-    /**
-     * Gets btc.
-     *
-     * @return the btc
-     */
-    @JsonIgnore
-    public Double getBtc() {
-        return this.btc;
-    }
-
-    /**
-     * Sets btc.
-     *
-     * @param btc the btc
-     */
-    @JsonProperty("btc")
-    public void setBtc(Double btc) {
-        this.btc = btc;
-    }
-
-    /**
-     * Gets rate.
-     *
-     * @return the rate
-     */
-    @JsonIgnore
-    public Double getRate() {
-        return this.rate;
-    }
-
-    /**
-     * Sets rate.
-     *
-     * @param rate the rate
-     */
-    @JsonProperty("rate")
-    public void setRate(Double rate) {
-        this.rate = rate;
-    }
-
-    /**
      * Gets date and time (UTC) when BitPay received the batch. ISO-8601 format `yyyy-mm-ddThh:mm:ssZ`.
      *
      * @return the request date
@@ -733,4 +634,22 @@ public class Payout {
         this.dateExecuted = dateExecuted;
     }
 
+    /**
+     * This field will be returned in case of error and contain an error code.
+     *
+     * @return code
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public Integer getCode() {
+        return code;
+    }
+
+    /**
+     * Sets error code.
+     *
+     * @param code code
+     */
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 }
