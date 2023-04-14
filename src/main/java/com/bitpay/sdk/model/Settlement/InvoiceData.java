@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * The type Invoice data.
- * @see <a href="https://bitpay.com/api/#rest-api-resources-settlements">Settlements</a>
+ * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {

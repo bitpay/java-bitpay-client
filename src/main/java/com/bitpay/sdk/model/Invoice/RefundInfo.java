@@ -17,7 +17,7 @@ import java.util.Hashtable;
 /**
  * The type Refund info.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-refunds">REST API Refunds</a>
+ * @see <a href="https://bitpay.readme.io/reference/refunds">REST API Refunds</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {

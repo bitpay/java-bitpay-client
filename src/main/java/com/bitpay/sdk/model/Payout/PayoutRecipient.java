@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * The Recipients resource allows a merchant to invite clients to sign up for a BitPay personal account.
  * </p>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-recipients">REST API Recipients</a>
+ * @see <a href="https://bitpay.readme.io/reference/recipients">REST API Recipients</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * The type Invoice.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-invoices-resource">REST API Invoices</a>
+ * @see <a href="https://bitpay.readme.io/reference/invoices">REST API Invoices</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice {
@@ -186,7 +186,7 @@ public class Invoice {
      * Gets ISO 4217 3-character currency code.
      * This is the currency associated with the price field.
      *
-     * @see <a href="https://bitpay.com/api/#rest-api-resources-currencies">Supported currencies</a>
+     * @see <a href="https://bitpay.readme.io/reference/currencies">Supported currencies</a>
      *
      * @return the currency
      */
@@ -199,7 +199,7 @@ public class Invoice {
      * Sets ISO 4217 3-character currency code.
      * This is the currency associated with the price field.
      *
-     * @see <a href="https://bitpay.com/api/#rest-api-resources-currencies">Supported currencies</a>
+     * @see <a href="https://bitpay.readme.io/reference/currencies">Supported currencies</a>
      *
      * @param currency the currency
      * @throws BitPayException the bit pay exception
@@ -488,7 +488,7 @@ public class Invoice {
     }
 
     /**
-     * GSets redirect url. The shopper will be redirected to this URL when clicking on the Return button after
+     * Gets redirect url. The shopper will be redirected to this URL when clicking on the Return button after
      * a successful payment or when clicking on the Close button if a separate closeURL is not specified.
      * Be sure to include "http://" or "https://" in the url.
      *
@@ -956,7 +956,7 @@ public class Invoice {
      *
      * Detailed information about invoice status notifications can be found under the Instant Payment Notification
      * (IPN) section.
-     * @see <a href="https://bitpay.com/api/#notifications-webhooks-instant-payment-notifications-handling">
+     * @see <a href="https://bitpay.readme.io/reference/notifications-invoices">
      *     Instant Payment Notification
      *     </a>
      *
@@ -1007,7 +1007,7 @@ public class Invoice {
      *
      * Detailed information about invoice status notifications can be found under the Instant Payment Notification
      * (IPN) section.
-     * @see <a href="https://bitpay.com/api/#notifications-webhooks-instant-payment-notifications-handling">
+     * @see <a href="https://bitpay.readme.io/reference/notifications-invoices">
      *     Instant Payment Notification
      *     </a>
      *
@@ -1360,7 +1360,7 @@ public class Invoice {
      * Gets bill id. This field will be in the invoice object only if the invoice was generated from a bill,
      * see the Bills resource for more information.
      *
-     * @see <a href="https://bitpay.com/api/#rest-api-resources-bills/">Bills resource</a>
+     * @see <a href="https://bitpay.readme.io/reference/bills">Bills resource</a>
      *
      * @return the bill id
      */
@@ -1373,7 +1373,7 @@ public class Invoice {
      * Sets bill id. This field will be in the invoice object only if the invoice was generated from a bill,
      * see the Bills resource for more information
      *
-     * @see <a href="https://bitpay.com/api/#rest-api-resources-bills/">Bills resource</a>
+     * @see <a href="https://bitpay.readme.io/reference/bills">Bills resource</a>
      *
      * @param billId the bill id
      */

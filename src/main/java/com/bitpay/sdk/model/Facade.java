@@ -15,7 +15,7 @@ import java.util.Objects;
  * Best practices suggest that the requested facade should be limited to the minimum level that
  * grants the required capabilities.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-concepts-api-tokens">REST API concepts</a>
+ * @see <a href="https://bitpay.readme.io/reference/concepts">REST API concepts</a>
  */
 public enum Facade {
     /**

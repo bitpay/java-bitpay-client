@@ -26,7 +26,7 @@ package com.bitpay.sdk.exceptions;
  * eg 020001
  * </pre>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class PayoutRecipientQueryException extends PayoutRecipientException {
     /**

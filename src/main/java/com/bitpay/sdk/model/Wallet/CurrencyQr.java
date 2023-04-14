@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The type Currency qr.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-wallets">Wallets</a>
+ * @see <a href="https://bitpay.readme.io/reference/wallets">Wallets</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyQr {

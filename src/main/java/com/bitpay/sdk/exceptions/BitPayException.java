@@ -9,7 +9,7 @@ import org.apache.http.util.TextUtils;
 /**
  * General BitPay Exception which is inherited by all other exceptions.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class BitPayException extends ClientProtocolException {
     private static final long serialVersionUID = -7186627969477257933L;

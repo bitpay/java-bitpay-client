@@ -23,7 +23,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *   "rate": 1
  * }
  * </pre>
- * 
+ *
+ * @see <a href="https://bitpay.readme.io/reference/rates">REST API Rates</a>
  * @see com.bitpay.sdk.Client#getRates()
  * @see com.bitpay.sdk.model.Rate.Rates
  */

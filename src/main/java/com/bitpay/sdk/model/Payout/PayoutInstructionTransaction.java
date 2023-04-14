@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 /**
  * The type Payout instruction transaction.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-payouts">REST API Payouts</a>
+ * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInstructionTransaction {

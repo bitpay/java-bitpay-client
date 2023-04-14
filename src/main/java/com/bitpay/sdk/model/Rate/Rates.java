@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Rates are exchange rates, representing the number of fiat currency units equivalent to one BTC.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-rates">REST API Rates</a>
+ * @see <a href="https://bitpay.readme.io/reference/rates">REST API Rates</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rates {

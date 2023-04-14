@@ -6,6 +6,7 @@ package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.TokenContainer;
+import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -24,6 +25,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,20 +46,31 @@ public class AbstractClientTest {
     protected GuidGenerator uuidGenerator;
 
     private int port;
+    private HttpContext httpContext;
 
     public AbstractClientTest() {
     }
 
     @BeforeAll
-    public void beforeEach() throws IOException {
+    public void beforeAll() throws IOException {
         this.port = ThreadLocalRandom.current().nextInt(8000, 9000);
         this.httpServer = HttpServer.create(new InetSocketAddress(port), 0);
         this.httpServer.start();
     }
 
     @AfterAll
-    public void afterEach() {
+    public void afterAll() {
         this.httpServer.stop(0);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        if (Objects.isNull(this.httpContext)) {
+            return;
+        }
+
+        this.httpServer.removeContext(this.httpContext);
+        this.httpContext = null;
     }
 
     protected String getPreparedJsonDataFromFile(String fileName) {
@@ -85,7 +98,7 @@ public class AbstractClientTest {
         }
 
         String queryFromPath = query;
-        httpServer.createContext(path, new HttpHandler() {
+        this.httpContext = httpServer.createContext(path, new HttpHandler() {
             public void handle(HttpExchange exchange) throws IOException {
 
                 InputStreamReader isr =  new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8);
