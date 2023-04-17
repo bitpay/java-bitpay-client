@@ -66,7 +66,7 @@ public class RateClientTest extends AbstractClientTest {
     }
 
     private RateClient getTestedClass() {
-        return new RateClient(this.getBitPayClient());
+        return RateClient.getInstance(this.getBitPayClient());
     }
 
 }

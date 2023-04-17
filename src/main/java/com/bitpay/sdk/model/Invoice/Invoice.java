@@ -49,7 +49,6 @@ public class Invoice {
     private String merchantName = DEFAULT_NON_SENT_VALUE;
     private String selectedTransactionCurrency = DEFAULT_NON_SENT_VALUE;
     private String forcedBuyerSelectedWallet = DEFAULT_NON_SENT_VALUE;
-    private InvoiceTransactionDetails transactionDetails;
     private InvoiceUniversalCodes universalCodes;
     private List<InvoiceItemizedDetails> itemizedDetails;
     private boolean autoRedirect = false;
@@ -681,27 +680,6 @@ public class Invoice {
     @JsonProperty("forcedBuyerSelectedWallet")
     public void setForcedBuyerSelectedWallet(String forcedBuyerSelectedWallet) {
         this.forcedBuyerSelectedWallet = forcedBuyerSelectedWallet;
-    }
-
-    /**
-     * Gets invoice transaction details.
-     *
-     * @return the transaction details
-     */
-    @JsonProperty("transactionDetails")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public InvoiceTransactionDetails getTransactionDetails() {
-        return this.transactionDetails;
-    }
-
-    /**
-     * Sets invoice transaction details.
-     *
-     * @param transactionDetails the transaction details
-     */
-    @JsonProperty("transactionDetails")
-    public void setTransactionDetails(InvoiceTransactionDetails transactionDetails) {
-        this.transactionDetails = transactionDetails;
     }
 
     /**

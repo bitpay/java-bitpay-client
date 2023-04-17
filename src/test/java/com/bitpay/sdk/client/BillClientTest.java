@@ -327,7 +327,7 @@ public class BillClientTest extends AbstractClientTest {
             accessTokens = this.getAccessTokens();
         }
 
-        return new BillClient(this.getBitPayClient(), accessTokens);
+        return BillClient.getInstance(this.getBitPayClient(), accessTokens);
     }
 
 }

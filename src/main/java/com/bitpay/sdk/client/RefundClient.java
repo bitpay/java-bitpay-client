@@ -31,8 +31,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Refund client.
  */
-public class RefundClient {
+public class RefundClient implements ResourceClient {
 
+    private static RefundClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
@@ -44,10 +45,30 @@ public class RefundClient {
      * @param accessTokens the access tokens
      * @param guidGenerator GUID generator
      */
-    public RefundClient(BitPayClient bitPayClient, TokenContainer accessTokens, GuidGenerator guidGenerator) {
+    private RefundClient(BitPayClient bitPayClient, TokenContainer accessTokens, GuidGenerator guidGenerator) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
         this.guidGenerator = guidGenerator;
+    }
+
+    /**
+     * Factory method for Bill Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @param guidGenerator Guid generator
+     * @return RefundClient
+     */
+    public static RefundClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens,
+        GuidGenerator guidGenerator
+    ) {
+        if (Objects.isNull(instance)) {
+            instance = new RefundClient(bitPayClient, accessTokens, guidGenerator);
+        }
+
+        return instance;
     }
 
     /**

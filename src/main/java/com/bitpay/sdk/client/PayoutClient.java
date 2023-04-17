@@ -30,8 +30,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Payout client.
  */
-public class PayoutClient {
+public class PayoutClient implements ResourceClient {
 
+    private static PayoutClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
 
@@ -41,9 +42,24 @@ public class PayoutClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public PayoutClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private PayoutClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
+    }
+
+    /**
+     * Factory method for Bill Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @return PayoutClient
+     */
+    public static PayoutClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+        if (Objects.isNull(instance)) {
+            instance = new PayoutClient(bitPayClient, accessTokens);
+        }
+
+        return instance;
     }
 
     /**

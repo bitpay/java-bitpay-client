@@ -31,8 +31,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Invoice client.
  */
-public class InvoiceClient {
+public class InvoiceClient implements ResourceClient {
 
+    private static InvoiceClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
@@ -44,7 +45,7 @@ public class InvoiceClient {
      * @param accessTokens  the access tokens
      * @param guidGenerator the Guid generator
      */
-    public InvoiceClient(
+    private InvoiceClient(
         BitPayClient bitPayClient,
         TokenContainer accessTokens,
         GuidGenerator guidGenerator
@@ -52,6 +53,26 @@ public class InvoiceClient {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
         this.guidGenerator = guidGenerator;
+    }
+
+    /**
+     * Factory method for Invoice Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @param guidGenerator Guid Generator
+     * @return InvoiceClient
+     */
+    public static InvoiceClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens,
+        GuidGenerator guidGenerator
+    ) {
+        if (Objects.isNull(instance)) {
+            instance = new InvoiceClient(bitPayClient, accessTokens, guidGenerator);
+        }
+
+        return instance;
     }
 
     /**

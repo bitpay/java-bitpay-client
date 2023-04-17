@@ -151,6 +151,6 @@ public class PayoutRecipientsClientTest extends AbstractClientTest {
     }
 
     private PayoutRecipientsClient getTestedClass() {
-        return new PayoutRecipientsClient(this.getBitPayClient(), this.getAccessTokens(), this.uuidGenerator);
+        return PayoutRecipientsClient.getInstance(this.getBitPayClient(), this.getAccessTokens(), this.uuidGenerator);
     }
 }
