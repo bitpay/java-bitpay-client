@@ -5,6 +5,7 @@ package com.bitpay.sdk.model.Wallet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -20,6 +21,8 @@ public class Currencies {
     private Boolean payPro;
     private CurrencyQr qr;
     private String image;
+    private String withdrawalFee;
+    private Boolean walletConnect;
 
     /**
      * Instantiates a new Currencies.
@@ -143,5 +146,40 @@ public class Currencies {
     @JsonProperty("image")
     public void setImage(String image) {
         this.image = image;
+    }
+
+    /**
+     * Gets Custodial wallet withdrawal fee.
+     * @return string withdrawal fee
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getWithdrawalFee() {
+        return withdrawalFee;
+    }
+
+    /**
+     * Sets Custodial wallet withdrawal fee.
+     */
+    @JsonProperty("withdrawalFee")
+    public void setWithdrawalFee(String withdrawalFee) {
+        this.withdrawalFee = withdrawalFee;
+    }
+
+    /**
+     * Gets whether or not this wallet supports walletConnect.
+     *
+     * @return boolean wallet connect
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public Boolean getWalletConnect() {
+        return walletConnect;
+    }
+
+    /**
+     * Sets whether or not this wallet supports walletConnect.
+     */
+    @JsonProperty("walletConnect")
+    public void setWalletConnect(Boolean walletConnect) {
+        this.walletConnect = walletConnect;
     }
 }

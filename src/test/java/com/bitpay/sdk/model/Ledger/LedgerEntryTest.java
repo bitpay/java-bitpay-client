@@ -179,6 +179,19 @@ public class LedgerEntryTest {
         Assertions.assertEquals(expected, testedClass.getId());
     }
 
+    @Test
+    public void it_should_change_support_request() {
+        // given
+        String expected = "expectedString";
+        LedgerEntry testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setSupportRequest(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getSupportRequest());
+    }
+
     private LedgerEntry getTestedClass() {
         return new LedgerEntry();
     }

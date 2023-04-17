@@ -4,8 +4,8 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.TokenContainer;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -23,8 +23,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.bitcoinj.core.ECKey;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -43,19 +43,19 @@ public class AbstractClientTest {
     @Mock
     protected GuidGenerator uuidGenerator;
 
-    private int port = 8000;
+    private int port;
 
     public AbstractClientTest() {
     }
 
-    @BeforeEach
+    @BeforeAll
     public void beforeEach() throws IOException {
         this.port = ThreadLocalRandom.current().nextInt(8000, 9000);
         this.httpServer = HttpServer.create(new InetSocketAddress(port), 0);
         this.httpServer.start();
     }
 
-    @AfterEach
+    @AfterAll
     public void afterEach() {
         this.httpServer.stop(0);
     }

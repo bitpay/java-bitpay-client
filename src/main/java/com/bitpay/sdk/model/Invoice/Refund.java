@@ -34,6 +34,11 @@ public class Refund {
     private String reference = DEFAULT_NON_SENT_VALUE;
     private Double refundFee;
     private Date lastRefundNotification;
+    private String notificationUrl = DEFAULT_NON_SENT_VALUE;
+    private String refundAddress = DEFAULT_NON_SENT_VALUE;
+    private String supportRequest = DEFAULT_NON_SENT_VALUE;
+    private String txid = DEFAULT_NON_SENT_VALUE;
+    private String type = DEFAULT_NON_SENT_VALUE;
 
     /**
      * Amount to be refunded in terms of the transaction currency.
@@ -54,6 +59,7 @@ public class Refund {
     private String id;
     private Date requestDate;
     private String status = DEFAULT_NON_SENT_VALUE;
+
 
     /**
      * Instantiates a new Refund.
@@ -418,5 +424,126 @@ public class Refund {
     @JsonProperty("refundFee")
     public void setRefundFee(Double refundFee) {
         this.refundFee = refundFee;
+    }
+
+    /**
+     * Gets URL to which BitPay sends webhook notifications. HTTPS is mandatory.
+     *
+     * @return notification url
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getNotificationUrl() {
+        return notificationUrl;
+    }
+
+    /**
+     * Sets URL to which BitPay sends webhook notifications. HTTPS is mandatory.
+     *
+     * @param notificationURL Notification url.
+     */
+    @JsonProperty("notificationURL")
+    public void setNotificationUrl(String notificationURL) {
+        this.notificationUrl = notificationURL;
+    }
+
+    /**
+     * Gets the wallet address that the refund will return the funds to, added by the customer.
+     *
+     * @return refund address
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getRefundAddress() {
+        return refundAddress;
+    }
+
+    /**
+     * Sets the wallet address that the refund will return the funds to, added by the customer.
+     *
+     * @param refundAddress refund address
+     */
+    @JsonProperty("refundAddress")
+    public void setRefundAddress(String refundAddress) {
+        this.refundAddress = refundAddress;
+    }
+
+    /**
+     * Gets the ID of the associated support request for the refund.
+     *
+     * @return support request
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getSupportRequest() {
+        return supportRequest;
+    }
+
+    /**
+     * Sets the ID of the associated support request for the refund.
+     *
+     * @param supportRequest support request
+     */
+    @JsonProperty("supportRequest")
+    public void setSupportRequest(String supportRequest) {
+        this.supportRequest = supportRequest;
+    }
+
+    /**
+     *
+     * Gets the transaction ID of the refund once executed.
+     *
+     * @return transaction id
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getTxid() {
+        return txid;
+    }
+
+    /**
+     * Sets the transaction ID of the refund once executed.
+     *
+     * @param txid transaction id
+     */
+    @JsonProperty("txid")
+    public void setTxid(String txid) {
+        this.txid = txid;
+    }
+
+    /**
+     * <p>Gets the type of refund.</p>
+     * <ul>
+     *    <li>full (current rate): A full refund of the amount paid at the current rate.</li>
+     *    <li>full (fixed rate): A full refund of the amount paid at the fixed rate.
+     *    Note: deprecated refund implementation only.</li>
+     *    <li>partial: Part of the invoice is being refunded, rather than the full invoie amount.</li>
+     *    <li>underpayment: The payment was underpaid, a refund in the amount paid will be executed.</li>
+     *    <li>overpayment: The payment was overpaid, a refund in the amount that was overpaid from the invoice price
+     *    will be executed.</li>
+     *    <li>declined: The payment was declined, a refund in the full amount paid will be excuted.</li>
+     * </ul>
+     *
+     * @return type
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * <p>Sets the type of refund.</p>
+     * <ul>
+     *    <li>full (current rate): A full refund of the amount paid at the current rate.</li>
+     *    <li>full (fixed rate): A full refund of the amount paid at the fixed rate.
+     *    Note: deprecated refund implementation only.</li>
+     *    <li>partial: Part of the invoice is being refunded, rather than the full invoie amount.</li>
+     *    <li>underpayment: The payment was underpaid, a refund in the amount paid will be executed.</li>
+     *    <li>overpayment: The payment was overpaid, a refund in the amount that was overpaid from the invoice price
+     *    will be executed.</li>
+     *    <li>declined: The payment was declined, a refund in the full amount paid will be excuted.</li>
+     * </ul>
+     *
+     * @param type type
+     */
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
     }
 }
