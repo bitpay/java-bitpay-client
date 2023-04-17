@@ -104,19 +104,6 @@ public class InvoiceDataTest {
     }
 
     @Test
-    public void it_should_change_btcPrice() {
-        // given
-        Float expected = 12.34F;
-        InvoiceData testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setBtcPrice(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getBtcPrice());
-    }
-
-    @Test
     public void it_should_change_refundInfo() {
         // given
         RefundInfo expected = Mockito.mock(RefundInfo.class);

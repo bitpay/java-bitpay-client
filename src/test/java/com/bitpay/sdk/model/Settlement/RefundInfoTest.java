@@ -49,32 +49,6 @@ public class RefundInfoTest {
         Assertions.assertSame(expected, testedClass.getAmount());
     }
 
-    @Test
-    public void it_should_change_reference() {
-        // given
-        String expected = "expectedString";
-        RefundInfo testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setReference(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getReference());
-    }
-
-    @Test
-    public void it_should_manipulate_refundRequestEid() {
-        // given
-        String expected = "someString";
-        RefundInfo testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setRefundRequestEid(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getRefundRequestEid());
-    }
-
     private RefundInfo getTestedClass() {
         return new RefundInfo();
     }

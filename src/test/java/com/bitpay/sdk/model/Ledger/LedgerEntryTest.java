@@ -76,6 +76,7 @@ public class LedgerEntryTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void it_should_change_txType() {
         // given
         String expected = "expectedString";
