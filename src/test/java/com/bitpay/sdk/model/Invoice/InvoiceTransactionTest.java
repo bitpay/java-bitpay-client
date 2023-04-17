@@ -6,6 +6,8 @@ package com.bitpay.sdk.model.Invoice;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -76,6 +78,32 @@ public class InvoiceTransactionTest {
         Assertions.assertSame(expected, testedClass.getTransactionId());
     }
 
+    @Test
+    public void it_should_manipulate_ex_rates() {
+        // given
+        Map<String, BigDecimal> expected = new HashMap<>();
+        expected.put("BTC", BigDecimal.valueOf(0.000234234));
+        InvoiceTransaction testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setExRates(expected);
+
+        // then
+        Assertions.assertSame(expected, testedClass.getExRates());
+    }
+
+    @Test
+    public void it_should_manipulate_output_index() {
+        // given
+        Integer expected = 1;
+        InvoiceTransaction testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setOutputIndex(expected);
+
+        // then
+        Assertions.assertSame(expected, testedClass.getOutputIndex());
+    }
 
     private InvoiceTransaction getTestedClass() {
         return new InvoiceTransaction();

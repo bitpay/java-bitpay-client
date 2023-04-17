@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * The type Payout info.
  * Object containing the settlement info provided by the Merchant in his BitPay account settings.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-settlements">Settlements</a>
+ * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInfo {

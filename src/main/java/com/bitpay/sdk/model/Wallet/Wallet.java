@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * The type Wallet. Currencies are fiat currencies supported by BitPay.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-wallets">Wallets</a>
+ * @see <a href="https://bitpay.readme.io/reference/wallets">Wallets</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Wallet {

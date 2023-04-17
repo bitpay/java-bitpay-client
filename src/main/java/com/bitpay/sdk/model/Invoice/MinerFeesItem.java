@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 /**
  * The type Miner fees item.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-ledgers">REST API Invoice</a>
+ * @see <a href="https://bitpay.readme.io/reference/ledgers">REST API Invoice</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFeesItem {

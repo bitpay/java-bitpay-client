@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Information collected from the buyer during the process of paying an invoice. Initially this object is empty.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-invoices-resource">REST API Invoices</a>
+ * @see <a href="https://bitpay.readme.io/reference/invoices">REST API Invoices</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceBuyerProvidedInfo {

@@ -18,7 +18,30 @@
     "displayAmountPaid": "0",
     "exceptionStatus": false,
     "targetConfirmations": 6,
-    "transactions": [],
+    "transactions": [
+      {
+        "amount": 739100,
+        "confirmations": 1,
+        "receivedTime": "2021-05-11T11:54:32.978Z",
+        "txid": "0638edcce08856726135e4f464e603706bc12313fd9a9cd046a177e4ffce98dd",
+        "exRates": {
+          "BCH": 1,
+          "USD": 1355.2800000000002,
+          "BTC": 0.02446472581430398,
+          "EUR": 1112.66,
+          "ETH": 0.33972366494876377,
+          "GUSD": 1355.2800000000002,
+          "PAX": 1355.2800000000002,
+          "BUSD": 1355.2800000000002,
+          "USDC": 1355.2800000000002,
+          "XRP": 948.9227925474189,
+          "DOGE": 2725.466119299674,
+          "DAI": 1353.985589776174,
+          "WBTC": 0.024436520994387978
+        },
+        "outputIndex": 0
+      }
+    ],
     "transactionSpeed": "medium",
     "buyer": {
       "email": "john@doe.com"

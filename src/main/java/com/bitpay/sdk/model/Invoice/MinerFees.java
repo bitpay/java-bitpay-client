@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * the total fee, and the fiat amount. This is referenced as "Network Cost" on an invoice,
  * see this support article for more information.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-invoices-resource">REST API Invoices</a>
+ * @see <a href="https://bitpay.readme.io/reference/invoices">REST API Invoices</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFees {

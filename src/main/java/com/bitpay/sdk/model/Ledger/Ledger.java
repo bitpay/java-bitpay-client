@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Ledgers are records of money movement.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-ledgers">REST API Ledgers</a>
+ * @see <a href="https://bitpay.readme.io/reference/ledgers">REST API Ledgers</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {

@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * The type Refund webhook.
  *
- * @see <a href="https://bitpay.com/api/#notifications-webhooks-instant-payment-notifications-refunds">Webhooks refunds</a>
+ * @see <a href="https://bitpay.readme.io/reference/refunds-1">Webhooks refunds</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundWebhook {
@@ -104,7 +104,7 @@ public class RefundWebhook {
     /**
      * Gets refund lifecycle status of the request (refer to status field in refunds resource).
 	 *
-	 * @see <a href="https://bitpay.com/api/#rest-api-resources-refunds-resource">Refunds resource</a>
+	 * @see <a href="https://bitpay.readme.io/reference/refunds-resource">Refunds resource</a>
      *
      * @return the status
      */
@@ -117,7 +117,7 @@ public class RefundWebhook {
     /**
      * Sets refund lifecycle status of the request (refer to status field in refunds resource).
 	 *
-	 * @see <a href="https://bitpay.com/api/#rest-api-resources-refunds-resource">Refunds resource</a>
+	 * @see <a href="https://bitpay.readme.io/reference/refunds-resource">Refunds resource</a>
      *
      * @param status the status
      */

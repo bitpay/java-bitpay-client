@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * The type Invoice event token.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-invoices-resource">REST API Invoices</a>
+ * @see <a href="https://bitpay.readme.io/reference/invoices">REST API Invoices</a>
  */
 public class InvoiceEventToken {
 

@@ -19,7 +19,7 @@ import java.util.Date;
  * while underpaid and overpaid invoices are automatically executed by BitPay to issue the underpayment
  * or overpayment amount to the customer.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-refunds">REST API Refunds</a>
+ * @see <a href="https://bitpay.readme.io/reference/refunds">REST API Refunds</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Refund {

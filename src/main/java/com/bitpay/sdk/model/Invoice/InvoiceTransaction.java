@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Initially empty when the invoice is created.
@@ -18,7 +19,7 @@ import java.util.Date;
  * For instance the consumer's transaction hash if the invoice is paid, but also the refund transaction hash
  * if the merchant decide to issue a refund to the purchaser.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-invoices-resource">REST API Invoices</a>
+ * @see <a href="https://bitpay.readme.io/reference/invoices">REST API Invoices</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceTransaction {
@@ -28,6 +29,8 @@ public class InvoiceTransaction {
     private Date time;
     private Date receivedTime;
     private String txid = DEFAULT_NON_SENT_VALUE;
+    private Map<String, BigDecimal> exRates;
+    private Integer outputIndex;
 
     /**
      * Instantiates a new Invoice transaction.
@@ -135,4 +138,36 @@ public class InvoiceTransaction {
         this.time = time;
     }
 
+    /**
+     * Gets exchange rates.
+     *
+     * @return ex rates
+     */
+    public Map<String, BigDecimal> getExRates() {
+        return exRates;
+    }
+
+    /**
+     * Sets exchange rates.
+     */
+    @JsonProperty("exRates")
+    public void setExRates(Map<String, BigDecimal> exRates) {
+        this.exRates = exRates;
+    }
+
+    /**
+     * Gets output index.
+     * @return output index
+     */
+    public Integer getOutputIndex() {
+        return outputIndex;
+    }
+
+    /**
+     * @param outputIndex output index
+     */
+    @JsonProperty("outputIndex")
+    public void setOutputIndex(Integer outputIndex) {
+        this.outputIndex = outputIndex;
+    }
 }

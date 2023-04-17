@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * The type Settlement.
- * @see <a href="https://bitpay.com/api/#rest-api-resources-settlements">Settlements</a>
+ * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Settlement {

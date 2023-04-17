@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * The type Policy.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources">Rest API Resources</a>
+ * @see <a href="https://bitpay.readme.io/reference/tokens">Tokens concept</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Policy {

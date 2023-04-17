@@ -25,7 +25,7 @@ import java.util.List;
  * like marketplaces or affiliate networks,
  * or for payroll purposes by creating multiple payouts at a time.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-payouts">REST API Payouts</a>
+ * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
@@ -175,7 +175,7 @@ public class Payout {
      * e.g. your settlement currency.
      *
      * @return the ledger currency
-     * @see <a href="https://bitpay.com/api/#rest-api-resources-payouts">Supported ledger currency codes</a>
+     * @see <a href="https://bitpay.readme.io/reference/payouts">Supported ledger currency codes</a>
      */
     @JsonProperty("ledgerCurrency")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

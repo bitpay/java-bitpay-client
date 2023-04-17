@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The type Ledger entry.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-ledgers">REST API Ledgers</a>
+ * @see <a href="https://bitpay.readme.io/reference/ledgers">REST API Ledgers</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LedgerEntry {
@@ -39,7 +39,7 @@ public class LedgerEntry {
      *
      * @return the type
      *
-     * @see <a href="https://bitpay.com/api/#ledger-entry-codes">Ledger entry codes</a>
+     * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonIgnore
     public String getType() {
@@ -51,7 +51,7 @@ public class LedgerEntry {
      *
      * @param type the type
      *
-     * @see <a href="https://bitpay.com/api/#ledger-entry-codes">Ledger entry codes</a>
+     * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("type")
     public void setType(String type) {
@@ -90,7 +90,7 @@ public class LedgerEntry {
      *
      * @return the code
      *
-     * @see <a href="https://bitpay.com/api/#ledger-entry-codes">Ledger entry codes</a>
+     * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonIgnore
     public String getCode() {
@@ -103,7 +103,7 @@ public class LedgerEntry {
      *
      * @param code the code
      *
-     * @see <a href="https://bitpay.com/api/#ledger-entry-codes">Ledger entry codes</a>
+     * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("code")
     public void setCode(String code) {

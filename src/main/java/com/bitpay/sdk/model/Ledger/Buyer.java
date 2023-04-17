@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The type Buyer.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources-ledgers">REST API Ledgers</a>
+ * @see <a href="https://bitpay.readme.io/reference/ledgers">REST API Ledgers</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
