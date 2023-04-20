@@ -491,6 +491,6 @@ public class InvoiceClientTest extends AbstractClientTest {
     }
 
     private InvoiceClient getTestedClass(TokenContainer accessTokens) {
-        return new InvoiceClient(this.getBitPayClient(), accessTokens, this.uuidGenerator);
+        return InvoiceClient.getInstance(this.getBitPayClient(), accessTokens, this.uuidGenerator);
     }
 }

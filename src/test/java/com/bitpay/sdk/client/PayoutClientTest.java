@@ -197,6 +197,6 @@ public class PayoutClientTest extends AbstractClientTest {
     }
 
     private PayoutClient getTestedClass(TokenContainer accessTokens) {
-        return new PayoutClient(this.getBitPayClient(), accessTokens);
+        return PayoutClient.getInstance(this.getBitPayClient(), accessTokens);
     }
 }

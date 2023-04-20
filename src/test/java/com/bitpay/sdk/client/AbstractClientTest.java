@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.client;
 
+import com.bitpay.sdk.ResourceClientsCleaner;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.TokenContainer;
 import com.sun.net.httpserver.HttpContext;
@@ -27,6 +28,7 @@ import org.bitcoinj.core.ECKey;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -61,6 +63,11 @@ public class AbstractClientTest {
     @AfterAll
     public void afterAll() {
         this.httpServer.stop(0);
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        ResourceClientsCleaner.execute();
     }
 
     @AfterEach

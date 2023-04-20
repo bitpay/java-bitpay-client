@@ -173,6 +173,6 @@ public class SettlementClientTest extends AbstractClientTest {
     }
 
     private SettlementClient getTestedClass() {
-        return new SettlementClient(this.getBitPayClient(), this.getAccessTokens());
+        return SettlementClient.getInstance(this.getBitPayClient(), this.getAccessTokens());
     }
 }

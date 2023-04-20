@@ -11,13 +11,15 @@ import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 
 /**
  * The type Rate client.
  */
-public class RateClient {
+public class RateClient implements ResourceClient {
 
+    private static RateClient instance;
     private final BitPayClient bitPayClient;
 
     /**
@@ -25,8 +27,22 @@ public class RateClient {
      *
      * @param bitPayClient the bit pay client
      */
-    public RateClient(BitPayClient bitPayClient) {
+    private RateClient(BitPayClient bitPayClient) {
         this.bitPayClient = bitPayClient;
+    }
+
+    /**
+     * Factory method for Rate Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @return RateClient
+     */
+    public static RateClient getInstance(BitPayClient bitPayClient) {
+        if (Objects.isNull(instance)) {
+            instance = new RateClient(bitPayClient);
+        }
+
+        return instance;
     }
 
     /**

@@ -11,13 +11,15 @@ import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.apache.http.HttpResponse;
 
 /**
  * The type Wallet client.
  */
-public class WalletClient {
+public class WalletClient implements ResourceClient {
 
+    private static WalletClient instance;
     private final BitPayClient bitPayClient;
 
     /**
@@ -25,8 +27,22 @@ public class WalletClient {
      *
      * @param bitPayClient the bit pay client
      */
-    public WalletClient(BitPayClient bitPayClient) {
+    private WalletClient(BitPayClient bitPayClient) {
         this.bitPayClient = bitPayClient;
+    }
+
+    /**
+     * Factory method for Wallet Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @return WalletClient
+     */
+    public static WalletClient getInstance(BitPayClient bitPayClient) {
+        if (Objects.isNull(instance)) {
+            instance = new WalletClient(bitPayClient);
+        }
+
+        return instance;
     }
 
     /**

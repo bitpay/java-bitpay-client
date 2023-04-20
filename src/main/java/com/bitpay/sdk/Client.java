@@ -316,7 +316,7 @@ public class Client {
      * @throws BitPayException the bit pay exception
      */
     public Map<String, Object> getCurrencyInfo(String currencyCode) throws BitPayException {
-        CurrencyClient client = new CurrencyClient(this.bitPayClient);
+        CurrencyClient client = CurrencyClient.getInstance(this.bitPayClient);
         return client.getInfo(currencyCode);
     }
 
@@ -329,7 +329,7 @@ public class Client {
      */
     public Invoice createInvoice(Invoice invoice) throws InvoiceCreationException {
         try {
-            InvoiceClient client = createInvoiceClient();
+            InvoiceClient client = getInvoiceClient();
             Facade facade = getFacadeBasedOnAccessToken();
             boolean signRequest = isSignRequest(facade);
 
@@ -352,7 +352,7 @@ public class Client {
      */
     public Invoice createInvoice(Invoice invoice, Facade facade, boolean signRequest) throws InvoiceCreationException {
         try {
-            InvoiceClient client = createInvoiceClient();
+            InvoiceClient client = getInvoiceClient();
 
             return client.create(invoice, facade, signRequest);
         } catch (BitPayException ex) {
@@ -374,7 +374,7 @@ public class Client {
         boolean signRequest = isSignRequest(facade);
 
         try {
-            return this.createInvoiceClient().get(invoiceId, facade, signRequest);
+            return this.getInvoiceClient().get(invoiceId, facade, signRequest);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -393,7 +393,7 @@ public class Client {
      */
     public Invoice getInvoice(String invoiceId, Facade facade, boolean signRequest) throws BitPayException {
         try {
-            return this.createInvoiceClient().get(invoiceId, facade, signRequest);
+            return this.getInvoiceClient().get(invoiceId, facade, signRequest);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -412,7 +412,7 @@ public class Client {
     public Invoice getInvoiceByGuid(String guid) throws InvoiceQueryException {
         Facade facade = getFacadeBasedOnAccessToken();
         boolean signRequest = isSignRequest(facade);
-        return this.createInvoiceClient().getByGuid(guid, facade, signRequest);
+        return this.getInvoiceClient().getByGuid(guid, facade, signRequest);
     }
 
     /**
@@ -425,7 +425,7 @@ public class Client {
      * @throws InvoiceQueryException InvoiceQueryException class
      */
     public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
-        return this.createInvoiceClient().getByGuid(guid, facade, signRequest);
+        return this.getInvoiceClient().getByGuid(guid, facade, signRequest);
     }
 
     /**
@@ -449,7 +449,7 @@ public class Client {
         Integer limit,
         Integer offset
     ) throws BitPayException, InvoiceQueryException {
-        return this.createInvoiceClient().getInvoices(dateStart, dateEnd, status, orderId, limit, offset);
+        return this.getInvoiceClient().getInvoices(dateStart, dateEnd, status, orderId, limit, offset);
     }
 
     /**
@@ -461,7 +461,7 @@ public class Client {
      * @since 8.8.0
      */
     public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
-        return this.createInvoiceClient().getInvoiceEventToken(invoiceId);
+        return this.getInvoiceClient().getInvoiceEventToken(invoiceId);
     }
 
     /**
@@ -483,7 +483,7 @@ public class Client {
         String buyerEmail,
         Boolean autoVerify
     ) throws BitPayException, InvoiceUpdateException {
-        return this.createInvoiceClient().update(invoiceId, buyerSms, smsCode, buyerEmail, autoVerify);
+        return this.getInvoiceClient().update(invoiceId, buyerSms, smsCode, buyerEmail, autoVerify);
     }
 
     /**
@@ -496,7 +496,7 @@ public class Client {
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
     public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
-        return this.createInvoiceClient().pay(invoiceId, status);
+        return this.getInvoiceClient().pay(invoiceId, status);
     }
 
     /**
@@ -508,7 +508,7 @@ public class Client {
      * @throws BitPayException              BitPayException class
      */
     public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
-        return this.createInvoiceClient().cancel(invoiceId);
+        return this.getInvoiceClient().cancel(invoiceId);
     }
 
     /**
@@ -522,7 +522,7 @@ public class Client {
      */
     public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
         throws InvoiceCancellationException, BitPayException {
-        return this.createInvoiceClient().cancel(invoiceId, forceCancel);
+        return this.getInvoiceClient().cancel(invoiceId, forceCancel);
     }
 
     /**
@@ -535,7 +535,7 @@ public class Client {
      * @throws BitPayException BitPayException class
      */
     public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
-        return this.createInvoiceClient().cancelByGuid(guid, false);
+        return this.getInvoiceClient().cancelByGuid(guid, false);
     }
 
     /**
@@ -551,7 +551,7 @@ public class Client {
      * @throws BitPayException BitPayException class
      */
     public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
-        return this.createInvoiceClient().cancelByGuid(guid, forceCancel);
+        return this.getInvoiceClient().cancelByGuid(guid, forceCancel);
     }
 
     /**
@@ -562,7 +562,7 @@ public class Client {
      * @throws BitPayException BitPayException
      */
     public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
-        return this.createInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
+        return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
     }
 
     /**
@@ -774,7 +774,7 @@ public class Client {
      */
     public Bill createBill(Bill bill, Facade facade, boolean signRequest)
         throws BitPayException, BillCreationException {
-        return this.createBillClient().create(bill, facade, signRequest);
+        return this.getBillClient().create(bill, facade, signRequest);
     }
 
     /**
@@ -802,7 +802,7 @@ public class Client {
      * @throws BillQueryException BillQueryException class
      */
     public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
-        return this.createBillClient().get(billId, facade, signRequest);
+        return this.getBillClient().get(billId, facade, signRequest);
     }
 
     /**
@@ -814,7 +814,7 @@ public class Client {
      * @throws BillQueryException BillQueryException class
      */
     public List<Bill> getBills(String status) throws BitPayException, BillQueryException {
-        return this.createBillClient().getBills(status);
+        return this.getBillClient().getBills(status);
     }
 
     /**
@@ -825,7 +825,7 @@ public class Client {
      * @throws BillQueryException BillQueryException class
      */
     public List<Bill> getBills() throws BitPayException, BillQueryException {
-        return this.createBillClient().getBills();
+        return this.getBillClient().getBills();
     }
 
     /**
@@ -838,7 +838,7 @@ public class Client {
      * @throws BillUpdateException BillUpdateException class
      */
     public Bill updateBill(Bill bill, String billId) throws BitPayException, BillUpdateException {
-        return this.createBillClient().update(bill, billId);
+        return this.getBillClient().update(bill, billId);
     }
 
     /**
@@ -866,7 +866,7 @@ public class Client {
      * @throws BillDeliveryException BillDeliveryException class
      */
     public String deliverBill(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
-        return this.createBillClient().deliver(billId, billToken, signRequest);
+        return this.getBillClient().deliver(billId, billToken, signRequest);
     }
 
     /**
@@ -918,7 +918,7 @@ public class Client {
      */
     public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
         LedgerQueryException {
-        return this.createLedgerClient().getEntries(currency, dateStart, dateEnd);
+        return this.getLedgerClient().getEntries(currency, dateStart, dateEnd);
     }
 
     /**
@@ -929,7 +929,7 @@ public class Client {
      * @throws LedgerQueryException LedgerQueryException class
      */
     public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
-        return this.createLedgerClient().getLedgers();
+        return this.getLedgerClient().getLedgers();
     }
 
     /**
@@ -942,7 +942,7 @@ public class Client {
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException,
         PayoutRecipientCreationException {
-        return this.createPayoutRecipientsClient().submit(recipients);
+        return this.getPayoutRecipientsClient().submit(recipients);
     }
 
     /**
@@ -958,7 +958,7 @@ public class Client {
      */
     public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit, Integer offset)
         throws BitPayException, PayoutRecipientQueryException {
-        return this.createPayoutRecipientsClient().getRecipientsByFilters(status, limit, offset);
+        return this.getPayoutRecipientsClient().getRecipientsByFilters(status, limit, offset);
     }
 
     /**
@@ -972,7 +972,7 @@ public class Client {
      */
     public PayoutRecipient getPayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
-        return this.createPayoutRecipientsClient().get(recipientId);
+        return this.getPayoutRecipientsClient().get(recipientId);
     }
 
     /**
@@ -987,7 +987,7 @@ public class Client {
      */
     public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
         throws BitPayException, PayoutRecipientUpdateException {
-        return this.createPayoutRecipientsClient().update(recipientId, recipient);
+        return this.getPayoutRecipientsClient().update(recipientId, recipient);
     }
 
     /**
@@ -1001,7 +1001,7 @@ public class Client {
      */
     public Boolean deletePayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
-        return this.createPayoutRecipientsClient().delete(recipientId);
+        return this.getPayoutRecipientsClient().delete(recipientId);
     }
 
     /**
@@ -1015,7 +1015,7 @@ public class Client {
      */
     public Boolean requestPayoutRecipientNotification(String recipientId)
         throws PayoutRecipientNotificationException, BitPayException {
-        return this.createPayoutRecipientsClient().requestNotification(recipientId);
+        return this.getPayoutRecipientsClient().requestNotification(recipientId);
     }
 
     /**
@@ -1027,7 +1027,7 @@ public class Client {
      * @throws PayoutCreationException PayoutCreationException class
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
-        return this.createPayoutClient().submit(payout);
+        return this.getPayoutClient().submit(payout);
     }
 
     /**
@@ -1040,7 +1040,7 @@ public class Client {
      * @throws PayoutQueryException PayoutQueryException class
      */
     public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
-        return this.createPayoutClient().get(payoutId);
+        return this.getPayoutClient().get(payoutId);
     }
 
     /**
@@ -1052,7 +1052,7 @@ public class Client {
      * @throws PayoutCancellationException PayoutCancellationException class
      */
     public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
-        return this.createPayoutClient().cancel(payoutId);
+        return this.getPayoutClient().cancel(payoutId);
     }
 
     /**
@@ -1071,7 +1071,7 @@ public class Client {
      */
     public List<Payout> getPayouts(String startDate, String endDate, String status, String reference, Integer limit,
                                    Integer offset) throws BitPayException, PayoutQueryException {
-        return this.createPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset);
+        return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset);
     }
 
     /**
@@ -1084,7 +1084,7 @@ public class Client {
      */
     public Boolean requestPayoutNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
-        return this.createPayoutClient().requestNotification(payoutId);
+        return this.getPayoutClient().requestNotification(payoutId);
     }
 
     /**
@@ -1110,7 +1110,7 @@ public class Client {
         Integer limit,
         Integer offset
     ) throws BitPayException, SettlementQueryException {
-        return this.createSettlementClient().getSettlements(currency, dateStart, dateEnd, status, limit, offset);
+        return this.getSettlementClient().getSettlements(currency, dateStart, dateEnd, status, limit, offset);
     }
 
     /**
@@ -1122,7 +1122,7 @@ public class Client {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
-        return this.createSettlementClient().get(settlementId);
+        return this.getSettlementClient().get(settlementId);
     }
 
     /**
@@ -1135,7 +1135,7 @@ public class Client {
      * @throws SettlementQueryException SettlementQueryException class
      */
     public Settlement getSettlementReconciliationReport(String settlementId, String token) throws SettlementQueryException {
-        return this.createSettlementClient().getSettlementReconciliationReport(settlementId, token);
+        return this.getSettlementClient().getSettlementReconciliationReport(settlementId, token);
     }
 
     /**
@@ -1146,7 +1146,7 @@ public class Client {
      * @throws BitPayException      BitPayException class
      */
     public List<Wallet> getSupportedWallets() throws WalletQueryException, BitPayException {
-        return this.createWalletClient().getSupportedWallets();
+        return this.getWalletClient().getSupportedWallets();
     }
 
     /**
@@ -1155,7 +1155,7 @@ public class Client {
      * @return the rates client
      */
     public RateClient getRateClient() {
-        return new RateClient(this.bitPayClient);
+        return RateClient.getInstance(this.bitPayClient);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1328,74 +1328,74 @@ public class Client {
     }
 
     /**
-     * Create invoice client.
+     * Get invoice client.
      *
      * @return the invoice client
      */
-    protected InvoiceClient createInvoiceClient() {
-        return new InvoiceClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
+    protected InvoiceClient getInvoiceClient() {
+        return InvoiceClient.getInstance(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
-     * Create refund client.
+     * Get refund client.
      *
      * @return the refund client
      */
     protected RefundClient createRefundClient() {
-        return new RefundClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
+        return RefundClient.getInstance(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
-     * Create bill client.
+     * Get bill client.
      *
      * @return the bill client
      */
-    protected BillClient createBillClient() {
-        return new BillClient(this.bitPayClient, this.accessTokens);
+    protected BillClient getBillClient() {
+        return BillClient.getInstance(this.bitPayClient, this.accessTokens);
     }
 
     /**
-     * Create ledger client.
+     * Get ledger client.
      *
      * @return the ledger client
      */
-    protected LedgerClient createLedgerClient() {
-        return new LedgerClient(this.bitPayClient, this.accessTokens);
+    protected LedgerClient getLedgerClient() {
+        return LedgerClient.getInstance(this.bitPayClient, this.accessTokens);
     }
 
     /**
-     * Create payout recipients client.
+     * Get payout recipients client.
      *
      * @return the payout recipients client
      */
-    protected PayoutRecipientsClient createPayoutRecipientsClient() {
-        return new PayoutRecipientsClient(this.bitPayClient, this.accessTokens, this.guidGenerator);
+    protected PayoutRecipientsClient getPayoutRecipientsClient() {
+        return PayoutRecipientsClient.getInstance(this.bitPayClient, this.accessTokens, this.guidGenerator);
     }
 
     /**
-     * Create payout client.
+     * Get payout client.
      *
      * @return the payout client
      */
-    protected PayoutClient createPayoutClient() {
-        return new PayoutClient(this.bitPayClient, this.accessTokens);
+    protected PayoutClient getPayoutClient() {
+        return PayoutClient.getInstance(this.bitPayClient, this.accessTokens);
     }
 
     /**
-     * Create settlement client.
+     * Get settlement client.
      *
      * @return the settlement client
      */
-    protected SettlementClient createSettlementClient() {
-        return new SettlementClient(this.bitPayClient, this.accessTokens);
+    protected SettlementClient getSettlementClient() {
+        return SettlementClient.getInstance(this.bitPayClient, this.accessTokens);
     }
 
     /**
-     * Create wallet client.
+     * Get wallet client.
      *
      * @return the wallet client
      */
-    protected WalletClient createWalletClient() {
-        return new WalletClient(this.bitPayClient);
+    protected WalletClient getWalletClient() {
+        return WalletClient.getInstance(this.bitPayClient);
     }
 }

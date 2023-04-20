@@ -307,6 +307,6 @@ public class RefundClientTest extends AbstractClientTest {
     }
 
     private RefundClient getTestedClass() {
-        return new RefundClient(this.getBitPayClient(), this.getAccessTokens(), this.uuidGenerator);
+        return RefundClient.getInstance(this.getBitPayClient(), this.getAccessTokens(), this.uuidGenerator);
     }
 }

@@ -21,7 +21,7 @@ public class WalletClientTest extends AbstractClientTest {
             null,
             getPreparedJsonDataFromFile("getSupportedWallets.json")
         );
-        WalletClient client = new WalletClient(this.getBitPayClient());
+        WalletClient client = WalletClient.getInstance(this.getBitPayClient());
 
         // when
         List<Wallet> result = client.getSupportedWallets();

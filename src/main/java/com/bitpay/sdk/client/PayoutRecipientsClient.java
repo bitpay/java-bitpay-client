@@ -33,8 +33,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Payout recipients client.
  */
-public class PayoutRecipientsClient {
+public class PayoutRecipientsClient implements ResourceClient {
 
+    private static PayoutRecipientsClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
     private final GuidGenerator guidGenerator;
@@ -46,7 +47,7 @@ public class PayoutRecipientsClient {
      * @param accessTokens  the access tokens
      * @param guidGenerator the Guid generator
      */
-    public PayoutRecipientsClient(
+    private PayoutRecipientsClient(
         BitPayClient bitPayClient,
         TokenContainer accessTokens,
         GuidGenerator guidGenerator
@@ -54,6 +55,26 @@ public class PayoutRecipientsClient {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
         this.guidGenerator = guidGenerator;
+    }
+
+    /**
+     * Factory method for Bill Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @param guidGenerator Guid Generator
+     * @return PayoutRecipientsClient
+     */
+    public static PayoutRecipientsClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens,
+        GuidGenerator guidGenerator
+    ) {
+        if (Objects.isNull(instance)) {
+            instance = new PayoutRecipientsClient(bitPayClient, accessTokens, guidGenerator);
+        }
+
+        return instance;
     }
 
     /**

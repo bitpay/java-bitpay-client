@@ -28,8 +28,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Bill client.
  */
-public class BillClient {
+public class BillClient implements ResourceClient {
 
+    private static BillClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
 
@@ -39,9 +40,24 @@ public class BillClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public BillClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private BillClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
+    }
+
+    /**
+     * Factory method for Bill Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @return BillClient
+     */
+    public static BillClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+        if (Objects.isNull(instance)) {
+            instance = new BillClient(bitPayClient, accessTokens);
+        }
+
+        return instance;
     }
 
     /**

@@ -19,8 +19,6 @@ public class RefundInfo {
     private String supportRequest;
     private String currency;
     private Hashtable<String, Double> amounts;
-    private String reference;
-    private String refundRequestEid;
 
     /**
      * Instantiates a new Refund info.
@@ -90,49 +88,5 @@ public class RefundInfo {
     @JsonProperty("amounts")
     public void setAmount(Hashtable<String, Double> amounts) {
         this.amounts = amounts;
-    }
-
-    /**
-     * Gets reference. Present only if specified in the request to create the refund.
-     * This is your reference label for this refund.
-     * It will be passed-through on each response for you to identify the refund in your system.
-     * Maximum string length is 100 characters.
-     *
-     * @return the reference
-     */
-    @JsonIgnore
-    public String getReference() {
-        return this.reference;
-    }
-
-    /**
-     * Sets reference. Present only if specified in the request to create the refund.
-     * This is your reference label for this refund.
-     * It will be passed-through on each response for you to identify the refund in your system.
-     * Maximum string length is 100 characters.
-     *
-     * @param reference the reference
-     */
-    @JsonProperty("reference")
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
-    /**
-     * Gets Refund Request Eid.
-     *
-     * @return Refund Request Eid
-     */
-    public String getRefundRequestEid() {
-        return this.refundRequestEid;
-    }
-
-    /**
-     * Sets Refund Request Eid.
-     *
-     * @param refundRequestEid Refund Request Eid
-     */
-    public void setRefundRequestEid(String refundRequestEid) {
-        this.refundRequestEid = refundRequestEid;
     }
 }

@@ -38,6 +38,6 @@ public class CurrencyClientTest extends AbstractClientTest {
     }
 
     private CurrencyClient getCurrencyClient() throws BitPayException {
-        return new CurrencyClient(this.getBitPayClient());
+        return CurrencyClient.getInstance(this.getBitPayClient());
     }
 }

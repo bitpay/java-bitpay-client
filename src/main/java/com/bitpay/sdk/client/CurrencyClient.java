@@ -19,8 +19,9 @@ import org.apache.http.util.EntityUtils;
 /**
  * The type Currency client.
  */
-public class CurrencyClient {
+public class CurrencyClient implements ResourceClient {
 
+    private static CurrencyClient instance;
     private final BitPayClient client;
     private List<Map<String, String>> currenciesInfo;
 
@@ -30,11 +31,25 @@ public class CurrencyClient {
      * @param client the client
      * @throws BitPayException the bit pay exception
      */
-    public CurrencyClient(BitPayClient client) throws BitPayException {
+    private CurrencyClient(BitPayClient client) throws BitPayException {
         if (Objects.isNull(client)) {
             throw new BitPayException(null, "failed init Currency Client");
         }
         this.client = client;
+    }
+
+    /**
+     * Factory method for Currency Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @return CurrencyClient
+     */
+    public static CurrencyClient getInstance(BitPayClient bitPayClient) throws BitPayException {
+        if (Objects.isNull(instance)) {
+            instance = new CurrencyClient(bitPayClient);
+        }
+
+        return instance;
     }
 
     /**

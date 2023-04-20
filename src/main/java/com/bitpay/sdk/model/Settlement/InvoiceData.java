@@ -25,7 +25,6 @@ public class InvoiceData {
     private String transactionCurrency;
     private Float overPaidAmount;
     private Map<String, Double> payoutPercentage;
-    private Float btcPrice;
     private RefundInfo refundInfo;
 
     /**
@@ -179,26 +178,6 @@ public class InvoiceData {
     @JsonProperty("payoutPercentage")
     public void setPayoutPercentage(Map<String, Double> payoutPercentage) {
         this.payoutPercentage = payoutPercentage;
-    }
-
-    /**
-     * Gets btc price.
-     *
-     * @return the btc price
-     */
-    @JsonIgnore
-    public Float getBtcPrice() {
-        return this.btcPrice;
-    }
-
-    /**
-     * Sets btc price.
-     *
-     * @param btcPrice the btc price
-     */
-    @JsonProperty("btcPrice")
-    public void setBtcPrice(Float btcPrice) {
-        this.btcPrice = btcPrice;
     }
 
     /**

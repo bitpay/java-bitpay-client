@@ -38,19 +38,6 @@ public class RefundInfoTest {
     }
 
     @Test
-    public void it_should_manipulate_refundRequestEid() {
-        // given
-        String expected = "someString";
-        RefundInfo testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setRefundRequestEid(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getRefundRequestEid());
-    }
-
-    @Test
     public void it_should_not_allow_to_set_invalid_currency() {
         Assertions.assertThrows(BitPayException.class, () -> {
             final String invalidCurrency = "INVALID_CURRENCY";

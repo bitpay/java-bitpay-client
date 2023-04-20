@@ -24,7 +24,6 @@ public class RefundInfo {
 
     private String supportRequest = DEFAULT_NON_SENT_VALUE;
     private String currency = DEFAULT_NON_SENT_VALUE;
-    private String refundRequestEid = DEFAULT_NON_SENT_VALUE;
     private Hashtable<String, Double> amounts;
 
     /**
@@ -77,25 +76,6 @@ public class RefundInfo {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
 
         this.currency = currency;
-    }
-
-    /**
-     * Gets Refund Request Eid.
-     *
-     * @return Refund Request Eid
-     */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getRefundRequestEid() {
-        return this.refundRequestEid;
-    }
-
-    /**
-     * Sets Refund Request Eid.
-     *
-     * @param refundRequestEid Refund Request Eid
-     */
-    public void setRefundRequestEid(String refundRequestEid) {
-        this.refundRequestEid = refundRequestEid;
     }
 
     /**

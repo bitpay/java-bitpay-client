@@ -35,15 +35,11 @@ public class PayoutRecipient {
     private String email = DEFAULT_NON_SENT_VALUE;
     private String guid;
     private String label = DEFAULT_NON_SENT_VALUE;
-    private String reference = DEFAULT_NON_SENT_VALUE;
     private String notificationURL = DEFAULT_NON_SENT_VALUE;
-
-    private String account = DEFAULT_NON_SENT_VALUE;
     private String status = DEFAULT_NON_SENT_VALUE;
     private String id = DEFAULT_NON_SENT_VALUE;
     private String shopperId = DEFAULT_NON_SENT_VALUE;
     private String token = DEFAULT_NON_SENT_VALUE;
-    private String supportPhone = DEFAULT_NON_SENT_VALUE;
 
 
     /**
@@ -187,27 +183,6 @@ public class PayoutRecipient {
         this.notificationURL = notificationURL;
     }
 
-    /**
-     * Gets reference.
-     *
-     * @return the reference
-     */
-    @JsonProperty("reference")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getReference() {
-        return this.reference;
-    }
-
-    /**
-     * Sets reference.
-     *
-     * @param reference the reference
-     */
-    @JsonProperty("reference")
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
     // Response fields
     //
 
@@ -303,45 +278,5 @@ public class PayoutRecipient {
     @JsonProperty("shopperId")
     public void setShopperId(String shopperId) {
         this.shopperId = shopperId;
-    }
-
-    /**
-     * Gets account.
-     *
-     * @return the account
-     */
-    @JsonIgnore
-    public String getAccount() {
-        return this.account;
-    }
-
-    /**
-     * Sets account.
-     *
-     * @param account the account
-     */
-    @JsonProperty("account")
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    /**
-     * Gets support phone.
-     *
-     * @return the support phone
-     */
-    @JsonIgnore
-    public String getSupportPhone() {
-        return this.supportPhone;
-    }
-
-    /**
-     * Sets support phone.
-     *
-     * @param supportPhone the support phone
-     */
-    @JsonProperty("supportPhone")
-    public void setSupportPhone(String supportPhone) {
-        this.supportPhone = supportPhone;
     }
 }

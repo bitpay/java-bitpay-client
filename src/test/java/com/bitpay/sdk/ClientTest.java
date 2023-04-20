@@ -26,8 +26,8 @@ import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Settlement.Settlement;
 import com.bitpay.sdk.model.Wallet.Wallet;
-import com.bitpay.sdk.util.TokenContainer;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.TokenContainer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +43,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -74,6 +75,11 @@ public class ClientTest {
     private HttpResponse httpResponse;
     @Mock
     private HttpEntity httpEntity;
+
+    @BeforeEach
+    public void clearResourceClients() {
+        ResourceClientsCleaner.execute();
+    }
 
     @Test
     public void it_should_provide_pos_client() throws BitPayException {

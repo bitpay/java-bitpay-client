@@ -228,15 +228,6 @@ public class InvoiceTest {
     }
 
     @Test
-    public void it_should_manipulate_transactionDetails() {
-        InvoiceTransactionDetails expected = Mockito.mock(InvoiceTransactionDetails.class);
-        Invoice testedClass = this.getTestedClass();
-
-        testedClass.setTransactionDetails(expected);
-        Assertions.assertSame(expected, testedClass.getTransactionDetails());
-    }
-
-    @Test
     public void it_should_manipulate_universalCodes() {
         InvoiceUniversalCodes expected = Mockito.mock(InvoiceUniversalCodes.class);
         Invoice testedClass = this.getTestedClass();

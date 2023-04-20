@@ -68,6 +68,6 @@ public class LedgerClientTest extends AbstractClientTest {
     }
 
     private LedgerClient getTestedClass(TokenContainer accessTokens) {
-        return new LedgerClient(this.getBitPayClient(), accessTokens);
+        return LedgerClient.getInstance(this.getBitPayClient(), accessTokens);
     }
 }

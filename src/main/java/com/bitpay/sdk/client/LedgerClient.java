@@ -23,8 +23,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Ledger client.
  */
-public class LedgerClient {
+public class LedgerClient implements ResourceClient {
 
+    private static LedgerClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
 
@@ -34,9 +35,24 @@ public class LedgerClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public LedgerClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private LedgerClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
+    }
+
+    /**
+     * Factory method for Ledger Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @return LedgerClient
+     */
+    public static LedgerClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+        if (Objects.isNull(instance)) {
+            instance = new LedgerClient(bitPayClient, accessTokens);
+        }
+
+        return instance;
     }
 
     /**

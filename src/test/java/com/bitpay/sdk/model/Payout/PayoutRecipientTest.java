@@ -49,19 +49,6 @@ public class PayoutRecipientTest {
     }
 
     @Test
-    public void it_should_change_reference() {
-        // given
-        String expected = "expectedString";
-        PayoutRecipient testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setReference(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getReference());
-    }
-
-    @Test
     public void it_should_change_notificationURL() {
         // given
         String expected = "expectedString";
@@ -72,19 +59,6 @@ public class PayoutRecipientTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getNotificationURL());
-    }
-
-    @Test
-    public void it_should_change_account() {
-        // given
-        String expected = "expectedString";
-        PayoutRecipient testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setAccount(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getAccount());
     }
 
     @Test
@@ -137,19 +111,6 @@ public class PayoutRecipientTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getToken());
-    }
-
-    @Test
-    public void it_should_change_supportPhone() {
-        // given
-        String expected = "expectedString";
-        PayoutRecipient testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setSupportPhone(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getSupportPhone());
     }
 
     private PayoutRecipient getTestedClass() {

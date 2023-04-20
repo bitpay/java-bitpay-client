@@ -23,8 +23,9 @@ import org.apache.http.message.BasicNameValuePair;
 /**
  * The type Settlement client.
  */
-public class SettlementClient {
+public class SettlementClient implements ResourceClient {
 
+    private static SettlementClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
 
@@ -34,9 +35,24 @@ public class SettlementClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    public SettlementClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private SettlementClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
+    }
+
+    /**
+     * Factory method for Settlement Client.
+     *
+     * @param bitPayClient BitPay Client
+     * @param accessTokens Access Tokens
+     * @return SettlementClient
+     */
+    public static SettlementClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+        if (Objects.isNull(instance)) {
+            instance = new SettlementClient(bitPayClient, accessTokens);
+        }
+
+        return instance;
     }
 
     /**
