@@ -159,6 +159,8 @@ public class Currencies {
 
     /**
      * Sets Custodial wallet withdrawal fee.
+     *
+     * @param withdrawalFee withdrawal fee
      */
     @JsonProperty("withdrawalFee")
     public void setWithdrawalFee(String withdrawalFee) {
@@ -177,6 +179,8 @@ public class Currencies {
 
     /**
      * Sets whether or not this wallet supports walletConnect.
+     *
+     * @param walletConnect wallet connect
      */
     @JsonProperty("walletConnect")
     public void setWalletConnect(Boolean walletConnect) {

@@ -53,7 +53,7 @@ public class Payout {
     private Long requestDate;
     private Long dateExecuted;
     private Integer code;
-    private List<PayoutInstructionTransaction> transactions = Collections.emptyList();
+    private List<PayoutTransaction> transactions = Collections.emptyList();
 
     /**
      * Constructor, create an empty Payout object.
@@ -254,7 +254,7 @@ public class Payout {
      */
     @JsonProperty("transactions")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public List<PayoutInstructionTransaction> getTransactions() {
+    public List<PayoutTransaction> getTransactions() {
         return this.transactions;
     }
 
@@ -264,7 +264,7 @@ public class Payout {
      * @param transactions the transactions
      */
     @JsonProperty("transactions")
-    public void setTransactions(List<PayoutInstructionTransaction> transactions) {
+    public void setTransactions(List<PayoutTransaction> transactions) {
         this.transactions = transactions;
     }
 

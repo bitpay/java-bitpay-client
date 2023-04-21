@@ -23,6 +23,11 @@ public class SupportedTransactionCurrencies {
     private SupportedTransactionCurrency gusd = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency pax = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency xrp = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency busd = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency doge = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency ltc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency wbtc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency dai = new SupportedTransactionCurrency();
 
     /**
      * Instantiates a new Supported transaction currencies.
@@ -151,4 +156,104 @@ public class SupportedTransactionCurrencies {
      */
     @JsonProperty("XRP")
     public void setXrp(SupportedTransactionCurrency xrp) { this.xrp = xrp; }
+
+    /**
+     * Gets BUSD.
+     *
+     * @return BUSD
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getBusd() {
+        return this.busd;
+    }
+
+    /**
+     * Sets BUSD.
+     *
+     * @param busd BUSD
+     */
+    @JsonProperty("BUSD")
+    public void setBusd(SupportedTransactionCurrency busd) {
+        this.busd = busd;
+    }
+
+    /**
+     * Gets DOGE.
+     *
+     * @return DOGE
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getDoge() {
+        return doge;
+    }
+
+    /**
+     * Sets DOGE.
+     *
+     * @param doge DOGE
+     */
+    @JsonProperty("DOGE")
+    public void setDoge(SupportedTransactionCurrency doge) {
+        this.doge = doge;
+    }
+
+    /**
+     * Gets LTC.
+     *
+     * @return LTC
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getLtc() {
+        return this.ltc;
+    }
+
+    /**
+     * Sets LTC.
+     *
+     * @param ltc LTC
+     */
+    @JsonProperty("LTC")
+    public void setLtc(SupportedTransactionCurrency ltc) {
+        this.ltc = ltc;
+    }
+
+    /**
+     * Gets DAI.
+     *
+     * @return DAI
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getDai() {
+        return this.dai;
+    }
+
+    /**
+     * Sets DAI.
+     *
+     * @param dai DAI
+     */
+    @JsonProperty("DAI")
+    public void setDai(SupportedTransactionCurrency dai) {
+        this.dai = dai;
+    }
+
+    /**
+     * Gets WBTC.
+     *
+     * @return WBTC
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getWbtc() {
+        return this.wbtc;
+    }
+
+    /**
+     * Sets WBTC.
+     *
+     * @param wbtc WBTC
+     */
+    @JsonProperty("WBTC")
+    public void setWbtc(SupportedTransactionCurrency wbtc) {
+        this.wbtc = wbtc;
+    }
 }

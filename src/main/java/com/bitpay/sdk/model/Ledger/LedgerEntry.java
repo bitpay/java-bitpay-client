@@ -27,6 +27,7 @@ public class LedgerEntry {
     private String transactionCurrency;
     private String id;
     private String supportRequest;
+    private String currency;
 
     /**
      * Instantiates a new Ledger entry.
@@ -339,5 +340,25 @@ public class LedgerEntry {
     @JsonProperty("supportRequest")
     public void setSupportRequest(String supportRequest) {
         this.supportRequest = supportRequest;
+    }
+
+    /**
+     * Gets ledger entry currency for the corresponding amount.
+     *
+     * @return currency
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getCurrency() {
+        return this.currency;
+    }
+
+    /**
+     * Sets ledger entry currency for the corresponding amount.
+     *
+     * @param currency currency
+     */
+    @JsonProperty("currency")
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

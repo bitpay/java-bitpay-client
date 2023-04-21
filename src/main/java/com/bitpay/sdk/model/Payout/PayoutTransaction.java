@@ -14,16 +14,17 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PayoutInstructionTransaction {
+public class PayoutTransaction {
 
     private String txid;
     private Double amount;
     private Long date;
+    private String confirmations;
 
     /**
      * Instantiates a new Payout instruction transaction.
      */
-    public PayoutInstructionTransaction() {
+    public PayoutTransaction() {
     }
 
     /**
@@ -90,4 +91,22 @@ public class PayoutInstructionTransaction {
         this.date = date;
     }
 
+    /**
+     * Gets the number of confirmations the transaction has received.
+     *
+     * @return confirmations
+     */
+    @JsonIgnore
+    public String getConfirmations() {
+        return confirmations;
+    }
+
+    /**
+     * Sets the number of confirmations the transaction has received.
+     * @param confirmations confirmations
+     */
+    @JsonProperty("confirmations")
+    public void setConfirmations(String confirmations) {
+        this.confirmations = confirmations;
+    }
 }

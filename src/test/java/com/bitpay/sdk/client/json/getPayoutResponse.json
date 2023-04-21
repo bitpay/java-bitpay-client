@@ -27,7 +27,8 @@
       {
         "txid": "db53d7e2bf3385a31257ce09396202d9c2823370a5ca186db315c45e24594057",
         "amount": 0.000254,
-        "date": "2021-05-27T11:04:23.155Z"
+        "date": "2021-05-27T11:04:23.155Z",
+        "confirmations": 6
       }
     ],
     "token": "6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL"

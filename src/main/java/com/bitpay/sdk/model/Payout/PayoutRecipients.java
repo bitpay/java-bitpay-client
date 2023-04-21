@@ -10,6 +10,8 @@ import java.util.List;
 
 /**
  * The type Payout recipients.
+ *
+ * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 public class PayoutRecipients {
     private String guid;

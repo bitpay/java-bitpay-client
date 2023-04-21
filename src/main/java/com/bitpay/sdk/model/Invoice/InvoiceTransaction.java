@@ -149,6 +149,8 @@ public class InvoiceTransaction {
 
     /**
      * Sets exchange rates.
+     *
+     * @param exRates Exchange rates
      */
     @JsonProperty("exRates")
     public void setExRates(Map<String, BigDecimal> exRates) {

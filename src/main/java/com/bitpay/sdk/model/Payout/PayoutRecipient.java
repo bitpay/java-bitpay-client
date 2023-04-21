@@ -41,7 +41,6 @@ public class PayoutRecipient {
     private String shopperId = DEFAULT_NON_SENT_VALUE;
     private String token = DEFAULT_NON_SENT_VALUE;
 
-
     /**
      * Constructor, create a minimal Recipient object.
      *

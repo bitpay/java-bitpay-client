@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The type Item.
+ *
+ * @see <a href="https://developer.bitpay.com/reference/bills">REST API Bills</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
