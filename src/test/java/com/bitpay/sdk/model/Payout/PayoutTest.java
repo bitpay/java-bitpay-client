@@ -301,8 +301,8 @@ public class PayoutTest {
     @Test
     public void it_should_change_transactions() {
         // given
-        List<PayoutInstructionTransaction> expected =
-            Collections.singletonList(Mockito.mock(PayoutInstructionTransaction.class));
+        List<PayoutTransaction> expected =
+            Collections.singletonList(Mockito.mock(PayoutTransaction.class));
         Payout testedClass = this.getTestedClass();
 
         // when

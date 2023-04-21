@@ -18,6 +18,8 @@ import java.util.List;
 /**
  * <p>Bills are payment requests addressed to specific buyers.</p>
  * <p>Bill line items have fixed prices, typically denominated in fiat currency.</p>
+ *
+ * @see <a href="https://developer.bitpay.com/reference/bills">REST API Bills</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {

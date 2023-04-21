@@ -43,6 +43,7 @@ public class CurrencyClient implements ResourceClient {
      *
      * @param bitPayClient BitPay Client
      * @return CurrencyClient
+     * @throws BitPayException BitPayException
      */
     public static CurrencyClient getInstance(BitPayClient bitPayClient) throws BitPayException {
         if (Objects.isNull(instance)) {

@@ -2,6 +2,8 @@ package com.bitpay.sdk.model.Payout;
 
 /**
  * The type Recipient status.
+ *
+ * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 public class RecipientStatus {
 

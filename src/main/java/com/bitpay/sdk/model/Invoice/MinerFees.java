@@ -25,7 +25,12 @@ public class MinerFees {
     private MinerFeesItem usdc = new MinerFeesItem();
     private MinerFeesItem gusd = new MinerFeesItem();
     private MinerFeesItem pax = new MinerFeesItem();
+    private MinerFeesItem busd = new MinerFeesItem();
     private MinerFeesItem xrp = new MinerFeesItem();
+    private MinerFeesItem doge = new MinerFeesItem();
+    private MinerFeesItem ltc = new MinerFeesItem();
+    private MinerFeesItem dai = new MinerFeesItem();
+    private MinerFeesItem wbtc = new MinerFeesItem();
 
     /**
      * Instantiates a new Miner fees.
@@ -150,10 +155,110 @@ public class MinerFees {
     public MinerFeesItem getXrp() { return this.xrp; }
 
     /**
-     * Sets xrp.
+     * Sets XRP.
      *
      * @param xrp the XRP
      */
     @JsonProperty("XRP")
     public void setXrp(MinerFeesItem xrp) { this.xrp = xrp; }
+
+    /**
+     * Gets BUSD.
+     *
+     * @return BUSD
+     */
+    @JsonIgnore
+    public MinerFeesItem getBusd() {
+        return this.busd;
+    }
+
+    /**
+     * Sets BUSD.
+     *
+     * @param busd BUSD
+     */
+    @JsonProperty("BUSD")
+    public void setBusd(MinerFeesItem busd) {
+        this.busd = busd;
+    }
+
+    /**
+     * Gets DOGE.
+     *
+     * @return DOGE
+     */
+    @JsonIgnore
+    public MinerFeesItem getDoge() {
+        return this.doge;
+    }
+
+    /**
+     * Sets DOGE.
+     *
+     * @param doge DOGE
+     */
+    @JsonProperty("DOGE")
+    public void setDoge(MinerFeesItem doge) {
+        this.doge = doge;
+    }
+
+    /**
+     * Gets LTC.
+     *
+     * @return LTC
+     */
+    @JsonIgnore
+    public MinerFeesItem getLtc() {
+        return this.ltc;
+    }
+
+    /**
+     * Sets LTC.
+     *
+     * @param ltc LTC
+     */
+    @JsonProperty("LTC")
+    public void setLtc(MinerFeesItem ltc) {
+        this.ltc = ltc;
+    }
+
+    /**
+     * Gets DAI.
+     *
+     * @return DAI
+     */
+    @JsonIgnore
+    public MinerFeesItem getDai() {
+        return this.dai;
+    }
+
+    /**
+     * Sets DAI.
+     *
+     * @param dai DAI
+     */
+    @JsonProperty("DAI")
+    public void setDai(MinerFeesItem dai) {
+        this.dai = dai;
+    }
+
+    /**
+     * Gets WBTC.
+     *
+     * @return WBTC
+     */
+    @JsonIgnore
+    public MinerFeesItem getWbtc() {
+        return this.wbtc;
+    }
+
+    /**
+     * Sets WBTC.
+     *
+     * @param wbtc WBTC
+     */
+    @JsonProperty("WBTC")
+    public void setWbtc(MinerFeesItem wbtc) {
+        this.wbtc = wbtc;
+    }
 }

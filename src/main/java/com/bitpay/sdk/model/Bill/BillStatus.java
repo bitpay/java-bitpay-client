@@ -5,6 +5,8 @@ package com.bitpay.sdk.model.Bill;
 
 /**
  * The type Bill status.
+ *
+ * @see <a href="https://developer.bitpay.com/reference/bills">REST API Bills</a>
  */
 public class BillStatus {
 

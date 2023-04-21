@@ -13,7 +13,7 @@ public class PayoutInstructionTransactionTest {
     public void it_should_change_txid() {
         // given
         String expected = "expectedString";
-        PayoutInstructionTransaction testedClass = this.getTestedClass();
+        PayoutTransaction testedClass = this.getTestedClass();
 
         // when
         testedClass.setTxid(expected);
@@ -26,7 +26,7 @@ public class PayoutInstructionTransactionTest {
     public void it_should_change_amount() {
         // given
         Double expected = 12.34;
-        PayoutInstructionTransaction testedClass = this.getTestedClass();
+        PayoutTransaction testedClass = this.getTestedClass();
 
         // when
         testedClass.setAmount(expected);
@@ -39,7 +39,7 @@ public class PayoutInstructionTransactionTest {
     public void it_should_change_date() {
         // given
         Long expected = 12L;
-        PayoutInstructionTransaction testedClass = this.getTestedClass();
+        PayoutTransaction testedClass = this.getTestedClass();
 
         // when
         testedClass.setDate(expected);
@@ -49,7 +49,7 @@ public class PayoutInstructionTransactionTest {
     }
 
 
-    private PayoutInstructionTransaction getTestedClass() {
-        return new PayoutInstructionTransaction();
+    private PayoutTransaction getTestedClass() {
+        return new PayoutTransaction();
     }
 }
