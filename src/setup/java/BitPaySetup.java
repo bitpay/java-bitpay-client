@@ -16,7 +16,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 
-class BitPaySetup {
+public class BitPaySetup {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String opt, env, privateKeyPath = "", privateKeyAsHex = "", pairingCodeMerchant, pairingCodePayout, privateKey = "";
