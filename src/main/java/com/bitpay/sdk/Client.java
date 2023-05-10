@@ -12,6 +12,7 @@ import com.bitpay.sdk.client.HttpRequestFactory;
 import com.bitpay.sdk.client.InvoiceClient;
 import com.bitpay.sdk.client.LedgerClient;
 import com.bitpay.sdk.client.PayoutClient;
+import com.bitpay.sdk.client.PayoutGroupClient;
 import com.bitpay.sdk.client.PayoutRecipientsClient;
 import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.client.RefundClient;
@@ -51,6 +52,7 @@ import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
+import com.bitpay.sdk.model.Payout.PayoutGroup;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
 import com.bitpay.sdk.model.Rate.Rate;
@@ -68,6 +70,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1131,6 +1134,20 @@ public class Client {
     }
 
     /**
+     * Submit a BitPay Payouts.
+     *
+     * @see <a href="https://developer.bitpay.com/reference/create-payout-group">Create a Payouts</a>
+     *
+     * @param payouts Collection of Payout objects with request parameters defined.
+     * @return A BitPay PayoutGroup with generated Payout objects and information's about not created payouts.
+     * @throws BitPayException         BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     */
+    public PayoutGroup submitPayouts(Collection<Payout> payouts) throws BitPayException, PayoutCreationException {
+        return this.getPayoutGroupClient().submit(payouts);
+    }
+
+    /**
      * Retrieve a BitPay payout by payout id using. The client must have been
      * previously authorized for the payout facade.
      *
@@ -1160,6 +1177,20 @@ public class Client {
     }
 
     /**
+     * Cancel a BitPay Payouts.
+     *
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout-group">Cancel a Payouts</a>
+     *
+     * @param groupId String The id of the payout group to cancel.
+     * @return A BitPay PayoutGroup with cancelled Payout objects and information's about not cancelled payouts.
+     * @throws BitPayException             BitPayException class
+     * @throws PayoutCancellationException PayoutCancellationException class
+     */
+    public PayoutGroup cancelPayouts(String groupId) throws BitPayException, PayoutCancellationException {
+        return this.getPayoutGroupClient().cancel(groupId);
+    }
+
+    /**
      * Retrieve a collection of BitPay payouts.
      *
      * @see <a href="https://developer.bitpay.com/reference/retrieve-payouts-filtered-by-query">Retrieve Payouts Filtered by Query</a>
@@ -1171,13 +1202,14 @@ public class Client {
      * @param limit     int Maximum results that the query will return (useful for
      *                  paging results).
      * @param offset    int Offset for paging.
+     * @param groupId   String The optional group id assigned to payout.
      * @return A list of BitPay Payout objects.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
      */
     public List<Payout> getPayouts(String startDate, String endDate, String status, String reference, Integer limit,
-                                   Integer offset) throws BitPayException, PayoutQueryException {
-        return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset);
+                                   Integer offset, String groupId) throws BitPayException, PayoutQueryException {
+        return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset, groupId);
     }
 
     /**
@@ -1495,6 +1527,10 @@ public class Client {
      */
     protected PayoutClient getPayoutClient() {
         return PayoutClient.getInstance(this.bitPayClient, this.tokenContainer);
+    }
+
+    protected PayoutGroupClient getPayoutGroupClient() {
+        return PayoutGroupClient.getInstance(this.bitPayClient, this.tokenContainer);
     }
 
     /**

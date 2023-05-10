@@ -119,8 +119,15 @@ public class PayoutClientTest extends AbstractClientTest {
         );
 
         // when
-        List<Payout> result = this.getTestedClass(accessTokens).
-            getPayouts("2021-05-27", "2021-05-31", null, null, null, null);
+        List<Payout> result = this.getTestedClass(accessTokens).getPayouts(
+                "2021-05-27",
+                "2021-05-31",
+                null,
+                null,
+                null,
+                null,
+                null
+            );
 
         // then
         Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, result.get(0).getAccountId());

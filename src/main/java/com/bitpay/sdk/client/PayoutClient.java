@@ -179,6 +179,7 @@ public class PayoutClient implements ResourceClient {
      * @param limit     int Maximum results that the query will return (useful for
      *                  paging results).
      * @param offset    int Offset for paging.
+     * @param groupId   String The optional group id assigned to payout.
      * @return A list of BitPay Payout objects.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
@@ -189,7 +190,8 @@ public class PayoutClient implements ResourceClient {
         String status,
         String reference,
         Integer limit,
-        Integer offset
+        Integer offset,
+        String groupId
     ) throws BitPayException, PayoutQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
@@ -202,6 +204,9 @@ public class PayoutClient implements ResourceClient {
         }
         if (Objects.nonNull(offset)) {
             ParameterAdder.execute(params, "offset", offset.toString());
+        }
+        if (Objects.nonNull(groupId)) {
+            ParameterAdder.execute(params, "groupId", groupId);
         }
 
         List<Payout> payouts;

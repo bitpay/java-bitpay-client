@@ -54,6 +54,7 @@ public class Payout {
     private Long dateExecuted;
     private Integer code;
     private List<PayoutTransaction> transactions = Collections.emptyList();
+    public boolean ignoreEmails = false;
 
     /**
      * Constructor, create an empty Payout object.
@@ -651,5 +652,15 @@ public class Payout {
      */
     public void setCode(Integer code) {
         this.code = code;
+    }
+
+    @JsonProperty("ignoreEmails")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public boolean isIgnoreEmails() {
+        return this.ignoreEmails;
+    }
+
+    public void setIgnoreEmails(final boolean ignoreEmails) {
+        this.ignoreEmails = ignoreEmails;
     }
 }

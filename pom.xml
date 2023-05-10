@@ -130,7 +130,7 @@
                 <configuration>
                     <argLine>@{argLine} -Duser.timezone=UTC</argLine>
                     <excludes>
-                        <exclude>**/integration/ClientIntegrationTest.java</exclude>
+                        <exclude>**/functional/ClientFunctionalTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

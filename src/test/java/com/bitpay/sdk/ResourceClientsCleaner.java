@@ -9,6 +9,7 @@ import com.bitpay.sdk.client.CurrencyClient;
 import com.bitpay.sdk.client.InvoiceClient;
 import com.bitpay.sdk.client.LedgerClient;
 import com.bitpay.sdk.client.PayoutClient;
+import com.bitpay.sdk.client.PayoutGroupClient;
 import com.bitpay.sdk.client.PayoutRecipientsClient;
 import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.client.RefundClient;
@@ -27,8 +28,8 @@ public class ResourceClientsCleaner {
     public static void execute() {
         List<Class<? extends ResourceClient>> classes = Arrays
             .asList(BillClient.class, CurrencyClient.class, InvoiceClient.class,
-            LedgerClient.class, PayoutClient.class, PayoutRecipientsClient.class, RateClient.class, RefundClient.class,
-            SettlementClient.class, WalletClient.class);
+            LedgerClient.class, PayoutClient.class, PayoutGroupClient.class, PayoutRecipientsClient.class,
+                RateClient.class, RefundClient.class, SettlementClient.class, WalletClient.class);
         classes.forEach(singleClass -> {
             try {
                 Field field = singleClass.getDeclaredField("instance");

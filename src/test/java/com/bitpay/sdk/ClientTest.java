@@ -20,6 +20,8 @@ import com.bitpay.sdk.model.Invoice.Refund;
 import com.bitpay.sdk.model.Ledger.Ledger;
 import com.bitpay.sdk.model.Ledger.LedgerEntry;
 import com.bitpay.sdk.model.Payout.Payout;
+import com.bitpay.sdk.model.Payout.PayoutGroup;
+import com.bitpay.sdk.model.Payout.PayoutGroupFailed;
 import com.bitpay.sdk.model.Payout.PayoutRecipient;
 import com.bitpay.sdk.model.Payout.PayoutRecipients;
 import com.bitpay.sdk.model.Rate.Rate;
@@ -32,8 +34,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
@@ -64,6 +69,7 @@ public class ClientTest {
         "2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXcejgPXVmZ4Ae3oGaCGBFKQf";
     protected static final String PAYOUT_TOKEN = "3tDEActqHSjbc3Hn5MoLH7XTn4hMdGSp6YbmvNDXTr5Y";
     protected static final String PAYOUT_ID = "JMwv8wQCXANoU2ZZQ9a9GH";
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Mock
     private BitPayClient bitPayClient;
@@ -1748,6 +1754,66 @@ public class ClientTest {
     }
 
     @Test
+    public void it_should_test_submitPayoutGroup() throws BitPayException, ParseException {
+        // given
+        final String requestJson = getPreparedJsonDataFromFile("submitPayoutGroupRequest.json");
+        Collection<Payout> payouts = Arrays.asList(getPayoutExample(), getPayoutExample());
+
+        Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
+        Mockito.when(this.bitPayClient.post("payouts/group", requestJson, true))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("submitPayoutGroupResponse.json"));
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+
+        PayoutGroup result = testedClass.submitPayouts(payouts);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).post("payouts/group", requestJson, true);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+
+        Assertions.assertFalse(result.getPayouts().isEmpty());
+        Payout firstPayout = result.getPayouts().get(0);
+
+        Assertions.assertEquals(10.0, firstPayout.getAmount());
+        Assertions.assertEquals("USD", firstPayout.getCurrency());
+        Assertions.assertNull(firstPayout.getDateExecuted());
+        Assertions.assertEquals(
+            dateFormatter.parse("2021-05-27T09:00:00.000Z").toInstant().toEpochMilli(),
+            firstPayout.getEffectiveDate()
+        );
+        Assertions.assertEquals("john@doe.com", firstPayout.getEmail());
+        Assertions.assertNull(firstPayout.getExchangeRates());
+        Assertions.assertEquals("JMwv8wQCXANoU2ZZQ9a9GH", firstPayout.getId());
+        Assertions.assertEquals("John Doe", firstPayout.getLabel());
+        Assertions.assertEquals("GBP", firstPayout.getLedgerCurrency());
+        Assertions.assertNull(firstPayout.getMessage());
+        Assertions.assertEquals("merchant@email.com", firstPayout.getNotificationEmail());
+        Assertions.assertEquals(
+            "https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx",
+            firstPayout.getNotificationURL()
+        );
+        Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", firstPayout.getRecipientId());
+        Assertions.assertEquals("payout_20210527", firstPayout.getReference());
+        Assertions.assertEquals(
+            dateFormatter.parse("2021-05-27T10:47:37.834Z").toInstant().toEpochMilli(),
+            firstPayout.getRequestDate()
+        );
+        Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", firstPayout.getShopperId());
+        Assertions.assertEquals("new", firstPayout.getStatus());
+        Assertions.assertTrue(firstPayout.getTransactions().isEmpty());
+
+        Assertions.assertFalse(result.getFailed().isEmpty());
+        PayoutGroupFailed failed = result.getFailed().get(0);
+        Assertions.assertEquals("Ledger currency is required", failed.getErrMessage());
+        Assertions.assertEquals("john@doe.com", failed.getPayee());
+    }
+
+    @Test
     public void it_should_test_getPayout() throws BitPayException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -1800,6 +1866,37 @@ public class ClientTest {
     }
 
     @Test
+    public void it_should_test_cancelPayoutGroup() throws BitPayException {
+        // given
+        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+        params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
+
+        Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
+        Mockito.when(this.bitPayClient.delete("payouts/group/" + PAYOUT_ID, params))
+            .thenReturn(this.httpResponse);
+        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+            .thenReturn(getPreparedJsonDataFromFile("cancelPayoutGroupResponse.json"));
+
+        Client testedClass = this.getTestedClass();
+
+        // when
+
+        PayoutGroup result = testedClass.cancelPayouts(PAYOUT_ID);
+
+        // then
+        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("payouts/group/" + PAYOUT_ID, params);
+        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
+
+        Assertions.assertFalse(result.getPayouts().isEmpty());
+        Assertions.assertFalse(result.getFailed().isEmpty());
+
+        PayoutGroupFailed failed = result.getFailed().get(0);
+        Assertions.assertEquals("D8tgWzn1psUua4NYWW1vYo", failed.getPayoutId());
+        Assertions.assertEquals("PayoutId is missing or invalid", failed.getErrMessage());
+    }
+
+    @Test
     public void it_should_test_getPayouts() throws BitPayException {
         // given
         final String startDate = "2021-05-27";
@@ -1823,7 +1920,15 @@ public class ClientTest {
         Client testedClass = this.getTestedClass();
 
         // when
-        List<Payout> result = testedClass.getPayouts(startDate, endDate, null, null, limit, offset);
+        List<Payout> result = testedClass.getPayouts(
+            startDate,
+            endDate,
+            null,
+            null,
+            limit,
+            offset,
+            null
+        );
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
