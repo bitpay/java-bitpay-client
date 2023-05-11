@@ -1,7 +1,8 @@
-package com.bitpay.sdk;
-
+import com.bitpay.sdk.Client;
+import com.bitpay.sdk.Config;
+import com.bitpay.sdk.Environment;
+import com.bitpay.sdk.PrivateKey;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.util.AccessTokens;
 import com.bitpay.sdk.util.KeyUtils;
 import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 import org.bitcoinj.core.ECKey;
 
-class BitPaySetup {
+public class BitPaySetup {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String opt;
