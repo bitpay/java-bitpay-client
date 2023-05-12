@@ -1,4 +1,9 @@
-package com.bitpay.sdk.model.Ledger;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
+package com.bitpay.sdk.model.ledger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,7 +60,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("type")
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -81,7 +86,7 @@ public class LedgerEntry {
      *
      */
     @JsonProperty("amount")
-    public void setAmount(String amount) {
+    public void setAmount(final String amount) {
         this.amount = amount;
     }
 
@@ -107,7 +112,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("code")
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -133,7 +138,7 @@ public class LedgerEntry {
      * @param description the description
      */
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -153,16 +158,15 @@ public class LedgerEntry {
      * @param timestamp the timestamp
      */
     @JsonProperty("timestamp")
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(final String timestamp) {
         this.timestamp = timestamp;
     }
 
     /**
      * Gets tx type.
      *
-     * @deprecated see type
-     *
      * @return the tx type
+     * @deprecated see type
      */
     @Deprecated
     @JsonIgnore
@@ -173,12 +177,11 @@ public class LedgerEntry {
     /**
      * Sets tx type.
      *
-     * @deprecated see type
-     *
      * @param txType the tx type
+     * @deprecated see type
      */
     @JsonProperty("txType")
-    public void setTxType(String txType) {
+    public void setTxType(final String txType) {
         this.txType = txType;
     }
 
@@ -198,7 +201,7 @@ public class LedgerEntry {
      * @param scale the scale
      */
     @JsonProperty("scale")
-    public void setScale(String scale) {
+    public void setScale(final String scale) {
         this.scale = scale;
     }
 
@@ -218,7 +221,7 @@ public class LedgerEntry {
      * @param invoiceId the invoice id
      */
     @JsonProperty("invoiceId")
-    public void setInvoiceId(String invoiceId) {
+    public void setInvoiceId(final String invoiceId) {
         this.invoiceId = invoiceId;
     }
 
@@ -238,7 +241,7 @@ public class LedgerEntry {
      * @param buyer the buyer
      */
     @JsonProperty("buyerFields")
-    public void setBuyer(Buyer buyer) {
+    public void setBuyer(final Buyer buyer) {
         this.buyer = buyer;
     }
 
@@ -258,7 +261,7 @@ public class LedgerEntry {
      * @param invoiceAmount the invoice amount
      */
     @JsonProperty("invoiceAmount")
-    public void setInvoiceAmount(Double invoiceAmount) {
+    public void setInvoiceAmount(final Double invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
     }
 
@@ -278,7 +281,7 @@ public class LedgerEntry {
      * @param invoiceCurrency the invoice currency
      */
     @JsonProperty("invoiceCurrency")
-    public void setInvoiceCurrency(String invoiceCurrency) {
+    public void setInvoiceCurrency(final String invoiceCurrency) {
         this.invoiceCurrency = invoiceCurrency;
     }
 
@@ -300,7 +303,7 @@ public class LedgerEntry {
      * @param transactionCurrency the transaction currency
      */
     @JsonProperty("transactionCurrency")
-    public void setTransactionCurrency(String transactionCurrency) {
+    public void setTransactionCurrency(final String transactionCurrency) {
         this.transactionCurrency = transactionCurrency;
     }
 
@@ -320,25 +323,27 @@ public class LedgerEntry {
      * @param id the id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
     /**
      * Gets the refund requestId.
+     *
      * @return refund requestId
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getSupportRequest() {
-        return supportRequest;
+        return this.supportRequest;
     }
 
     /**
      * Sets the refund requestId.
+     *
      * @param supportRequest refund request id
      */
     @JsonProperty("supportRequest")
-    public void setSupportRequest(String supportRequest) {
+    public void setSupportRequest(final String supportRequest) {
         this.supportRequest = supportRequest;
     }
 
@@ -358,7 +363,7 @@ public class LedgerEntry {
      * @param currency currency
      */
     @JsonProperty("currency")
-    public void setCurrency(String currency) {
+    public void setCurrency(final String currency) {
         this.currency = currency;
     }
 }

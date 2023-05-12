@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Ledger;
+package com.bitpay.sdk.model.ledger;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

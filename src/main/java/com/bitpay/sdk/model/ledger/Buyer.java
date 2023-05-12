@@ -1,7 +1,11 @@
-package com.bitpay.sdk.model.Ledger;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
 
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.ledger;
 
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,16 +19,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String name = DEFAULT_NON_SENT_VALUE;
-    private String address1 = DEFAULT_NON_SENT_VALUE;
-    private String address2 = DEFAULT_NON_SENT_VALUE;
-    private String city = DEFAULT_NON_SENT_VALUE;
-    private String state = DEFAULT_NON_SENT_VALUE;
-    private String zip = DEFAULT_NON_SENT_VALUE;
-    private String country = DEFAULT_NON_SENT_VALUE;
-    private String phone = DEFAULT_NON_SENT_VALUE;
+    private String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private boolean notify;
-    private String email = DEFAULT_NON_SENT_VALUE;
+    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Buyer.

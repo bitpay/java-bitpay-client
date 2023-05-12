@@ -1,7 +1,11 @@
-package com.bitpay.sdk.model.Ledger;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
 
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.ledger;
 
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {
 
-    private String currency = DEFAULT_NON_SENT_VALUE;
+    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Double balance;
 
     /**
