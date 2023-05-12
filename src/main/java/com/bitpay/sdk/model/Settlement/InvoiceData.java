@@ -141,7 +141,7 @@ public class InvoiceData {
      * It equals to the absolute difference between amountPaid and paymentTotals for the corresponding
      * transactionCurrency used.
      *
-     * See also {@link com.bitpay.sdk.model.Invoice.Invoice }
+     * See also {@link com.bitpay.sdk.model.invoice.Invoice }
      *
      * @return the over paid amount
      */
