@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Bill;
+package com.bitpay.sdk.model.bill;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import java.util.Collections;

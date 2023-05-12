@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2019 BitPay
  */
-package com.bitpay.sdk.model.Bill;
+package com.bitpay.sdk.model.bill;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -5,8 +5,8 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Bill.Bill;
-import com.bitpay.sdk.model.Bill.Item;
+import com.bitpay.sdk.model.bill.Bill;
+import com.bitpay.sdk.model.bill.Item;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.TokenContainer;
 import java.util.ArrayList;

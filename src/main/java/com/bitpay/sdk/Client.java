@@ -43,7 +43,7 @@ import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
 import com.bitpay.sdk.exceptions.WalletQueryException;
-import com.bitpay.sdk.model.Bill.Bill;
+import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Invoice.Invoice;
 import com.bitpay.sdk.model.Invoice.InvoiceEventToken;

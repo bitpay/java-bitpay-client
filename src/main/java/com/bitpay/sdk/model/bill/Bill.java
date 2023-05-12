@@ -1,18 +1,17 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
-package com.bitpay.sdk.model.Bill;
-
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.bill;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 /**
@@ -24,27 +23,27 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {
 
-    private String currency = DEFAULT_NON_SENT_VALUE;
-    private String token = DEFAULT_NON_SENT_VALUE;
-    private String email = DEFAULT_NON_SENT_VALUE;
+    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private List<Item> items;
-    private String number = DEFAULT_NON_SENT_VALUE;
-    private String name = DEFAULT_NON_SENT_VALUE;
-    private String address1 = DEFAULT_NON_SENT_VALUE;
-    private String address2 = DEFAULT_NON_SENT_VALUE;
-    private String city = DEFAULT_NON_SENT_VALUE;
-    private String state = DEFAULT_NON_SENT_VALUE;
-    private String zip = DEFAULT_NON_SENT_VALUE;
-    private String country = DEFAULT_NON_SENT_VALUE;
+    private String number = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private List<String> cc;
-    private String phone = DEFAULT_NON_SENT_VALUE;
-    private String dueDate = DEFAULT_NON_SENT_VALUE;
+    private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String dueDate = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private boolean passProcessingFee;
-    private String status = DEFAULT_NON_SENT_VALUE;
-    private String url = DEFAULT_NON_SENT_VALUE;
-    private String createdDate = DEFAULT_NON_SENT_VALUE;
-    private String id = DEFAULT_NON_SENT_VALUE;
-    private String merchant = DEFAULT_NON_SENT_VALUE;
+    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String createdDate = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String merchant = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an empty Bill object.
@@ -60,7 +59,12 @@ public class Bill {
      * @param email    The email address of the receiver for this bill.
      * @param items    The list of itens to add to this bill.
      */
-    public Bill(String number, String currency, String email, List<Item> items) {
+    public Bill(
+        final String number,
+        final String currency,
+        final String email,
+        final List<Item> items
+    ) {
         this.number = number;
         this.currency = currency;
         this.email = email;
@@ -96,7 +100,7 @@ public class Bill {
      *
      */
     @JsonProperty("token")
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 
@@ -119,9 +123,10 @@ public class Bill {
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("currency")
-    public void setCurrency(String currency) throws BitPayException {
-        if (!Currency.isValid(currency))
+    public void setCurrency(final String currency) throws BitPayException {
+        if (!Currency.isValid(currency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
+        }
 
         this.currency = currency;
     }
@@ -143,7 +148,7 @@ public class Bill {
      * @param email the email
      */
     @JsonProperty("email")
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -164,7 +169,7 @@ public class Bill {
      * @param items the items
      */
     @JsonProperty("items")
-    public void setItems(List<Item> items) {
+    public void setItems(final List<Item> items) {
         this.items = items;
     }
 
@@ -188,7 +193,7 @@ public class Bill {
      * @param number the number
      */
     @JsonProperty("number")
-    public void setNumber(String number) {
+    public void setNumber(final String number) {
         this.number = number;
     }
 
@@ -200,7 +205,7 @@ public class Bill {
     @JsonProperty("name")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -209,7 +214,7 @@ public class Bill {
      * @param name the name
      */
     @JsonProperty("name")
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -230,7 +235,7 @@ public class Bill {
      * @param address1 the address 1
      */
     @JsonProperty("address1")
-    public void setAddress1(String address1) {
+    public void setAddress1(final String address1) {
         this.address1 = address1;
     }
 
@@ -251,7 +256,7 @@ public class Bill {
      * @param address2 the address 2
      */
     @JsonProperty("address2")
-    public void setAddress2(String address2) {
+    public void setAddress2(final String address2) {
         this.address2 = address2;
     }
 
@@ -272,7 +277,7 @@ public class Bill {
      * @param city the city
      */
     @JsonProperty("city")
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -293,7 +298,7 @@ public class Bill {
      * @param state the state
      */
     @JsonProperty("state")
-    public void setState(String state) {
+    public void setState(final String state) {
         this.state = state;
     }
 
@@ -314,7 +319,7 @@ public class Bill {
      * @param zip the zip
      */
     @JsonProperty("zip")
-    public void setZip(String zip) {
+    public void setZip(final String zip) {
         this.zip = zip;
     }
 
@@ -335,7 +340,7 @@ public class Bill {
      * @param country the country
      */
     @JsonProperty("country")
-    public void setCountry(String country) {
+    public void setCountry(final String country) {
         this.country = country;
     }
 
@@ -356,7 +361,7 @@ public class Bill {
      * @param cc the cc
      */
     @JsonProperty("cc")
-    public void setCc(List<String> cc) {
+    public void setCc(final List<String> cc) {
         this.cc = cc;
     }
 
@@ -377,7 +382,7 @@ public class Bill {
      * @param phone the phone
      */
     @JsonProperty("phone")
-    public void setPhone(String phone) {
+    public void setPhone(final String phone) {
         this.phone = phone;
     }
 
@@ -398,7 +403,7 @@ public class Bill {
      * @param dueDate the due date
      */
     @JsonProperty("dueDate")
-    public void setDueDate(String dueDate) {
+    public void setDueDate(final String dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -419,7 +424,7 @@ public class Bill {
      * @param passProcessingFee the pass processing fee
      */
     @JsonProperty("passProcessingFee")
-    public void setPassProcessingFee(boolean passProcessingFee) {
+    public void setPassProcessingFee(final boolean passProcessingFee) {
         this.passProcessingFee = passProcessingFee;
     }
 
@@ -442,7 +447,7 @@ public class Bill {
      * @param status the status
      */
     @JsonProperty("status")
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -462,7 +467,7 @@ public class Bill {
      * @param url the url
      */
     @JsonProperty("url")
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 
@@ -483,7 +488,7 @@ public class Bill {
      * @param createdDate the create date
      */
     @JsonProperty("createdDate")
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(final String createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -503,7 +508,7 @@ public class Bill {
      * @param id the id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -523,7 +528,7 @@ public class Bill {
      * @param merchant the merchant
      */
     @JsonProperty("merchant")
-    public void setMerchant(String merchant) {
+    public void setMerchant(final String merchant) {
         this.merchant = merchant;
     }
 }

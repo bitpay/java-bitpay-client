@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -9,8 +10,8 @@ import com.bitpay.sdk.exceptions.BillDeliveryException;
 import com.bitpay.sdk.exceptions.BillQueryException;
 import com.bitpay.sdk.exceptions.BillUpdateException;
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
+import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.bitpay.sdk.util.TokenContainer;
@@ -30,6 +31,7 @@ import org.apache.http.message.BasicNameValuePair;
  */
 public class BillClient implements ResourceClient {
 
+    private static final String EXCEPTION_MESSAGE = "failed to deserialize BitPay server response (%s) : ";
     private static BillClient instance;
     private final BitPayClient bitPayClient;
     private final TokenContainer accessTokens;
@@ -40,7 +42,10 @@ public class BillClient implements ResourceClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    private BillClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private BillClient(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }
@@ -52,7 +57,10 @@ public class BillClient implements ResourceClient {
      * @param accessTokens Access Tokens
      * @return BillClient
      */
-    public static BillClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    public static BillClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         if (Objects.isNull(instance)) {
             instance = new BillClient(bitPayClient, accessTokens);
         }
@@ -70,8 +78,11 @@ public class BillClient implements ResourceClient {
      * @throws BitPayException       BitPayException class
      * @throws BillCreationException BillCreationException class
      */
-    public Bill create(Bill bill, Facade facade, boolean signRequest)
-        throws BitPayException, BillCreationException {
+    public Bill create(
+        Bill bill,
+        Facade facade,
+        boolean signRequest
+    ) throws BitPayException, BillCreationException {
         if (Objects.isNull(bill) || Objects.isNull(facade)) {
             throw new BillCreationException(null, "missing required parameter");
         }
@@ -90,8 +101,10 @@ public class BillClient implements ResourceClient {
             HttpResponse response = this.bitPayClient.post("bills", json, signRequest);
             bill = mapper.readerForUpdating(bill).readValue(this.bitPayClient.responseToJsonString(response));
         } catch (Exception e) {
-            throw new BillCreationException(null,
-                "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+            throw new BillCreationException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bill") + e.getMessage()
+            );
         }
 
         return bill;
@@ -107,7 +120,11 @@ public class BillClient implements ResourceClient {
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
      */
-    public Bill get(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
+    public Bill get(
+        String billId,
+        Facade facade,
+        boolean signRequest
+    ) throws BitPayException, BillQueryException {
         if (Objects.isNull(billId) || Objects.isNull(facade)) {
             throw new BillQueryException(null, "missing required parameter");
         }
@@ -121,11 +138,15 @@ public class BillClient implements ResourceClient {
             HttpResponse response = this.bitPayClient.get("bills/" + billId, params, signRequest);
             bill = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill.class);
         } catch (JsonProcessingException e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bill") + e.getMessage()
+            );
         } catch (Exception e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bill") + e.getMessage()
+            );
         }
 
         return bill;
@@ -139,7 +160,7 @@ public class BillClient implements ResourceClient {
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
      */
-    public List<Bill>getBills(String status) throws BitPayException, BillQueryException {
+    public List<Bill> getBills(String status) throws BitPayException, BillQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         ParameterAdder.execute(params, "status", status);
@@ -148,13 +169,18 @@ public class BillClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("bills", params);
-            bills = Arrays.asList(JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
+            bills = Arrays.asList(
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
         } catch (JsonProcessingException e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bills") + e.getMessage()
+            );
         } catch (Exception e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bills") + e.getMessage()
+            );
         }
 
         return bills;
@@ -175,13 +201,18 @@ public class BillClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("bills", params);
-            bills = Arrays.asList(JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
+            bills = Arrays.asList(
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Bill[].class));
         } catch (JsonProcessingException e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bills") + e.getMessage()
+            );
         } catch (Exception e) {
-            throw new BillQueryException(null,
-                "failed to deserialize BitPay server response (Bills) : " + e.getMessage());
+            throw new BillQueryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bills") + e.getMessage()
+            );
         }
 
         return bills;
@@ -196,7 +227,10 @@ public class BillClient implements ResourceClient {
      * @throws BitPayException     BitPayException class
      * @throws BillUpdateException BillUpdateException class
      */
-    public Bill update(Bill bill, String billId) throws BitPayException, BillUpdateException {
+    public Bill update(
+        Bill bill,
+        String billId
+    ) throws BitPayException, BillUpdateException {
         if (Objects.isNull(billId) || Objects.isNull(bill)) {
             throw new BillUpdateException(null, "missing required parameter");
         }
@@ -212,8 +246,10 @@ public class BillClient implements ResourceClient {
             HttpResponse response = this.bitPayClient.update("bills/" + billId, json);
             bill = mapper.readerForUpdating(bill).readValue(this.bitPayClient.responseToJsonString(response));
         } catch (Exception e) {
-            throw new BillUpdateException(null,
-                "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+            throw new BillUpdateException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bill") + e.getMessage()
+            );
         }
 
         return bill;
@@ -228,7 +264,11 @@ public class BillClient implements ResourceClient {
      * @return A response status returned from the API.
      * @throws BillDeliveryException BillDeliveryException class
      */
-    public String deliver(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
+    public String deliver(
+        String billId,
+        String billToken,
+        boolean signRequest
+    ) throws BillDeliveryException {
         if (Objects.isNull(billId) || Objects.isNull(billToken)) {
             throw new BillDeliveryException(null, "missing required parameter");
         }
@@ -248,8 +288,10 @@ public class BillClient implements ResourceClient {
             HttpResponse response = this.bitPayClient.post("bills/" + billId + "/deliveries", json, signRequest);
             result = this.bitPayClient.responseToJsonString(response).replace("\"", "");
         } catch (Exception e) {
-            throw new BillDeliveryException(null,
-                "failed to deserialize BitPay server response (Bill) : " + e.getMessage());
+            throw new BillDeliveryException(
+                null,
+                String.format(EXCEPTION_MESSAGE, "Bill") + e.getMessage()
+            );
         }
 
         return result;

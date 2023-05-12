@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Bill;
+
+package com.bitpay.sdk.model.bill;
 
 import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
