@@ -7,8 +7,8 @@ package com.bitpay.sdk.exceptions;
 
 /**
  * Exception which is extended by other exceptions related with Settlement.
- * @see com.bitpay.sdk.exceptions.SettlementQueryException
  *
+ * @see com.bitpay.sdk.exceptions.SettlementQueryException
  * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class SettlementException extends BitPayException {
