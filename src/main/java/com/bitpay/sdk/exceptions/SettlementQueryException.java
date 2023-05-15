@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -35,15 +36,18 @@ public class SettlementQueryException extends SettlementException {
      * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public SettlementQueryException(String status, String message) {
-        super(status, BuildMessage(message));
+    public SettlementQueryException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to retrieve settlements";
-        String BitPayCode = "BITPAY-SETTLEMENTS-GET";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to retrieve settlements";
+        String bitPayCode = "BITPAY-SETTLEMENTS-GET";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }

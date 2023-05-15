@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -35,15 +36,18 @@ public class PayoutRecipientUpdateException extends PayoutRecipientException {
      * @param status  String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public PayoutRecipientUpdateException(String status, String message) {
-        super(status, BuildMessage(message));
+    public PayoutRecipientUpdateException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to update payout recipient.";
-        String BitPayCode = "BITPAY-PAYOUT-RECIPIENT-UPDATE";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to update payout recipient.";
+        String bitPayCode = "BITPAY-PAYOUT-RECIPIENT-UPDATE";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }
