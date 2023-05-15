@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
+
 package com.bitpay.sdk.util;
 
 /**
@@ -39,10 +41,10 @@ public class BitPayLogger {
      *
      * @param level the level
      */
-    public BitPayLogger(int level) {
+    public BitPayLogger(final int level) {
         this.level = level;
 
-        String strLevel;
+        final String strLevel;
         switch (level) {
             case 0:
                 strLevel = "OFF";
@@ -61,6 +63,7 @@ public class BitPayLogger {
                 strLevel = "DEBUG";
                 break;
         }
+
         System.out.println("Logging level set to: " + strLevel);
     }
 
@@ -69,8 +72,8 @@ public class BitPayLogger {
      *
      * @param message the message
      */
-    public void info(String message) {
-        if (level >= INFO) {
+    public void info(final String message) {
+        if (this.level >= INFO) {
             System.out.println("INFO: " + message);
         }
     }
@@ -80,8 +83,8 @@ public class BitPayLogger {
      *
      * @param message the message
      */
-    public void warn(String message) {
-        if (level >= WARN) {
+    public void warn(final String message) {
+        if (this.level >= WARN) {
             System.out.println("WARN: " + message);
         }
     }
@@ -91,8 +94,8 @@ public class BitPayLogger {
      *
      * @param message the message
      */
-    public void err(String message) {
-        if (level >= ERR) {
+    public void err(final String message) {
+        if (this.level >= ERR) {
             System.out.println("ERR: " + message);
         }
     }
@@ -102,8 +105,8 @@ public class BitPayLogger {
      *
      * @param message the message
      */
-    public void debug(String message) {
-        if (level >= DEBUG) {
+    public void debug(final String message) {
+        if (this.level >= DEBUG) {
             System.out.println("DEBUG: " + message);
         }
     }

@@ -1372,7 +1372,7 @@ public class Client {
     protected void deriveIdentity(ECKey ecKey) throws IllegalArgumentException, BitPayException {
         // Identity in this implementation is defined to be the SIN.
         try {
-            this.identity = KeyUtils.deriveSIN(ecKey);
+            this.identity = KeyUtils.deriveSin(ecKey);
         } catch (Exception e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Token array) : " + e.getMessage());
