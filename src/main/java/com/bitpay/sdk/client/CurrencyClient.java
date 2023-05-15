@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -60,7 +61,7 @@ public class CurrencyClient implements ResourceClient {
      * @return Map |null
      * @throws BitPayException the bit pay exception
      */
-    @SuppressWarnings (value="unchecked")
+    @SuppressWarnings("unchecked")
     public Map<String, Object> getInfo(String currencyCode) throws BitPayException {
         if (Objects.isNull(currencyCode)) {
             throw new BitPayException(null, "missing required parameter");
@@ -86,7 +87,7 @@ public class CurrencyClient implements ResourceClient {
      *
      * @throws BitPayException BitPayException class
      */
-    @SuppressWarnings (value="unchecked")
+    @SuppressWarnings("unchecked")
     private void loadCurrencies() throws BitPayException {
         try {
             HttpEntity newEntity = this.client.get("currencies").getEntity();
