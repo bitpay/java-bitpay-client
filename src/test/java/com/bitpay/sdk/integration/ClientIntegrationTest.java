@@ -17,9 +17,9 @@ import com.bitpay.sdk.model.invoice.InvoiceEventToken;
 import com.bitpay.sdk.model.invoice.Refund;
 import com.bitpay.sdk.model.ledger.Ledger;
 import com.bitpay.sdk.model.ledger.LedgerEntry;
-import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.model.Payout.PayoutRecipient;
-import com.bitpay.sdk.model.Payout.PayoutRecipients;
+import com.bitpay.sdk.model.payout.Payout;
+import com.bitpay.sdk.model.payout.PayoutRecipient;
+import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.Rate.Rate;
 import com.bitpay.sdk.model.Rate.Rates;
 import com.bitpay.sdk.model.Wallet.Wallet;
@@ -259,7 +259,7 @@ public class ClientIntegrationTest {
         payout.setRecipientId(recipientId);
         payout.setNotificationEmail(email);
         payout.setReference("Java Integration Test " + UUID.randomUUID().toString());
-        payout.setNotificationURL("https://somenotiticationURL.com");
+        payout.setNotificationUrl("https://somenotiticationURL.com");
 
         Payout submitPayout = this.client.submitPayout(payout);
         String payoutId = submitPayout.getId();

@@ -1,7 +1,11 @@
-package com.bitpay.sdk.model.Payout;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
 
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.payout;
 
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,7 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * <p>
  * The recipients of the email invites will be invited to create a BitPay personal account,
  * submit a photo of a proof of ID document (Passport, driver's license, Identity card) and
- * provide the home address in order to be able to submit a cryptocurrency withdrawal address to be used for the payouts.
+ * provide the home address in order to be able to submit a cryptocurrency withdrawal address
+ * to be used for the payouts.
  * </p>
  * <p>
  * Info. The BitPay personal account is NOT a cryptocurrency wallet,
@@ -32,27 +37,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
-    private String email = DEFAULT_NON_SENT_VALUE;
+    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String guid;
-    private String label = DEFAULT_NON_SENT_VALUE;
-    private String notificationURL = DEFAULT_NON_SENT_VALUE;
-    private String status = DEFAULT_NON_SENT_VALUE;
-    private String id = DEFAULT_NON_SENT_VALUE;
-    private String shopperId = DEFAULT_NON_SENT_VALUE;
-    private String token = DEFAULT_NON_SENT_VALUE;
+    private String label = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create a minimal Recipient object.
      *
      * @param email           string Recipient email address to which the invite shall be sent.
      * @param label           string Recipient nickname assigned by the merchant (Optional).
-     * @param notificationURL string URL to which BitPay sends webhook notifications to inform the merchant about the
+     * @param notificationUrl string URL to which BitPay sends webhook notifications to inform the merchant about the
      *                        status of a given recipient. HTTPS is mandatory (Optional).
      */
-    public PayoutRecipient(String email, String label, String notificationURL) {
+    public PayoutRecipient(
+        String email,
+        String label,
+        String notificationUrl
+    ) {
         this.email = email;
         this.label = label;
-        this.notificationURL = notificationURL;
+        this.notificationUrl = notificationUrl;
     }
 
     /**
@@ -116,7 +125,7 @@ public class PayoutRecipient {
     @JsonProperty("token")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getToken() {
-    	return this.token;
+        return this.token;
     }
 
     /**
@@ -128,9 +137,9 @@ public class PayoutRecipient {
      */
     @JsonProperty("token")
     public void setToken(String token) {
-    	this.token = token;
+        this.token = token;
     }
-    
+
     // Optional fields
     //
 
@@ -166,8 +175,8 @@ public class PayoutRecipient {
      */
     @JsonProperty("notificationURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getNotificationURL() {
-        return this.notificationURL;
+    public String getNotificationUrl() {
+        return this.notificationUrl;
     }
 
     /**
@@ -175,11 +184,11 @@ public class PayoutRecipient {
      * URL to which BitPay sends webhook notifications. If a notificationURL is not passed during payout creation,
      * the payout will default to using the merchant account level payout IPN if populated.
      *
-     * @param notificationURL the notification url
+     * @param notificationUrl the notification url
      */
     @JsonProperty("notificationURL")
-    public void setNotificationURL(String notificationURL) {
-        this.notificationURL = notificationURL;
+    public void setNotificationUrl(String notificationUrl) {
+        this.notificationUrl = notificationUrl;
     }
 
     // Response fields
@@ -196,7 +205,7 @@ public class PayoutRecipient {
      *     <li>removed</li>
      * </ul>
      * <p>
-     * See also {@link com.bitpay.sdk.model.Payout.RecipientStatus}
+     * See also {@link com.bitpay.sdk.model.payout.RecipientStatus}
      *
      * @return the status
      */
@@ -216,7 +225,7 @@ public class PayoutRecipient {
      *     <li>removed</li>
      * </ul>
      * <p>
-     * See also {@link com.bitpay.sdk.model.Payout.RecipientStatus}
+     * See also {@link com.bitpay.sdk.model.payout.RecipientStatus}
      *
      * @param status the status
      */
@@ -246,7 +255,8 @@ public class PayoutRecipient {
     }
 
     /**
-     * Gets unique id assigned by BitPay if the shopper used his personal BitPay account to authenticate and pay an invoice.
+     * Gets unique id assigned by BitPay if the shopper used his personal BitPay account to authenticate
+     * and pay an invoice.
      * For customers signing up for a brand new BitPay personal account,
      * this id will only be created as part of the payout onboarding.
      * <p>
@@ -263,7 +273,8 @@ public class PayoutRecipient {
     }
 
     /**
-     * Sets unique id assigned by BitPay if the shopper used his personal BitPay account to authenticate and pay an invoice.
+     * Sets unique id assigned by BitPay if the shopper used his personal BitPay account to authenticate
+     * and pay an invoice.
      * For customers signing up for a brand new BitPay personal account,
      * this id will only be created as part of the payout onboarding.
      * <p>

@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Payout;
+package com.bitpay.sdk.model.payout;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.ModelConfiguration;
@@ -25,7 +25,7 @@ public class PayoutTest {
         Assertions.assertEquals(0.0, testedClass.getAmount());
         Assertions.assertEquals("USD", testedClass.getCurrency());
         Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, testedClass.getNotificationEmail());
-        Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, testedClass.getNotificationURL());
+        Assertions.assertEquals(ModelConfiguration.DEFAULT_NON_SENT_VALUE, testedClass.getNotificationUrl());
     }
 
     @Test
@@ -123,10 +123,10 @@ public class PayoutTest {
         Payout testedClass = this.getTestedClass();
 
         // when
-        testedClass.setNotificationURL(expected);
+        testedClass.setNotificationUrl(expected);
 
         // then
-        Assertions.assertEquals(expected, testedClass.getNotificationURL());
+        Assertions.assertEquals(expected, testedClass.getNotificationUrl());
     }
 
     @Test

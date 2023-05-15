@@ -1,4 +1,9 @@
-package com.bitpay.sdk.model.Payout;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
+package com.bitpay.sdk.model.payout;
 
 /**
  * The type Payout status.

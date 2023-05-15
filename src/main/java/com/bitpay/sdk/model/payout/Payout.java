@@ -1,9 +1,13 @@
-package com.bitpay.sdk.model.Payout;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
 
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.payout;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Currency;
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,10 +16,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.util.Collections;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Payout.
@@ -30,22 +33,22 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
 
-    private String token = DEFAULT_NON_SENT_VALUE;
+    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     private Double amount = 0.0;
-    private String currency = DEFAULT_NON_SENT_VALUE;
+    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Long effectiveDate;
 
-    private String reference = DEFAULT_NON_SENT_VALUE;
-    private String notificationEmail = DEFAULT_NON_SENT_VALUE;
-    private String notificationURL = DEFAULT_NON_SENT_VALUE;
-    private String ledgerCurrency = DEFAULT_NON_SENT_VALUE;
-    private String groupId = DEFAULT_NON_SENT_VALUE;
+    private String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String ledgerCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private String groupId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String id;
-    private String shopperId = DEFAULT_NON_SENT_VALUE;
+    private String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String recipientId;
     private Map<String, Map<String, Double>> exchangeRates;
-    private String accountId = DEFAULT_NON_SENT_VALUE;
+    private String accountId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String email;
     private String label;
     private String status;
@@ -59,8 +62,8 @@ public class Payout {
      * Constructor, create an empty Payout object.
      */
     public Payout() {
-        amount = 0.0;
-        currency = "USD";
+        this.amount = 0.0;
+        this.currency = "USD";
     }
 
     /**
@@ -83,7 +86,7 @@ public class Payout {
      *                       CAD, NZD, AUD, ZAR, JPY, BTC, BCH, GUSD, USDC, PAX,XRP,
      *                       BUSD, DOGE,ETH, WBTC, DAI
      */
-    public Payout(Double amount, String currency, String ledgerCurrency) {
+    public Payout(final Double amount, final String currency, final String ledgerCurrency) {
         this.amount = amount;
         this.currency = currency;
         this.ledgerCurrency = ledgerCurrency;
@@ -115,7 +118,7 @@ public class Payout {
      * @param token the token
      */
     @JsonProperty("token")
-    public void setToken(String token) {
+    public void setToken(final String token) {
         this.token = token;
     }
 
@@ -139,7 +142,7 @@ public class Payout {
      * @param amount the amount
      */
     @JsonProperty("amount")
-    public void setAmount(Double amount) {
+    public void setAmount(final Double amount) {
         this.amount = amount;
     }
 
@@ -161,7 +164,7 @@ public class Payout {
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("currency")
-    public void setCurrency(String currency) throws BitPayException {
+    public void setCurrency(final String currency) throws BitPayException {
         if (!Currency.isValid(currency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
         }
@@ -193,7 +196,7 @@ public class Payout {
      * @throws BitPayException the bit pay exception
      */
     @JsonProperty("ledgerCurrency")
-    public void setLedgerCurrency(String ledgerCurrency) throws BitPayException {
+    public void setLedgerCurrency(final String ledgerCurrency) throws BitPayException {
         if (!Currency.isValid(ledgerCurrency)) {
             throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
         }
@@ -208,17 +211,18 @@ public class Payout {
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     /**
      * Added to the payouts made at the same time through the `Create Payout Group` request.
      * Can be used for querying or deleting.
+     *
      * @param groupId group id
      */
     @JsonProperty("groupId")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public void setGroupId(String groupId) {
+    public void setGroupId(final String groupId) {
         this.groupId = groupId;
     }
 
@@ -243,7 +247,7 @@ public class Payout {
      */
     @JsonProperty("effectiveDate")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setEffectiveDate(Long effectiveDate) {
+    public void setEffectiveDate(final Long effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
@@ -264,7 +268,7 @@ public class Payout {
      * @param transactions the transactions
      */
     @JsonProperty("transactions")
-    public void setTransactions(List<PayoutTransaction> transactions) {
+    public void setTransactions(final List<PayoutTransaction> transactions) {
         this.transactions = transactions;
     }
 
@@ -294,7 +298,7 @@ public class Payout {
      * @param reference the reference
      */
     @JsonProperty("reference")
-    public void setReference(String reference) {
+    public void setReference(final String reference) {
         this.reference = reference;
     }
 
@@ -317,7 +321,7 @@ public class Payout {
      * @param notificationEmail the notification email
      */
     @JsonProperty("notificationEmail")
-    public void setNotificationEmail(String notificationEmail) {
+    public void setNotificationEmail(final String notificationEmail) {
         this.notificationEmail = notificationEmail;
     }
 
@@ -329,19 +333,19 @@ public class Payout {
      */
     @JsonProperty("notificationURL")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getNotificationURL() {
-        return this.notificationURL;
+    public String getNotificationUrl() {
+        return this.notificationUrl;
     }
 
     /**
      * Sets notification url.
      * URL to which BitPay sends webhook notifications. HTTPS is mandatory
      *
-     * @param notificationURL the notification url
+     * @param notificationUrl the notification url
      */
     @JsonProperty("notificationURL")
-    public void setNotificationURL(String notificationURL) {
-        this.notificationURL = notificationURL;
+    public void setNotificationUrl(final String notificationUrl) {
+        this.notificationUrl = notificationUrl;
     }
 
     // Response fields
@@ -363,7 +367,7 @@ public class Payout {
      * @param id the id
      */
     @JsonProperty("id")
-    public void setId(String id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -396,7 +400,7 @@ public class Payout {
      * @param shopperId the shopper id
      */
     @JsonProperty("shopperId")
-    public void setShopperId(String shopperId) {
+    public void setShopperId(final String shopperId) {
         this.shopperId = shopperId;
     }
 
@@ -419,7 +423,7 @@ public class Payout {
      * @param recipientId the recipient id
      */
     @JsonProperty("recipientId")
-    public void setRecipientId(String recipientId) {
+    public void setRecipientId(final String recipientId) {
         this.recipientId = recipientId;
     }
 
@@ -440,7 +444,7 @@ public class Payout {
      * @param exchangeRates the exchange rates
      */
     @JsonProperty("exchangeRates")
-    public void setExchangeRates(Map<String, Map<String, Double>> exchangeRates) {
+    public void setExchangeRates(final Map<String, Map<String, Double>> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
@@ -463,7 +467,7 @@ public class Payout {
      * @param accountId the account id
      */
     @JsonProperty("accountId")
-    public void setAccountId(String accountId) {
+    public void setAccountId(final String accountId) {
         this.accountId = accountId;
     }
 
@@ -485,7 +489,7 @@ public class Payout {
      * @param message the message
      */
     @JsonProperty("message")
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -512,7 +516,7 @@ public class Payout {
      * @param email the email
      */
     @JsonProperty("email")
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
@@ -536,12 +540,12 @@ public class Payout {
      * @param label the label
      */
     @JsonProperty("label")
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 
     /**
-     * Gets payout request status, the possible values are:
+     * Gets payout request status. The possible values are:
      * <ul>
      *     <li>new - initial status when the payout batch is created</li>
      *     <li>funded - if there are enough funds available on the merchant account,
@@ -566,7 +570,7 @@ public class Payout {
     }
 
     /**
-     * Sets payout request status, the possible values are:
+     * Sets payout request status. The possible values are:
      * <ul>
      *     <li>new - initial status when the payout batch is created</li>
      *     <li>funded - if there are enough funds available on the merchant account,
@@ -586,7 +590,7 @@ public class Payout {
      * @param status the status
      */
     @JsonProperty("status")
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -608,7 +612,7 @@ public class Payout {
      */
     @JsonProperty("requestDate")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setRequestDate(Long requestDate) {
+    public void setRequestDate(final Long requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -630,7 +634,7 @@ public class Payout {
      */
     @JsonProperty("dateExecuted")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setDateExecuted(Long dateExecuted) {
+    public void setDateExecuted(final Long dateExecuted) {
         this.dateExecuted = dateExecuted;
     }
 
@@ -641,7 +645,7 @@ public class Payout {
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Integer getCode() {
-        return code;
+        return this.code;
     }
 
     /**
@@ -649,7 +653,7 @@ public class Payout {
      *
      * @param code code
      */
-    public void setCode(Integer code) {
+    public void setCode(final Integer code) {
         this.code = code;
     }
 }

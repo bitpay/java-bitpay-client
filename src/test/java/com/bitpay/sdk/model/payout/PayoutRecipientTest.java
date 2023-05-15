@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Payout;
+package com.bitpay.sdk.model.payout;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -55,10 +55,10 @@ public class PayoutRecipientTest {
         PayoutRecipient testedClass = this.getTestedClass();
 
         // when
-        testedClass.setNotificationURL(expected);
+        testedClass.setNotificationUrl(expected);
 
         // then
-        Assertions.assertEquals(expected, testedClass.getNotificationURL());
+        Assertions.assertEquals(expected, testedClass.getNotificationUrl());
     }
 
     @Test

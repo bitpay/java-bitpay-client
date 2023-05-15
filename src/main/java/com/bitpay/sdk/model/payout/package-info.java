@@ -5,4 +5,4 @@
 /**
  * BitPay SDK Payout.
  */
-package com.bitpay.sdk.model.Payout;
+package com.bitpay.sdk.model.payout;

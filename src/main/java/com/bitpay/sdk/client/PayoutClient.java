@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -10,7 +11,7 @@ import com.bitpay.sdk.exceptions.PayoutCreationException;
 import com.bitpay.sdk.exceptions.PayoutNotificationException;
 import com.bitpay.sdk.exceptions.PayoutQueryException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Payout.Payout;
+import com.bitpay.sdk.model.payout.Payout;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.bitpay.sdk.util.TokenContainer;
@@ -113,7 +114,7 @@ public class PayoutClient implements ResourceClient {
 
         String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        ParameterAdder.execute(params,"token", token);
+        ParameterAdder.execute(params, "token", token);
 
         Payout payout;
 
@@ -223,7 +224,7 @@ public class PayoutClient implements ResourceClient {
     }
 
     /**
-     * Request a payout notification
+     * Request a payout notification.
      *
      * @param payoutId String The id of the payout to notify..
      * @return True if the notification was successfully sent, false otherwise.

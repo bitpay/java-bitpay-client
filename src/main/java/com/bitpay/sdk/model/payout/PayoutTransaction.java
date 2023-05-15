@@ -1,4 +1,9 @@
-package com.bitpay.sdk.model.Payout;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
+package com.bitpay.sdk.model.payout;
 
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -43,7 +48,7 @@ public class PayoutTransaction {
      * @param txid the txid
      */
     @JsonProperty("txid")
-    public void setTxid(String txid) {
+    public void setTxid(final String txid) {
         this.txid = txid;
     }
 
@@ -63,7 +68,7 @@ public class PayoutTransaction {
      * @param amount the amount
      */
     @JsonProperty("amount")
-    public void setAmount(Double amount) {
+    public void setAmount(final Double amount) {
         this.amount = amount;
     }
 
@@ -87,7 +92,7 @@ public class PayoutTransaction {
      */
     @JsonProperty("date")
     @JsonDeserialize(using = DateDeserializer.class)
-    public void setDate(Long date) {
+    public void setDate(final Long date) {
         this.date = date;
     }
 
@@ -98,15 +103,16 @@ public class PayoutTransaction {
      */
     @JsonIgnore
     public String getConfirmations() {
-        return confirmations;
+        return this.confirmations;
     }
 
     /**
      * Sets the number of confirmations the transaction has received.
+     *
      * @param confirmations confirmations
      */
     @JsonProperty("confirmations")
-    public void setConfirmations(String confirmations) {
+    public void setConfirmations(final String confirmations) {
         this.confirmations = confirmations;
     }
 }

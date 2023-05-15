@@ -1,10 +1,13 @@
-package com.bitpay.sdk.model.Payout;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
 
-import static com.bitpay.sdk.model.ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+package com.bitpay.sdk.model.payout;
 
+import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -16,12 +19,12 @@ import java.util.List;
 public class PayoutRecipients {
     private String guid;
     private List<PayoutRecipient> recipients = Collections.emptyList();
-    private String token = DEFAULT_NON_SENT_VALUE;
+    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an recipient-full request PayoutBatch object.
      *
-     * @param recipients array array of JSON objects, with containing the following parameters.
+     * @param recipients array of JSON objects, with containing the following parameters.
      */
     public PayoutRecipients(List<PayoutRecipient> recipients) {
         this.recipients = recipients;

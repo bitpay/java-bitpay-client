@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Payout;
+package com.bitpay.sdk.model.payout;
 
 import java.util.Collections;
 import java.util.List;
