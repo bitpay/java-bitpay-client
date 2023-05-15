@@ -22,7 +22,7 @@ import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.rate.Rate;
 import com.bitpay.sdk.model.rate.Rates;
-import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.model.wallet.Wallet;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;

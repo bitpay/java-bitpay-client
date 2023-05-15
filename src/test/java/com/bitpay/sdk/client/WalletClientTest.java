@@ -5,7 +5,7 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.model.wallet.Wallet;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

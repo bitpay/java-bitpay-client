@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Wallet;
+
+package com.bitpay.sdk.model.wallet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -49,7 +51,9 @@ public class CurrencyQr {
      * @return the collapsed
      */
     @JsonIgnore
-    public Boolean getCollapsed() { return this.collapsed; }
+    public Boolean getCollapsed() {
+        return this.collapsed;
+    }
 
     /**
      * Sets UI hint for BitPay invoice, generally not relevant to customer integrations.

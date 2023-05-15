@@ -1,4 +1,4 @@
-package com.bitpay.sdk.model.Wallet;
+package com.bitpay.sdk.model.wallet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

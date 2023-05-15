@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Wallet;
+
+package com.bitpay.sdk.model.wallet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -46,7 +48,7 @@ public class Currencies {
      * @param code the code
      */
     @JsonProperty("code")
-    public void setCode(String code) {
+    public void setCode(final String code) {
         this.code = code;
     }
 
@@ -66,7 +68,7 @@ public class Currencies {
      * @param p2p the p2p
      */
     @JsonProperty("p2p")
-    public void setP2p(Boolean p2p) {
+    public void setP2p(final Boolean p2p) {
         this.p2p = p2p;
     }
 
@@ -88,7 +90,7 @@ public class Currencies {
      * @param dappBrowser the dapp browser
      */
     @JsonProperty("dappBrowser")
-    public void setDappBrowser(Boolean dappBrowser) {
+    public void setDappBrowser(final Boolean dappBrowser) {
         this.dappBrowser = dappBrowser;
     }
 
@@ -98,7 +100,9 @@ public class Currencies {
      * @return the pay pro
      */
     @JsonIgnore
-    public Boolean getPayPro() { return this.payPro; }
+    public Boolean getPayPro() {
+        return this.payPro;
+    }
 
     /**
      * Sets pay pro. Whether or not BitPay Payment Protocol is supported on this particular currency option.
@@ -106,7 +110,7 @@ public class Currencies {
      * @param payPro the pay pro
      */
     @JsonProperty("payPro")
-    public void setPayPro(Boolean payPro) {
+    public void setPayPro(final Boolean payPro) {
         this.payPro = payPro;
     }
 
@@ -116,7 +120,9 @@ public class Currencies {
      * @return the qr
      */
     @JsonIgnore
-    public CurrencyQr getQr() { return this.qr; }
+    public CurrencyQr getQr() {
+        return this.qr;
+    }
 
     /**
      * Sets qr. Object containing QR code related information to show for this payment method.
@@ -124,7 +130,7 @@ public class Currencies {
      * @param qr the QR
      */
     @JsonProperty("qr")
-    public void setQr(CurrencyQr qr) {
+    public void setQr(final CurrencyQr qr) {
         this.qr = qr;
     }
 
@@ -144,17 +150,18 @@ public class Currencies {
      * @param image the image
      */
     @JsonProperty("image")
-    public void setImage(String image) {
+    public void setImage(final String image) {
         this.image = image;
     }
 
     /**
      * Gets Custodial wallet withdrawal fee.
+     *
      * @return string withdrawal fee
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String getWithdrawalFee() {
-        return withdrawalFee;
+        return this.withdrawalFee;
     }
 
     /**
@@ -163,7 +170,7 @@ public class Currencies {
      * @param withdrawalFee withdrawal fee
      */
     @JsonProperty("withdrawalFee")
-    public void setWithdrawalFee(String withdrawalFee) {
+    public void setWithdrawalFee(final String withdrawalFee) {
         this.withdrawalFee = withdrawalFee;
     }
 
@@ -174,7 +181,7 @@ public class Currencies {
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Boolean getWalletConnect() {
-        return walletConnect;
+        return this.walletConnect;
     }
 
     /**
@@ -183,7 +190,7 @@ public class Currencies {
      * @param walletConnect wallet connect
      */
     @JsonProperty("walletConnect")
-    public void setWalletConnect(Boolean walletConnect) {
+    public void setWalletConnect(final Boolean walletConnect) {
         this.walletConnect = walletConnect;
     }
 }

@@ -1,12 +1,13 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Wallet;
+
+package com.bitpay.sdk.model.wallet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.ArrayList;
 
 /**
@@ -95,7 +96,9 @@ public class Wallet {
      * @return the pay pro
      */
     @JsonIgnore
-    public Boolean getPayPro() { return this.payPro; }
+    public Boolean getPayPro() {
+        return this.payPro;
+    }
 
     /**
      * Sets pay pro. Whether or not the wallet supports ANY BitPay Payment Protocol options.
@@ -113,7 +116,9 @@ public class Wallet {
      * @return the currencies
      */
     @JsonIgnore
-    public ArrayList<Currencies> getCurrencies() { return this.currencies; }
+    public ArrayList<Currencies> getCurrencies() {
+        return this.currencies;
+    }
 
     /**
      * Sets currencies. Details of what currencies support payments for this wallet.

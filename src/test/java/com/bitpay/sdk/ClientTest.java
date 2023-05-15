@@ -25,7 +25,7 @@ import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.rate.Rate;
 import com.bitpay.sdk.model.rate.Rates;
 import com.bitpay.sdk.model.settlement.Settlement;
-import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.model.wallet.Wallet;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.TokenContainer;
 import java.io.ByteArrayInputStream;

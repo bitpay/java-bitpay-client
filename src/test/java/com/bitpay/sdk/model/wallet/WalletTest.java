@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Wallet;
+package com.bitpay.sdk.model.wallet;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
