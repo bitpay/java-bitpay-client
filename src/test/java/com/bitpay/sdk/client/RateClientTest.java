@@ -5,8 +5,8 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.RateQueryException;
-import com.bitpay.sdk.model.Rate.Rate;
-import com.bitpay.sdk.model.Rate.Rates;
+import com.bitpay.sdk.model.rate.Rate;
+import com.bitpay.sdk.model.rate.Rates;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

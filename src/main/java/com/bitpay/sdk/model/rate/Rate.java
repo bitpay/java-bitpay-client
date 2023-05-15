@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Rate;
+
+package com.bitpay.sdk.model.rate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,23 +28,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  * @see <a href="https://bitpay.readme.io/reference/rates">REST API Rates</a>
  * @see com.bitpay.sdk.Client#getRates()
- * @see com.bitpay.sdk.model.Rate.Rates
+ * @see com.bitpay.sdk.model.rate.Rates
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rate {
 
     /**
-     * An ISO 4217 currency code or cryptocurrency code
-     * 
+     * An ISO 4217 currency code or cryptocurrency code.
+     * <p>
      * Refer to <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO Standards</a>
      * for a list of ISO 4217 currency codes.
-     * 
+     *
      */
     private String code;
 
     /**
-     * The name of the currency or cryptocurrency
-     * 
+     * The name of the currency or cryptocurrency.
+     * <p>
      * Refer to <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO Standards</a>
      * for a list of ISO 4217 currency codes.
      */

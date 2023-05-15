@@ -1,9 +1,13 @@
-package com.bitpay.sdk.model.Rate;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
+package com.bitpay.sdk.model.rate;
 
 import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.exceptions.RateQueryException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
 /**
