@@ -6,7 +6,7 @@ package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
-import com.bitpay.sdk.model.Settlement.Settlement;
+import com.bitpay.sdk.model.settlement.Settlement;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

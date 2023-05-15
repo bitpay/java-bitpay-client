@@ -1,16 +1,18 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Settlement;
+
+package com.bitpay.sdk.model.settlement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Hashtable;
 
 /**
  * The type Refund info.
+ *
  * @see <a href="https://bitpay.readme.io/reference/refunds-resource">Refunds</a>
  * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */

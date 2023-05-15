@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.model.Settlement;
+package com.bitpay.sdk.model.settlement;
 
 import java.util.Hashtable;
 import org.junit.jupiter.api.Assertions;

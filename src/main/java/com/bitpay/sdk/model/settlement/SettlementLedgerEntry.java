@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Settlement;
+
+package com.bitpay.sdk.model.settlement;
 
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * The type Settlement ledger entry.
+ *
  * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -7,10 +8,10 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Settlement.Settlement;
-import com.bitpay.sdk.util.TokenContainer;
+import com.bitpay.sdk.model.settlement.Settlement;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -35,7 +36,10 @@ public class SettlementClient implements ResourceClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    private SettlementClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private SettlementClient(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }
@@ -47,7 +51,10 @@ public class SettlementClient implements ResourceClient {
      * @param accessTokens Access Tokens
      * @return SettlementClient
      */
-    public static SettlementClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    public static SettlementClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         if (Objects.isNull(instance)) {
             instance = new SettlementClient(bitPayClient, accessTokens);
         }
@@ -70,8 +77,14 @@ public class SettlementClient implements ResourceClient {
      * @throws BitPayException          BitPayException class
      * @throws SettlementQueryException SettlementQueryException class
      */
-    public List<Settlement> getSettlements(String currency, String dateStart, String dateEnd, String status,
-                                           Integer limit, Integer offset) throws BitPayException,
+    public List<Settlement> getSettlements(
+        String currency,
+        String dateStart,
+        String dateEnd,
+        String status,
+        Integer limit,
+        Integer offset
+    ) throws BitPayException,
         SettlementQueryException {
         limit = limit != null ? limit : 100;
         offset = offset != null ? offset : 0;
@@ -149,7 +162,10 @@ public class SettlementClient implements ResourceClient {
      * @return A detailed BitPay Settlement object.
      * @throws SettlementQueryException SettlementQueryException class
      */
-    public Settlement getSettlementReconciliationReport(String settlementId, String token) throws SettlementQueryException {
+    public Settlement getSettlementReconciliationReport(
+        String settlementId,
+        String token
+    ) throws SettlementQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         if (Objects.isNull(settlementId) || Objects.isNull(token)) {
             throw new SettlementQueryException(null, "missing id/token");

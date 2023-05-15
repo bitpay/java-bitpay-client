@@ -1,4 +1,9 @@
-package com.bitpay.sdk.model.Settlement;
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
+package com.bitpay.sdk.model.settlement;
 
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -7,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.util.List;
 
 /**
  * The type Settlement.
+ *
  * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -87,9 +92,9 @@ public class Settlement {
 
     /**
      * Gets currency. ISO 4217 3-character currency code. This is the currency associated with the settlement.
-     * @see <a href="https://bitpay.com/docs/settlement">Supported settlement currencies are listed</a>
      *
      * @return the currency
+     * @see <a href="https://bitpay.com/docs/settlement">Supported settlement currencies are listed</a>
      */
     @JsonIgnore
     public String getCurrency() {
@@ -98,9 +103,9 @@ public class Settlement {
 
     /**
      * Sets currency. ISO 4217 3-character currency code. This is the currency associated with the settlement.
-     * @see <a href="https://bitpay.com/docs/settlement">Supported settlement currencies are listed</a>
      *
      * @param currency the currency
+     * @see <a href="https://bitpay.com/docs/settlement">Supported settlement currencies are listed</a>
      */
     @JsonProperty("currency")
     public void setCurrency(String currency) {
@@ -309,11 +314,17 @@ public class Settlement {
      * Each withholding is a JSON object containing a code, amount and description field.
      * The possible withholding codes are:
      * <ul>
-     *     <li>W001 - Refund Reserve: a merchant can set a refund reserve for his account. This code indicate the current amount in the reserve at the moment the settlement is generated.</li>
-     *     <li>W002 - Settlement Fee: in case BitPay is charging the bank fees to the merchant, via a SWIFT wire for instance, will be posted to the ledger when the settlementReport goes into status ‘processing’. This code is not used for SEPA or ACH transfers</li>
-     *     <li>W003 - Liquidity Withholding : Used when BitPay's balance at the specific settlement bank is insufficient to payout the full amount today</li>
-     *     <li>W004 - Insufficient Balance : in the event a case the ledger balance of the merchant drops after the settlement cut-off, the settlement amount will be adjusted.</li>
-     *     <li>W005 - Pending Refunds : in order to make sure enough funds are left on the account to execute pending refund requests.</li>
+     *     <li>W001 - Refund Reserve: a merchant can set a refund reserve for his account.
+     *     This code indicate the current amount in the reserve at the moment the settlement is generated.</li>
+     *     <li>W002 - Settlement Fee: in case BitPay is charging the bank fees to the merchant,
+     *     via a SWIFT wire for instance, will be posted to the ledger when the settlementReport goes into status
+     *     ‘processing’. This code is not used for SEPA or ACH transfers</li>
+     *     <li>W003 - Liquidity Withholding : Used when BitPay's balance at the specific settlement bank
+     *     is insufficient to payout the full amount today</li>
+     *     <li>W004 - Insufficient Balance : in the event a case the ledger balance of the merchant drops after
+     *     the settlement cut-off, the settlement amount will be adjusted.</li>
+     *     <li>W005 - Pending Refunds : in order to make sure enough funds are left on the account to execute pending
+     *     refund requests.</li>
      * </ul>
      *
      * @return the with holdings
@@ -329,11 +340,17 @@ public class Settlement {
      * Each withholding is a JSON object containing a code, amount and description field.
      * The possible withholding codes are:
      * <ul>
-     *     <li>W001 - Refund Reserve: a merchant can set a refund reserve for his account. This code indicate the current amount in the reserve at the moment the settlement is generated.</li>
-     *     <li>W002 - Settlement Fee: in case BitPay is charging the bank fees to the merchant, via a SWIFT wire for instance, will be posted to the ledger when the settlementReport goes into status ‘processing’. This code is not used for SEPA or ACH transfers</li>
-     *     <li>W003 - Liquidity Withholding : Used when BitPay's balance at the specific settlement bank is insufficient to payout the full amount today</li>
-     *     <li>W004 - Insufficient Balance : in the event a case the ledger balance of the merchant drops after the settlement cut-off, the settlement amount will be adjusted.</li>
-     *     <li>W005 - Pending Refunds : in order to make sure enough funds are left on the account to execute pending refund requests.</li>
+     *     <li>W001 - Refund Reserve: a merchant can set a refund reserve for his account.
+     *     This code indicate the current amount in the reserve at the moment the settlement is generated.</li>
+     *     <li>W002 - Settlement Fee: in case BitPay is charging the bank fees to the merchant,
+     *     via a SWIFT wire for instance, will be posted to the ledger when the settlementReport goes into status
+     *     ‘processing’. This code is not used for SEPA or ACH transfers</li>
+     *     <li>W003 - Liquidity Withholding : Used when BitPay's balance at the specific settlement bank
+     *     is insufficient to payout the full amount today</li>
+     *     <li>W004 - Insufficient Balance : in the event a case the ledger balance of the merchant drops
+     *     after the settlement cut-off, the settlement amount will be adjusted.</li>
+     *     <li>W005 - Pending Refunds : in order to make sure enough funds are left on the account to execute
+     *     pending refund requests.</li>
      * </ul>
      *
      * @param withHoldings the with holdings

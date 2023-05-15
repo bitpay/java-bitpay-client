@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Settlement;
+
+package com.bitpay.sdk.model.settlement;
 
 import com.bitpay.sdk.util.DateDeserializer;
 import com.bitpay.sdk.util.DateSerializer;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 /**
  * The type Invoice data.
+ *
  * @see <a href="https://bitpay.readme.io/reference/settlements">Settlements</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -137,10 +140,11 @@ public class InvoiceData {
 
     /**
      * Gets over paid amount.
-     * This parameter will be returned on the invoice object if the invoice was overpaid ("exceptionStatus": "paidOver").
+     * This parameter will be returned on the invoice object if the invoice was overpaid
+     * ("exceptionStatus": "paidOver").
      * It equals to the absolute difference between amountPaid and paymentTotals for the corresponding
      * transactionCurrency used.
-     *
+     * <p>
      * See also {@link com.bitpay.sdk.model.invoice.Invoice }
      *
      * @return the over paid amount

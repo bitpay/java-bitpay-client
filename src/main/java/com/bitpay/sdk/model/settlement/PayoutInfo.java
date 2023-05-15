@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.model.Settlement;
+
+package com.bitpay.sdk.model.settlement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -174,7 +176,9 @@ public class PayoutInfo {
      * @return the bank
      */
     @JsonIgnore
-    public String getBank() { return this.bank; }
+    public String getBank() {
+        return this.bank;
+    }
 
     /**
      * Sets name of the bank used by the merchant.
@@ -182,7 +186,9 @@ public class PayoutInfo {
      * @param bank the bank
      */
     @JsonProperty("bank")
-    public void setBank(String bank) { this.bank = bank; }
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
 
     /**
      * Gets SWIFT/BIC code of the merchant's bank.
@@ -190,7 +196,9 @@ public class PayoutInfo {
      * @return the swift
      */
     @JsonIgnore
-    public String getSwift() { return this.swift; }
+    public String getSwift() {
+        return this.swift;
+    }
 
     /**
      * Sets SWIFT/BIC code of the merchant's bank.
@@ -198,7 +206,9 @@ public class PayoutInfo {
      * @param swift the swift
      */
     @JsonProperty("swift")
-    public void setSwift(String swift) { this.swift = swift; }
+    public void setSwift(String swift) {
+        this.swift = swift;
+    }
 
     /**
      * Gets address. This field is used to indicate the wallet address used for the settlement,
@@ -211,7 +221,9 @@ public class PayoutInfo {
      * @return the address
      */
     @JsonIgnore
-    public String getAddress() { return this.address; }
+    public String getAddress() {
+        return this.address;
+    }
 
     /**
      * Sets address. This field is used to indicate the wallet address used for the settlement,
@@ -224,7 +236,9 @@ public class PayoutInfo {
      * @param address the address
      */
     @JsonProperty("address")
-    public void setAddress(String address) { this.address = address; }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     /**
      * Gets city of the merchant bank, field return if the settlement currency is.
@@ -232,7 +246,9 @@ public class PayoutInfo {
      * @return the city
      */
     @JsonIgnore
-    public String getCity() { return this.city; }
+    public String getCity() {
+        return this.city;
+    }
 
     /**
      * Sets city of the merchant bank, field return if the settlement currency is.
@@ -240,7 +256,9 @@ public class PayoutInfo {
      * @param city the city
      */
     @JsonProperty("city")
-    public void setCity(String city) { this.city = city; }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     /**
      * Gets postal code of the merchant bank, field return if the settlement currency is.
@@ -248,7 +266,9 @@ public class PayoutInfo {
      * @return the postal
      */
     @JsonIgnore
-    public String getPostal() { return this.postal; }
+    public String getPostal() {
+        return this.postal;
+    }
 
     /**
      * Sets postal code of the merchant bank, field return if the settlement currency is.
@@ -256,7 +276,9 @@ public class PayoutInfo {
      * @param postal the postal
      */
     @JsonProperty("postal")
-    public void setPostal(String postal) { this.postal = postal; }
+    public void setPostal(String postal) {
+        this.postal = postal;
+    }
 
     /**
      * Gets sort used to pass country specific bank fields: BSB for AUD.
@@ -264,7 +286,9 @@ public class PayoutInfo {
      * @return the sort
      */
     @JsonIgnore
-    public String getSort() { return this.sort; }
+    public String getSort() {
+        return this.sort;
+    }
 
     /**
      * Sets sort used to pass country specific bank fields: BSB for AUD.
@@ -272,7 +296,9 @@ public class PayoutInfo {
      * @param sort the sort
      */
     @JsonProperty("sort")
-    public void setSort(String sort) { this.sort = sort; }
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
     /**
      * Gets wire.
@@ -283,7 +309,9 @@ public class PayoutInfo {
      * @return the wire
      */
     @JsonIgnore
-    public String getWire() { return this.wire; }
+    public String getWire() {
+        return this.wire;
+    }
 
     /**
      * Sets wire.
@@ -294,7 +322,9 @@ public class PayoutInfo {
      * @param wire the wire
      */
     @JsonProperty("wire")
-    public void setWire(String wire) { this.wire = wire; }
+    public void setWire(String wire) {
+        this.wire = wire;
+    }
 
     /**
      * Gets bank name. Name of the bank used by the merchant. Field returned if "wire": true in the "payoutInfo" object.
@@ -302,7 +332,9 @@ public class PayoutInfo {
      * @return the bank name
      */
     @JsonIgnore
-    public String getBankName() { return this.bankName; }
+    public String getBankName() {
+        return this.bankName;
+    }
 
     /**
      * Sets bank name. Name of the bank used by the merchant. Field returned if "wire": true in the "payoutInfo" object.
@@ -310,7 +342,9 @@ public class PayoutInfo {
      * @param bankName the bank name
      */
     @JsonProperty("bankName")
-    public void setBankName(String bankName) { this.bankName = bankName; }
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
 
     /**
      * Gets bank address of the merchant's bank. Field returned if "wire": true in the "payoutInfo" object.
@@ -318,7 +352,9 @@ public class PayoutInfo {
      * @return the bank address
      */
     @JsonIgnore
-    public String getBankAddress() { return this.bankAddress; }
+    public String getBankAddress() {
+        return this.bankAddress;
+    }
 
     /**
      * Sets bank address of the merchant's bank. Field returned if "wire": true in the "payoutInfo" object.
@@ -326,7 +362,9 @@ public class PayoutInfo {
      * @param bankAddress the bank address
      */
     @JsonProperty("bankAddress")
-    public void setBankAddress(String bankAddress) { this.bankAddress = bankAddress; }
+    public void setBankAddress(String bankAddress) {
+        this.bankAddress = bankAddress;
+    }
 
     /**
      * Gets bank address 2 of the merchant's bank. Field returned if "wire": true in the "payoutInfo" object.
@@ -334,7 +372,9 @@ public class PayoutInfo {
      * @return the bank address 2
      */
     @JsonIgnore
-    public String getBankAddress2() { return this.bankAddress2; }
+    public String getBankAddress2() {
+        return this.bankAddress2;
+    }
 
     /**
      * Sets bank address 2 of the merchant's bank. Field returned if "wire": true in the "payoutInfo" object.
@@ -342,7 +382,9 @@ public class PayoutInfo {
      * @param bankAddress2 the bank address 2
      */
     @JsonProperty("bankAddress2")
-    public void setBankAddress2(String bankAddress2) { this.bankAddress2 = bankAddress2; }
+    public void setBankAddress2(String bankAddress2) {
+        this.bankAddress2 = bankAddress2;
+    }
 
     /**
      * Gets iban. The merchant's bank account number, in the IBAN (International Bank Account Number) format.
@@ -351,7 +393,9 @@ public class PayoutInfo {
      * @return the iban
      */
     @JsonIgnore
-    public String getIban() { return this.iban; }
+    public String getIban() {
+        return this.iban;
+    }
 
     /**
      * Sets iban. The merchant's bank account number, in the IBAN (International Bank Account Number) format.
@@ -360,7 +404,9 @@ public class PayoutInfo {
      * @param iban the iban
      */
     @JsonProperty("iban")
-    public void setIban(String iban) { this.iban = iban; }
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
 
     /**
      * Gets additional information. When providing the settlement info via the dashboard,
@@ -370,7 +416,9 @@ public class PayoutInfo {
      * @return the additional information
      */
     @JsonIgnore
-    public String getAdditionalInformation() { return this.additionalInformation; }
+    public String getAdditionalInformation() {
+        return this.additionalInformation;
+    }
 
     /**
      * Sets additional information. When providing the settlement info via the dashboard,
@@ -379,7 +427,9 @@ public class PayoutInfo {
      * @param additionalInformation the additional information
      */
     @JsonProperty("additionalInformation")
-    public void setAdditionalInformation(String additionalInformation) { this.additionalInformation = additionalInformation; }
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
 
     /**
      * Gets bank account holder name. Field returned if "wire": true in the "payoutInfo" object.
@@ -387,7 +437,9 @@ public class PayoutInfo {
      * @return the account holder name
      */
     @JsonIgnore
-    public String getAccountHolderName() { return this.accountHolderName; }
+    public String getAccountHolderName() {
+        return this.accountHolderName;
+    }
 
     /**
      * Sets bank account holder name.
@@ -395,7 +447,9 @@ public class PayoutInfo {
      * @param accountHolderName the account holder name
      */
     @JsonProperty("accountHolderName")
-    public void setAccountHolderName(String accountHolderName) { this.accountHolderName = accountHolderName; }
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
 
     /**
      * Gets bank account holder address. Field returned if "wire": true in the "payoutInfo" object.
@@ -403,7 +457,9 @@ public class PayoutInfo {
      * @return the account holder address
      */
     @JsonIgnore
-    public String getAccountHolderAddress() { return this.accountHolderAddress; }
+    public String getAccountHolderAddress() {
+        return this.accountHolderAddress;
+    }
 
     /**
      * Sets bank account holder address.
@@ -411,7 +467,9 @@ public class PayoutInfo {
      * @param accountHolderAddress the account holder address
      */
     @JsonProperty("accountHolderAddress")
-    public void setAccountHolderAddress(String accountHolderAddress) { this.accountHolderAddress = accountHolderAddress; }
+    public void setAccountHolderAddress(String accountHolderAddress) {
+        this.accountHolderAddress = accountHolderAddress;
+    }
 
     /**
      * Gets bank account holder address 2. Field returned if "wire": true in the "payoutInfo" object.
@@ -419,7 +477,9 @@ public class PayoutInfo {
      * @return the account holder address 2
      */
     @JsonIgnore
-    public String getAccountHolderAddress2() { return this.accountHolderAddress2; }
+    public String getAccountHolderAddress2() {
+        return this.accountHolderAddress2;
+    }
 
     /**
      * Sets bank account holder address 2.
@@ -427,7 +487,9 @@ public class PayoutInfo {
      * @param accountHolderAddress2 the account holder address 2
      */
     @JsonProperty("accountHolderAddress2")
-    public void setAccountHolderAddress2(String accountHolderAddress2) { this.accountHolderAddress2 = accountHolderAddress2; }
+    public void setAccountHolderAddress2(String accountHolderAddress2) {
+        this.accountHolderAddress2 = accountHolderAddress2;
+    }
 
     /**
      * Gets bank account holder postal code. Field returned if "wire": true in the "payoutInfo" object.
@@ -435,7 +497,9 @@ public class PayoutInfo {
      * @return the account holder postal code
      */
     @JsonIgnore
-    public String getAccountHolderPostalCode() { return this.accountHolderPostalCode; }
+    public String getAccountHolderPostalCode() {
+        return this.accountHolderPostalCode;
+    }
 
     /**
      * Sets bank account holder postal code.
@@ -443,7 +507,9 @@ public class PayoutInfo {
      * @param accountHolderPostalCode the account holder postal code
      */
     @JsonProperty("accountHolderPostalCode")
-    public void setAccountHolderPostalCode(String accountHolderPostalCode) { this.accountHolderPostalCode = accountHolderPostalCode; }
+    public void setAccountHolderPostalCode(String accountHolderPostalCode) {
+        this.accountHolderPostalCode = accountHolderPostalCode;
+    }
 
     /**
      * Gets bank account holder city. Field returned if "wire": true in the "payoutInfo" object.
@@ -451,7 +517,9 @@ public class PayoutInfo {
      * @return the account holder city
      */
     @JsonIgnore
-    public String getAccountHolderCity() { return this.accountHolderCity; }
+    public String getAccountHolderCity() {
+        return this.accountHolderCity;
+    }
 
     /**
      * Sets bank account holder city.
@@ -459,7 +527,9 @@ public class PayoutInfo {
      * @param accountHolderCity the account holder city
      */
     @JsonProperty("accountHolderCity")
-    public void setAccountHolderCity(String accountHolderCity) { this.accountHolderCity = accountHolderCity; }
+    public void setAccountHolderCity(String accountHolderCity) {
+        this.accountHolderCity = accountHolderCity;
+    }
 
     /**
      * Gets bank account holder country. Field returned if "wire": true in the "payoutInfo" object.
@@ -467,7 +537,9 @@ public class PayoutInfo {
      * @return the account holder country
      */
     @JsonIgnore
-    public String getAccountHolderCountry() { return this.accountHolderCountry; }
+    public String getAccountHolderCountry() {
+        return this.accountHolderCountry;
+    }
 
     /**
      * Sets bank account holder country.
@@ -475,5 +547,7 @@ public class PayoutInfo {
      * @param accountHolderCountry the account holder country
      */
     @JsonProperty("accountHolderCountry")
-    public void setAccountHolderCountry(String accountHolderCountry) { this.accountHolderCountry = accountHolderCountry; }
+    public void setAccountHolderCountry(String accountHolderCountry) {
+        this.accountHolderCountry = accountHolderCountry;
+    }
 }
