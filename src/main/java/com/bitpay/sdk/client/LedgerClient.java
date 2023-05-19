@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -7,8 +8,8 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.LedgerQueryException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Ledger.Ledger;
-import com.bitpay.sdk.model.Ledger.LedgerEntry;
+import com.bitpay.sdk.model.ledger.Ledger;
+import com.bitpay.sdk.model.ledger.LedgerEntry;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
 import com.bitpay.sdk.util.TokenContainer;
@@ -35,7 +36,10 @@ public class LedgerClient implements ResourceClient {
      * @param bitPayClient the bit pay client
      * @param accessTokens the access tokens
      */
-    private LedgerClient(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    private LedgerClient(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         this.bitPayClient = bitPayClient;
         this.accessTokens = accessTokens;
     }
@@ -47,7 +51,10 @@ public class LedgerClient implements ResourceClient {
      * @param accessTokens Access Tokens
      * @return LedgerClient
      */
-    public static LedgerClient getInstance(BitPayClient bitPayClient, TokenContainer accessTokens) {
+    public static LedgerClient getInstance(
+        BitPayClient bitPayClient,
+        TokenContainer accessTokens
+    ) {
         if (Objects.isNull(instance)) {
             instance = new LedgerClient(bitPayClient, accessTokens);
         }
@@ -65,8 +72,11 @@ public class LedgerClient implements ResourceClient {
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
      */
-    public List<LedgerEntry> getEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
-        LedgerQueryException {
+    public List<LedgerEntry> getEntries(
+        String currency,
+        String dateStart,
+        String dateEnd
+    ) throws BitPayException, LedgerQueryException {
         if (Objects.isNull(currency) || Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
             throw new BitPayException(null, "missing mandatory fields");
         }

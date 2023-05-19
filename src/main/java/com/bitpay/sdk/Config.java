@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
+
 package com.bitpay.sdk;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -65,7 +67,7 @@ public class Config {
      */
     @JsonIgnore
     public Environment getEnvironment() {
-        return environment;
+        return this.environment;
     }
 
     /**
@@ -79,7 +81,7 @@ public class Config {
      * @param environment the environment
      */
     @JsonProperty("Environment")
-    public void setEnvironment(Environment environment) {
+    public void setEnvironment(final Environment environment) {
         this.environment = environment;
     }
 
@@ -93,8 +95,8 @@ public class Config {
      *     </a>
      */
     @JsonIgnore
-    public JsonNode getEnvConfig(Environment env) {
-        return envConfig.path(env.toString());
+    public JsonNode getEnvConfig(final Environment env) {
+        return this.envConfig.path(env.toString());
     }
 
     /**
@@ -106,7 +108,7 @@ public class Config {
      *     </a>
      */
     @JsonProperty("EnvConfig")
-    public void setEnvConfig(JsonNode envConfig) {
+    public void setEnvConfig(final JsonNode envConfig) {
         this.envConfig = envConfig;
     }
 
@@ -116,11 +118,11 @@ public class Config {
      * @return the api tokens
      */
     public ObjectNode getApiTokens() {
-        ObjectNode envConfig = (ObjectNode) this.getEnvConfig(this.getEnvironment());
+        final ObjectNode envConfig = (ObjectNode) this.getEnvConfig(this.getEnvironment());
         ObjectNode apiTokens = null;
         apiTokens = (ObjectNode) envConfig.get(API_TOKENS_KEY);
         if (Objects.isNull(apiTokens)) {
-            apiTokens = (ObjectNode) JsonNodeFactory.instance.objectNode();
+            apiTokens = JsonNodeFactory.instance.objectNode();
             envConfig.putIfAbsent(API_TOKENS_KEY, apiTokens);
         }
 

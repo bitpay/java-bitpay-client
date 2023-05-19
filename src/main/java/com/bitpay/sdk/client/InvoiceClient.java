@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -10,8 +11,8 @@ import com.bitpay.sdk.exceptions.InvoiceCreationException;
 import com.bitpay.sdk.exceptions.InvoiceQueryException;
 import com.bitpay.sdk.exceptions.InvoiceUpdateException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
+import com.bitpay.sdk.model.invoice.Invoice;
+import com.bitpay.sdk.model.invoice.InvoiceEventToken;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
@@ -85,8 +86,11 @@ public class InvoiceClient implements ResourceClient {
      * @throws BitPayException          BitPayException class
      * @throws InvoiceCreationException InvoiceCreationException class
      */
-    public Invoice create(Invoice invoice, Facade facade, Boolean signRequest) throws BitPayException,
-        InvoiceCreationException {
+    public Invoice create(
+        Invoice invoice,
+        Facade facade,
+        Boolean signRequest
+    ) throws BitPayException, InvoiceCreationException {
         if (Objects.isNull(invoice) || Objects.isNull(facade)) {
             throw new InvoiceCreationException(null, "missing required parameter");
         }
@@ -118,7 +122,8 @@ public class InvoiceClient implements ResourceClient {
     }
 
     /**
-     * Retrieve a BitPay invoice by invoice id using the specified facade.  The client must have been previously authorized for the specified facade.
+     * Retrieve a BitPay invoice by invoice id using the specified facade.
+     * The client must have been previously authorized for the specified facade.
      *
      * @param invoiceId   The id of the invoice to retrieve.
      * @param facade      The facade used to create it.
@@ -127,7 +132,11 @@ public class InvoiceClient implements ResourceClient {
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice get(String invoiceId, Facade facade, Boolean signRequest) throws BitPayException,
+    public Invoice get(
+        String invoiceId,
+        Facade facade,
+        Boolean signRequest
+    ) throws BitPayException,
         InvoiceQueryException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
@@ -136,7 +145,8 @@ public class InvoiceClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId, params, signRequest);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -151,7 +161,8 @@ public class InvoiceClient implements ResourceClient {
     }
 
     /**
-     * Retrieve a BitPay invoice by guid using the specified facade.  The client must have been previously authorized for the specified facade.
+     * Retrieve a BitPay invoice by guid using the specified facade.
+     * The client must have been previously authorized for the specified facade.
      *
      * @param guid        The guid of the invoice to retrieve.
      * @param facade      The facade used to create it.
@@ -159,7 +170,11 @@ public class InvoiceClient implements ResourceClient {
      * @return A BitPay Invoice object.
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public Invoice getByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
+    public Invoice getByGuid(
+        String guid,
+        Facade facade,
+        Boolean signRequest
+    ) throws InvoiceQueryException {
         if (Objects.isNull(guid) || Objects.isNull(facade)) {
             throw new InvoiceQueryException(null, "missing required parameters");
         }
@@ -170,7 +185,8 @@ public class InvoiceClient implements ResourceClient {
         try {
             ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
             HttpResponse response = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -197,8 +213,14 @@ public class InvoiceClient implements ResourceClient {
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
      */
-    public List<Invoice> getInvoices(String dateStart, String dateEnd, String status, String orderId, Integer limit,
-                                     Integer offset) throws BitPayException, InvoiceQueryException {
+    public List<Invoice> getInvoices(
+        String dateStart,
+        String dateEnd,
+        String status,
+        String orderId,
+        Integer limit,
+        Integer offset
+    ) throws BitPayException, InvoiceQueryException {
         if (Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
             throw new InvoiceQueryException(null, "missing required parameter");
         }
@@ -221,7 +243,8 @@ public class InvoiceClient implements ResourceClient {
         try {
             HttpResponse response = this.bitPayClient.get("invoices", params);
             invoices = Arrays.asList(
-                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
+                JsonMapperFactory.create()
+                    .readValue(this.bitPayClient.responseToJsonString(response), Invoice[].class));
         } catch (BitPayException ex) {
             throw new InvoiceQueryException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (JsonProcessingException e) {
@@ -314,7 +337,8 @@ public class InvoiceClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.update("invoices/" + invoiceId, json);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceUpdateException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -334,7 +358,10 @@ public class InvoiceClient implements ResourceClient {
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice pay(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
+    public Invoice pay(
+        String invoiceId,
+        String status
+    ) throws BitPayException, InvoiceUpdateException {
         final Map<String, Object> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (status != null) {
@@ -391,8 +418,10 @@ public class InvoiceClient implements ResourceClient {
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException              BitPayException class
      */
-    public Invoice cancel(String invoiceId, Boolean forceCancel)
-        throws InvoiceCancellationException, BitPayException {
+    public Invoice cancel(
+        String invoiceId,
+        Boolean forceCancel
+    ) throws InvoiceCancellationException, BitPayException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         if (forceCancel) {
@@ -402,7 +431,8 @@ public class InvoiceClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("invoices/" + invoiceId, params);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -413,7 +443,10 @@ public class InvoiceClient implements ResourceClient {
         return invoice;
     }
 
-    public Invoice cancelByGuid(String guid, Boolean forceCancel) throws BitPayException {
+    public Invoice cancelByGuid(
+        String guid,
+        Boolean forceCancel
+    ) throws BitPayException {
         if (Objects.isNull(guid) || Objects.isNull(forceCancel)) {
             throw new InvoiceCancellationException(null, "missing required parameter");
         }
@@ -427,7 +460,8 @@ public class InvoiceClient implements ResourceClient {
 
         try {
             HttpResponse response = this.bitPayClient.delete("invoices/guid/" + guid, params);
-            invoice = JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
+            invoice =
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Invoice.class);
         } catch (BitPayException ex) {
             throw new InvoiceCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
         } catch (Exception e) {
@@ -460,7 +494,10 @@ public class InvoiceClient implements ResourceClient {
         }
     }
 
-    private void validateRequiredField(String buyerSms, String buyerEmail) throws InvoiceUpdateException {
+    private void validateRequiredField(
+        String buyerSms,
+        String buyerEmail
+    ) throws InvoiceUpdateException {
         if (buyerSms == null && buyerEmail == null) {
             throw new InvoiceUpdateException(null,
                 "Updating the invoice requires Mobile Phone Number for SMS reception.");
@@ -471,7 +508,11 @@ public class InvoiceClient implements ResourceClient {
         }
     }
 
-    private void validateSmsCode(String buyerSms, String smsCode, Boolean autoVerify) throws InvoiceUpdateException {
+    private void validateSmsCode(
+        String buyerSms,
+        String smsCode,
+        Boolean autoVerify
+    ) throws InvoiceUpdateException {
         if (Objects.isNull(autoVerify)) {
             return;
         }

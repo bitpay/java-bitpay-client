@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -21,16 +22,19 @@ public class PayoutException extends BitPayException {
      * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public PayoutException(String status, String message) {
-        super(status, BuildMessage(message));
+    public PayoutException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "An unexpected error occurred while trying to manage the payout.";
-        String BitPayCode = "BITPAY-PAYOUT-GENERIC";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "An unexpected error occurred while trying to manage the payout.";
+        String bitPayCode = "BITPAY-PAYOUT-GENERIC";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+            message = bitPayCode + ": " + bitPayMessage + " -> " + message;
         }
 
         return message;

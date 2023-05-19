@@ -6,7 +6,7 @@ package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.ModelConfiguration;
-import com.bitpay.sdk.model.Payout.Payout;
+import com.bitpay.sdk.model.payout.Payout;
 import com.bitpay.sdk.util.TokenContainer;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +41,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("GBP", result.getLedgerCurrency());
         Assertions.assertNull(result.getMessage());
         Assertions.assertEquals("merchant@email.com", result.getNotificationEmail());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationURL());
+        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
         Assertions.assertEquals("payout_20210527", result.getReference());
         Assertions.assertEquals(1622112457834L, result.getRequestDate());
@@ -78,7 +78,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("GBP", result.getLedgerCurrency());
         Assertions.assertNull(result.getMessage());
         Assertions.assertEquals("merchant@email.com", result.getNotificationEmail());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationURL());
+        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
         Assertions.assertEquals("payout_20210527", result.getReference());
         Assertions.assertEquals(1622112457834L, result.getRequestDate());
@@ -134,7 +134,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("GBP", result.get(0).getLedgerCurrency());
         Assertions.assertNull(result.get(0).getMessage());
         Assertions.assertEquals("merchant@email.com", result.get(0).getNotificationEmail());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(0).getNotificationURL());
+        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(0).getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(0).getRecipientId());
         Assertions.assertEquals("payout_20210527", result.get(0).getReference());
         Assertions.assertEquals(1622112457834L, result.get(0).getRequestDate());
@@ -154,7 +154,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("GBP", result.get(1).getLedgerCurrency());
         Assertions.assertNull(result.get(1).getMessage());
         Assertions.assertEquals("merchant@email.com", result.get(1).getNotificationEmail());
-        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(1).getNotificationURL());
+        Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(1).getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(1).getRecipientId());
         Assertions.assertEquals("payout_20210528", result.get(1).getReference());
         Assertions.assertEquals(1622197423765L, result.get(1).getRequestDate());
@@ -190,7 +190,7 @@ public class PayoutClientTest extends AbstractClientTest {
         payout.setLedgerCurrency("GBP");
         payout.setReference("payout_20210527");
         payout.setNotificationEmail("merchant@email.com");
-        payout.setNotificationURL("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx");
+        payout.setNotificationUrl("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx");
         payout.setEmail("john@doe.com");
         payout.setLabel("John Doe");
 

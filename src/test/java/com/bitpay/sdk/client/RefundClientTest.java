@@ -5,7 +5,7 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Invoice.Refund;
+import com.bitpay.sdk.model.invoice.Refund;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;

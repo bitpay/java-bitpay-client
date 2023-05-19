@@ -10,7 +10,9 @@
     <packaging>jar</packaging>
 
     <name>BitPay</name>
-    <description>Full implementation of the BitPay Payment Gateway. This library implements BitPay's Cryptographically Secure RESTful API.</description>
+    <description>Full implementation of the BitPay Payment Gateway. This library implements BitPay's Cryptographically
+        Secure RESTful API.
+    </description>
     <url>https://bitpay.com/</url>
 
     <licenses>
@@ -133,6 +135,21 @@
                         <exclude>**/integration/ClientIntegrationTest.java</exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <configLocation>config/checkstyle/checkstyle.xml</configLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

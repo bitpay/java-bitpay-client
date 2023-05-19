@@ -1,27 +1,33 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
-package com.bitpay.sdk.util;
-/*
- * Copyright (c) 2019 BitPay
- */
-import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.ECKey.ECDSASignature;
-import org.bitcoinj.core.Sha256Hash;
 
-import java.io.*;
+package com.bitpay.sdk.util;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import org.bitcoinj.core.Base58;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.bitcoinj.core.Sha256Hash;
 
 /**
  * The type Key utils.
  */
 public class KeyUtils {
 
-    final private static char[] hexArray = "0123456789abcdef".toCharArray();
+    private static final char[] hexArray = "0123456789abcdef".toCharArray();
     private static String PrivateKeyFile;
     private static URI privateKey;
 
@@ -167,6 +173,28 @@ public class KeyUtils {
     }
 
     /**
+     * Save EC key.
+     *
+     * @param ecKey      the ec key
+     * @param privateKey the private key
+     * @throws IOException        the io exception
+     * @throws URISyntaxException the uri syntax exception
+     */
+    public static void saveEcKey(
+        ECKey ecKey,
+        URI privateKey
+    ) throws IOException, URISyntaxException {
+        File file = new File(privateKey);
+        //we shan't overwrite an existing file
+
+        if (file.exists()) {
+            return;
+        }
+        KeyUtils.privateKey = privateKey;
+        saveEcKey(ecKey);
+    }
+
+    /**
      * Save EC key as hex.
      *
      * @param ecKey the ec key
@@ -202,53 +230,34 @@ public class KeyUtils {
     }
 
     /**
-     * Save EC key.
-     *
-     * @param ecKey      the ec key
-     * @param privateKey the private key
-     * @throws IOException        the io exception
-     * @throws URISyntaxException the uri syntax exception
-     */
-    public static void saveEcKey(ECKey ecKey, URI privateKey) throws IOException, URISyntaxException {
-        File file = new File(privateKey);
-        //we shan't overwrite an existing file
-
-        if (file.exists()) {
-            return;
-        }
-        KeyUtils.privateKey = privateKey;
-        saveEcKey(ecKey);
-    }
-
-    /**
      * Derive sin string.
      *
      * @param ecKey the ec key
      * @return the string
      * @throws IllegalArgumentException the illegal argument exception
      */
-    public static String deriveSIN(ECKey ecKey) throws IllegalArgumentException {
+    public static String deriveSin(ECKey ecKey) throws IllegalArgumentException {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).
         byte[] pubKeyHash = ecKey.getPubKeyHash();
 
         // Convert binary pubKeyHash, SINtype and version to Hex
         String version = "0F";
-        String SINtype = "02";
+        String sinType = "02";
         String pubKeyHashHex = bytesToHex(pubKeyHash);
 
         // Concatenate all three elements
-        String preSIN = version + SINtype + pubKeyHashHex;
+        String preSin = version + sinType + pubKeyHashHex;
 
         // Convert the hex string back to binary and double sha256 hash it leaving in binary both times
-        byte[] preSINbyte = hexToBytes(preSIN);
-        byte[] hash2Bytes = Sha256Hash.hashTwice(preSINbyte);
+        byte[] preSinByte = hexToBytes(preSin);
+        byte[] hash2Bytes = Sha256Hash.hashTwice(preSinByte);
 
         // Convert back to hex and take first four bytes
         String hashString = bytesToHex(hash2Bytes);
         String first4Bytes = hashString.substring(0, 8);
 
         // Append first four bytes to fully appended SIN string
-        String unencoded = preSIN + first4Bytes;
+        String unencoded = preSin + first4Bytes;
         byte[] unencodedBytes = new BigInteger(unencoded, 16).toByteArray();
         return Base58.encode(unencodedBytes);
     }
@@ -261,7 +270,10 @@ public class KeyUtils {
      * @return the string
      * @throws UnsupportedEncodingException the unsupported encoding exception
      */
-    public static String sign(ECKey key, String input) throws UnsupportedEncodingException {
+    public static String sign(
+        ECKey key,
+        String input
+    ) throws UnsupportedEncodingException {
         byte[] data = input.getBytes(StandardCharsets.UTF_8);
 
         Sha256Hash hash = Sha256Hash.of(data);

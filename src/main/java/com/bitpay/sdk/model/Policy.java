@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.model;
@@ -7,7 +8,6 @@ package com.bitpay.sdk.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 /**
@@ -44,7 +44,7 @@ public class Policy {
      * @param policy the policy
      */
     @JsonProperty("policy")
-    public void setPolicy(String policy) {
+    public void setPolicy(final String policy) {
         this.policy = policy;
     }
 
@@ -56,7 +56,7 @@ public class Policy {
      */
     @JsonIgnore
     public String getMethod() {
-        return method;
+        return this.method;
     }
 
     /**
@@ -66,7 +66,7 @@ public class Policy {
      * @param method the method
      */
     @JsonProperty("method")
-    public void setMethod(String method) {
+    public void setMethod(final String method) {
         this.method = method;
     }
 
@@ -77,7 +77,7 @@ public class Policy {
      */
     @JsonIgnore
     public List<String> getParams() {
-        return params;
+        return this.params;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Policy {
      * @param params the params
      */
     @JsonProperty("params")
-    public void setParams(List<String> params) {
+    public void setParams(final List<String> params) {
         this.params = params;
     }
 }
