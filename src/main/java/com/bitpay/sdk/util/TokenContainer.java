@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.util;
@@ -75,7 +76,10 @@ public class TokenContainer {
      * @param facade Facade
      * @param token  Token
      */
-    public void put(Facade facade, String token) {
+    public void put(
+        Facade facade,
+        String token
+    ) {
         this.data.put(facade.toString(), token);
     }
 

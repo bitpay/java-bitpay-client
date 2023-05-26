@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk;
@@ -44,21 +45,21 @@ import com.bitpay.sdk.exceptions.RefundQueryException;
 import com.bitpay.sdk.exceptions.RefundUpdateException;
 import com.bitpay.sdk.exceptions.SettlementQueryException;
 import com.bitpay.sdk.exceptions.WalletQueryException;
-import com.bitpay.sdk.model.Bill.Bill;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Invoice.Invoice;
-import com.bitpay.sdk.model.Invoice.InvoiceEventToken;
-import com.bitpay.sdk.model.Invoice.Refund;
-import com.bitpay.sdk.model.Ledger.Ledger;
-import com.bitpay.sdk.model.Ledger.LedgerEntry;
-import com.bitpay.sdk.model.Payout.Payout;
-import com.bitpay.sdk.model.Payout.PayoutGroup;
-import com.bitpay.sdk.model.Payout.PayoutRecipient;
-import com.bitpay.sdk.model.Payout.PayoutRecipients;
-import com.bitpay.sdk.model.Rate.Rate;
-import com.bitpay.sdk.model.Rate.Rates;
-import com.bitpay.sdk.model.Settlement.Settlement;
-import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.model.bill.Bill;
+import com.bitpay.sdk.model.invoice.Invoice;
+import com.bitpay.sdk.model.invoice.InvoiceEventToken;
+import com.bitpay.sdk.model.invoice.Refund;
+import com.bitpay.sdk.model.ledger.Ledger;
+import com.bitpay.sdk.model.ledger.LedgerEntry;
+import com.bitpay.sdk.model.payout.Payout;
+import com.bitpay.sdk.model.payout.PayoutGroup;
+import com.bitpay.sdk.model.payout.PayoutRecipient;
+import com.bitpay.sdk.model.payout.PayoutRecipients;
+import com.bitpay.sdk.model.rate.Rate;
+import com.bitpay.sdk.model.rate.Rates;
+import com.bitpay.sdk.model.settlement.Settlement;
+import com.bitpay.sdk.model.wallet.Wallet;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.KeyUtils;
@@ -85,6 +86,9 @@ import org.bitcoinj.core.ECKey;
  */
 public class Client {
 
+    private static final String LOAD_PRIVATE_KEY_EXCEPTION =
+        "When trying to load private key. Make sure the configuration details are correct "
+            + "and the private key and tokens are valid : ";
     private final GuidGenerator guidGenerator;
     private final BitPayClient bitPayClient;
     private final TokenContainer tokenContainer;
@@ -111,7 +115,10 @@ public class Client {
      * @param environment Environment
      * @throws BitPayException the bit pay exception
      */
-    public Client(PosToken token, Environment environment) throws BitPayException {
+    public Client(
+        PosToken token,
+        Environment environment
+    ) throws BitPayException {
         if (Objects.isNull(token) || Objects.isNull(environment)) {
             throw new BitPayException(null, "Missing required constructor parameters");
         }
@@ -169,7 +176,11 @@ public class Client {
      * @param proxyCredentials CredentialsProvider Optional Proxy Basic Auth Credentials (set to NULL to ignore)
      * @throws BitPayException BitPayException class
      */
-    public Client(ConfigFilePath configFilePath, HttpHost proxy, CredentialsProvider proxyCredentials) throws BitPayException {
+    public Client(
+        ConfigFilePath configFilePath,
+        HttpHost proxy,
+        CredentialsProvider proxyCredentials
+    ) throws BitPayException {
         try {
             Config config = this.buildConfigFromFile(configFilePath);
             this.tokenContainer = new TokenContainer(config);
@@ -201,18 +212,18 @@ public class Client {
      * @param bitPayClient   BitPayClient
      * @param identity       Identity
      * @param tokenContainer TokenContainer
-     * @param GuidGenerator  GuidGenerator
+     * @param guidGenerator  GuidGenerator
      */
     public Client(
         BitPayClient bitPayClient,
         String identity,
         TokenContainer tokenContainer,
-        GuidGenerator GuidGenerator
+        GuidGenerator guidGenerator
     ) {
         this.bitPayClient = bitPayClient;
         this.identity = identity;
         this.tokenContainer = tokenContainer;
-        this.guidGenerator = GuidGenerator;
+        this.guidGenerator = guidGenerator;
     }
 
     /**
@@ -234,7 +245,10 @@ public class Client {
      * @return the client
      * @throws BitPayException the bit pay exception
      */
-    public static Client createPosClient(PosToken token, Environment environment) throws BitPayException {
+    public static Client createPosClient(
+        PosToken token,
+        Environment environment
+    ) throws BitPayException {
         return new Client(token, environment);
     }
 
@@ -272,10 +286,9 @@ public class Client {
     /**
      * Authorize this client with the server using the specified pairing code (Server Initiated Pairing).
      *
-     * @see <a href="https://developer.bitpay.com/reference/get-token">Request an API Token</a>
-     *
      * @param pairingCode A code obtained from the server; typically from bitpay.com/api-tokens.
      * @throws BitPayException BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/get-token">Request an API Token</a>
      */
     public void authorizeClient(String pairingCode) throws BitPayException {
         this.createAuthorizationClient().authorizeClient(pairingCode);
@@ -284,11 +297,10 @@ public class Client {
     /**
      * Request a pairing code from the BitPay server (Client Initiated Pairing).
      *
-     * @see <a href="https://developer.bitpay.com/reference/get-token">Request an API Token</a>
-     *
      * @param facade Defines the level of API access being requested
      * @return A pairing code for claim at https://bitpay.com/dashboard/merchant/api-tokens.
      * @throws BitPayException BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/get-token">Request an API Token</a>
      */
     public String authorizeClient(Facade facade) throws BitPayException {
         return this.createAuthorizationClient().authorizeClient(facade);
@@ -331,11 +343,10 @@ public class Client {
     /**
      * Create a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-an-invoice">Create an Invoice</a>
-     *
      * @param invoice An Invoice object with request parameters defined.
      * @return A BitPay generated Invoice object.
      * @throws InvoiceCreationException InvoiceCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-an-invoice">Create an Invoice</a>
      */
     public Invoice createInvoice(Invoice invoice) throws InvoiceCreationException {
         try {
@@ -354,15 +365,18 @@ public class Client {
     /**
      * Create a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-an-invoice">Create an Invoice</a>
-     *
      * @param invoice An Invoice object with request parameters defined.
      * @param facade The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay generated Invoice object.
      * @throws InvoiceCreationException InvoiceCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-an-invoice">Create an Invoice</a>
      */
-    public Invoice createInvoice(Invoice invoice, Facade facade, boolean signRequest) throws InvoiceCreationException {
+    public Invoice createInvoice(
+        Invoice invoice,
+        Facade facade,
+        boolean signRequest
+    ) throws InvoiceCreationException {
         try {
             InvoiceClient client = getInvoiceClient();
 
@@ -377,11 +391,10 @@ public class Client {
     /**
      * Retrieve a BitPay invoice by invoice id using the public facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice">Retrieve an Invoice</a>
-     *
      * @param invoiceId The id of the invoice to retrieve.
      * @return A BitPay Invoice object.
      * @throws BitPayException the bit pay exception
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice">Retrieve an Invoice</a>
      */
     public Invoice getInvoice(String invoiceId) throws BitPayException {
         Facade facade = getFacadeBasedOnAccessToken();
@@ -399,15 +412,18 @@ public class Client {
     /**
      * Retrieve a BitPay invoice by invoice id.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice">Retrieve an Invoice</a>
-     *
      * @param invoiceId The id of the invoice to retrieve.
      * @param facade The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay Invoice object.
      * @throws BitPayException the bit pay exception
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice">Retrieve an Invoice</a>
      */
-    public Invoice getInvoice(String invoiceId, Facade facade, boolean signRequest) throws BitPayException {
+    public Invoice getInvoice(
+        String invoiceId,
+        Facade facade,
+        boolean signRequest
+    ) throws BitPayException {
         try {
             return this.getInvoiceClient().get(invoiceId, facade, signRequest);
         } catch (BitPayException ex) {
@@ -421,11 +437,10 @@ public class Client {
      * Retrieve a BitPay invoice by guid using the specified facade.
      * The client must have been previously authorized for the specified facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice-by-guid">Retrieve an Invoice by GUID</a>
-     *
-     * @param guid        The guid of the invoice to retrieve.
+     * @param guid The guid of the invoice to retrieve.
      * @return A BitPay Invoice object.
      * @throws InvoiceQueryException InvoiceQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice-by-guid">Retrieve an Invoice by GUID</a>
      */
     public Invoice getInvoiceByGuid(String guid) throws InvoiceQueryException {
         Facade facade = getFacadeBasedOnAccessToken();
@@ -437,22 +452,23 @@ public class Client {
      * Retrieve a BitPay invoice by guid using the specified facade.
      * The client must have been previously authorized for the specified facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice-by-guid">Retrieve an Invoice by GUID</a>
-     *
      * @param guid        The guid of the invoice to retrieve.
      * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay Invoice object.
      * @throws InvoiceQueryException InvoiceQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-invoice-by-guid">Retrieve an Invoice by GUID</a>
      */
-    public Invoice getInvoiceByGuid(String guid, Facade facade, Boolean signRequest) throws InvoiceQueryException {
+    public Invoice getInvoiceByGuid(
+        String guid,
+        Facade facade,
+        Boolean signRequest
+    ) throws InvoiceQueryException {
         return this.getInvoiceClient().getByGuid(guid, facade, signRequest);
     }
 
     /**
      * Retrieve a collection of BitPay invoices.
-     *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-invoices-filtered-by-query">Retrieve Invoices Filtered by Query</a>
      *
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
@@ -463,6 +479,7 @@ public class Client {
      * @return A list of BitPay Invoice objects.
      * @throws BitPayException       BitPayException class
      * @throws InvoiceQueryException InvoiceQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-invoices-filtered-by-query">Retrieve Invoices Filtered by Query</a>
      */
     public List<Invoice> getInvoices(
         String dateStart,
@@ -478,12 +495,11 @@ public class Client {
     /**
      * Retrieves a bus token which can be used to subscribe to invoice events.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-event-token">Retrieve an Event Token</a>
-     *
      * @param invoiceId the id of the invoice for which you want to fetch an event token.
      * @return InvoiceEventToken event token
      * @throws BitPayException BitPayException
      * @since 8.8.0
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-an-event-token">Retrieve an Event Token</a>
      */
     public InvoiceEventToken getInvoiceEventToken(String invoiceId) throws BitPayException {
         return this.getInvoiceClient().getInvoiceEventToken(invoiceId);
@@ -491,8 +507,6 @@ public class Client {
 
     /**
      * Update a BitPay invoice with communication method.
-     *
-     * @see <a href="https://developer.bitpay.com/reference/update-an-invoice">Update an Invoice</a>
      *
      * @param invoiceId  The id of the invoice to updated.
      * @param buyerSms   The buyer's cell number.
@@ -502,6 +516,7 @@ public class Client {
      * @return A BitPay generated Invoice object.
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
+     * @see <a href="https://developer.bitpay.com/reference/update-an-invoice">Update an Invoice</a>
      */
     public Invoice updateInvoice(
         String invoiceId,
@@ -522,19 +537,21 @@ public class Client {
      * @throws BitPayException        BitPayException class
      * @throws InvoiceUpdateException InvoiceUpdateException class
      */
-    public Invoice payInvoice(String invoiceId, String status) throws BitPayException, InvoiceUpdateException {
+    public Invoice payInvoice(
+        String invoiceId,
+        String status
+    ) throws BitPayException, InvoiceUpdateException {
         return this.getInvoiceClient().pay(invoiceId, status);
     }
 
     /**
      * Delete a previously created BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice">Cancel an Invoice</a>
-     *
      * @param invoiceId The Id of the BitPay invoice to be canceled.
      * @return A BitPay generated Invoice object.
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException              BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice">Cancel an Invoice</a>
      */
     public Invoice cancelInvoice(String invoiceId) throws InvoiceCancellationException, BitPayException {
         return this.getInvoiceClient().cancel(invoiceId);
@@ -544,16 +561,17 @@ public class Client {
      * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
      * the point where it may have been paid, unless using forceCancel parameter.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice">Cancel an Invoice</a>
-     *
      * @param invoiceId   The Id of the BitPay invoice to be canceled.
      * @param forceCancel If 'true' it will cancel the invoice even if no contact information is present.
      * @return A BitPay generated Invoice object.
      * @throws InvoiceCancellationException InvoiceCancellationException class
      * @throws BitPayException              BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice">Cancel an Invoice</a>
      */
-    public Invoice cancelInvoice(String invoiceId, Boolean forceCancel)
-        throws InvoiceCancellationException, BitPayException {
+    public Invoice cancelInvoice(
+        String invoiceId,
+        Boolean forceCancel
+    ) throws InvoiceCancellationException, BitPayException {
         return this.getInvoiceClient().cancel(invoiceId, forceCancel);
     }
 
@@ -561,13 +579,12 @@ public class Client {
      * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
      * the point where it may have been paid, unless using forceCancel parameter.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice-by-guid">Cancel an Invoice by GUID</a>
-     *
      * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
      *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
      *             in Retrieve Invoice by GUID.
      * @return Invoice Invoice
      * @throws BitPayException BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice-by-guid">Cancel an Invoice by GUID</a>
      */
     public Invoice cancelInvoiceByGuid(String guid) throws BitPayException {
         return this.getInvoiceClient().cancelByGuid(guid, false);
@@ -577,8 +594,6 @@ public class Client {
      * Cancellation will require EITHER an SMS or E-mail to have already been set if the invoice has proceeded to
      * the point where it may have been paid, unless using forceCancel parameter.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice-by-guid">Cancel an Invoice by GUID</a>
-     *
      * @param guid GUID A passthru variable provided by the merchant and designed to be used by the merchant to
      *             correlate the invoice with an order ID in their system, which can be used as a lookup variable
      *             in Retrieve Invoice by GUID.
@@ -587,8 +602,12 @@ public class Client {
      *                    process and is not recommended.
      * @return Invoice Invoice
      * @throws BitPayException BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-an-invoice-by-guid">Cancel an Invoice by GUID</a>
      */
-    public Invoice cancelInvoiceByGuid(String guid, Boolean forceCancel) throws BitPayException {
+    public Invoice cancelInvoiceByGuid(
+        String guid,
+        Boolean forceCancel
+    ) throws BitPayException {
         return this.getInvoiceClient().cancelByGuid(guid, forceCancel);
     }
 
@@ -596,11 +615,10 @@ public class Client {
      * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
      * so the client can request that BitPay resend it.
      *
-     * @see <a href="https://developer.bitpay.com/reference/request-an-invoice-webhook-to-be-resent">Request an Invoice Webhook to be Resent</a>
-     *
      * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
      * @return Boolean status of request
      * @throws BitPayException BitPayException
+     * @see <a href="https://developer.bitpay.com/reference/request-an-invoice-webhook-to-be-resent">Request an Invoice Webhook to be Resent</a>
      */
     public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayException {
         return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
@@ -609,17 +627,18 @@ public class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
-     *
      * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
      * @param amount             Amount to be refunded in the currency indicated.
-     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
-     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param preview            Whether to create the refund request as a preview
+     *                           (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission
+     *                           or at time of processing
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
      * @param reference          Present only if specified. Used as reference label for the refund. Max str length = 100
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
      */
     public Refund createRefund(
         String invoiceId,
@@ -643,19 +662,21 @@ public class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
-     *
      * @param invoiceId          The BitPay invoice Id having the associated refund to be created.
      * @param amount             Amount to be refunded in the currency indicated.
-     * @param preview            Whether to create the refund request as a preview (which will not be acted on until status is updated)
-     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission or at time of processing
+     * @param preview            Whether to create the refund request as a preview
+     *                           (which will not be acted on until status is updated)
+     * @param immediate          Whether funds should be removed from merchant ledger immediately on submission
+     *                           or at time of processing
      * @param buyerPaysRefundFee Whether the buyer should pay the refund fee (default is merchant)
      * @param reference          Present only if specified. Used as reference label for the refund. Max str length = 100
-     * @param guid               Variable provided by the merchant and designed to be used by the merchant to correlate the refund with a refund ID in their system
+     * @param guid               Variable provided by the merchant and designed to be used by the merchant
+     *                           to correlate the refund with a refund ID in their system
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
      * @since 8.7.0
+     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
      */
     public Refund createRefund(
         String invoiceId,
@@ -681,28 +702,26 @@ public class Client {
     /**
      * Create a refund for a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
-     *
-     * @param refund Refund class which provided data - invoice id, amount, preview, immediate, buyerPaysRefundFee, reference and guid for create request
+     * @param refund Refund class which provided data - invoice id, amount, preview, immediate, buyerPaysRefundFee,
+     *               reference and guid for create request
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
      * @since 8.7.0
+     * @see <a href="https://developer.bitpay.com/reference/create-a-refund-request">Create a Refund Request</a>
      */
-    public Refund createRefund(Refund refund) throws
-        RefundCreationException, BitPayException {
+    public Refund createRefund(Refund refund) throws RefundCreationException, BitPayException {
         return this.getRefundClient().create(refund);
     }
 
     /**
      * Retrieve a previously made refund request on a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-refund-request">Retrieve a Refund Request</a>
-     *
      * @param refundId The BitPay refund ID.
      * @return A BitPay Refund object with the associated Refund object.
      * @throws RefundQueryException RefundQueryException class
      * @throws BitPayException      BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-refund-request">Retrieve a Refund Request</a>
      */
     public Refund getRefund(String refundId) throws RefundQueryException, BitPayException {
         return this.getRefundClient().getById(refundId);
@@ -711,12 +730,11 @@ public class Client {
     /**
      * Retrieve a previously made refund request on a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-refund-by-guid-request">Retrieve a Refund by GUID Request</a>
-     *
      * @param guid The BitPay refund GUID.
      * @return A BitPay Refund object with the associated Refund object.
      * @throws BitPayException      BitPayException class
      * @since 8.7.0
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-refund-by-guid-request">Retrieve a Refund by GUID Request</a>
      */
     public Refund getRefundByGuid(String guid) throws BitPayException {
         return this.getRefundClient().getByGuid(guid);
@@ -725,12 +743,11 @@ public class Client {
     /**
      * Retrieve all refund requests on a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-refunds-of-an-invoice">Retrieve Refunds of an Invoice</a>
-     *
      * @param invoiceId The BitPay invoice object having the associated refunds.
      * @return A list of BitPay Refund objects with the associated Refund objects.
      * @throws RefundQueryException RefundQueryException class
      * @throws BitPayException      BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-refunds-of-an-invoice">Retrieve Refunds of an Invoice</a>
      */
     public List<Refund> getRefunds(String invoiceId) throws RefundQueryException, BitPayException {
         return this.getRefundClient().getRefundsByInvoiceId(invoiceId);
@@ -739,22 +756,22 @@ public class Client {
     /**
      * Update the status of a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/update-a-refund-request">Update a Refund Request</a>
-     *
      * @param refundId A BitPay refund ID.
      * @param status   The new status for the refund to be updated.
      * @return A BitPay generated Refund object.
      * @throws RefundUpdateException RefundUpdateException class
      * @throws BitPayException       BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/update-a-refund-request">Update a Refund Request</a>
      */
-    public Refund updateRefund(String refundId, String status) throws RefundUpdateException, BitPayException {
+    public Refund updateRefund(
+        String refundId,
+        String status
+    ) throws RefundUpdateException, BitPayException {
         return this.getRefundClient().update(refundId, status);
     }
 
     /**
      * Update the status of a BitPay invoice.
-     *
-     * @see <a href="https://developer.bitpay.com/reference/update-a-refund-by-guid-request">Update a Refund by GUID Request</a>
      *
      * @param guid A BitPay refund Guid.
      * @param status   The new status for the refund to be updated.
@@ -762,20 +779,23 @@ public class Client {
      * @throws RefundUpdateException RefundUpdateException class
      * @throws BitPayException       BitPayException class
      * @since 8.7.0
+     * @see <a href="https://developer.bitpay.com/reference/update-a-refund-by-guid-request">Update a Refund by GUID Request</a>
      */
-    public Refund updateRefundByGuid(String guid, String status) throws RefundUpdateException, BitPayException {
+    public Refund updateRefundByGuid(
+        String guid,
+        String status
+    ) throws RefundUpdateException, BitPayException {
         return this.getRefundClient().updateByGuid(guid, status);
     }
 
     /**
      * Send a refund notification.
      *
-     * @see <a href="https://developer.bitpay.com/reference/request-a-refund-notification-to-be-resent">Request a Refund Notification to be Resent</a>
-     *
      * @param refundId A BitPay refund ID.
      * @return An updated Refund Object
      * @throws RefundCreationException RefundCreationException class
      * @throws BitPayException         BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/request-a-refund-notification-to-be-resent">Request a Refund Notification to be Resent</a>
      */
     public Boolean sendRefundNotification(String refundId) throws RefundCreationException, BitPayException {
         return this.getRefundClient().sendRefundNotification(refundId);
@@ -784,12 +804,11 @@ public class Client {
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-a-refund-request">Cancel a Refund Request</a>
-     *
      * @param refundId The refund Id for the refund to be canceled.
      * @return An updated Refund Object.
      * @throws RefundCancellationException RefundCancellationException class
      * @throws BitPayException             BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-refund-request">Cancel a Refund Request</a>
      */
     public Refund cancelRefund(String refundId) throws RefundCancellationException, BitPayException {
         return this.getRefundClient().cancel(refundId);
@@ -798,13 +817,12 @@ public class Client {
     /**
      * Cancel a previously submitted refund request on a BitPay invoice.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-a-refund-by-guid-request">Cancel a Refund by GUID Request</a>
-     *
      * @param guid The refund Guid for the refund to be canceled.
      * @return An updated Refund Object.
      * @throws RefundCancellationException RefundCancellationException class
      * @throws BitPayException             BitPayException class
      * @since 8.7.0
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-refund-by-guid-request">Cancel a Refund by GUID Request</a>
      */
     public Refund cancelRefundByGuid(String guid) throws RefundCancellationException, BitPayException {
         return this.getRefundClient().cancelByGuid(guid);
@@ -813,12 +831,11 @@ public class Client {
     /**
      * Create a BitPay bill.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-bill">Create a Bill</a>
-     *
      * @param bill An Bill object with request parameters defined.
      * @return A BitPay generated Bill object.
      * @throws BillCreationException BillCreationException class
      * @throws BitPayException       the bit pay exception
+     * @see <a href="https://developer.bitpay.com/reference/create-a-bill">Create a Bill</a>
      */
     public Bill createBill(Bill bill) throws BillCreationException, BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
@@ -830,28 +847,29 @@ public class Client {
     /**
      * Create a BitPay Bill.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-bill">Create a Bill</a>
-     *
      * @param bill        A Bill object with request parameters defined.
      * @param facade      The facade used to create it.
      * @param signRequest Signed request.
      * @return A BitPay generated Bill object.
      * @throws BitPayException       BitPayException class
      * @throws BillCreationException BillCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-a-bill">Create a Bill</a>
      */
-    public Bill createBill(Bill bill, Facade facade, boolean signRequest)
-        throws BitPayException, BillCreationException {
+    public Bill createBill(
+        Bill bill,
+        Facade facade,
+        boolean signRequest
+    ) throws BitPayException, BillCreationException {
         return this.getBillClient().create(bill, facade, signRequest);
     }
 
     /**
      * Retrieve a BitPay bill by bill id using the public facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-bill">Retrieve a Bill</a>
-     *
      * @param billId The id of the bill to retrieve.
      * @return A BitPay Bill object.
      * @throws BitPayException the bit pay exception
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-bill">Retrieve a Bill</a>
      */
     public Bill getBill(String billId) throws BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
@@ -863,28 +881,30 @@ public class Client {
     /**
      * Retrieve a BitPay bill by bill id using the specified facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-bill">Retrieve a Bill</a>
-     *
      * @param billId      The id of the bill to retrieve.
      * @param facade      The facade used to retrieve it.
      * @param signRequest Signed request.
      * @return A BitPay Bill object.
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-bill">Retrieve a Bill</a>
      */
-    public Bill getBill(String billId, Facade facade, boolean signRequest) throws BitPayException, BillQueryException {
+    public Bill getBill(
+        String billId,
+        Facade facade,
+        boolean signRequest
+    ) throws BitPayException, BillQueryException {
         return this.getBillClient().get(billId, facade, signRequest);
     }
 
     /**
      * Retrieve a collection of BitPay bills.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-bills-by-status">Retrieve Bills by Status</a>
-     *
      * @param status The status to filter the bills.
      * @return A list of BitPay Bill objects.
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-bills-by-status">Retrieve Bills by Status</a>
      */
     public List<Bill> getBills(String status) throws BitPayException, BillQueryException {
         return this.getBillClient().getBills(status);
@@ -893,11 +913,10 @@ public class Client {
     /**
      * Retrieve a collection of BitPay bills.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-bills-by-status">Retrieve Bills by Status</a>
-     *
      * @return A list of BitPay Bill objects.
      * @throws BitPayException    BitPayException class
      * @throws BillQueryException BillQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-bills-by-status">Retrieve Bills by Status</a>
      */
     public List<Bill> getBills() throws BitPayException, BillQueryException {
         return this.getBillClient().getBills();
@@ -906,29 +925,33 @@ public class Client {
     /**
      * Update a BitPay Bill.
      *
-     * @see <a href="https://developer.bitpay.com/reference/update-a-bill">Update a Bill</a>
-     *
      * @param bill   A Bill object with the parameters to update defined.
      * @param billId The Id of the Bill to udpate.
      * @return An updated Bill object.
      * @throws BitPayException     BitPayException class
      * @throws BillUpdateException BillUpdateException class
+     * @see <a href="https://developer.bitpay.com/reference/update-a-bill">Update a Bill</a>
      */
-    public Bill updateBill(Bill bill, String billId) throws BitPayException, BillUpdateException {
+    public Bill updateBill(
+        Bill bill,
+        String billId
+    ) throws BitPayException, BillUpdateException {
         return this.getBillClient().update(bill, billId);
     }
 
     /**
      * Deliver a BitPay Bill.
      *
-     * @see <a href="https://developer.bitpay.com/reference/deliver-a-bill-via-email">Deliver a Bill Via Email</a>
-     *
      * @param billId    The id of the requested bill.
      * @param billToken The token of the requested bill.
      * @return A response status returned from the API.
      * @throws BitPayException the bit pay exception
+     * @see <a href="https://developer.bitpay.com/reference/deliver-a-bill-via-email">Deliver a Bill Via Email</a>
      */
-    public String deliverBill(String billId, String billToken) throws BitPayException {
+    public String deliverBill(
+        String billId,
+        String billToken
+    ) throws BitPayException {
         Facade facade = this.getFacadeBasedOnAccessToken();
         boolean signRequest = isSignRequest(facade);
 
@@ -938,22 +961,23 @@ public class Client {
     /**
      * Deliver a BitPay Bill.
      *
-     * @see <a href="https://developer.bitpay.com/reference/deliver-a-bill-via-email">Deliver a Bill Via Email</a>
-     *
      * @param billId      The id of the requested bill.
      * @param billToken   The token of the requested bill.
      * @param signRequest Allow unsigned request
      * @return A response status returned from the API.
      * @throws BillDeliveryException BillDeliveryException class
+     * @see <a href="https://developer.bitpay.com/reference/deliver-a-bill-via-email">Deliver a Bill Via Email</a>
      */
-    public String deliverBill(String billId, String billToken, boolean signRequest) throws BillDeliveryException {
+    public String deliverBill(
+        String billId,
+        String billToken,
+        boolean signRequest
+    ) throws BillDeliveryException {
         return this.getBillClient().deliver(billId, billToken, signRequest);
     }
 
     /**
      * Retrieve the rates for a cryptocurrency / fiat pair. See https://bitpay.com/bitcoin-exchange-rates.
-     *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-the-rates-for-a-cryptocurrency-fiat-pair">Retrieve the rates for a cryptocurrency / fiat pair</a>
      *
      * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
      *                     Current supported values are BTC and BCH.
@@ -961,8 +985,12 @@ public class Client {
      * @return A Rate object populated with the BitPay exchange rate table.
      * @throws RateQueryException RateQueryException class
      * @since 8.8.0
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-the-rates-for-a-cryptocurrency-fiat-pair">Retrieve the rates for a cryptocurrency / fiat pair</a>
      */
-    public Rate getRate(String baseCurrency, String currency) throws RateQueryException {
+    public Rate getRate(
+        String baseCurrency,
+        String currency
+    ) throws RateQueryException {
         return this.getRateClient().get(baseCurrency, currency);
     }
 
@@ -979,13 +1007,12 @@ public class Client {
     /**
      * Retrieve the exchange rate table maintained by BitPay by baseCurrency. See https://bitpay.com/bitcoin-exchange-rates.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-all-the-rates-for-a-given-cryptocurrency">Retrieve all the rates for a given cryptocurrency</a>
-     *
      * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
      *                     Current supported values are BTC and BCH.
      * @return A Rates object populated with the BitPay exchange rate table.
      * @throws RateQueryException RateQueryException class
      * @since 8.8.0
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-all-the-rates-for-a-given-cryptocurrency">Retrieve all the rates for a given cryptocurrency</a>
      */
     public Rates getRates(String baseCurrency) throws RateQueryException {
         return this.getRateClient().getRates(baseCurrency);
@@ -994,28 +1021,29 @@ public class Client {
     /**
      * Retrieve a list of ledgers entries by currency and date range using the merchant facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-ledger-entries">Retrieve Ledger Entries</a>
-     *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
      * @return Ledger entries list.
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-ledger-entries">Retrieve Ledger Entries</a>
      */
-    public List<LedgerEntry> getLedgerEntries(String currency, String dateStart, String dateEnd) throws BitPayException,
-        LedgerQueryException {
+    public List<LedgerEntry> getLedgerEntries(
+        String currency,
+        String dateStart,
+        String dateEnd
+    ) throws BitPayException, LedgerQueryException {
         return this.getLedgerClient().getEntries(currency, dateStart, dateEnd);
     }
 
     /**
      * Retrieve a list of ledgers using the merchant facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-account-balances">Retrieve Account Balances</a>
-     *
      * @return A list of Ledger objects populated with the currency and current balance of each one.
      * @throws BitPayException      BitPayException class
      * @throws LedgerQueryException LedgerQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-account-balances">Retrieve Account Balances</a>
      */
     public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
         return this.getLedgerClient().getLedgers();
@@ -1024,12 +1052,11 @@ public class Client {
     /**
      * Submit BitPay Payout Recipients.
      *
-     * @see <a href="https://developer.bitpay.com/reference/invite-recipients">Invite Recipients</a>
-     *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects.
      * @throws BitPayException                  BitPayException class
      * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/invite-recipients">Invite Recipients</a>
      */
     public List<PayoutRecipient> submitPayoutRecipients(PayoutRecipients recipients) throws BitPayException,
         PayoutRecipientCreationException {
@@ -1039,8 +1066,6 @@ public class Client {
     /**
      * Retrieve a collection of BitPay Payout Recipients.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-recipients-by-status">Retrieve Recipients by Status</a>
-     *
      * @param status String|null The recipient status you want to query on.
      * @param limit  int Maximum results that the query will return (useful for
      *               paging results). result).
@@ -1048,9 +1073,13 @@ public class Client {
      * @return array A list of BitPayRecipient objects.
      * @throws BitPayException               BitPayException class
      * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-recipients-by-status">Retrieve Recipients by Status</a>
      */
-    public List<PayoutRecipient> getPayoutRecipients(String status, Integer limit, Integer offset)
-        throws BitPayException, PayoutRecipientQueryException {
+    public List<PayoutRecipient> getPayoutRecipients(
+        String status,
+        Integer limit,
+        Integer offset
+    ) throws BitPayException, PayoutRecipientQueryException {
         return this.getPayoutRecipientsClient().getRecipientsByFilters(status, limit, offset);
     }
 
@@ -1058,12 +1087,11 @@ public class Client {
      * Retrieve a BitPay payout recipient by batch id using.  The client must have been previously authorized for the
      * payout facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-recipient">Retrieve a Recipient</a>
-     *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
      * @throws BitPayException               BitPayException class
      * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-recipient">Retrieve a Recipient</a>
      */
     public PayoutRecipient getPayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientQueryException {
@@ -1073,30 +1101,29 @@ public class Client {
     /**
      * Update a Payout Recipient.
      *
-     * @see <a href="https://developer.bitpay.com/reference/update-a-recipient">Update a Recipient</a>
-     *
      * @param recipientId String The recipient id for the recipient to be updated.
      * @param recipient   PayoutRecipients A PayoutRecipient object with updated
      *                    parameters defined.
      * @return The updated recipient object.
      * @throws BitPayException                BitPayException class
      * @throws PayoutRecipientUpdateException PayoutRecipientUpdateException class
+     * @see <a href="https://developer.bitpay.com/reference/update-a-recipient">Update a Recipient</a>
      */
-    public PayoutRecipient updatePayoutRecipient(String recipientId, PayoutRecipient recipient)
-        throws BitPayException, PayoutRecipientUpdateException {
+    public PayoutRecipient updatePayoutRecipient(
+        String recipientId,
+        PayoutRecipient recipient
+    ) throws BitPayException, PayoutRecipientUpdateException {
         return this.getPayoutRecipientsClient().update(recipientId, recipient);
     }
 
     /**
      * Cancel a BitPay Payout recipient.
      *
-     * @see <a href="https://developer.bitpay.com/reference/remove-a-recipient">Remove a Recipient</a>
-     *
      * @param recipientId String The id of the recipient to cancel.
      * @return True if the delete operation was successful, false otherwise.
      * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException
-     *                                              class
+     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException class
+     * @see <a href="https://developer.bitpay.com/reference/remove-a-recipient">Remove a Recipient</a>
      */
     public Boolean deletePayoutRecipient(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
@@ -1104,15 +1131,13 @@ public class Client {
     }
 
     /**
-     * Request a payout recipient notification
-     *
-     * @see <a href="https://developer.bitpay.com/reference/request-a-recipient-webhook-to-be-resent">Request a Recipient Webhook to be Resent</a>
+     * Request a payout recipient notification.
      *
      * @param recipientId String A BitPay recipient ID.
      * @return True if the notification was successfully sent, false otherwise.
      * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException
-     *                                              class
+     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException class
+     * @see <a href="https://developer.bitpay.com/reference/request-a-recipient-webhook-to-be-resent">Request a Recipient Webhook to be Resent</a>
      */
     public Boolean requestPayoutRecipientNotification(String recipientId)
         throws PayoutRecipientNotificationException, BitPayException {
@@ -1122,12 +1147,11 @@ public class Client {
     /**
      * Submit a BitPay Payout.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-a-payout">Create a Payout</a>
-     *
      * @param payout Payout A Payout object with request parameters defined.
      * @return A BitPay generated Payout object.
      * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-a-payout">Create a Payout</a>
      */
     public Payout submitPayout(Payout payout) throws BitPayException, PayoutCreationException {
         return this.getPayoutClient().submit(payout);
@@ -1136,12 +1160,11 @@ public class Client {
     /**
      * Submit a BitPay Payouts.
      *
-     * @see <a href="https://developer.bitpay.com/reference/create-payout-group">Create a Payouts</a>
-     *
      * @param payouts Collection of Payout objects with request parameters defined.
      * @return A BitPay PayoutGroup with generated Payout objects and information's about not created payouts.
      * @throws BitPayException         BitPayException class
      * @throws PayoutCreationException PayoutCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-payout-group">Create a Payouts</a>
      */
     public PayoutGroup submitPayouts(Collection<Payout> payouts) throws BitPayException, PayoutCreationException {
         return this.getPayoutGroupClient().submit(payouts);
@@ -1151,12 +1174,11 @@ public class Client {
      * Retrieve a BitPay payout by payout id using. The client must have been
      * previously authorized for the payout facade.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-payout">Retrieve a Payout</a>
-     *
      * @param payoutId String The id of the payout to retrieve.
      * @return A BitPay Payout object.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-payout">Retrieve a Payout</a>
      */
     public Payout getPayout(String payoutId) throws BitPayException, PayoutQueryException {
         return this.getPayoutClient().get(payoutId);
@@ -1165,12 +1187,11 @@ public class Client {
     /**
      * Cancel a BitPay Payout.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout">Cancel a Payout</a>
-     *
      * @param payoutId String The id of the payout to cancel.
      * @return True if the refund was successfully canceled, false otherwise.
      * @throws BitPayException             BitPayException class
      * @throws PayoutCancellationException PayoutCancellationException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout">Cancel a Payout</a>
      */
     public Boolean cancelPayout(String payoutId) throws BitPayException, PayoutCancellationException {
         return this.getPayoutClient().cancel(payoutId);
@@ -1179,12 +1200,11 @@ public class Client {
     /**
      * Cancel a BitPay Payouts.
      *
-     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout-group">Cancel a Payouts</a>
-     *
      * @param groupId String The id of the payout group to cancel.
      * @return A BitPay PayoutGroup with cancelled Payout objects and information's about not cancelled payouts.
      * @throws BitPayException             BitPayException class
      * @throws PayoutCancellationException PayoutCancellationException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout-group">Cancel a Payouts</a>
      */
     public PayoutGroup cancelPayouts(String groupId) throws BitPayException, PayoutCancellationException {
         return this.getPayoutGroupClient().cancel(groupId);
@@ -1192,8 +1212,6 @@ public class Client {
 
     /**
      * Retrieve a collection of BitPay payouts.
-     *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-payouts-filtered-by-query">Retrieve Payouts Filtered by Query</a>
      *
      * @param startDate String The start date for the query.
      * @param endDate   String The end date for the query.
@@ -1206,21 +1224,28 @@ public class Client {
      * @return A list of BitPay Payout objects.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-payouts-filtered-by-query">Retrieve Payouts Filtered by Query</a>
      */
-    public List<Payout> getPayouts(String startDate, String endDate, String status, String reference, Integer limit,
-                                   Integer offset, String groupId) throws BitPayException, PayoutQueryException {
+    public List<Payout> getPayouts(
+        String startDate,
+        String endDate,
+        String status,
+        String reference,
+        Integer limit,
+        Integer offset,
+        String groupId
+    ) throws BitPayException, PayoutQueryException {
         return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset, groupId);
     }
 
     /**
-     * Request a payout notification
+     * Request a payout notification.
      *
-     * @see <a href="https://developer.bitpay.com/reference/request-a-payout-webhook-to-be-resent">Request a Payout Webhook to be Resent</a>
-     *
-     * @param payoutId String The id of the payout to notify..
+     * @param payoutId String The id of the payout to notify.
      * @return True if the notification was successfully sent, false otherwise.
      * @throws BitPayException             BitPayException class
      * @throws PayoutNotificationException PayoutNotificationException class
+     * @see <a href="https://developer.bitpay.com/reference/request-a-payout-webhook-to-be-resent">Request a Payout Webhook to be Resent</a>
      */
     public Boolean requestPayoutNotification(String payoutId)
         throws BitPayException, PayoutNotificationException {
@@ -1232,8 +1257,6 @@ public class Client {
      * The `limit` and `offset` parameters
      * specify pages for large query sets.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-settlements">Retrieve Settlements</a>
-     *
      * @param currency  The three digit currency string for the ledger to retrieve.
      * @param dateStart The start date for the query.
      * @param dateEnd   The end date for the query.
@@ -1243,6 +1266,7 @@ public class Client {
      * @return A list of BitPay Settlement objects.
      * @throws BitPayException          BitPayException class
      * @throws SettlementQueryException SettlementQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-settlements">Retrieve Settlements</a>
      */
     public List<Settlement> getSettlements(
         String currency,
@@ -1258,12 +1282,11 @@ public class Client {
     /**
      * Retrieves a summary of the specified settlement.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-settlement">Retrieve a Settlement</a>
-     *
      * @param settlementId Settlement Id.
      * @return A BitPay Settlement object.
      * @throws BitPayException          BitPayException class
      * @throws SettlementQueryException SettlementQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-a-settlement">Retrieve a Settlement</a>
      */
     public Settlement getSettlement(String settlementId) throws BitPayException, SettlementQueryException {
         return this.getSettlementClient().get(settlementId);
@@ -1273,25 +1296,27 @@ public class Client {
      * Gets a detailed reconciliation report of the activity within the settlement period.
      * Required id and settlement token.
      *
-     * @see <a href="https://developer.bitpay.com/reference/fetch-a-reconciliation-report">Fetch a Reconciliation Report</a>
-     *
      * @param settlementId Settlement ID.
      * @param token Settlement token.
      * @return A detailed BitPay Settlement object.
      * @throws SettlementQueryException SettlementQueryException class
+     * @see <a href="https://developer.bitpay.com/reference/fetch-a-reconciliation-report">Fetch a Reconciliation Report</a>
      */
-    public Settlement getSettlementReconciliationReport(String settlementId, String token) throws SettlementQueryException {
+    public Settlement getSettlementReconciliationReport(
+        String settlementId,
+        String token
+    )
+        throws SettlementQueryException {
         return this.getSettlementClient().getSettlementReconciliationReport(settlementId, token);
     }
 
     /**
      * Retrieve all supported wallets.
      *
-     * @see <a href="https://developer.bitpay.com/reference/retrieve-the-supported-wallets">Retrieve the Supported Wallets</a>
-     *
      * @return A list of wallet objets.
      * @throws WalletQueryException WalletQueryException class
      * @throws BitPayException      BitPayException class
+     * @see <a href="https://developer.bitpay.com/reference/retrieve-the-supported-wallets">Retrieve the Supported Wallets</a>
      */
     public List<Wallet> getSupportedWallets() throws WalletQueryException, BitPayException {
         return this.getWalletClient().getSupportedWallets();
@@ -1306,9 +1331,9 @@ public class Client {
         return RateClient.getInstance(this.bitPayClient);
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Sets the logger level of reporting.
@@ -1326,7 +1351,10 @@ public class Client {
      * @param proxyCreds   the proxy creds
      * @return the http client
      */
-    protected HttpClient getHttpClient(HttpHost proxyDetails, CredentialsProvider proxyCreds) {
+    protected HttpClient getHttpClient(
+        HttpHost proxyDetails,
+        CredentialsProvider proxyCreds
+    ) {
         if (proxyDetails != null) {
             if (proxyCreds != null) {
                 return HttpClientBuilder.create().setProxy(proxyDetails).setDefaultCredentialsProvider(
@@ -1352,9 +1380,10 @@ public class Client {
             try {
                 return KeyUtils.loadEcKey();
             } catch (Exception e) {
-                throw new BitPayException(null,
-                    "When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " +
-                        e.getMessage());
+                throw new BitPayException(
+                    null,
+                    LOAD_PRIVATE_KEY_EXCEPTION + e.getMessage()
+                );
             }
         } else {
             try {
@@ -1388,9 +1417,10 @@ public class Client {
             }
             return null;
         } catch (Exception e) {
-            throw new BitPayException(null,
-                "When trying to load private key. Make sure the configuration details are correct and the private key and tokens are valid : " +
-                    e.getMessage());
+            throw new BitPayException(
+                null,
+                LOAD_PRIVATE_KEY_EXCEPTION + e.getMessage()
+            );
         }
     }
 
@@ -1404,7 +1434,7 @@ public class Client {
     protected void deriveIdentity(ECKey ecKey) throws IllegalArgumentException, BitPayException {
         // Identity in this implementation is defined to be the SIN.
         try {
-            this.identity = KeyUtils.deriveSIN(ecKey);
+            this.identity = KeyUtils.deriveSin(ecKey);
         } catch (Exception e) {
             throw new BitPayException(null,
                 "failed to deserialize BitPay server response (Token array) : " + e.getMessage());

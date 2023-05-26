@@ -5,8 +5,8 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Ledger.Ledger;
-import com.bitpay.sdk.model.Ledger.LedgerEntry;
+import com.bitpay.sdk.model.ledger.Ledger;
+import com.bitpay.sdk.model.ledger.LedgerEntry;
 import com.bitpay.sdk.util.TokenContainer;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

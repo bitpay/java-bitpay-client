@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -11,8 +12,8 @@ import com.bitpay.sdk.exceptions.PayoutRecipientNotificationException;
 import com.bitpay.sdk.exceptions.PayoutRecipientQueryException;
 import com.bitpay.sdk.exceptions.PayoutRecipientUpdateException;
 import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.Payout.PayoutRecipient;
-import com.bitpay.sdk.model.Payout.PayoutRecipients;
+import com.bitpay.sdk.model.payout.PayoutRecipient;
+import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.ParameterAdder;
@@ -186,7 +187,7 @@ public class PayoutRecipientsClient implements ResourceClient {
         try {
             HttpResponse response = this.bitPayClient.get("recipients/" + recipientId, params, true);
             recipient = JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient.class);
+                .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient.class);
         } catch (JsonProcessingException e) {
             throw new PayoutRecipientQueryException(null,
                 "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
@@ -248,7 +249,7 @@ public class PayoutRecipientsClient implements ResourceClient {
      * @param recipientId String The id of the recipient to cancel.
      * @return True if the delete operation was successfull, false otherwise.
      * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException                                              class
+     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException class
      */
     public Boolean delete(String recipientId)
         throws BitPayException, PayoutRecipientCancellationException {
@@ -279,11 +280,11 @@ public class PayoutRecipientsClient implements ResourceClient {
     }
 
     /**
-     * Request a payout recipient notification
+     * Request a payout recipient notification.
      *
      * @param recipientId String A BitPay recipient ID.
      * @return True if the notification was successfully sent, false otherwise.
-     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException                                              class
+     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException class
      * @throws BitPayException                      BitPayException class
      */
     public Boolean requestNotification(String recipientId)

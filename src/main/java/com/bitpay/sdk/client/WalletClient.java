@@ -1,12 +1,13 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.WalletQueryException;
-import com.bitpay.sdk.model.Wallet.Wallet;
+import com.bitpay.sdk.model.wallet.Wallet;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Arrays;
@@ -58,7 +59,8 @@ public class WalletClient implements ResourceClient {
         try {
             HttpResponse response = this.bitPayClient.get("supportedwallets");
             wallets = Arrays.asList(
-                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Wallet[].class));
+                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Wallet[].class)
+            );
         } catch (JsonProcessingException e) {
             throw new WalletQueryException(null,
                 "failed to deserialize BitPay server response (Wallet) : " + e.getMessage());

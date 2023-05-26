@@ -5,8 +5,8 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.model.Payout.PayoutRecipient;
-import com.bitpay.sdk.model.Payout.PayoutRecipients;
+import com.bitpay.sdk.model.payout.PayoutRecipient;
+import com.bitpay.sdk.model.payout.PayoutRecipients;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;

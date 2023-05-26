@@ -1,12 +1,13 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
+
 package com.bitpay.sdk.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,7 @@ import java.text.SimpleDateFormat;
  * The type Date deserializer.
  */
 public class DateDeserializer extends JsonDeserializer<Long> {
-    private static final SimpleDateFormat _dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     /**
      * This method deserialize Date according with format yyyy-MM-dd'T'HH:mm:ss.SSS'Z.
@@ -26,13 +27,14 @@ public class DateDeserializer extends JsonDeserializer<Long> {
      * @throws IOException IOException
      */
     @Override
-    public Long deserialize(JsonParser jp, DeserializationContext dc) throws IOException {
-        Long l = 0l;
+    public Long deserialize(
+        JsonParser jp,
+        DeserializationContext dc
+    ) throws IOException {
         try {
-            l = (_dateFormatter.parse(jp.getText())).getTime();
+            return DATE_FORMAT.parse(jp.getText()).getTime();
         } catch (ParseException e) {
             throw new IOException(e);
         }
-        return l;
     }
-}	
+}

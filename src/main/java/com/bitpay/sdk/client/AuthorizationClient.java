@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.client;
@@ -7,9 +8,9 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.Token;
-import com.bitpay.sdk.util.TokenContainer;
-import com.bitpay.sdk.util.JsonMapperFactory;
 import com.bitpay.sdk.util.GuidGenerator;
+import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.util.TokenContainer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.Arrays;

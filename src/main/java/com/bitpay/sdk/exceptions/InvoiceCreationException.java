@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -46,15 +47,18 @@ public class InvoiceCreationException extends InvoiceException {
      * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public InvoiceCreationException(String status, String message) {
-        super(status, BuildMessage(message));
+    public InvoiceCreationException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to create invoice";
-        String BitPayCode = "BITPAY-INVOICE-CREATE";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to create invoice";
+        String bitPayCode = "BITPAY-INVOICE-CREATE";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }
