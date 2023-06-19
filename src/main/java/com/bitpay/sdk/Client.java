@@ -13,6 +13,7 @@ import com.bitpay.sdk.client.HttpRequestFactory;
 import com.bitpay.sdk.client.InvoiceClient;
 import com.bitpay.sdk.client.LedgerClient;
 import com.bitpay.sdk.client.PayoutClient;
+import com.bitpay.sdk.client.PayoutGroupClient;
 import com.bitpay.sdk.client.PayoutRecipientsClient;
 import com.bitpay.sdk.client.RateClient;
 import com.bitpay.sdk.client.RefundClient;
@@ -52,6 +53,7 @@ import com.bitpay.sdk.model.invoice.Refund;
 import com.bitpay.sdk.model.ledger.Ledger;
 import com.bitpay.sdk.model.ledger.LedgerEntry;
 import com.bitpay.sdk.model.payout.Payout;
+import com.bitpay.sdk.model.payout.PayoutGroup;
 import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.rate.Rate;
@@ -69,6 +71,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -1155,6 +1158,19 @@ public class Client {
     }
 
     /**
+     * Submit a BitPay Payouts.
+     *
+     * @param payouts Collection of Payout objects with request parameters defined.
+     * @return A BitPay PayoutGroup with generated Payout objects and information's about not created payouts.
+     * @throws BitPayException         BitPayException class
+     * @throws PayoutCreationException PayoutCreationException class
+     * @see <a href="https://developer.bitpay.com/reference/create-payout-group">Create a Payouts</a>
+     */
+    public PayoutGroup submitPayouts(Collection<Payout> payouts) throws BitPayException, PayoutCreationException {
+        return this.getPayoutGroupClient().submit(payouts);
+    }
+
+    /**
      * Retrieve a BitPay payout by payout id using. The client must have been
      * previously authorized for the payout facade.
      *
@@ -1182,6 +1198,19 @@ public class Client {
     }
 
     /**
+     * Cancel a BitPay Payouts.
+     *
+     * @param groupId String The id of the payout group to cancel.
+     * @return A BitPay PayoutGroup with cancelled Payout objects and information's about not cancelled payouts.
+     * @throws BitPayException             BitPayException class
+     * @throws PayoutCancellationException PayoutCancellationException class
+     * @see <a href="https://developer.bitpay.com/reference/cancel-a-payout-group">Cancel a Payouts</a>
+     */
+    public PayoutGroup cancelPayouts(String groupId) throws BitPayException, PayoutCancellationException {
+        return this.getPayoutGroupClient().cancel(groupId);
+    }
+
+    /**
      * Retrieve a collection of BitPay payouts.
      *
      * @param startDate String The start date for the query.
@@ -1191,6 +1220,7 @@ public class Client {
      * @param limit     int Maximum results that the query will return (useful for
      *                  paging results).
      * @param offset    int Offset for paging.
+     * @param groupId   String The optional group id assigned to payout.
      * @return A list of BitPay Payout objects.
      * @throws BitPayException      BitPayException class
      * @throws PayoutQueryException PayoutQueryException class
@@ -1202,9 +1232,10 @@ public class Client {
         String status,
         String reference,
         Integer limit,
-        Integer offset
+        Integer offset,
+        String groupId
     ) throws BitPayException, PayoutQueryException {
-        return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset);
+        return this.getPayoutClient().getPayouts(startDate, endDate, status, reference, limit, offset, groupId);
     }
 
     /**
@@ -1526,6 +1557,10 @@ public class Client {
      */
     protected PayoutClient getPayoutClient() {
         return PayoutClient.getInstance(this.bitPayClient, this.tokenContainer);
+    }
+
+    protected PayoutGroupClient getPayoutGroupClient() {
+        return PayoutGroupClient.getInstance(this.bitPayClient, this.tokenContainer);
     }
 
     /**

@@ -2,7 +2,7 @@
  * Copyright (c) 2019 BitPay
  */
 
-package com.bitpay.sdk.integration;
+package com.bitpay.sdk.functional;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.ConfigFilePath;
@@ -11,6 +11,7 @@ import com.bitpay.sdk.exceptions.RateQueryException;
 import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.bill.Item;
 import com.bitpay.sdk.model.Currency;
+import com.bitpay.sdk.model.payout.PayoutGroup;
 import com.bitpay.sdk.model.invoice.Buyer;
 import com.bitpay.sdk.model.invoice.Invoice;
 import com.bitpay.sdk.model.invoice.InvoiceEventToken;
@@ -27,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +38,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ClientIntegrationTest {
+public class ClientFunctionalTest {
 
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final LocalDateTime yesterday;
@@ -50,7 +53,7 @@ public class ClientIntegrationTest {
      * to "email.txt" file in this directory. It's required for submit requests.
      * It's impossible to test settlements in test environment.
      */
-    public ClientIntegrationTest() throws BitPayException {
+    public ClientFunctionalTest() throws BitPayException {
         String path = getPathExistingClass() + "BitPay.config.json";
         this.client = new Client(new ConfigFilePath(path), null, null);
         this.yesterday = LocalDateTime.now().minusDays(1);
@@ -251,15 +254,7 @@ public class ClientIntegrationTest {
             this.client.submitPayoutRecipients(new PayoutRecipients(requestedRecipients));
         String recipientId = recipients.get(0).getId();
 
-        Payout payout = new Payout();
-
-        payout.setAmount(10.00);
-        payout.setCurrency("USD");
-        payout.setLedgerCurrency("USD");
-        payout.setRecipientId(recipientId);
-        payout.setNotificationEmail(email);
-        payout.setReference("Java Integration Test " + UUID.randomUUID().toString());
-        payout.setNotificationUrl("https://somenotiticationURL.com");
+        Payout payout = getPayout(email, recipientId);
 
         Payout submitPayout = this.client.submitPayout(payout);
         String payoutId = submitPayout.getId();
@@ -274,6 +269,7 @@ public class ClientIntegrationTest {
             null,
             null,
             null,
+            null,
             null
         );
         Assertions.assertFalse(getPayouts.isEmpty());
@@ -284,6 +280,55 @@ public class ClientIntegrationTest {
 
         Boolean cancelledPayout = this.client.cancelPayout(payoutId);
         Assertions.assertTrue(cancelledPayout);
+    }
+
+    /**
+     * You need to have recipient before
+     * <p>
+     * Tested payout requests:
+     * - SubmitPayouts(Collection<Payout> payouts)
+     * - GetPayout(string payoutId)
+     * - CancelPayouts(string groupId)
+     * - GetPayouts(Dictionary<string, dynamic> filters)
+     * - RequestPayoutNotification(string payoutId)
+     */
+    @Test
+    public void it_should_test_payout_group_requests() throws BitPayException {
+        String email = getEmail();
+        PayoutRecipient requestedRecipient = new PayoutRecipient(email, "Bob", null);
+        List<PayoutRecipient> requestedRecipients = Collections.singletonList(requestedRecipient);
+
+        List<PayoutRecipient> recipients =
+            this.client.submitPayoutRecipients(new PayoutRecipients(requestedRecipients));
+        String recipientId = recipients.get(0).getId();
+
+        Collection<Payout> payouts = Arrays.asList(getPayout(email, recipientId), getPayout(email, recipientId));
+
+        PayoutGroup submitPayoutGroup = this.client.submitPayouts(payouts);
+        Payout firstSubmittedPayout = submitPayoutGroup.getPayouts().get(0);
+        String payoutId = firstSubmittedPayout.getId();
+        Assertions.assertNotNull(payoutId);
+        Assertions.assertEquals(email, firstSubmittedPayout.getNotificationEmail());
+
+        Payout getPayoutById = this.client.getPayout(payoutId);
+        Assertions.assertEquals(email, getPayoutById.getNotificationEmail());
+        List<Payout> getPayouts = this.client.getPayouts(
+            this.monthAgo.format(this.dateFormatter),
+            this.tomorrow.format(this.dateFormatter),
+            null,
+            null,
+            null,
+            null,
+            firstSubmittedPayout.getGroupId()
+        );
+        Assertions.assertFalse(getPayouts.isEmpty());
+        Assertions.assertTrue(getPayouts.stream().anyMatch(p -> p.getNotificationEmail().equals(email)));
+
+        Boolean requestPayoutNotification = this.client.requestPayoutNotification(payoutId);
+        Assertions.assertTrue(requestPayoutNotification);
+
+        PayoutGroup cancelledPayouts = this.client.cancelPayouts(firstSubmittedPayout.getGroupId());
+        Assertions.assertTrue(!cancelledPayouts.getPayouts().isEmpty());
     }
 
     /**
@@ -422,6 +467,20 @@ public class ClientIntegrationTest {
     }
 
     private String getPathExistingClass() {
-        return "src/test/java/com/bitpay/sdk/integration/";
+        return "src/test/java/com/bitpay/sdk/functional/";
+    }
+
+    private static Payout getPayout(String email, String recipientId) throws BitPayException {
+        Payout payout = new Payout();
+
+        payout.setAmount(10.00);
+        payout.setCurrency("USD");
+        payout.setLedgerCurrency("USD");
+        payout.setRecipientId(recipientId);
+        payout.setNotificationEmail(email);
+        payout.setReference("Java Integration Test " + UUID.randomUUID().toString());
+        payout.setNotificationUrl("https://somenotiticationURL.com");
+
+        return payout;
     }
 }
