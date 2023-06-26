@@ -7,7 +7,7 @@ Full implementation of the BitPay Payment Gateway. This library implements BitPa
 
 ## Getting Started
 
-To get up and running with our Java library quickly, check out our [documentation](https://dash.readme.com/project/bitpay/v1.0/refs/java-full-sdk-getting-started).
+To get up and running with our Java library quickly, check out our [documentation](https://developer.bitpay.com/reference/java-full-sdk-getting-started).
 
 ## Support
 
