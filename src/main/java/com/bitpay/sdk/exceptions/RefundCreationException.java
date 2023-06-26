@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -29,7 +30,7 @@ package com.bitpay.sdk.exceptions;
  * eg 010201
  * </pre>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class RefundCreationException extends RefundException {
     /**
@@ -38,15 +39,18 @@ public class RefundCreationException extends RefundException {
      * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public RefundCreationException(String status, String message) {
-        super(status, BuildMessage(message));
+    public RefundCreationException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to create refund";
-        String BitPayCode = "BITPAY-REFUND-CREATE";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to create refund";
+        String bitPayCode = "BITPAY-REFUND-CREATE";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }

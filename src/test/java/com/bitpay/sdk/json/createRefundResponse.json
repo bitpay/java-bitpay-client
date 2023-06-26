@@ -1,0 +1,16 @@
+{
+  "guid":"37bd36bd-6fcb-409c-a907-47f9244302aa",
+  "id": "Eso8srxKJR5U71ahCspAAA",
+  "invoice": "UZjwcYkWAKfTMn9J1yyfs4",
+  "reference": "someReference",
+  "status": "preview",
+  "amount": 10,
+  "transactionCurrency": "BTC",
+  "transactionAmount": 7.19E-4,
+  "transactionRefundFee": 2.0E-6,
+  "currency": "USD",
+  "refundFee": 0.03,
+  "immediate": false,
+  "buyerPaysRefundFee": false,
+  "requestDate": "2022-11-14T12:20:47.000Z"
+}

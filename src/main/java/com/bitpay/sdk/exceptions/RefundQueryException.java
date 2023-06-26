@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -29,7 +30,7 @@ package com.bitpay.sdk.exceptions;
  * eg 020201
  * </pre>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class RefundQueryException extends RefundException {
     /**
@@ -38,15 +39,18 @@ public class RefundQueryException extends RefundException {
      * @param status String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public RefundQueryException(String status, String message) {
-        super(status, BuildMessage(message));
+    public RefundQueryException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to retrieve refund";
-        String BitPayCode = "BITPAY-REFUND-GET";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to retrieve refund";
+        String bitPayCode = "BITPAY-REFUND-GET";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }

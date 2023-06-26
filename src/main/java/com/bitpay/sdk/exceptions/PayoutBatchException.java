@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -12,7 +13,7 @@ package com.bitpay.sdk.exceptions;
  * @see com.bitpay.sdk.exceptions.PayoutBatchNotificationException
  * @see com.bitpay.sdk.exceptions.PayoutBatchQueryException
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class PayoutBatchException extends BitPayException {
     /**
@@ -21,16 +22,19 @@ public class PayoutBatchException extends BitPayException {
      * @param status  String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public PayoutBatchException(String status, String message) {
-        super(status, BuildMessage(message));
+    public PayoutBatchException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "An unexpected error occured while trying to manage the payout batch.";
-        String BitPayCode = "BITPAY-PAYOUT-BATCH-GENERIC";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "An unexpected error occured while trying to manage the payout batch.";
+        String bitPayCode = "BITPAY-PAYOUT-BATCH-GENERIC";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+            message = bitPayCode + ": " + bitPayMessage + " -> " + message;
         }
 
         return message;

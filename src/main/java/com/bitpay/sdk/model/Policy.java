@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.model;
@@ -7,20 +8,19 @@ package com.bitpay.sdk.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 /**
  * The type Policy.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-resources">Rest API Resources</a>
+ * @see <a href="https://bitpay.readme.io/reference/tokens">Tokens concept</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Policy {
 
-    private String _policy;
-    private String _method;
-    private List<String> _params;
+    private String policy;
+    private String method;
+    private List<String> params;
 
     /**
      * Instantiates a new Policy.
@@ -35,7 +35,7 @@ public class Policy {
      */
     @JsonIgnore
     public String getPolicy() {
-        return _policy;
+        return this.policy;
     }
 
     /**
@@ -44,8 +44,8 @@ public class Policy {
      * @param policy the policy
      */
     @JsonProperty("policy")
-    public void setPolicy(String policy) {
-        this._policy = policy;
+    public void setPolicy(final String policy) {
+        this.policy = policy;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Policy {
      */
     @JsonIgnore
     public String getMethod() {
-        return _method;
+        return this.method;
     }
 
     /**
@@ -66,8 +66,8 @@ public class Policy {
      * @param method the method
      */
     @JsonProperty("method")
-    public void setMethod(String method) {
-        this._method = method;
+    public void setMethod(final String method) {
+        this.method = method;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Policy {
      */
     @JsonIgnore
     public List<String> getParams() {
-        return _params;
+        return this.params;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Policy {
      * @param params the params
      */
     @JsonProperty("params")
-    public void setParams(List<String> params) {
-        this._params = params;
+    public void setParams(final List<String> params) {
+        this.params = params;
     }
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -26,7 +27,7 @@ package com.bitpay.sdk.exceptions;
  * eg 010001
  * </pre>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class PayoutNotificationException extends PayoutException {
     /**
@@ -35,15 +36,18 @@ public class PayoutNotificationException extends PayoutException {
      * @param status  String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public PayoutNotificationException(String status, String message) {
-        super(status, BuildMessage(message));
+    public PayoutNotificationException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to send payout notification.";
-        String BitPayCode = "BITPAY-PAYOUT-NOTIFICATION";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to send payout notification.";
+        String bitPayCode = "BITPAY-PAYOUT-NOTIFICATION";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }

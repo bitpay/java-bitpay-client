@@ -1,6 +1,8 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
+
 package com.bitpay.sdk.exceptions;
 
 import org.apache.http.client.ClientProtocolException;
@@ -9,7 +11,7 @@ import org.apache.http.util.TextUtils;
 /**
  * General BitPay Exception which is inherited by all other exceptions.
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class BitPayException extends ClientProtocolException {
     private static final long serialVersionUID = -7186627969477257933L;
@@ -30,24 +32,28 @@ public class BitPayException extends ClientProtocolException {
      * @param statusCode String [optional] The Exception code to throw.
      * @param reasonPhrase String [optional] The Exception message to throw.
      */
-    public BitPayException(String statusCode, String reasonPhrase) {
-        super(String.format("Status: %s" + (TextUtils.isBlank(reasonPhrase) ? "" : " -> Reason: %s"), BuildStatus(statusCode), BuildMessage(reasonPhrase)));
+    public BitPayException(
+        String statusCode,
+        String reasonPhrase
+    ) {
+        super(String.format("Status: %s" + (TextUtils.isBlank(reasonPhrase) ? "" : " -> Reason: %s"),
+            buildStatus(statusCode), buildMessage(reasonPhrase)));
         this.statusCode = statusCode;
         this.reasonPhrase = reasonPhrase;
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Unexpected Bitpay exeption.";
-        String BitPayCode = "BITPAY-GENERIC";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Unexpected Bitpay exeption.";
+        String bitPayCode = "BITPAY-GENERIC";
 
         if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+            message = bitPayCode + ": " + bitPayMessage + " -> " + message;
         }
 
         return message;
     }
 
-    private static String BuildStatus(String status) {
+    private static String buildStatus(String status) {
         if (status == null) {
             status = "000000";
         }
@@ -61,6 +67,7 @@ public class BitPayException extends ClientProtocolException {
      * <p>The next two digits refer to the resource that was impacted.</p>
      * <p>The last two digits refer to the specific error.</p>
      * <p>eg. 010103 - Missing parameters for Invoice POST request.</p>
+     *
      * @return String
      */
     public String getStatusCode() {
@@ -70,6 +77,7 @@ public class BitPayException extends ClientProtocolException {
     /**
      * <p>Reason phrase including BitPay Code and BitPay Message.</p>
      * <p>eg. BITPAY-BILL-UPDATE: Failed to update bill -&gt; failed to deserialize BitPay server response (Bill) </p>
+     *
      * @return String
      */
     public String getReasonPhrase() {

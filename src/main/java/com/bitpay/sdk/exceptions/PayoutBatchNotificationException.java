@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2019 BitPay
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
  */
 
 package com.bitpay.sdk.exceptions;
@@ -26,7 +27,7 @@ package com.bitpay.sdk.exceptions;
  * eg 010001
  * </pre>
  *
- * @see <a href="https://bitpay.com/api/#rest-api-error-codes">Rest API Error Codes</a>
+ * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
 public class PayoutBatchNotificationException extends PayoutBatchException {
     /**
@@ -35,15 +36,18 @@ public class PayoutBatchNotificationException extends PayoutBatchException {
      * @param status  String [optional] The Exception code to throw.
      * @param message String [optional] The Exception message to throw.
      */
-    public PayoutBatchNotificationException(String status, String message) {
-        super(status, BuildMessage(message));
+    public PayoutBatchNotificationException(
+        String status,
+        String message
+    ) {
+        super(status, buildMessage(message));
     }
 
-    private static String BuildMessage(String message) {
-        String BitPayMessage = "Failed to send payout batch notification.";
-        String BitPayCode = "BITPAY-PAYOUT-BATCH-NOTIFICATION";
+    private static String buildMessage(String message) {
+        String bitPayMessage = "Failed to send payout batch notification.";
+        String bitPayCode = "BITPAY-PAYOUT-BATCH-NOTIFICATION";
 
-        message = BitPayCode + ": " + BitPayMessage + " -> " + message;
+        message = bitPayCode + ": " + bitPayMessage + " -> " + message;
 
         return message;
     }

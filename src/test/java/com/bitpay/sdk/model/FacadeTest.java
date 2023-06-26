@@ -10,11 +10,11 @@ public class FacadeTest {
 
     @Test
     public void it_should_returns_merchant_string() {
-        Assertions.assertEquals("merchant", Facade.Merchant);
+        Assertions.assertEquals("merchant", Facade.MERCHANT.toString());
     }
 
     @Test
     public void it_should_returns_payout_string() {
-        Assertions.assertEquals("payout", Facade.Payout);
+        Assertions.assertEquals("payout", Facade.PAYOUT.toString());
     }
 }

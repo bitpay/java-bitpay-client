@@ -1,13 +1,13 @@
 <img src="https://bitpay.com/_nuxt/img/bitpay-logo-blue.1c0494b.svg" width="150">
 
 # BitPay Java client
-[![License](https://img.shields.io/github/license/bitpay/java-bitpay-client.svg?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/bitpay/java-bitpay-client/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Build](https://github.com/bitpay/java-bitpay-client/actions/workflows/build.yml/badge.svg)
 
-Full implementation of the BitPay Payment Gateway. This library implements BitPay's [Cryptographically Secure RESTful API](https://bitpay.com/api).
+Full implementation of the BitPay Payment Gateway. This library implements BitPay's [Cryptographically Secure RESTful API](https://developer.bitpay.com/reference/concepts).
 
 ## Getting Started
 
-To get up and running with our Java library quickly, follow [The GUIDE](https://github.com/bitpay/java-bitpay-client/blob/master/GUIDE.md)
+To get up and running with our Java library quickly, check out our [documentation](https://dash.readme.com/project/bitpay/v1.0/refs/java-full-sdk-getting-started).
 
 ## Support
 

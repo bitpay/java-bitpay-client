@@ -1,0 +1,29 @@
+{
+  "status": "draft",
+  "url": "https://bitpay.com/bill?id=X6KJbe9RxAGWNReCwd1xRw&resource=bills",
+  "number": "bill1234-ABCD",
+  "createdDate": "2021-05-21T09:48:02.373Z",
+  "dueDate": "2021-05-31T00:00:00.000Z",
+  "currency": "USD",
+  "email": "john@doe.com",
+  "cc": [
+    "jane@doe.com"
+  ],
+  "passProcessingFee": true,
+  "id": "X6KJbe9RxAGWNReCwd1xRw",
+  "items": [
+    {
+      "id": "EL4vx41Nxc5RYhbqDthjE",
+      "description": "Test Item 1",
+      "price": 6,
+      "quantity": 1
+    },
+    {
+      "id": "6spPADZ2h6MfADvnhfsuBt",
+      "description": "Test Item 2",
+      "price": 4,
+      "quantity": 1
+    }
+  ],
+  "token": "qVVgRARN6fKtNZ7Tcq6qpoPBBE3NxdrmdMD883RyMK4Pf8EHENKVxCXhRwyynWveo"
+}
