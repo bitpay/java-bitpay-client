@@ -34,7 +34,7 @@ public class Config {
     /**
      * BitPay Plugin Info Version.
      */
-    public static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v9.0.0";
+    public static final String BITPAY_PLUGIN_INFO = "BitPay_Java_Client_v9.0.1";
     /**
      * BitPay Api Frame.
      */
