@@ -1,13 +1,6 @@
 name: Build
 
-on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-  push:
-    branches-ignore:
-      - 'master'
+on: [push, pull_request]
 
 jobs:
   build-and-test:
