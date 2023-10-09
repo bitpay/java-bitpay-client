@@ -5,7 +5,8 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.util.JsonMapperFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -14,8 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.http.HttpEntity;
-import org.apache.http.util.EntityUtils;
 
 /**
  * The type Currency client.
@@ -30,11 +29,11 @@ public class CurrencyClient implements ResourceClient {
      * Instantiates a new Currency client.
      *
      * @param client the client
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    private CurrencyClient(BitPayClient client) throws BitPayException {
+    private CurrencyClient(BitPayClient client) throws BitPayGenericException {
         if (Objects.isNull(client)) {
-            throw new BitPayException(null, "failed init Currency Client");
+            BitPayExceptionProvider.throwGenericExceptionWithMessage("Failed init Currency Client");
         }
         this.client = client;
     }
@@ -44,9 +43,9 @@ public class CurrencyClient implements ResourceClient {
      *
      * @param bitPayClient BitPay Client
      * @return CurrencyClient
-     * @throws BitPayException BitPayException
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public static CurrencyClient getInstance(BitPayClient bitPayClient) throws BitPayException {
+    public static CurrencyClient getInstance(BitPayClient bitPayClient) throws BitPayGenericException {
         if (Objects.isNull(instance)) {
             instance = new CurrencyClient(bitPayClient);
         }
@@ -59,12 +58,11 @@ public class CurrencyClient implements ResourceClient {
      *
      * @param currencyCode String Currency code for which the info will be retrieved.
      * @return Map |null
-     * @throws BitPayException the bit pay exception
      */
     @SuppressWarnings("unchecked")
-    public Map<String, Object> getInfo(String currencyCode) throws BitPayException {
+    public Map<String, Object> getInfo(String currencyCode) throws BitPayGenericException {
         if (Objects.isNull(currencyCode)) {
-            throw new BitPayException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         if (Objects.isNull(this.currenciesInfo)) {
@@ -73,7 +71,6 @@ public class CurrencyClient implements ResourceClient {
 
         for (Object currency : this.currenciesInfo) {
             Map<String, Object> currencyInfo = JsonMapperFactory.create().convertValue(currency, Map.class);
-
             if (currencyInfo.get("code").toString().equals(currencyCode)) {
                 return currencyInfo;
             }
@@ -84,17 +81,10 @@ public class CurrencyClient implements ResourceClient {
 
     /**
      * Load currencies info.
-     *
-     * @throws BitPayException BitPayException class
      */
-    @SuppressWarnings("unchecked")
-    private void loadCurrencies() throws BitPayException {
+    private void loadCurrencies() {
         try {
-            HttpEntity newEntity = this.client.get("currencies").getEntity();
-
-            String jsonString;
-
-            jsonString = EntityUtils.toString(newEntity, "UTF-8");
+            String jsonString = this.client.get("currencies");
 
             JsonMapper mapper = JsonMapperFactory.create();
 

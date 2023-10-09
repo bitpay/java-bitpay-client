@@ -5,7 +5,9 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.RateQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.rate.Rate;
 import com.bitpay.sdk.model.rate.Rates;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -13,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.apache.http.HttpResponse;
 
 /**
  * The type Rate client.
@@ -53,48 +54,46 @@ public class RateClient implements ResourceClient {
      *                     Current supported values are BTC and BCH.
      * @param currency the fiat currency for which you want to fetch the baseCurrency rates.
      * @return A Rates object populated with the BitPay exchange rate table.
-     * @throws RateQueryException RateQueryException class
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      * @since 8.8.0
      * @see <a href="https://bitpay.com/bitcoin-exchange-rates">Exchange rates</a>
      */
     public Rate get(
         String baseCurrency,
         String currency
-    ) throws RateQueryException {
+    ) throws BitPayGenericException, BitPayApiException {
+        String jsonResponse = this.bitPayClient.get("rates/" + baseCurrency + "/" + currency);
+
+        Rate rate = null;
+
         try {
-            HttpResponse response = this.bitPayClient.get("rates/" + baseCurrency + "/" + currency);
-            final String content = this.bitPayClient.responseToJsonString(response);
-            return JsonMapperFactory.create().readValue(content, Rate.class);
+            rate = JsonMapperFactory.create().readValue(jsonResponse, Rate.class);
         } catch (JsonProcessingException e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Rate", e.getMessage());
         }
+
+        return rate;
     }
 
     /**
      * Retrieve the exchange rate table maintained by BitPay.
      *
      * @return A Rates object populated with the BitPay exchange rate table.
-     * @throws RateQueryException RateQueryException class
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      * @see <a href="https://bitpay.com/bitcoin-exchange-rates">Exchange rates</a>
      */
-    public Rates getRates() throws RateQueryException {
-        List<Rate> rates;
+    public Rates getRates() throws BitPayGenericException, BitPayApiException {
+        List<Rate> rates = null;
 
+        String response = this.bitPayClient.get("rates");
         try {
-            HttpResponse response = this.bitPayClient.get("rates");
             rates = Arrays.asList(
-                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Rate[].class)
+                JsonMapperFactory.create().readValue(response, Rate[].class)
             );
         } catch (JsonProcessingException e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Rates", e.getMessage());
         }
 
         return new Rates(rates);
@@ -106,24 +105,21 @@ public class RateClient implements ResourceClient {
      * @param baseCurrency the cryptocurrency for which you want to fetch the rates.
      *                     Current supported values are BTC and BCH.
      * @return A Rates object populated with the BitPay exchange rate table.
-     * @throws RateQueryException RateQueryException class
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      * @since 8.8.0
      * @see <a href="https://bitpay.com/bitcoin-exchange-rates">Exchange rates</a>
      */
-    public Rates getRates(String baseCurrency) throws RateQueryException {
-        List<Rate> rates;
+    public Rates getRates(String baseCurrency) throws BitPayGenericException, BitPayApiException {
+        List<Rate> rates = null;
 
+        String response = this.bitPayClient.get("rates/" + baseCurrency);
         try {
-            HttpResponse response = this.bitPayClient.get("rates/" + baseCurrency);
             rates = Arrays.asList(
-                JsonMapperFactory.create().readValue(this.bitPayClient.responseToJsonString(response), Rate[].class)
+                JsonMapperFactory.create().readValue(response, Rate[].class)
             );
         } catch (JsonProcessingException e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new RateQueryException(null,
-                "failed to deserialize BitPay server response (Rates) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Rates", e.getMessage());
         }
 
         return new Rates(rates);

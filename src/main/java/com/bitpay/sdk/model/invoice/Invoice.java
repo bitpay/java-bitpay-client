@@ -5,7 +5,8 @@
 
 package com.bitpay.sdk.model.invoice;
 
-import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -198,13 +199,13 @@ public class Invoice {
      * This is the currency associated with the price field.
      *
      * @param currency the currency
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException BitPayGenericException class
      * @see <a href="https://bitpay.readme.io/reference/currencies">Supported currencies</a>
      */
     @JsonProperty("currency")
-    public void setCurrency(final String currency) throws BitPayException {
+    public void setCurrency(final String currency) throws BitPayGenericException {
         if (!Currency.isValid(currency)) {
-            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
+            BitPayExceptionProvider.throwInvalidCurrencyException(currency);
         }
 
         this.currency = currency;
@@ -649,12 +650,12 @@ public class Invoice {
      * "DOGE", "DAI" and "WBTC". If not yet selected, this field will not be returned.
      *
      * @param selectedTransactionCurrency the selected transaction currency
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException BitPayGenericException class
      */
     @JsonProperty("selectedTransactionCurrency")
-    public void setSelectedTransactionCurrency(final String selectedTransactionCurrency) throws BitPayException {
+    public void setSelectedTransactionCurrency(final String selectedTransactionCurrency) throws BitPayGenericException {
         if (!Currency.isValid(selectedTransactionCurrency)) {
-            throw new BitPayException(null, "Error: selectedTransactionCurrency code must be a type of Model.Currency");
+            BitPayExceptionProvider.throwInvalidCurrencyException(selectedTransactionCurrency);
         }
 
         this.selectedTransactionCurrency = this.currency;

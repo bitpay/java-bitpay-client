@@ -5,8 +5,9 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.SettlementQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.settlement.Settlement;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -74,8 +74,8 @@ public class SettlementClient implements ResourceClient {
      * @param limit     Maximum number of settlements to retrieve.
      * @param offset    Offset for paging.
      * @return A list of BitPay Settlement objects.
-     * @throws BitPayException          BitPayException class
-     * @throws SettlementQueryException SettlementQueryException class
+     * @throws BitPayApiException          BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public List<Settlement> getSettlements(
         String currency,
@@ -84,11 +84,7 @@ public class SettlementClient implements ResourceClient {
         String status,
         Integer limit,
         Integer offset
-    ) throws BitPayException,
-        SettlementQueryException {
-        limit = limit != null ? limit : 100;
-        offset = offset != null ? offset : 0;
-
+    ) throws BitPayApiException, BitPayGenericException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         ParameterAdder.execute(params, "startDate", dateStart);
@@ -102,19 +98,16 @@ public class SettlementClient implements ResourceClient {
             ParameterAdder.execute(params, "offset", offset.toString());
         }
 
-        List<Settlement> settlements;
+        List<Settlement> settlements = null;
+
+        String jsonResponse = this.bitPayClient.get("settlements", params);
 
         try {
-            HttpResponse response = this.bitPayClient.get("settlements", params);
             settlements =
                 Arrays.asList(JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), Settlement[].class));
+                    .readValue(jsonResponse, Settlement[].class));
         } catch (JsonProcessingException e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Settlement", e.getMessage());
         }
 
         return settlements;
@@ -125,30 +118,27 @@ public class SettlementClient implements ResourceClient {
      *
      * @param settlementId Settlement Id.
      * @return A BitPay Settlement object.
-     * @throws BitPayException          BitPayException class
-     * @throws SettlementQueryException SettlementQueryException class
+     * @throws BitPayApiException          BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public Settlement get(String settlementId) throws BitPayException, SettlementQueryException {
+    public Settlement get(String settlementId) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(settlementId)) {
-            throw new SettlementQueryException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
-        Settlement settlement;
+        Settlement settlement = null;
         String token = this.accessTokens.getAccessToken(Facade.MERCHANT);
         final ObjectMapper objectMapper = JsonMapperFactory.create();
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", token);
 
+        String response = this.bitPayClient.get("settlements/" + settlementId, params);
+
         try {
-            HttpResponse response = this.bitPayClient.get("settlements/" + settlementId, params);
             settlement =
-                objectMapper.readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
+                objectMapper.readValue(response, Settlement.class);
         } catch (JsonProcessingException e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (Settlement) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Settlement", e.getMessage());
         }
 
         return settlement;
@@ -160,32 +150,29 @@ public class SettlementClient implements ResourceClient {
      * @param settlementId Settlement ID.
      * @param token Settlement token.
      * @return A detailed BitPay Settlement object.
-     * @throws SettlementQueryException SettlementQueryException class
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      */
     public Settlement getSettlementReconciliationReport(
         String settlementId,
         String token
-    ) throws SettlementQueryException {
+    ) throws BitPayGenericException, BitPayApiException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         if (Objects.isNull(settlementId) || Objects.isNull(token)) {
-            throw new SettlementQueryException(null, "missing id/token");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         ParameterAdder.execute(params, "token", token);
 
-        Settlement reconciliationReport;
+        Settlement reconciliationReport = null;
+
+        String jsonResponse = this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
 
         try {
-            HttpResponse response =
-                this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
             reconciliationReport = JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), Settlement.class);
+                .readValue(jsonResponse, Settlement.class);
         } catch (JsonProcessingException e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (ReconciliationReport) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new SettlementQueryException(null,
-                "failed to deserialize BitPay server response (ReconciliationReport) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Settlement", e.getMessage());
         }
 
         return reconciliationReport;

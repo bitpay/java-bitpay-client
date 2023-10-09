@@ -5,16 +5,12 @@
 package com.bitpay.sdk;
 
 import com.bitpay.sdk.client.BitPayClient;
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.InvoiceCancellationException;
-import com.bitpay.sdk.exceptions.RefundCreationException;
-import com.bitpay.sdk.exceptions.RefundQueryException;
-import com.bitpay.sdk.exceptions.RefundUpdateException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
+import com.bitpay.sdk.exceptions.BitPayValidationException;
+import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.bill.Item;
-import com.bitpay.sdk.model.Facade;
-import com.bitpay.sdk.model.payout.PayoutGroup;
-import com.bitpay.sdk.model.payout.PayoutGroupFailed;
 import com.bitpay.sdk.model.invoice.Buyer;
 import com.bitpay.sdk.model.invoice.Invoice;
 import com.bitpay.sdk.model.invoice.InvoiceEventToken;
@@ -22,6 +18,8 @@ import com.bitpay.sdk.model.invoice.Refund;
 import com.bitpay.sdk.model.ledger.Ledger;
 import com.bitpay.sdk.model.ledger.LedgerEntry;
 import com.bitpay.sdk.model.payout.Payout;
+import com.bitpay.sdk.model.payout.PayoutGroup;
+import com.bitpay.sdk.model.payout.PayoutGroupFailed;
 import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.rate.Rate;
@@ -42,9 +40,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.message.BasicNameValuePair;
 import org.junit.jupiter.api.Assertions;
@@ -77,10 +73,6 @@ public class ClientTest {
     private TokenContainer accessTokens;
     @Mock
     private GuidGenerator guidGenerator;
-    @Mock
-    private HttpResponse httpResponse;
-    @Mock
-    private HttpEntity httpEntity;
 
     @BeforeEach
     public void clearResourceClients() {
@@ -88,7 +80,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_provide_pos_client() throws BitPayException {
+    public void it_should_provide_pos_client() throws BitPayGenericException {
         // given
         String posToken = "posToken";
 
@@ -100,7 +92,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_provide_client_by_key() throws BitPayException {
+    public void it_should_provide_client_by_key() throws BitPayGenericException {
         // given
         String privateKey =
             "3082013102010104208ae30afbc7e93cb10cb983f70863e546b53f0b2c6158b1a71b576fd09790cff3a081e33081e0020101302c06072a8648ce3d0101022100fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f3044042000000000000000000000000000000000000000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000704410479be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8022100fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141020101a124032200035d6a7e38d7c08b8a626e2390d0360a72a58bd1c5e1348e0eb810d4bbab3d3adf";
@@ -116,7 +108,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_provide_client_by_config() throws BitPayException {
+    public void it_should_provide_client_by_config() throws BitPayGenericException {
         // given
         String path = System.getProperty("user.dir") + "/src/test/java/com/bitpay/sdk/BitPay.config.json";
 
@@ -129,8 +121,8 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_throws_bitpayexception_for_invalid_privateKey() throws BitPayException {
-        BitPayException exception = Assertions.assertThrows(BitPayException.class, () -> {
+    public void it_should_throws_BitPayApiException_for_invalid_privateKey() {
+        BitPayGenericException exception = Assertions.assertThrows(BitPayGenericException.class, () -> {
             new Client(
                 Environment.TEST,
                 new PrivateKey("invalid"),
@@ -140,23 +132,19 @@ public class ClientTest {
             );
         });
 
-        Assertions.assertEquals(
-            "Status: 000000 -> Reason: failed to deserialize BitPay server response (Config) : Status: 000000 -> Reason: BITPAY-GENERIC: Unexpected Bitpay exeption. -> Private Key file not found",
-            exception.getMessage()
-        );
+        Assertions.assertEquals("Private Key file not found", exception.getMessage());
     }
 
     @Test
-    public void it_should_authorize_client_by_pairing_code() throws BitPayException {
+    public void it_should_authorize_client_by_pairing_code() throws BitPayApiException, BitPayGenericException {
         // given
         String pairingCode = "123123123";
         Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
-        Mockito.when(this.bitPayClient.post("tokens",
-            "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
-            .thenReturn(this.httpResponse);
         final String responseString =
             "[{\"policies\":[{\"policy\":\"id\",\"method\":\"active\",\"params\":[\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"]}],\"token\":\"t0k3n\",\"facade\":\"merchant\",\"dateCreated\":1668425446554,\"pairingExpiration\":1668511846554,\"pairingCode\":\"123123123\"}]";
-        Mockito.when(this.bitPayClient.responseToJsonString(httpResponse)).thenReturn(responseString);
+        Mockito.when(this.bitPayClient.post("tokens",
+            "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
+            .thenReturn(responseString);
 
         Client testedClass = this.getTestedClass();
 
@@ -164,20 +152,19 @@ public class ClientTest {
         testedClass.authorizeClient(pairingCode);
 
         // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Mockito.verify(this.accessTokens, Mockito.times(1)).put("merchant", "t0k3n");
     }
 
     @Test
-    public void it_should_authorize_client_by_facade() throws BitPayException {
+    public void it_should_authorize_client_by_facade() throws BitPayApiException, BitPayGenericException {
         // given
         Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
-        Mockito.when(this.bitPayClient.post("tokens",
-            "{\"count\":1,\"facade\":\"merchant\",\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"}"))
-            .thenReturn(this.httpResponse);
+
         final String responseString =
             "[{\"policies\":[{\"policy\":\"id\",\"method\":\"inactive\",\"params\":[\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"]}],\"token\":\"G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3\",\"facade\":\"merchant\",\"label\":\"merchantwebsite.com\",\"dateCreated\":1621340364865,\"pairingExpiration\":1621426764865,\"pairingCode\":\"C4Lg7oW\"}]";
-        Mockito.when(this.bitPayClient.responseToJsonString(httpResponse)).thenReturn(responseString);
+        Mockito.when(this.bitPayClient.post("tokens",
+            "{\"count\":1,\"facade\":\"merchant\",\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"}"))
+            .thenReturn(responseString);
 
         Client testedClass = this.getTestedClass();
 
@@ -185,22 +172,20 @@ public class ClientTest {
         testedClass.authorizeClient(Facade.MERCHANT);
 
         // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Mockito.verify(this.accessTokens, Mockito.times(1))
             .put("merchant", "G7XM9fcM1gtCN7DUr8ZWtPGVFLTKiYWanHR4kvqsnjP3");
     }
 
     @Test
-    public void it_should_test_requestClientAuthorization() throws BitPayException {
+    public void it_should_test_requestClientAuthorization() throws BitPayApiException, BitPayGenericException {
         // given
         String pairingCode = "123123123";
         Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
-        Mockito.when(this.bitPayClient.post("tokens",
-            "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
-            .thenReturn(this.httpResponse);
         final String responseString =
             "[{\"policies\":[{\"policy\":\"id\",\"method\":\"active\",\"params\":[\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\"]}],\"token\":\"t0k3n\",\"facade\":\"merchant\",\"dateCreated\":1668425446554,\"pairingExpiration\":1668511846554,\"pairingCode\":\"\"}]";
-        Mockito.when(this.bitPayClient.responseToJsonString(httpResponse)).thenReturn(responseString);
+        Mockito.when(this.bitPayClient.post("tokens",
+            "{\"guid\":\"37bd36bd-6fcb-409c-a907-47f9244302aa\",\"id\":\"Tf2yXsY49iFyDfxt3b2kf9VPRMwPxxAyCRW\",\"pairingCode\":\"123123123\"}"))
+            .thenReturn(responseString);
 
         Client testedClass = this.getTestedClass();
 
@@ -208,12 +193,11 @@ public class ClientTest {
         testedClass.authorizeClient(pairingCode);
 
         // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Mockito.verify(this.accessTokens, Mockito.times(1)).put("merchant", "t0k3n");
     }
 
     @Test
-    public void it_should_test_getAccessToken() throws BitPayException {
+    public void it_should_test_getAccessToken() throws BitPayGenericException {
         // given
         Client testedClass = this.getTestedClass();
         String tokenKey = "tokenKey";
@@ -226,18 +210,16 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getCurrencyInfo() throws IOException {
+    public void it_should_test_getCurrencyInfo() throws BitPayGenericException, BitPayApiException {
         // given
         String response = getPreparedJsonDataFromFile("currencies.json");
         InputStream inputStream = new ByteArrayInputStream(response.getBytes());
-        Mockito.when(this.bitPayClient.get("currencies")).thenReturn(this.httpResponse);
-        Mockito.when(this.httpResponse.getEntity()).thenReturn(this.httpEntity);
-        Mockito.when(this.httpEntity.getContent()).thenReturn(inputStream);
+        Mockito.when(this.bitPayClient.get("currencies")).thenReturn(response);
 
         Client testedClass = this.getTestedClass();
 
         // when
-        Map result = testedClass.getCurrencyInfo("USD");
+        Map<String, Object> result = testedClass.getCurrencyInfo("USD");
 
         // then
         Assertions.assertEquals("USD", result.get("code"));
@@ -246,13 +228,12 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_create_invoice_by_merchant() throws IOException {
+    public void it_should_test_create_invoice_by_merchant()
+        throws BitPayGenericException, BitPayApiException {
         // given
         Invoice invoice = getInvoiceExample();
 
         Mockito.when(this.bitPayClient.post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createInvoiceResponse.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(true);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT))
@@ -275,14 +256,12 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_createInvoice_by_pos() throws IOException {
+    public void it_should_test_createInvoice_by_pos() throws BitPayGenericException, BitPayApiException {
         // given
         Invoice invoice = getInvoiceExample();
 
         Mockito
             .when(this.bitPayClient.post("invoices", getPreparedJsonDataFromFile("createInvoiceRequest.json"), false))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createInvoiceResponse.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(false);
         Mockito.when(this.accessTokens.getAccessToken(Facade.POS)).thenReturn("someToken");
@@ -304,7 +283,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getInvoice_by_merchant() throws BitPayException {
+    public void it_should_test_getInvoice_by_merchant() throws BitPayApiException, BitPayGenericException {
         // given
         String id = "UZjwcYkWAKfTMn9J1yyfs4";
         final String facadeToken = "someToken";
@@ -313,8 +292,6 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient
             .get(ArgumentMatchers.eq("invoices/" + id), ArgumentMatchers.eq(params), ArgumentMatchers.eq(true)))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(true);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT))
@@ -325,14 +302,13 @@ public class ClientTest {
         Invoice result = testedClass.getInvoice(id);
 
         // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Mockito.verify(this.bitPayClient, Mockito.times(1))
             .get(ArgumentMatchers.eq("invoices/" + id), ArgumentMatchers.eq(params), ArgumentMatchers.eq(true));
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
     }
 
     @Test
-    public void it_should_test_getInvoice_by_pos() throws BitPayException {
+    public void it_should_test_getInvoice_by_pos() throws BitPayApiException, BitPayGenericException {
         // given
         String id = "UZjwcYkWAKfTMn9J1yyfs4";
         final String facadeToken = "someToken";
@@ -341,8 +317,6 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient
             .get(ArgumentMatchers.eq("invoices/" + id), ArgumentMatchers.eq(params), ArgumentMatchers.eq(false)))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(false);
         Mockito.when(this.accessTokens.getAccessToken(Facade.POS)).thenReturn(facadeToken);
@@ -352,14 +326,13 @@ public class ClientTest {
         Invoice result = testedClass.getInvoice(id);
 
         // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Mockito.verify(this.bitPayClient, Mockito.times(1))
             .get(ArgumentMatchers.eq("invoices/" + id), ArgumentMatchers.eq(params), ArgumentMatchers.eq(false));
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
     }
 
     @Test
-    public void it_should_test_getInvoiceByGuid() throws BitPayException {
+    public void it_should_test_getInvoiceByGuid() throws BitPayApiException, BitPayGenericException {
         // given
         String guid = "chc9kj52-04g0-4b6f-941d-3a844e352758";
         String merchantToken = "merchantToken";
@@ -368,8 +341,6 @@ public class ClientTest {
         Mockito.when(this.bitPayClient
             .get(ArgumentMatchers.eq("invoices/guid/" + guid), ArgumentMatchers.eq(expectedParams),
                 ArgumentMatchers.eq(true)))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -379,12 +350,11 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
     }
 
     @Test
-    public void it_should_test_getInvoices() throws BitPayException {
+    public void it_should_test_getInvoices() throws BitPayApiException, BitPayGenericException {
         // given
         String merchantToken = "merchantToken";
         List<BasicNameValuePair> expectedParams = new ArrayList<BasicNameValuePair>();
@@ -394,8 +364,6 @@ public class ClientTest {
         expectedParams.add(new BasicNameValuePair("status", "complete"));
         expectedParams.add(new BasicNameValuePair("limit", "1"));
         Mockito.when(this.bitPayClient.get(ArgumentMatchers.eq("invoices"), ArgumentMatchers.eq(expectedParams)))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoices.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -412,19 +380,16 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertFalse(result.isEmpty());
     }
 
     @Test
-    public void it_should_get_invoice_event_token() throws BitPayException {
+    public void it_should_get_invoice_event_token() throws BitPayApiException, BitPayGenericException {
         // given
         String merchantToken = "merchantToken";
         List<BasicNameValuePair> expectedParams = new ArrayList<BasicNameValuePair>();
         expectedParams.add(new BasicNameValuePair("token", merchantToken));
         Mockito.when(this.bitPayClient.get(ArgumentMatchers.eq("invoices/GZRP3zgNHTDf8F5BmdChKz/events"), ArgumentMatchers.eq(expectedParams)))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoiceEventToken.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -434,15 +399,14 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("4MuqDPt93i9Xbf8SnAPniwbGeNLW8A3ScgAmukFMgFUFRqTLuuhVdAFfePPysVqL2P", result.getToken());
         Assertions.assertEquals(Arrays.asList("payment", "confirmation"), result.getEvents());
         Assertions.assertEquals(Arrays.asList("subscribe", "unsubscribe"), result.getActions());
     }
 
     @Test
-    public void it_should_test_throws_exception_for_missing_arguments_in_updateInvoice() throws BitPayException {
-        Assertions.assertThrows(BitPayException.class, () -> {
+    public void it_should_test_throws_validation_exception_for_missing_arguments_in_updateInvoice() throws BitPayValidationException {
+        Assertions.assertThrows(BitPayValidationException.class, () -> {
             // given
             final String merchantToken = "merchantToken";
             final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -463,15 +427,13 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_updateInvoice() throws BitPayException {
+    public void it_should_test_updateInvoice() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
 
         Mockito.when(this.bitPayClient.update(ArgumentMatchers.eq("invoices/" + invoiceId),
             ArgumentMatchers.eq("{\"buyerSms\":\"+12223334444\",\"token\":\"merchantToken\"}")))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
 
@@ -488,12 +450,11 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
     }
 
     @Test
-    public void it_should_test_payInvoice() throws BitPayException {
+    public void it_should_test_payInvoice() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -501,8 +462,6 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient.update(ArgumentMatchers.eq("invoices/pay/" + invoiceId),
             ArgumentMatchers.eq("{\"token\":\"merchantToken\",\"status\":\"complete\"}")))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -515,12 +474,11 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
     }
 
     @Test
-    public void it_should_force_cancel_invoice() throws BitPayException {
+    public void it_should_force_cancel_invoice() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -530,9 +488,7 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient.delete(
             ArgumentMatchers.eq("invoices/" + invoiceId), ArgumentMatchers.eq(expectedParams))
-        ).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
+        ).thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -542,12 +498,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/" + invoiceId, expectedParams);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("payment#1234", result.getGuid());
     }
 
     @Test
-    public void it_should_cancel_invoice() throws BitPayException {
+    public void it_should_cancel_invoice() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -556,9 +511,7 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient.delete(
             ArgumentMatchers.eq("invoices/" + invoiceId), ArgumentMatchers.eq(expectedParams))
-        ).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
+        ).thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -568,12 +521,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/" + invoiceId, expectedParams);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("payment#1234", result.getGuid());
     }
 
     @Test
-    public void it_should_cancel_invoice_by_guid() throws BitPayException {
+    public void it_should_cancel_invoice_by_guid() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String guidId = "payment#1234";
@@ -582,9 +534,7 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient.delete(
             ArgumentMatchers.eq("invoices/guid/" + guidId), ArgumentMatchers.eq(expectedParams))
-        ).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
+        ).thenReturn(getPreparedJsonDataFromFile("getCancelledInvoice.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -594,14 +544,13 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("invoices/guid/" + guidId, expectedParams);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(guidId, result.getGuid());
     }
 
     @Test
-    public void it_should_throws_exception_for_cancel_invoice_for_invalid_state_of_cancel() throws BitPayException {
-        InvoiceCancellationException exception = Assertions.assertThrows(
-            InvoiceCancellationException.class,
+    public void it_should_throws_exception_for_cancel_invoice_for_invalid_state_of_cancel() throws BitPayApiException {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 final String merchantToken = "merchantToken";
                 final String guidId = "chc9kj52-04g0-4b6f-941d-3a844e352757";
@@ -610,25 +559,28 @@ public class ClientTest {
 
                 Mockito.when(this.bitPayClient.delete(
                     ArgumentMatchers.eq("invoices/guid/" + guidId), ArgumentMatchers.eq(expectedParams))
-                ).thenReturn(this.httpResponse);
-                Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-                    .thenThrow(new BitPayException(null, "Error: Invalid invoice state for cancel"));
+                ).thenThrow(new BitPayApiException("Error: Invalid invoice state for cancel", "00000"));
                 Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
                 Client testedClass = this.getTestedClass();
 
                 // when
-                Invoice result = testedClass.cancelInvoiceByGuid(guidId, false);
+                testedClass.cancelInvoiceByGuid(guidId, false);
             }
         );
 
         Assertions.assertEquals(
-            "Status: 000000 -> Reason: BITPAY-INVOICE-CANCEL: Failed to cancel invoice -> Error: Invalid invoice state for cancel",
+            "Error: Invalid invoice state for cancel",
             exception.getMessage()
+        );
+
+        Assertions.assertEquals(
+            "00000",
+            exception.getCode()
         );
     }
 
     @Test
-    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayException {
+    public void it_should_request_invoice_webhook_to_be_resent() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
@@ -636,9 +588,7 @@ public class ClientTest {
 
         Mockito.when(this.bitPayClient.post(
             ArgumentMatchers.eq("invoices/" + invoiceId + "/notifications"), ArgumentMatchers.eq(requestJson))
-        ).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn("\"Success\"");
+        ).thenReturn("\"Success\"");
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -648,20 +598,17 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices/" + invoiceId + "/notifications", requestJson);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_create_refund() throws BitPayException {
+    public void it_should_create_refund() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
         final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
 
         Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
         Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
@@ -684,21 +631,18 @@ public class ClientTest {
             createRefundJsonRequest,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(invoiceId, result.getInvoice());
         Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
-    public void it_should_create_refund_with_guid() throws BitPayException {
+    public void it_should_create_refund_with_guid() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
         final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
 
         Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -722,21 +666,18 @@ public class ClientTest {
             createRefundJsonRequest,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(invoiceId, result.getInvoice());
         Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
-    public void it_should_create_refund_using_refund_object() throws BitPayException {
+    public void it_should_create_refund_using_refund_object() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
         final String createRefundJsonRequest = getPreparedJsonDataFromFile("createRefundRequest.json");
 
         Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("createRefundResponse.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -756,15 +697,14 @@ public class ClientTest {
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("refunds/", createRefundJsonRequest, true);
         Mockito.verify(this.guidGenerator, Mockito.times(0)).execute();
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(invoiceId, result.getInvoice());
         Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
-    public void it_should_throws_refundCreationException_for_missing_invoice_id_and_amount_for_createRefund() {
-        RefundCreationException exception = Assertions.assertThrows(
-            RefundCreationException.class,
+    public void it_should_throws_bitpay_validation_exception_for_missing_invoice_id_and_amount_for_createRefund() {
+        BitPayValidationException exception = Assertions.assertThrows(
+            BitPayValidationException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -775,15 +715,15 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 000000 -> Reason: BITPAY-REFUND-CREATE: Failed to create refund -> Invoice ID, amount and currency are required to issue a refund.",
+            "Invoice ID, amount and currency are required to issue a refund.",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_throws_refundCreationException_for_invalid_sendRefundNotification() {
-        RefundCreationException exception = Assertions.assertThrows(
-            RefundCreationException.class,
+    public void it_should_throws_bitpay_api_exception_for_invalid_sendRefundNotification() {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -791,7 +731,7 @@ public class ClientTest {
                     ArgumentMatchers.eq("refunds/1/notifications"),
                     ArgumentMatchers.anyString(),
                     ArgumentMatchers.eq(true)
-                )).thenThrow(new BitPayException("500", "error message"));
+                )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
                 testedClass.sendRefundNotification("1");
@@ -799,15 +739,15 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-CREATE: Failed to create refund -> error message",
+            "error message",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_throws_refundCreationException_for_api_issue_for_create_refund() {
-        RefundCreationException exception = Assertions.assertThrows(
-            RefundCreationException.class,
+    public void it_should_throws_bitpay_api_exception_for_api_issue_for_create_refund() {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -815,7 +755,7 @@ public class ClientTest {
                     ArgumentMatchers.eq("refunds/"),
                     ArgumentMatchers.anyString(),
                     ArgumentMatchers.eq(true)
-                )).thenThrow(new BitPayException("500", "error message"));
+                )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
                 testedClass.createRefund("123", 2.20, true, true, true, "no");
@@ -823,15 +763,15 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-CREATE: Failed to create refund -> error message",
+            "error message",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_throws_refundQueryException_for_api_issue_for_get_refund() {
-        RefundQueryException exception = Assertions.assertThrows(
-            RefundQueryException.class,
+    public void it_should_throws_bitpay_api_exception_for_api_issue_for_get_refund() {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -840,7 +780,7 @@ public class ClientTest {
                     ArgumentMatchers.eq("refunds/" + id),
                     ArgumentMatchers.any(),
                     ArgumentMatchers.eq(true)
-                )).thenThrow(new BitPayException("500", "error message"));
+                )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
                 testedClass.getRefund(id);
@@ -848,15 +788,15 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-GET: Failed to retrieve refund -> error message",
+            "error message",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_throws_refundQueryException_for_api_issue_for_get_refunds() {
-        RefundQueryException exception = Assertions.assertThrows(
-            RefundQueryException.class,
+    public void it_should_throws_bitpay_api_exception_for_api_issue_for_get_refunds() {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -865,7 +805,7 @@ public class ClientTest {
                     ArgumentMatchers.eq("refunds/"),
                     ArgumentMatchers.any(),
                     ArgumentMatchers.eq(true)
-                )).thenThrow(new BitPayException("500", "error message"));
+                )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
                 testedClass.getRefunds(id);
@@ -873,40 +813,15 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-GET: Failed to retrieve refund -> error message",
+            "error message",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_throws_refundUpdateException_for_api_issue_for_get_refunds() {
-        RefundQueryException exception = Assertions.assertThrows(
-            RefundQueryException.class,
-            () -> {
-                // given
-                Client testedClass = this.getTestedClass();
-                String id = "12";
-                Mockito.when(this.bitPayClient.get(
-                    ArgumentMatchers.eq("refunds/"),
-                    ArgumentMatchers.any(),
-                    ArgumentMatchers.eq(true)
-                )).thenThrow(new BitPayException("500", "error message"));
-
-                // when
-                testedClass.getRefunds(id);
-            }
-        );
-
-        Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-GET: Failed to retrieve refund -> error message",
-            exception.getMessage()
-        );
-    }
-
-    @Test
-    public void it_should_throws_refundUpdateException_for_api_issue_for_update_refund() {
-        RefundUpdateException exception = Assertions.assertThrows(
-            RefundUpdateException.class,
+    public void it_should_throws_bitpay_api_exception_for_api_issue_for_update_refund() {
+        BitPayApiException exception = Assertions.assertThrows(
+            BitPayApiException.class,
             () -> {
                 // given
                 Client testedClass = this.getTestedClass();
@@ -914,7 +829,7 @@ public class ClientTest {
                 Mockito.when(this.bitPayClient.update(
                     ArgumentMatchers.eq("refunds/12"),
                     ArgumentMatchers.eq("{\"token\":null,\"status\":\"complete\"}")
-                )).thenThrow(new BitPayException("500", "error message"));
+                )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
                 testedClass.updateRefund(id, "complete");
@@ -922,13 +837,13 @@ public class ClientTest {
         );
 
         Assertions.assertEquals(
-            "Status: 500 -> Reason: BITPAY-REFUND-UPDATE: Failed to update refund -> error message",
+            "error message",
             exception.getMessage()
         );
     }
 
     @Test
-    public void it_should_get_refund_by_id() throws BitPayException {
+    public void it_should_get_refund_by_id() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
@@ -937,8 +852,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("token", "merchantToken"));
 
         Mockito.when(this.bitPayClient.get("refunds/" + refundId, params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getRefund.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
 
@@ -954,12 +867,11 @@ public class ClientTest {
             params,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
     }
 
     @Test
-    public void it_should_get_refund_by_guid() throws BitPayException {
+    public void it_should_get_refund_by_guid() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
 
@@ -967,8 +879,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("token", "merchantToken"));
 
         Mockito.when(this.bitPayClient.get("refunds/guid/" + EXAMPLE_UUID, params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getRefund.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
 
@@ -984,12 +894,11 @@ public class ClientTest {
             params,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(EXAMPLE_UUID, result.getGuid());
     }
 
     @Test
-    public void it_should_test_get_refunds() throws BitPayException {
+    public void it_should_test_get_refunds() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String invoiceId = "Hpqc63wvE1ZjzeeH4kEycF";
@@ -1000,8 +909,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("invoiceId", invoiceId));
 
         Mockito.when(this.bitPayClient.get("refunds/", params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
@@ -1016,12 +923,11 @@ public class ClientTest {
             params,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(invoiceId, result.get(0).getInvoice());
     }
 
     @Test
-    public void it_should_update_refund_by_id() throws BitPayException {
+    public void it_should_update_refund_by_id() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String status = "complete";
@@ -1036,9 +942,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.update(
             "refunds/" + refundId,
             requestedJson
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getRefundsJsonConvertedResponse);
+        )).thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -1048,12 +952,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).update("refunds/" + refundId, requestedJson);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
     }
 
     @Test
-    public void it_should_update_refund_by_guid() throws BitPayException {
+    public void it_should_update_refund_by_guid() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String status = "complete";
@@ -1068,9 +971,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.update(
             "refunds/guid/" + guid,
             requestedJson
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getRefundsJsonConvertedResponse);
+        )).thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -1080,12 +981,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).update("refunds/guid/" + guid, requestedJson);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(guid, result.getGuid());
     }
 
     @Test
-    public void it_should_test_sendRefundNotification() throws BitPayException {
+    public void it_should_test_sendRefundNotification() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
@@ -1099,9 +999,7 @@ public class ClientTest {
             "refunds/" + refundId + "/notifications",
             requestedJson,
             true
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getRefundsJsonConvertedResponse);
+        )).thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
@@ -1115,12 +1013,11 @@ public class ClientTest {
             requestedJson,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_cancel_refund_by_id() throws BitPayException {
+    public void it_should_cancel_refund_by_id() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
@@ -1132,9 +1029,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.delete(
             "refunds/" + refundId,
             params
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getRefundsJsonConvertedResponse);
+        )).thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
 
         Client testedClass = this.getTestedClass();
@@ -1145,12 +1040,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("refunds/" + refundId, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(refundId, result.getId());
     }
 
     @Test
-    public void it_should_cancel_refund_by_guid() throws BitPayException {
+    public void it_should_cancel_refund_by_guid() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "merchantToken";
         final String guid = EXAMPLE_UUID;
@@ -1162,9 +1056,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.delete(
             "refunds/guid/" + guid,
             params
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getRefundsJsonConvertedResponse);
+        )).thenReturn(getRefundsJsonConvertedResponse);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
 
         Client testedClass = this.getTestedClass();
@@ -1175,12 +1067,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("refunds/guid/" + guid, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(guid, result.getGuid());
     }
 
     @Test
-    public void it_should_test_createBill_by_merchant_facade() throws BitPayException {
+    public void it_should_test_createBill_by_merchant_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "AKnJyeLF1BjAfgfDbVUzHXk64N1WuDq3R9xtZouQFhSv";
         final String createBillApiRequest = getPreparedJsonDataFromFile("createBillRequest.json");
@@ -1190,9 +1081,7 @@ public class ClientTest {
             "bills",
             createBillApiRequest,
             true
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("createBillResponse.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("createBillResponse.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(true);
 
@@ -1204,12 +1093,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("bills", createBillApiRequest, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_createBill_by_pos_facade() throws BitPayException {
+    public void it_should_test_createBill_by_pos_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "AKnJyeLF1BjAfgfDbVUzHXk64N1WuDq3R9xtZouQFhSv";
         final String createBillApiRequest = getPreparedJsonDataFromFile("createBillRequest.json");
@@ -1219,9 +1107,7 @@ public class ClientTest {
             "bills",
             createBillApiRequest,
             false
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("createBillPosResponse.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("createBillPosResponse.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(false);
         Mockito.when(this.accessTokens.getAccessToken(Facade.POS)).thenReturn(merchantToken);
 
@@ -1233,12 +1119,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.POS);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("bills", createBillApiRequest, false);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_getBill_by_merchant_facade() throws BitPayException {
+    public void it_should_test_getBill_by_merchant_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String facadeToken = "AKnJyeLF1BjAfgfDbVUzHXk64N1WuDq3R9xtZouQFhSv";
 
@@ -1246,8 +1131,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("token", facadeToken));
 
         Mockito.when(this.bitPayClient.get("bills/" + BILL_ID, params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getBill.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(true);
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(facadeToken);
@@ -1260,12 +1143,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("bills/" + BILL_ID, params, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_getBill_by_pos_facade() throws BitPayException {
+    public void it_should_test_getBill_by_pos_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String facadeToken = "AKnJyeLF1BjAfgfDbVUzHXk64N1WuDq3R9xtZouQFhSv";
 
@@ -1273,8 +1155,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("token", facadeToken));
 
         Mockito.when(this.bitPayClient.get("bills/" + BILL_ID, params, false))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getBill.json"));
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(false);
         Mockito.when(this.accessTokens.getAccessToken(Facade.POS)).thenReturn(facadeToken);
@@ -1289,12 +1169,11 @@ public class ClientTest {
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.POS);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("bills/" + BILL_ID, params, false);
         Mockito.verify(this.bitPayClient, Mockito.times(0)).get("bills/" + BILL_ID, params, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_getBills() throws BitPayException {
+    public void it_should_test_getBills() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", MERCHANT_TOKEN));
@@ -1302,9 +1181,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.get(
             "bills",
             params
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getBills.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("getBills.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
 
         Client testedClass = this.getTestedClass();
@@ -1315,13 +1192,12 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("bills", params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.get(0).getId());
         Assertions.assertEquals(2, result.size());
     }
 
     @Test
-    public void it_should_test_getBills_by_status() throws BitPayException {
+    public void it_should_test_getBills_by_status() throws BitPayApiException, BitPayGenericException {
         // given
         final String status = "complete";
 
@@ -1332,9 +1208,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.get(
             "bills",
             params
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getBills.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("getBills.json"));
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
 
         Client testedClass = this.getTestedClass();
@@ -1345,13 +1219,12 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("bills", params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.get(0).getId());
         Assertions.assertEquals(2, result.size());
     }
 
     @Test
-    public void it_should_test_updateBill() throws BitPayException {
+    public void it_should_test_updateBill() throws BitPayApiException, BitPayGenericException {
         // given
         final String merchantToken = "AKnJyeLF1BjAfgfDbVUzHXk64N1WuDq3R9xtZouQFhSv";
         final Bill bill = this.getBillExample(merchantToken);
@@ -1363,9 +1236,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.update(
             "bills/" + BILL_ID,
             updateBillApiRequest
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getBill.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("getBill.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1374,21 +1245,18 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1)).update("bills/" + BILL_ID, updateBillApiRequest);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(BILL_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_deliverBill_by_merchant_facade() throws BitPayException {
+    public void it_should_test_deliverBill_by_merchant_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String billToken = "billToken";
         Mockito.when(this.bitPayClient.post(
             "bills/" + BILL_ID + "/deliveries",
             "{\"token\":\"billToken\"}",
             true
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn("Success");
+        )).thenReturn("Success");
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(true);
 
         Client testedClass = this.getTestedClass();
@@ -1402,21 +1270,18 @@ public class ClientTest {
             "{\"token\":\"billToken\"}",
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("Success", result);
     }
 
     @Test
-    public void it_should_test_deliverBill_by_pos_facade() throws BitPayException {
+    public void it_should_test_deliverBill_by_pos_facade() throws BitPayApiException, BitPayGenericException {
         // given
         final String billToken = "billToken";
         Mockito.when(this.bitPayClient.post(
             "bills/" + BILL_ID + "/deliveries",
             "{\"token\":\"billToken\"}",
             false
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn("Success");
+        )).thenReturn("Success");
         Mockito.when(this.accessTokens.tokenExists(Facade.MERCHANT)).thenReturn(false);
 
         Client testedClass = this.getTestedClass();
@@ -1430,15 +1295,13 @@ public class ClientTest {
             "{\"token\":\"billToken\"}",
             false
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("Success", result);
     }
 
     @Test
-    public void it_should_return_rate() throws BitPayException {
+    public void it_should_return_rate() throws BitPayApiException, BitPayGenericException {
         // given
-        Mockito.when(this.bitPayClient.get("rates/BCH/USD")).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("rates/BCH/USD"))
             .thenReturn("{\"code\": \"USD\", \"name\": \"US Dollar\", \"rate\": 100.99}");
 
         Client testedClass = this.getTestedClass();
@@ -1452,11 +1315,9 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_get_rates() throws BitPayException {
+    public void it_should_test_get_rates() throws BitPayApiException, BitPayGenericException {
         // given
-        Mockito.when(this.bitPayClient.get("rates")).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getRates.json"));
+        Mockito.when(this.bitPayClient.get("rates")).thenReturn(getPreparedJsonDataFromFile("getRates.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1469,11 +1330,9 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_get_rates_by_base_currency() throws BitPayException {
+    public void it_should_get_rates_by_base_currency() throws BitPayApiException, BitPayGenericException {
         // given
-        Mockito.when(this.bitPayClient.get("rates/USD")).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("getRates.json"));
+        Mockito.when(this.bitPayClient.get("rates/USD")).thenReturn(getPreparedJsonDataFromFile("getRates.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1486,7 +1345,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_get_ledger_entries() throws BitPayException {
+    public void it_should_get_ledger_entries() throws BitPayApiException, BitPayGenericException {
         // given
         final String currency = "USD";
         final String dateStart = "2021-5-10";
@@ -1498,8 +1357,7 @@ public class ClientTest {
         params.add(new BasicNameValuePair("endDate", dateEnd));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
-        Mockito.when(this.bitPayClient.get("ledgers/" + currency, params)).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("ledgers/" + currency, params))
             .thenReturn(getPreparedJsonDataFromFile("getLedgers.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1510,20 +1368,18 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("ledgers/" + currency, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(3, result.size());
         Assertions.assertEquals("20210510_fghij", result.get(0).getDescription());
     }
 
     @Test
-    public void it_should_test_getLedgers() throws BitPayException {
+    public void it_should_test_getLedgers() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", MERCHANT_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
-        Mockito.when(this.bitPayClient.get("ledgers", params)).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("ledgers", params))
             .thenReturn(getPreparedJsonDataFromFile("getLedgerBalances.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1534,13 +1390,12 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("ledgers", params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(3, result.size());
         Assertions.assertEquals(2389.82, result.get(1).getBalance());
     }
 
     @Test
-    public void it_should_test_submitPayoutRecipients() throws BitPayException {
+    public void it_should_test_submitPayoutRecipients() throws BitPayApiException, BitPayGenericException {
         // given
         PayoutRecipients recipients = getPayoutRecipientsExample();
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
@@ -1548,9 +1403,7 @@ public class ClientTest {
             "recipients",
             getPreparedJsonDataFromFile("submitPayoutRecipientsRequest.json"),
             true
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("submitPayoutRecipientsResponse.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("submitPayoutRecipientsResponse.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1564,7 +1417,6 @@ public class ClientTest {
             getPreparedJsonDataFromFile("submitPayoutRecipientsRequest.json"),
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
             RECIPIENT_TOKEN,
@@ -1573,7 +1425,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getPayoutRecipients() throws BitPayException {
+    public void it_should_test_getPayoutRecipients() throws BitPayApiException, BitPayGenericException {
         // given
         final String status = "invited";
         final Integer limit = 1;
@@ -1587,8 +1439,7 @@ public class ClientTest {
         params.add(new BasicNameValuePair("limit", limit.toString()));
         params.add(new BasicNameValuePair("offset", offset.toString()));
 
-        Mockito.when(this.bitPayClient.get("recipients", params, true)).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("recipients", params, true))
             .thenReturn(getPreparedJsonDataFromFile("retrieveRecipientsResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1599,7 +1450,6 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("recipients", params, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
             RECIPIENT_TOKEN,
@@ -1608,14 +1458,13 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getPayoutRecipient() throws BitPayException {
+    public void it_should_test_getPayoutRecipient() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
-        Mockito.when(this.bitPayClient.get("recipients/" + RECIPIENT_ID, params, true)).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("recipients/" + RECIPIENT_ID, params, true))
             .thenReturn(getPreparedJsonDataFromFile("retrieveRecipientResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1627,7 +1476,6 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("recipients/" + RECIPIENT_ID, params, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(
             RECIPIENT_TOKEN,
             result.getToken()
@@ -1635,7 +1483,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_updatePayoutRecipient() throws BitPayException {
+    public void it_should_test_updatePayoutRecipient() throws BitPayApiException, BitPayGenericException {
         // given
         final PayoutRecipient payoutRecipient = new PayoutRecipient();
         final String label = "Bob123";
@@ -1647,9 +1495,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.update(
             "recipients/" + RECIPIENT_ID,
             getPreparedJsonDataFromFile("updatePayoutRecipientRequest.json")
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("retrieveRecipientResponse.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("retrieveRecipientResponse.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1663,20 +1509,18 @@ public class ClientTest {
             "recipients/" + RECIPIENT_ID,
             getPreparedJsonDataFromFile("updatePayoutRecipientRequest.json")
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(RECIPIENT_TOKEN, result.getToken());
         Assertions.assertEquals(label, result.getLabel());
     }
 
     @Test
-    public void it_should_test_deletePayoutRecipient() throws BitPayException {
+    public void it_should_test_deletePayoutRecipient() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
-        Mockito.when(this.bitPayClient.delete("recipients/" + RECIPIENT_ID, params)).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.delete("recipients/" + RECIPIENT_ID, params))
             .thenReturn(getPreparedJsonDataFromFile("success.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1690,12 +1534,11 @@ public class ClientTest {
             "recipients/" + RECIPIENT_ID,
             params
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_test_requestPayoutRecipientNotification() throws BitPayException {
+    public void it_should_test_requestPayoutRecipientNotification() throws BitPayApiException, BitPayGenericException {
         // given
         final String requestJson = "{\"token\":\"3LKKrrNB2BcVAu2Y24QQ78GrKUk2ANLK4eLo85Q1a2HU\"}";
 
@@ -1704,9 +1547,7 @@ public class ClientTest {
             "recipients/" + RECIPIENT_ID + "/notifications",
             requestJson,
             true
-        )).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
-            .thenReturn(getPreparedJsonDataFromFile("success.json"));
+        )).thenReturn(getPreparedJsonDataFromFile("success.json"));
 
         Client testedClass = this.getTestedClass();
 
@@ -1721,20 +1562,17 @@ public class ClientTest {
             requestJson,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_test_submitPayout() throws BitPayException {
+    public void it_should_test_submitPayout() throws BitPayApiException, BitPayGenericException {
         // given
         final String requestJson = getPreparedJsonDataFromFile("submitPayoutRequest.json");
         Payout payout = getPayoutExample();
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.post("payouts", requestJson, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("submitPayoutResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1746,7 +1584,6 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("payouts", requestJson, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(
             "6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL",
             result.getToken()
@@ -1754,15 +1591,13 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_submitPayoutGroup() throws BitPayException, ParseException {
+    public void it_should_test_submitPayoutGroup() throws BitPayApiException, BitPayGenericException, ParseException {
         // given
         final String requestJson = getPreparedJsonDataFromFile("submitPayoutGroupRequest.json");
         Collection<Payout> payouts = Arrays.asList(getPayoutExample(), getPayoutExample());
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.post("payouts/group", requestJson, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("submitPayoutGroupResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1774,7 +1609,6 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("payouts/group", requestJson, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
 
         Assertions.assertFalse(result.getPayouts().isEmpty());
         Payout firstPayout = result.getPayouts().get(0);
@@ -1814,15 +1648,13 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getPayout() throws BitPayException {
+    public void it_should_test_getPayout() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.get("payouts/" + PAYOUT_ID, params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("submitPayoutResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1836,20 +1668,17 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get(
             "payouts/" + PAYOUT_ID, params, true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(PAYOUT_ID, result.getId());
     }
 
     @Test
-    public void it_should_test_cancelPayout() throws BitPayException {
+    public void it_should_test_cancelPayout() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.delete("payouts/" + PAYOUT_ID, params))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("success.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1861,22 +1690,18 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("payouts/" + PAYOUT_ID, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_test_cancelPayoutGroup() throws BitPayException {
+    public void it_should_test_cancelPayoutGroup() throws BitPayApiException, BitPayGenericException {
         // given
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         params.add(new BasicNameValuePair("token", PAYOUT_ACCESS_TOKEN));
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.delete("payouts/group/" + PAYOUT_ID, params))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("cancelPayoutGroupResponse.json"));
-
         Client testedClass = this.getTestedClass();
 
         // when
@@ -1886,7 +1711,6 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).delete("payouts/group/" + PAYOUT_ID, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
 
         Assertions.assertFalse(result.getPayouts().isEmpty());
         Assertions.assertFalse(result.getFailed().isEmpty());
@@ -1897,7 +1721,7 @@ public class ClientTest {
     }
 
     @Test
-    public void it_should_test_getPayouts() throws BitPayException {
+    public void it_should_test_getPayouts() throws BitPayApiException, BitPayGenericException {
         // given
         final String startDate = "2021-05-27";
         final String endDate = "2021-05-31";
@@ -1913,8 +1737,6 @@ public class ClientTest {
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.get("payouts", params, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getPayouts.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1933,12 +1755,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.PAYOUT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("payouts", params, true);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(2, result.size());
     }
 
     @Test
-    public void it_should_test_requestPayoutNotification() throws BitPayException {
+    public void it_should_test_requestPayoutNotification() throws BitPayApiException, BitPayGenericException {
         // given
         final String requestJson = "{\"token\":\"3LKKrrNB2BcVAu2Y24QQ78GrKUk2ANLK4eLo85Q1a2HU\"}";
 
@@ -1947,8 +1768,6 @@ public class ClientTest {
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.post("payouts/" + PAYOUT_ID + "/notifications", requestJson, true))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("success.json"));
 
         Client testedClass = this.getTestedClass();
@@ -1963,12 +1782,11 @@ public class ClientTest {
             requestJson,
             true
         );
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void it_should_test_getSettlements() throws BitPayException {
+    public void it_should_test_getSettlements() throws BitPayApiException, BitPayGenericException {
         // given
         final String currency = "USD";
         final String dateStart = "2021-5-10";
@@ -1988,8 +1806,6 @@ public class ClientTest {
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
         Mockito.when(this.bitPayClient.get("settlements", params))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getSettlementsResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -2007,13 +1823,12 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("settlements", params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("KBkdURgmE3Lsy9VTnavZHX", result.get(0).getId());
     }
 
     @Test
-    public void it_should_test_getSettlement() throws BitPayException {
+    public void it_should_test_getSettlement() throws BitPayApiException, BitPayGenericException {
         // given
         final String settlementId = "DNFnN3fFjjzLn6if5bdGJC";
 
@@ -2022,8 +1837,6 @@ public class ClientTest {
 
         Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(MERCHANT_TOKEN);
         Mockito.when(this.bitPayClient.get("settlements/" + settlementId, params))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getSettlementResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -2034,12 +1847,11 @@ public class ClientTest {
         // then
         Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("settlements/" + settlementId, params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("RPWTabW8urd3xWv2To989v", result.getId());
     }
 
     @Test
-    public void it_should_test_getSettlementReconciliationReport() throws BitPayException {
+    public void it_should_test_getSettlementReconciliationReport() throws BitPayApiException, BitPayGenericException {
         // given
         final String settlementId = "DNFnN3fFjjzLn6if5bdGJC";
         final String settlementToken = "5T1T5yGDEtFDYe8jEVBSYLHKewPYXZrDLvZxtXBzn69fBbZYitYQYH4BFYFvvaVU7D";
@@ -2048,8 +1860,6 @@ public class ClientTest {
         params.add(new BasicNameValuePair("token", settlementToken));
 
         Mockito.when(this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params))
-            .thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
             .thenReturn(getPreparedJsonDataFromFile("getSettlementReconciliationReportResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -2060,16 +1870,14 @@ public class ClientTest {
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1))
             .get("settlements/" + settlementId + "/reconciliationreport", params);
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals("RvNuCTMAkURKimwgvSVEMP", result.getId());
         Assertions.assertEquals(2389.82F, result.getTotalAmount());
     }
 
     @Test
-    public void it_should_test_getSupportedWallets() throws BitPayException {
+    public void it_should_test_getSupportedWallets() throws BitPayApiException, BitPayGenericException {
         // given
-        Mockito.when(this.bitPayClient.get("supportedwallets")).thenReturn(this.httpResponse);
-        Mockito.when(this.bitPayClient.responseToJsonString(this.httpResponse))
+        Mockito.when(this.bitPayClient.get("supportedwallets"))
             .thenReturn(getPreparedJsonDataFromFile("getSupportedWalletsResponse.json"));
 
         Client testedClass = this.getTestedClass();
@@ -2079,7 +1887,6 @@ public class ClientTest {
 
         // then
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("supportedwallets");
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).responseToJsonString(this.httpResponse);
         Assertions.assertEquals(7, result.size());
         Assertions.assertEquals("bitpay-wallet.png", result.get(0).getAvatar());
         Assertions.assertEquals("https://bitpay.com/img/wallet-logos/bitpay-wallet.png", result.get(0).getImage());
@@ -2097,18 +1904,6 @@ public class ClientTest {
                 Mockito.mock(CredentialsProvider.class)
             )
         );
-    }
-
-    @Test
-    public void it_should_test_setLoggerLevel() {
-        // given
-        Client testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setLoggerLevel(3);
-
-        // then
-        Mockito.verify(this.bitPayClient, Mockito.times(1)).setLoggerLevel(3);
     }
 
     private Invoice getInvoiceExample() {
@@ -2137,7 +1932,7 @@ public class ClientTest {
         return invoice;
     }
 
-    private Bill getBillExample(String merchantToken) throws BitPayException {
+    private Bill getBillExample(String merchantToken) throws BitPayGenericException {
         List<String> cc = new ArrayList<String>();
         cc.add("jane@doe.com");
 
@@ -2189,7 +1984,7 @@ public class ClientTest {
         return new PayoutRecipients(recipients);
     }
 
-    private Payout getPayoutExample() throws BitPayException {
+    private Payout getPayoutExample() throws BitPayGenericException {
         final Payout payout = new Payout();
         payout.setAmount(10.00);
         payout.setCurrency("USD");
@@ -2205,8 +2000,6 @@ public class ClientTest {
     }
 
     /**
-     * Be aware. I removed "data" index from original request
-     *
      * @param fileName filename of json
      * @return json response
      */

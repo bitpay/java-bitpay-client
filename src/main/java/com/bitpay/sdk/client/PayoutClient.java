@@ -5,11 +5,9 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.PayoutCancellationException;
-import com.bitpay.sdk.exceptions.PayoutCreationException;
-import com.bitpay.sdk.exceptions.PayoutNotificationException;
-import com.bitpay.sdk.exceptions.PayoutQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.payout.Payout;
 import com.bitpay.sdk.util.JsonMapperFactory;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -68,31 +65,33 @@ public class PayoutClient implements ResourceClient {
      *
      * @param payout Payout A Payout object with request parameters defined.
      * @return A BitPay generated Payout object.
-     * @throws BitPayException         BitPayException class
-     * @throws PayoutCreationException PayoutCreationException class
+     * @throws BitPayApiException         BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public Payout submit(Payout payout) throws BitPayException, PayoutCreationException {
+    public Payout submit(Payout payout) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(payout)) {
-            throw new PayoutCreationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
+
         String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         payout.setToken(token);
 
         JsonMapper mapper = JsonMapperFactory.create();
-        String json;
+        String json = null;
 
         try {
             json = mapper.writeValueAsString(payout);
         } catch (JsonProcessingException e) {
-            throw new PayoutCreationException(null, "failed to serialize Payout object : " + e.getMessage());
+            BitPayExceptionProvider.throwSerializeResourceException("Payout", e.getMessage());
         }
+
+        String jsonResponse = this.bitPayClient.post("payouts", json, true);
+
         try {
-            HttpResponse response = this.bitPayClient.post("payouts", json, true);
             payout = JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
-        } catch (Exception e) {
-            throw new PayoutCreationException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+                .readValue(jsonResponse, Payout.class);
+        } catch (JsonProcessingException e) {
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout", e.getMessage());
         }
 
         return payout;
@@ -104,30 +103,27 @@ public class PayoutClient implements ResourceClient {
      *
      * @param payoutId String The id of the payout to retrieve.
      * @return A BitPay Payout object.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws BitPayApiException      BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public Payout get(String payoutId) throws BitPayException, PayoutQueryException {
+    public Payout get(String payoutId) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(payoutId)) {
-            throw new PayoutQueryException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         String token = this.accessTokens.getAccessToken(Facade.PAYOUT);
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", token);
 
-        Payout payout;
+        Payout payout = null;
+
+        String jsonResponse = this.bitPayClient.get("payouts/" + payoutId, params, true);
 
         try {
-            HttpResponse response = this.bitPayClient.get("payouts/" + payoutId, params, true);
             payout = JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), Payout.class);
+                .readValue(jsonResponse, Payout.class);
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutQueryException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout", e.getMessage());
         }
 
         return payout;
@@ -138,33 +134,29 @@ public class PayoutClient implements ResourceClient {
      *
      * @param payoutId String The id of the payout to cancel.
      * @return True if the refund was successfully canceled, false otherwise.
-     * @throws BitPayException             BitPayException class
-     * @throws PayoutCancellationException PayoutCancellationException class
+     * @throws BitPayApiException BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public Boolean cancel(String payoutId) throws BitPayException, PayoutCancellationException {
+    public Boolean cancel(String payoutId)
+        throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(payoutId)) {
-            throw new PayoutCancellationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
-        boolean result;
+        boolean result = false;
         JsonMapper mapper = JsonMapperFactory.create();
 
+        String jsonResponse = this.bitPayClient.delete("payouts/" + payoutId, params);
+
         try {
-            HttpResponse response = this.bitPayClient.delete("payouts/" + payoutId, params);
-            String jsonString = this.bitPayClient.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode node = rootNode.get("status");
             result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
-
         } catch (JsonProcessingException e) {
-            throw new PayoutCancellationException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutCancellationException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeException(e.getMessage());
         }
 
         return result;
@@ -182,8 +174,8 @@ public class PayoutClient implements ResourceClient {
      * @param offset    int Offset for paging.
      * @param groupId   String The optional group id assigned to payout.
      * @return A list of BitPay Payout objects.
-     * @throws BitPayException      BitPayException class
-     * @throws PayoutQueryException PayoutQueryException class
+     * @throws BitPayApiException      BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public List<Payout> getPayouts(
         String startDate,
@@ -193,7 +185,7 @@ public class PayoutClient implements ResourceClient {
         Integer limit,
         Integer offset,
         String groupId
-    ) throws BitPayException, PayoutQueryException {
+    ) throws BitPayApiException, BitPayGenericException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
         ParameterAdder.execute(params, "startDate", startDate);
@@ -210,19 +202,16 @@ public class PayoutClient implements ResourceClient {
             ParameterAdder.execute(params, "groupId", groupId);
         }
 
-        List<Payout> payouts;
+        List<Payout> payouts = null;
+
+        String jsonResponse = this.bitPayClient.get("payouts", params, true);
 
         try {
-            HttpResponse response = this.bitPayClient.get("payouts", params, true);
             payouts = Arrays
                 .asList(JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), Payout[].class));
+                    .readValue(jsonResponse, Payout[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutQueryException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutQueryException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout", e.getMessage());
         }
 
         return payouts;
@@ -233,13 +222,13 @@ public class PayoutClient implements ResourceClient {
      *
      * @param payoutId String The id of the payout to notify..
      * @return True if the notification was successfully sent, false otherwise.
-     * @throws BitPayException             BitPayException class
-     * @throws PayoutNotificationException PayoutNotificationException class
+     * @throws BitPayApiException             BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public Boolean requestNotification(String payoutId)
-        throws BitPayException, PayoutNotificationException {
+        throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(payoutId)) {
-            throw new PayoutNotificationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final Map<String, String> params = new HashMap<>();
@@ -247,26 +236,23 @@ public class PayoutClient implements ResourceClient {
 
         JsonMapper mapper = JsonMapperFactory.create();
 
-        boolean result;
-        String json;
+        boolean result = false;
+        String json = null;
 
         try {
             json = mapper.writeValueAsString(params);
         } catch (JsonProcessingException e) {
-            throw new PayoutNotificationException(null, "failed to serialize payout batch object : " + e.getMessage());
+            BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
+        String jsonResponse = this.bitPayClient.post("payouts/" + payoutId + "/notifications", json, true);
+
         try {
-            HttpResponse response = this.bitPayClient.post("payouts/" + payoutId + "/notifications", json, true);
-            String jsonString = this.bitPayClient.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode node = rootNode.get("status");
             result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
-        } catch (BitPayException ex) {
-            throw new PayoutNotificationException(ex.getStatusCode(), ex.getReasonPhrase());
-        } catch (Exception e) {
-            throw new PayoutNotificationException(null,
-                "failed to deserialize BitPay server response (Payout) : " + e.getMessage());
+        } catch (JsonProcessingException e) {
+            BitPayExceptionProvider.throwDeserializeException(e.getMessage());
         }
 
         return result;

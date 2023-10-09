@@ -5,7 +5,8 @@
 
 package com.bitpay.sdk.model.invoice;
 
-import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -68,12 +69,12 @@ public class RefundInfo {
      * Sets reference currency used for the refund, usually the same as the currency used to create the invoice.
      *
      * @param currency the currency
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException BitPayGenericException class
      */
     @JsonProperty("currency")
-    public void setCurrency(String currency) throws BitPayException {
+    public void setCurrency(String currency) throws BitPayGenericException {
         if (!Currency.isValid(currency)) {
-            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
+            BitPayExceptionProvider.throwInvalidCurrencyException(currency);
         }
 
         this.currency = currency;

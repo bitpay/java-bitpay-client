@@ -6,8 +6,9 @@ package com.bitpay.sdk.functional;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.ConfigFilePath;
+import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.RateQueryException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.bill.Item;
 import com.bitpay.sdk.model.Currency;
@@ -68,7 +69,7 @@ public class ClientFunctionalTest {
      * - GetRates(string currency)
      */
     @Test
-    public void it_should_test_rate_requests() throws RateQueryException {
+    public void it_should_test_rate_requests() throws BitPayGenericException, BitPayApiException {
         Rate rate = this.client.getRate(Currency.BCH, Currency.USD);
         Assertions.assertTrue(rate.getValue() != 0);
 

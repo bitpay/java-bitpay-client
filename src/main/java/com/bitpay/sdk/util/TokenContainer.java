@@ -6,7 +6,8 @@
 package com.bitpay.sdk.util;
 
 import com.bitpay.sdk.Config;
-import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Hashtable;
@@ -49,9 +50,9 @@ public class TokenContainer {
      *
      * @param facade The identifier for the desired resource.
      * @return The token associated with resource.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public String getAccessToken(Facade facade) throws BitPayException {
+    public String getAccessToken(Facade facade) throws BitPayGenericException {
         return this.getAccessToken(facade.toString());
     }
 
@@ -60,11 +61,12 @@ public class TokenContainer {
      *
      * @param key The identifier for the desired resource.
      * @return The token associated with resource.
-     * @throws BitPayException BitPayException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public String getAccessToken(String key) throws BitPayException {
+    public String getAccessToken(String key) throws BitPayGenericException {
         if (!this.data.containsKey(key)) {
-            throw new BitPayException(null, "There is no token for the specified key : " + key);
+            BitPayExceptionProvider.throwGenericExceptionWithMessage(
+                "There is no token for the specified key : " + key);
         }
 
         return this.data.get(key);

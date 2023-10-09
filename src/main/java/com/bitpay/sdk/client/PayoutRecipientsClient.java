@@ -5,12 +5,9 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.PayoutRecipientCancellationException;
-import com.bitpay.sdk.exceptions.PayoutRecipientCreationException;
-import com.bitpay.sdk.exceptions.PayoutRecipientNotificationException;
-import com.bitpay.sdk.exceptions.PayoutRecipientQueryException;
-import com.bitpay.sdk.exceptions.PayoutRecipientUpdateException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
@@ -28,7 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -83,40 +79,35 @@ public class PayoutRecipientsClient implements ResourceClient {
      *
      * @param recipients PayoutRecipients A PayoutRecipients object with request parameters defined.
      * @return array A list of BitPay PayoutRecipients objects..
-     * @throws BitPayException                  BitPayException class
-     * @throws PayoutRecipientCreationException PayoutRecipientCreationException class
+     * @throws BitPayApiException  BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public List<PayoutRecipient> submit(PayoutRecipients recipients)
-        throws BitPayException, PayoutRecipientCreationException {
+    public List<PayoutRecipient> submit(PayoutRecipients recipients) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(recipients)) {
-            throw new PayoutRecipientCreationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         recipients.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipients.setGuid(Objects.isNull(recipients.getGuid()) ? this.guidGenerator.execute() : recipients.getGuid());
         JsonMapper mapper = JsonMapperFactory.create();
-        String json;
+        String json = null;
 
         try {
             json = mapper.writeValueAsString(recipients);
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientCreationException(null,
-                "failed to serialize PayoutRecipients object : " + e.getMessage());
+            BitPayExceptionProvider.throwSerializeResourceException("Payout Recipients", e.getMessage());
         }
 
-        List<PayoutRecipient> recipientsList;
+        List<PayoutRecipient> recipientsList = null;
+
+        String jsonResponse = this.bitPayClient.post("recipients", json, true);
 
         try {
-            HttpResponse response = this.bitPayClient.post("recipients", json, true);
             recipientsList = Arrays
                 .asList(JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient[].class));
+                    .readValue(jsonResponse, PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientCreationException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutRecipientCreationException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout Recipient", e.getMessage());
         }
 
         return recipientsList;
@@ -130,11 +121,11 @@ public class PayoutRecipientsClient implements ResourceClient {
      *               paging results). result).
      * @param offset int Offset for paging.
      * @return array A list of BitPayRecipient objects.
-     * @throws BitPayException               BitPayException class
-     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
+     * @throws BitPayApiException               BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public List<PayoutRecipient> getRecipientsByFilters(String status, Integer limit, Integer offset)
-        throws BitPayException, PayoutRecipientQueryException {
+        throws BitPayApiException, BitPayGenericException {
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
@@ -146,19 +137,16 @@ public class PayoutRecipientsClient implements ResourceClient {
             ParameterAdder.execute(params, "offset", offset.toString());
         }
 
-        List<PayoutRecipient> recipientsList;
+        List<PayoutRecipient> recipientsList = null;
+
+        String jsonResponse = this.bitPayClient.get("recipients", params, true);
 
         try {
-            HttpResponse response = this.bitPayClient.get("recipients", params, true);
             recipientsList = Arrays
                 .asList(JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient[].class));
+                    .readValue(jsonResponse, PayoutRecipient[].class));
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientQueryException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutRecipientQueryException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout Recipient", e.getMessage());
         }
 
         return recipientsList;
@@ -170,30 +158,27 @@ public class PayoutRecipientsClient implements ResourceClient {
      *
      * @param recipientId String The id of the recipient to retrieve.
      * @return PayoutRecipient A BitPay PayoutRecipient object.
-     * @throws BitPayException               BitPayException class
-     * @throws PayoutRecipientQueryException PayoutRecipientQueryException class
+     * @throws BitPayApiException               BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public PayoutRecipient get(String recipientId)
-        throws BitPayException, PayoutRecipientQueryException {
+        throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(recipientId)) {
-            throw new PayoutRecipientQueryException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
-        PayoutRecipient recipient;
+        PayoutRecipient recipient = null;
+
+        String jsonResponse = this.bitPayClient.get("recipients/" + recipientId, params, true);
 
         try {
-            HttpResponse response = this.bitPayClient.get("recipients/" + recipientId, params, true);
             recipient = JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient.class);
+                .readValue(jsonResponse, PayoutRecipient.class);
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientQueryException(null,
-                "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutRecipientQueryException(null,
-                "failed to deserialize BitPay server response (PayoutRecipient) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout Recipient", e.getMessage());
         }
 
         return recipient;
@@ -206,38 +191,35 @@ public class PayoutRecipientsClient implements ResourceClient {
      * @param recipient   PayoutRecipients A PayoutRecipient object with updated
      *                    parameters defined.
      * @return The updated recipient object.
-     * @throws BitPayException                BitPayException class
-     * @throws PayoutRecipientUpdateException PayoutRecipientUpdateException class
+     * @throws BitPayApiException                BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public PayoutRecipient update(String recipientId, PayoutRecipient recipient)
-        throws BitPayException, PayoutRecipientUpdateException {
+        throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(recipient) || Objects.isNull(recipientId)) {
-            throw new PayoutRecipientUpdateException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
+
         recipient.setToken(this.accessTokens.getAccessToken(Facade.PAYOUT));
         recipient.setGuid(Objects.isNull(recipient.getGuid()) ? this.guidGenerator.execute() : recipient.getGuid());
         JsonMapper mapper = JsonMapperFactory.create();
-        String json;
+        String json = null;
 
         try {
             json = mapper.writeValueAsString(recipient);
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientUpdateException(null,
-                "failed to serialize PayoutRecipient object : " + e.getMessage());
+            BitPayExceptionProvider.throwSerializeResourceException("Payout Recipient", e.getMessage());
         }
 
-        PayoutRecipient updateRecipient;
+        PayoutRecipient updateRecipient = null;
+
+        String response = this.bitPayClient.update("recipients/" + recipientId, json);
 
         try {
-            HttpResponse response = this.bitPayClient.update("recipients/" + recipientId, json);
             updateRecipient = JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), PayoutRecipient.class);
+                .readValue(response, PayoutRecipient.class);
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientUpdateException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new PayoutRecipientUpdateException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Payout Recipient", e.getMessage());
         }
 
         return updateRecipient;
@@ -247,33 +229,28 @@ public class PayoutRecipientsClient implements ResourceClient {
      * Cancel a BitPay Payout recipient.
      *
      * @param recipientId String The id of the recipient to cancel.
-     * @return True if the delete operation was successfull, false otherwise.
-     * @throws BitPayException                      BitPayException class
-     * @throws PayoutRecipientCancellationException PayoutRecipientCancellationException class
+     * @return True if the delete operation was successful, false otherwise.
+     * @throws BitPayApiException                      BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public Boolean delete(String recipientId)
-        throws BitPayException, PayoutRecipientCancellationException {
+    public Boolean delete(String recipientId) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(recipientId)) {
-            throw new PayoutRecipientCancellationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
-        Boolean result;
+        Boolean result = null;
+        String jsonResponse = this.bitPayClient.delete("recipients/" + recipientId, params);
 
         try {
-            HttpResponse response = this.bitPayClient.delete("recipients/" + recipientId, params);
-            String jsonString = this.bitPayClient.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode node = rootNode.get("status");
             result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
-        } catch (BitPayException ex) {
-            throw new PayoutRecipientCancellationException(ex.getStatusCode(), ex.getReasonPhrase());
-        } catch (Exception e) {
-            throw new PayoutRecipientCancellationException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        } catch (JsonProcessingException e) {
+            BitPayExceptionProvider.throwDeserializeException(e.getMessage());
         }
 
         return result;
@@ -284,40 +261,36 @@ public class PayoutRecipientsClient implements ResourceClient {
      *
      * @param recipientId String A BitPay recipient ID.
      * @return True if the notification was successfully sent, false otherwise.
-     * @throws PayoutRecipientNotificationException PayoutRecipientNotificationException class
-     * @throws BitPayException                      BitPayException class
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException                      BitPayApiException class
      */
-    public Boolean requestNotification(String recipientId)
-        throws PayoutRecipientNotificationException, BitPayException {
+    public Boolean requestNotification(String recipientId) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(recipientId)) {
-            throw new PayoutRecipientNotificationException(null, "missing required parameter");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final Map<String, String> params = new HashMap<>();
         params.put("token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
         JsonMapper mapper = JsonMapperFactory.create();
-        Boolean result;
-        String json;
+        Boolean result = null;
+        String json = null;
 
         try {
             json = mapper.writeValueAsString(params);
         } catch (JsonProcessingException e) {
-            throw new PayoutRecipientNotificationException(null,
-                "failed to serialize PayoutRecipient object : " + e.getMessage());
+            BitPayExceptionProvider.throwSerializeParamsException(e.getMessage());
         }
 
+        String jsonResponse = this.bitPayClient.post("recipients/" + recipientId + "/notifications", json, true);
+
+        JsonNode rootNode = null;
         try {
-            HttpResponse response = this.bitPayClient.post("recipients/" + recipientId + "/notifications", json, true);
-            String jsonString = this.bitPayClient.responseToJsonString(response);
-            JsonNode rootNode = mapper.readTree(jsonString);
+            rootNode = mapper.readTree(jsonResponse);
             JsonNode node = rootNode.get("status");
             result = node.toString().replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
-        } catch (BitPayException ex) {
-            throw new PayoutRecipientNotificationException(ex.getStatusCode(), ex.getReasonPhrase());
-        } catch (Exception e) {
-            throw new PayoutRecipientNotificationException(null,
-                "failed to deserialize BitPay server response (PayoutRecipients) : " + e.getMessage());
+        } catch (JsonProcessingException e) {
+            BitPayExceptionProvider.throwDeserializeException(e.getMessage());
         }
 
         return result;

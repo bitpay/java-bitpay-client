@@ -6,22 +6,18 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.Config;
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.util.BitPayLogger;
-import com.bitpay.sdk.util.JsonMapperFactory;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
+import com.bitpay.sdk.logger.LoggerProvider;
 import com.bitpay.sdk.util.KeyUtils;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -38,7 +34,6 @@ import org.bitcoinj.core.ECKey;
  */
 public class BitPayClient {
 
-    private static BitPayLogger logger = new BitPayLogger(BitPayLogger.OFF);
     private final HttpClient httpClient;
     private final HttpRequestFactory httpRequestFactory;
     private final String baseUrl;
@@ -70,12 +65,13 @@ public class BitPayClient {
      * @param uri        the uri
      * @param parameters the parameters
      * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      */
-    public HttpResponse get(
+    public String get(
         final String uri,
         final List<BasicNameValuePair> parameters
-    ) throws BitPayException {
+    ) throws BitPayApiException, BitPayGenericException {
         return get(uri, parameters, true);
     }
 
@@ -85,53 +81,63 @@ public class BitPayClient {
      * @param uri               the uri
      * @param parameters        the parameters
      * @param signatureRequired the signature required
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return the json http response
+     * @throws BitPayGenericException BitPayGenericException
+     * @throws BitPayApiException BitPayApiException
      */
-    public HttpResponse get(
+    public String get(
         final String uri,
         final List<BasicNameValuePair> parameters,
         final boolean signatureRequired
-    ) throws BitPayException {
+    ) throws BitPayApiException, BitPayGenericException {
+        String jsonResponse = null;
+
         try {
             String fullUrl = this.baseUrl + uri;
             final HttpGet httpGet = this.httpRequestFactory.createHttpGet(fullUrl);
 
             if (parameters != null) {
-
                 fullUrl += "?" + URLEncodedUtils.format(parameters, "UTF-8");
                 httpGet.setURI(new URI(fullUrl));
             }
+
             if (signatureRequired) {
                 httpGet.addHeader("x-signature", KeyUtils.sign(this.ecKey, fullUrl));
                 httpGet.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
             }
+
             httpGet.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
             httpGet.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
             httpGet.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
             httpGet.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
 
+            LoggerProvider.getLogger().logRequest(HttpGet.METHOD_NAME, fullUrl, null);
 
-            logger.info(httpGet.toString());
-            return this.httpClient.execute(httpGet);
+            HttpResponse response = this.httpClient.execute(httpGet);
 
-        } catch (final URISyntaxException e) {
-            throw new BitPayException(null, "Error: GET failed\n" + e.getMessage());
-        } catch (final ClientProtocolException e) {
-            throw new BitPayException(null, "Error: GET failed\n" + e.getMessage());
-        } catch (final Exception e) {
-            throw new BitPayException(null, "Error: GET failed\n" + e.getMessage());
+            final HttpEntity entity = response.getEntity();
+            String jsonString = EntityUtils.toString(entity, "UTF-8");
+
+            LoggerProvider.getLogger().logResponse(HttpGet.METHOD_NAME, fullUrl, jsonString);
+
+            jsonResponse = ResponseParser.getJsonDataFromJsonResponse(jsonString);
+
+        } catch (IOException | URISyntaxException e) {
+            BitPayExceptionProvider.throwApiExceptionWithMessage(e.getMessage());
         }
+
+        return jsonResponse;
     }
 
     /**
      * Send GET request.
      *
      * @param uri the uri
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return json http response
+     * @throws BitPayApiException BitPayApiException
+     * @throws BitPayGenericException BitPayGenericException
      */
-    public HttpResponse get(final String uri) throws BitPayException {
+    public String get(final String uri) throws BitPayApiException, BitPayGenericException {
         return this.get(uri, null, false);
     }
 
@@ -140,41 +146,47 @@ public class BitPayClient {
      *
      * @param uri        the uri
      * @param parameters the parameters
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return json http response
+     * @throws BitPayApiException BitPayApiException
+     * @throws BitPayGenericException BitPayGenericException
      */
-    public HttpResponse delete(
+    public String delete(
         final String uri,
         final List<BasicNameValuePair> parameters
-    ) throws BitPayException {
+    ) throws BitPayApiException, BitPayGenericException {
+        String jsonResponse = null;
+
         try {
             String fullUrl = this.baseUrl + uri;
             final HttpDelete httpDelete = this.httpRequestFactory.createHttpDelete(fullUrl);
 
             if (parameters != null) {
-
                 fullUrl += "?" + URLEncodedUtils.format(parameters, "UTF-8");
-
                 httpDelete.setURI(new URI(fullUrl));
-
-                httpDelete.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
-                httpDelete.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
-                httpDelete.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-                httpDelete.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
-                httpDelete.addHeader("x-signature", KeyUtils.sign(this.ecKey, fullUrl));
-                httpDelete.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
             }
 
-            logger.info(httpDelete.toString());
-            return this.httpClient.execute(httpDelete);
+            httpDelete.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+            httpDelete.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+            httpDelete.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+            httpDelete.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+            httpDelete.addHeader("x-signature", KeyUtils.sign(this.ecKey, fullUrl));
+            httpDelete.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
 
-        } catch (final URISyntaxException e) {
-            throw new BitPayException(null, "Error: DELETE failed\n" + e.getMessage());
-        } catch (final ClientProtocolException e) {
-            throw new BitPayException(null, "Error: DELETE failed\n" + e.getMessage());
-        } catch (final Exception e) {
-            throw new BitPayException(null, "Error: DELETE failed\n" + e.getMessage());
+            LoggerProvider.getLogger().logRequest(HttpDelete.METHOD_NAME, fullUrl, null);
+
+            HttpResponse response = this.httpClient.execute(httpDelete);
+
+            final HttpEntity entity = response.getEntity();
+            String jsonString = EntityUtils.toString(entity, "UTF-8");
+
+            LoggerProvider.getLogger().logResponse(HttpDelete.METHOD_NAME, fullUrl, jsonString);
+
+            jsonResponse = ResponseParser.getJsonDataFromJsonResponse(jsonString);
+        } catch (IOException | URISyntaxException e) {
+            BitPayExceptionProvider.throwApiExceptionWithMessage(e.getMessage());
         }
+
+        return jsonResponse;
     }
 
     /**
@@ -182,13 +194,14 @@ public class BitPayClient {
      *
      * @param uri  the uri
      * @param json the json
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return the json http response
+     * @throws BitPayApiException BitPayApiException
+     * @throws BitPayGenericException BitPayGenericException
      */
-    public HttpResponse post(
+    public String post(
         final String uri,
         final String json
-    ) throws BitPayException {
+    ) throws BitPayApiException, BitPayGenericException {
         return this.post(uri, json, false);
     }
 
@@ -198,16 +211,20 @@ public class BitPayClient {
      * @param uri               the uri
      * @param json              the json
      * @param signatureRequired the signature required
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return json response
+     * @throws BitPayApiException BitPayApiException
+     * @throws BitPayGenericException BitPayGenericException
      */
-    public HttpResponse post(
+    public String post(
         final String uri,
         final String json,
         final boolean signatureRequired
-    ) throws BitPayException {
+    ) throws BitPayApiException, BitPayGenericException {
+        String jsonResponse = null;
+
         try {
-            final HttpPost httpPost = this.httpRequestFactory.createHttpPost(this.baseUrl + uri);
+            final String endpoint = this.baseUrl + uri;
+            final HttpPost httpPost = this.httpRequestFactory.createHttpPost(endpoint);
 
             httpPost.setEntity(new ByteArrayEntity(json.getBytes(StandardCharsets.UTF_8)));
 
@@ -222,16 +239,21 @@ public class BitPayClient {
             httpPost.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
             httpPost.addHeader("Content-Type", "application/json");
 
-            logger.info(httpPost.toString());
-            return this.httpClient.execute(httpPost);
+            LoggerProvider.getLogger().logRequest(HttpPost.METHOD_NAME, endpoint, httpPost.toString());
 
-        } catch (final UnsupportedEncodingException e) {
-            throw new BitPayException(null, "Error: POST failed\n" + e.getMessage());
-        } catch (final ClientProtocolException e) {
-            throw new BitPayException(null, "Error: POST failed\n" + e.getMessage());
-        } catch (final Exception e) {
-            throw new BitPayException(null, "Error: POST failed\n" + e.getMessage());
+            HttpResponse response = this.httpClient.execute(httpPost);
+
+            final HttpEntity entity = response.getEntity();
+            String jsonString = EntityUtils.toString(entity, "UTF-8");
+
+            LoggerProvider.getLogger().logResponse(HttpGet.METHOD_NAME, endpoint, jsonString);
+
+            jsonResponse = ResponseParser.getJsonDataFromJsonResponse(jsonString);
+        } catch (IOException e) {
+            BitPayExceptionProvider.throwApiExceptionWithMessage(e.getMessage());
         }
+
+        return jsonResponse;
     }
 
     /**
@@ -239,124 +261,44 @@ public class BitPayClient {
      *
      * @param uri  the uri
      * @param json the json
-     * @return the http response
-     * @throws BitPayException the bit pay exception
+     * @return json response
+     * @throws BitPayApiException BitPayApiException
+     * @throws BitPayGenericException BitPayGenericException
      */
-    public HttpResponse update(
+    public String update(
         final String uri,
         final String json
-    ) throws BitPayException {
-        try {
-            final HttpPut put = this.httpRequestFactory.createHttpPut(this.baseUrl + uri);
-
-            put.setEntity(new ByteArrayEntity(json.getBytes(StandardCharsets.UTF_8)));
-
-            put.addHeader("x-signature", KeyUtils.sign(this.ecKey, this.baseUrl + uri + json));
-            put.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
-            put.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
-            put.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
-            put.addHeader("Content-Type", "application/json");
-            put.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
-            put.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
-
-            logger.info(put.toString());
-            return this.httpClient.execute(put);
-
-        } catch (final UnsupportedEncodingException e) {
-            throw new BitPayException(null, "Error: PUT failed\n" + e.getMessage());
-        } catch (final ClientProtocolException e) {
-            throw new BitPayException(null, "Error: PUT failed\n" + e.getMessage());
-        } catch (final Exception e) {
-            throw new BitPayException(null, "Error: PUT failed\n" + e.getMessage());
-        }
-    }
-
-    /**
-     * Convert HttpResponse for Json string.
-     *
-     * @param response the response
-     * @return the string
-     * @throws BitPayException the bit pay exception
-     */
-    public String responseToJsonString(final HttpResponse response) throws BitPayException {
-        if (response == null) {
-            throw new BitPayException(null, "Error: HTTP response is null");
-        }
+    ) throws BitPayApiException, BitPayGenericException {
+        String jsonResponse = null;
 
         try {
-            // Get the JSON string from the response.
+            final String endpoint = this.baseUrl + uri;
+            final HttpPut httpPut = this.httpRequestFactory.createHttpPut(endpoint);
+
+            httpPut.setEntity(new ByteArrayEntity(json.getBytes(StandardCharsets.UTF_8)));
+
+            httpPut.addHeader("x-signature", KeyUtils.sign(this.ecKey, this.baseUrl + uri + json));
+            httpPut.addHeader("x-identity", KeyUtils.bytesToHex(this.ecKey.getPubKey()));
+            httpPut.addHeader("x-accept-version", Config.BITPAY_API_VERSION);
+            httpPut.addHeader("X-BitPay-Plugin-Info", Config.BITPAY_PLUGIN_INFO);
+            httpPut.addHeader("Content-Type", "application/json");
+            httpPut.addHeader("x-bitpay-api-frame", Config.BITPAY_API_FRAME);
+            httpPut.addHeader("x-bitpay-api-frame-version", Config.BITPAY_API_FRAME_VERSION);
+
+            LoggerProvider.getLogger().logRequest(HttpPut.METHOD_NAME, endpoint, httpPut.toString());
+
+            HttpResponse response = this.httpClient.execute(httpPut);
+
             final HttpEntity entity = response.getEntity();
+            String jsonString = EntityUtils.toString(entity, "UTF-8");
 
-            String jsonString;
+            LoggerProvider.getLogger().logResponse(HttpPut.METHOD_NAME, endpoint, jsonString);
 
-            jsonString = EntityUtils.toString(entity, "UTF-8");
-            logger.info("RESPONSE: " + jsonString);
-            final JsonMapper mapper = JsonMapperFactory.create();
-
-            final JsonNode rootNode = mapper.readTree(jsonString);
-            JsonNode node = rootNode.get("status");
-            if (node != null) {
-                if ("error".equals(node.toString().replace("\"", ""))) {
-                    throw new BitPayException(rootNode.get("code").textValue(), rootNode.get("message").textValue());
-                }
-            }
-
-            node = rootNode.get("error");
-            if (node != null) {
-                throw new BitPayException(null, "Error: " + node.asText());
-            }
-
-            node = rootNode.get("errors");
-            if (node != null) {
-                String message = "Multiple errors:";
-
-                if (node.isArray()) {
-                    for (final JsonNode errorNode : node) {
-                        message += "\n" + errorNode.asText();
-                    }
-
-                    throw new BitPayException(null, message);
-                }
-            }
-
-            node = rootNode.get("status");
-            if (node != null) {
-                if ("error".equals(node.toString().replace("\"", ""))) {
-                    throw new BitPayException(rootNode.get("code").textValue(), rootNode.get("message").textValue());
-                }
-                if ("success".equals(node.toString().replace("\"", ""))) {
-                    node = rootNode.get("data");
-
-                    if ("{}".equals(node.toString())) {
-                        return rootNode.toString();
-                    }
-                }
-            }
-
-            node = rootNode.get("data");
-            if (node != null) {
-                jsonString = node.toString();
-            }
-
-            return jsonString;
-
-        } catch (final ParseException e) {
-            throw new BitPayException(null, "failed to retrieve HTTP response body : " + e.getMessage());
-        } catch (final JsonMappingException e) {
-            throw new BitPayException(null, "failed to parse json response to map : " + e.getMessage());
-        } catch (final BitPayException e) {
-            throw new BitPayException(e.getStatusCode(), e.getReasonPhrase());
-        } catch (final Exception e) {
-            throw new BitPayException(null, "failed to retrieve HTTP response body : " + e.getMessage());
+            jsonResponse = ResponseParser.getJsonDataFromJsonResponse(jsonString);
+        } catch (IOException e) {
+            BitPayExceptionProvider.throwApiExceptionWithMessage(e.getMessage());
         }
-    }
 
-    /**
-     * Sets the logger level of reporting.
-     *
-     * @param loggerLevel int BitPayLogger constant (OFF, INFO, WARN, ERR, DEBUG)
-     */
-    public void setLoggerLevel(final int loggerLevel) {
-        logger = new BitPayLogger(loggerLevel);
+        return jsonResponse;
     }
 }

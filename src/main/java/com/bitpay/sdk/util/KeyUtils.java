@@ -5,6 +5,8 @@
 
 package com.bitpay.sdk.util;
 
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,6 +22,7 @@ import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.ECKey.ECDSASignature;
 import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.crypto.KeyCrypterException;
 
 /**
  * The type Key utils.
@@ -65,11 +67,10 @@ public class KeyUtils {
      * @param privateKey the private key
      * @return the ec key
      */
-    public static ECKey createEcKeyFromHexString(String privateKey) {
+    public static ECKey createEcKeyFromHexString(String privateKey) throws BitPayGenericException {
         byte[] bytes = hexToBytes(privateKey);
-        ECKey ecKey = ECKey.fromASN1(bytes);
 
-        return ecKey;
+        return ECKey.fromASN1(bytes);
     }
 
     /**
@@ -79,7 +80,7 @@ public class KeyUtils {
      * @return the ec key
      * @throws IOException the io exception
      */
-    public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException {
+    public static ECKey createEcKeyFromHexStringFile(String privKeyFile) throws IOException, BitPayGenericException {
         return createEcKeyFromHexString(getKeyStringFromFile(privKeyFile));
     }
 
@@ -224,9 +225,7 @@ public class KeyUtils {
      */
     public static String loadEcKeyAsHex(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
-        String keyHex = bytesToHex(bytes);
-
-        return keyHex;
+        return bytesToHex(bytes);
     }
 
     /**
@@ -234,9 +233,9 @@ public class KeyUtils {
      *
      * @param ecKey the ec key
      * @return the string
-     * @throws IllegalArgumentException the illegal argument exception
+     * @throws BitPayGenericException the illegal argument exception
      */
-    public static String deriveSin(ECKey ecKey) throws IllegalArgumentException {
+    public static String deriveSin(ECKey ecKey) throws BitPayGenericException {
         // Get sha256 hash and then the RIPEMD-160 hash of the public key (this call gets the result in one step).
         byte[] pubKeyHash = ecKey.getPubKeyHash();
 
@@ -268,20 +267,28 @@ public class KeyUtils {
      * @param key   the key
      * @param input the input
      * @return the string
-     * @throws UnsupportedEncodingException the unsupported encoding exception
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public static String sign(
         ECKey key,
         String input
-    ) throws UnsupportedEncodingException {
-        byte[] data = input.getBytes(StandardCharsets.UTF_8);
+    ) throws BitPayGenericException {
+        String result = null;
 
-        Sha256Hash hash = Sha256Hash.of(data);
-        ECDSASignature sig = key.sign(hash, null);
+        try {
+            byte[] data = input.getBytes(StandardCharsets.UTF_8);
 
-        byte[] bytes = sig.encodeToDER();
+            Sha256Hash hash = Sha256Hash.of(data);
+            ECDSASignature sig = key.sign(hash, null);
 
-        return bytesToHex(bytes);
+            byte[] bytes = sig.encodeToDER();
+
+            result = bytesToHex(bytes);
+        } catch (KeyCrypterException e) {
+            BitPayExceptionProvider.throwGenericExceptionWithMessage("Wrong ecKey. " + e.getMessage());
+        }
+
+        return result;
     }
 
     private static int getHexVal(char hex) {
@@ -294,13 +301,14 @@ public class KeyUtils {
      *
      * @param hex the hex
      * @return the byte []
-     * @throws IllegalArgumentException the illegal argument exception
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public static byte[] hexToBytes(String hex) throws IllegalArgumentException {
+    public static byte[] hexToBytes(String hex) throws BitPayGenericException {
         char[] hexArray = hex.toCharArray();
 
         if (hex.length() % 2 == 1) {
-            throw new IllegalArgumentException("Error: The binary key cannot have an odd number of digits");
+            BitPayExceptionProvider.throwGenericExceptionWithMessage(
+                "Error: The binary key cannot have an odd number of digits");
         }
 
         byte[] arr = new byte[hex.length() >> 1];

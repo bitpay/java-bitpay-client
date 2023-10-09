@@ -6,7 +6,8 @@
 package com.bitpay.sdk.model.rate;
 
 import com.bitpay.sdk.client.RateClient;
-import com.bitpay.sdk.exceptions.RateQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
@@ -42,14 +43,11 @@ public class Rates {
      * Update rates.
      *
      * @param rateClient the rate client
-     * @throws RateQueryException the rate query exception
+     * @throws BitPayGenericException BitPayGenericException class
+     * @throws BitPayApiException BitPayApiException class
      */
-    public void update(RateClient rateClient) throws RateQueryException {
-        try {
-            this.rates = rateClient.getRates().getRates();
-        } catch (Exception e) {
-            throw new RateQueryException(null, e.getMessage());
-        }
+    public void update(RateClient rateClient) throws BitPayGenericException, BitPayApiException {
+        this.rates = rateClient.getRates().getRates();
     }
 
     /**

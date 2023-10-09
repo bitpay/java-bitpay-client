@@ -4,8 +4,9 @@
 
 package com.bitpay.sdk.client;
 
+import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.SettlementQueryException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.settlement.Settlement;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +18,7 @@ public class SettlementClientTest extends AbstractClientTest {
     public void it_should_get_settlements() throws BitPayException {
         // given
         this.addServerJsonResponse(
-            "/settlements?token=someMerchantToken&startDate=2021-5-10&endDate=2021-5-12&status=processing&limit=100&offset=0",
+            "/settlements?token=someMerchantToken&startDate=2021-5-10&endDate=2021-5-12&status=processing",
             "GET",
             null,
             getPreparedJsonDataFromFile("getSettlementsResponse.json")
@@ -120,7 +121,7 @@ public class SettlementClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void it_should_get_settlement_reconciliation_report() throws SettlementQueryException {
+    public void it_should_get_settlement_reconciliation_report() throws BitPayGenericException, BitPayApiException {
         // given
         this.addServerJsonResponse(
             //

@@ -7,10 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import org.bitcoinj.core.ECKey;
-
-import com.bitpay.sdk.util.KeyUtils;
-
 import org.junit.jupiter.api.Test;
 
 public class KeyUtilsTest {
@@ -38,7 +37,7 @@ public class KeyUtilsTest {
   }
 
   @Test
-  public void it_should_convert_hex_to_bytes() {
+  public void it_should_convert_hex_to_bytes() throws BitPayGenericException {
     String hex = "0123456789abcdef";
     byte[] expectedBytes = { 1, 35, 69, 103, -119, -85, -51, -17 };
     

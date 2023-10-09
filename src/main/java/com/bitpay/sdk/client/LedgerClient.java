@@ -5,8 +5,9 @@
 
 package com.bitpay.sdk.client;
 
-import com.bitpay.sdk.exceptions.BitPayException;
-import com.bitpay.sdk.exceptions.LedgerQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.ledger.Ledger;
 import com.bitpay.sdk.model.ledger.LedgerEntry;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -69,16 +69,16 @@ public class LedgerClient implements ResourceClient {
      * @param dateStart The first date for the query filter.
      * @param dateEnd   The last date for the query filter.
      * @return A list of Ledger entries.
-     * @throws BitPayException      BitPayException class
-     * @throws LedgerQueryException LedgerQueryException class
+     * @throws BitPayApiException      BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
     public List<LedgerEntry> getEntries(
         String currency,
         String dateStart,
         String dateEnd
-    ) throws BitPayException, LedgerQueryException {
+    ) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(currency) || Objects.isNull(dateStart) || Objects.isNull(dateEnd)) {
-            throw new BitPayException(null, "missing mandatory fields");
+            BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -86,17 +86,18 @@ public class LedgerClient implements ResourceClient {
         ParameterAdder.execute(params, "startDate", dateStart);
         ParameterAdder.execute(params, "endDate", dateEnd);
 
+        String jsonResponse = this.bitPayClient.get("ledgers/" + currency, params);
+
+        List<LedgerEntry> entries = null;
+
         try {
-            HttpResponse response = this.bitPayClient.get("ledgers/" + currency, params);
-            return Arrays.asList(JsonMapperFactory.create()
-                .readValue(this.bitPayClient.responseToJsonString(response), LedgerEntry[].class));
+            entries = Arrays.asList(JsonMapperFactory.create()
+                .readValue(jsonResponse, LedgerEntry[].class));
         } catch (JsonProcessingException e) {
-            throw new LedgerQueryException(null,
-                "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new LedgerQueryException(null,
-                "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Ledger", e.getMessage());
         }
+
+        return entries;
     }
 
     /**
@@ -104,26 +105,23 @@ public class LedgerClient implements ResourceClient {
      * Retrieve a list of ledgers using the merchant facade.
      *
      * @return A list of Ledger objects populated with the currency and current balance of each one.
-     * @throws BitPayException      BitPayException class
-     * @throws LedgerQueryException LedgerQueryException class
+     * @throws BitPayApiException      BitPayApiException class
+     * @throws BitPayGenericException BitPayGenericException class
      */
-    public List<Ledger> getLedgers() throws BitPayException, LedgerQueryException {
+    public List<Ledger> getLedgers() throws BitPayApiException, BitPayGenericException {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        List<Ledger> ledgers;
+        List<Ledger> ledgers = null;
+
+        String jsonResponse = this.bitPayClient.get("ledgers", params);
 
         try {
-            HttpResponse response = this.bitPayClient.get("ledgers", params);
             ledgers = Arrays
                 .asList(JsonMapperFactory.create()
-                    .readValue(this.bitPayClient.responseToJsonString(response), Ledger[].class));
+                    .readValue(jsonResponse, Ledger[].class));
         } catch (JsonProcessingException e) {
-            throw new LedgerQueryException(null,
-                "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
-        } catch (Exception e) {
-            throw new LedgerQueryException(null,
-                "failed to deserialize BitPay server response (Ledger) : " + e.getMessage());
+            BitPayExceptionProvider.throwDeserializeResourceException("Ledger", e.getMessage());
         }
 
         return ledgers;
