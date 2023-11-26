@@ -4,6 +4,8 @@
 
 package com.bitpay.sdk.client;
 
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.TokenContainer;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class AuthorizationClientTest extends AbstractClientTest {
     }
 
     @Test
-    public void it_should_authorize_client_by_facade() throws IOException {
+    public void it_should_authorize_client_by_facade() throws BitPayGenericException, BitPayApiException {
         // given
         Mockito.when(this.uuidGenerator.execute()).thenReturn(AbstractClientTest.EXAMPLE_UUID);
         this.addServerJsonResponse(

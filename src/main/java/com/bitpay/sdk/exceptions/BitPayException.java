@@ -5,82 +5,21 @@
 
 package com.bitpay.sdk.exceptions;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.util.TextUtils;
-
 /**
  * General BitPay Exception which is inherited by all other exceptions.
  *
  * @see <a href="https://bitpay.readme.io/reference/error-codes">Rest API Error Codes</a>
  */
-public class BitPayException extends ClientProtocolException {
-    private static final long serialVersionUID = -7186627969477257933L;
+public class BitPayException extends Exception {
 
-    /**
-     * String [optional] The Exception code to throw.
-     */
-    private final String statusCode;
-
-    /**
-     * String [optional] The Exception message to throw.
-     */
-    private final String reasonPhrase;
+    private static final long serialVersionUID = -5407556346434827903L;
 
     /**
      * Construct the BitPayException.
      *
-     * @param statusCode String [optional] The Exception code to throw.
-     * @param reasonPhrase String [optional] The Exception message to throw.
+     * @param message String [optional] The Exception message.
      */
-    public BitPayException(
-        String statusCode,
-        String reasonPhrase
-    ) {
-        super(String.format("Status: %s" + (TextUtils.isBlank(reasonPhrase) ? "" : " -> Reason: %s"),
-            buildStatus(statusCode), buildMessage(reasonPhrase)));
-        this.statusCode = statusCode;
-        this.reasonPhrase = reasonPhrase;
-    }
-
-    private static String buildMessage(String message) {
-        String bitPayMessage = "Unexpected Bitpay exeption.";
-        String bitPayCode = "BITPAY-GENERIC";
-
-        if (message.isEmpty() || !message.contains("BITPAY-")) {
-            message = bitPayCode + ": " + bitPayMessage + " -> " + message;
-        }
-
-        return message;
-    }
-
-    private static String buildStatus(String status) {
-        if (status == null) {
-            status = "000000";
-        }
-
-        return status;
-    }
-
-    /**
-     * <p>An error code consists of 6 digits. </p>
-     * <p>The first two digits of an error code represent the HTTP method that was used to call it.</p>
-     * <p>The next two digits refer to the resource that was impacted.</p>
-     * <p>The last two digits refer to the specific error.</p>
-     * <p>eg. 010103 - Missing parameters for Invoice POST request.</p>
-     *
-     * @return String
-     */
-    public String getStatusCode() {
-        return this.statusCode;
-    }
-
-    /**
-     * <p>Reason phrase including BitPay Code and BitPay Message.</p>
-     * <p>eg. BITPAY-BILL-UPDATE: Failed to update bill -&gt; failed to deserialize BitPay server response (Bill) </p>
-     *
-     * @return String
-     */
-    public String getReasonPhrase() {
-        return this.reasonPhrase;
+    public BitPayException(String message) {
+        super(message);
     }
 }

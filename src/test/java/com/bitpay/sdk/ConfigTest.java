@@ -58,7 +58,7 @@ public class ConfigTest {
 
     @Test
     public void it_should_returns_bitpay_plugin_info() {
-        Assertions.assertTrue(Config.BITPAY_PLUGIN_INFO.contains("BitPay_Java_Client_v9"));
+        Assertions.assertTrue(Config.BITPAY_PLUGIN_INFO.contains("BitPay_Java_Client_v10.0.0"));
     }
 
     @Test

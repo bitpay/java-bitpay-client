@@ -4,7 +4,8 @@
 package com.bitpay.sdk.model.rate;
 
 import com.bitpay.sdk.client.RateClient;
-import com.bitpay.sdk.exceptions.RateQueryException;
+import com.bitpay.sdk.exceptions.BitPayApiException;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +62,7 @@ public class RatesTest {
     }
 
     @Test
-    public void it_should_update_rates() throws RateQueryException {
+    public void it_should_update_rates() throws BitPayGenericException, BitPayApiException {
         // given
         List<Rate> rates = Arrays.asList(rate1, rate2);
         List<Rate> expectedRates = Collections.singletonList(rate1);
@@ -77,10 +78,10 @@ public class RatesTest {
     }
 
     @Test
-    public void it_should_throws_rateQueryException() throws RateQueryException {
-        Mockito.when(this.client.getRates()).thenThrow(RateQueryException.class);
+    public void it_should_throws_rateQueryException() throws BitPayGenericException, BitPayApiException {
+        Mockito.when(this.client.getRates()).thenThrow(BitPayApiException.class);
 
-        Assertions.assertThrows(RateQueryException.class, () -> {
+        Assertions.assertThrows(BitPayApiException.class, () -> {
             // given
             List<Rate> rates = Arrays.asList(rate1, rate2);
             Rates testedClass = this.getTestedClass(rates);

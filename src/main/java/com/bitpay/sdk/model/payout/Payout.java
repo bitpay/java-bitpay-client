@@ -5,7 +5,8 @@
 
 package com.bitpay.sdk.model.payout;
 
-import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
+import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.ModelConfiguration;
 import com.bitpay.sdk.util.DateDeserializer;
@@ -162,12 +163,12 @@ public class Payout {
      * Sets currency code set for the batch amount (ISO 4217 3-character currency code).
      *
      * @param currency the currency
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException the bit pay exception
      */
     @JsonProperty("currency")
-    public void setCurrency(final String currency) throws BitPayException {
+    public void setCurrency(final String currency) throws BitPayGenericException {
         if (!Currency.isValid(currency)) {
-            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
+            BitPayExceptionProvider.throwInvalidCurrencyException(currency);
         }
         this.currency = currency;
     }
@@ -194,12 +195,12 @@ public class Payout {
      * e.g. your settlement currency.
      *
      * @param ledgerCurrency the ledger currency
-     * @throws BitPayException the bit pay exception
+     * @throws BitPayGenericException the bit pay exception
      */
     @JsonProperty("ledgerCurrency")
-    public void setLedgerCurrency(final String ledgerCurrency) throws BitPayException {
+    public void setLedgerCurrency(final String ledgerCurrency) throws BitPayGenericException {
         if (!Currency.isValid(ledgerCurrency)) {
-            throw new BitPayException(null, "Error: currency code must be a type of Model.Currency");
+            BitPayExceptionProvider.throwInvalidCurrencyException(ledgerCurrency);
         }
         this.ledgerCurrency = ledgerCurrency;
     }
