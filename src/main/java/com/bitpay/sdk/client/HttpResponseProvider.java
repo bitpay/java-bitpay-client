@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayApiException;
@@ -9,7 +14,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.util.EntityUtils;
 
-class HttpResponseProvider {
+public class HttpResponseProvider {
 
     public static HttpResponse fromApacheHttpResponse(org.apache.http.HttpResponse apacheHttpResponse)
         throws BitPayApiException {

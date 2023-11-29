@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
 package com.bitpay.sdk.client;
 
 import java.util.Map;
@@ -25,22 +30,22 @@ public class HttpResponse {
     }
 
     public Integer getCode() {
-        return code;
+        return this.code;
     }
 
     public String getBody() {
-        return body;
+        return this.body;
     }
 
     public Map<String, String> getHeaders() {
-        return headers;
+        return this.headers;
     }
 
     public String getLocale() {
-        return locale;
+        return this.locale;
     }
 
     public String getHttpVersion() {
-        return httpVersion;
+        return this.httpVersion;
     }
 }
