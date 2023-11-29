@@ -85,7 +85,8 @@ public class PayoutClient implements ResourceClient {
             BitPayExceptionProvider.throwSerializeResourceException("Payout", e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("payouts", json, true);
+        HttpResponse response = this.bitPayClient.post("payouts", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             payout = JsonMapperFactory.create()
@@ -117,7 +118,8 @@ public class PayoutClient implements ResourceClient {
 
         Payout payout = null;
 
-        String jsonResponse = this.bitPayClient.get("payouts/" + payoutId, params, true);
+        HttpResponse response = this.bitPayClient.get("payouts/" + payoutId, params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             payout = JsonMapperFactory.create()
@@ -149,7 +151,8 @@ public class PayoutClient implements ResourceClient {
         boolean result = false;
         JsonMapper mapper = JsonMapperFactory.create();
 
-        String jsonResponse = this.bitPayClient.delete("payouts/" + payoutId, params);
+        HttpResponse response = this.bitPayClient.delete("payouts/" + payoutId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             JsonNode rootNode = mapper.readTree(jsonResponse);
@@ -204,7 +207,8 @@ public class PayoutClient implements ResourceClient {
 
         List<Payout> payouts = null;
 
-        String jsonResponse = this.bitPayClient.get("payouts", params, true);
+        HttpResponse response = this.bitPayClient.get("payouts", params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             payouts = Arrays
@@ -245,7 +249,8 @@ public class PayoutClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("payouts/" + payoutId + "/notifications", json, true);
+        HttpResponse response = this.bitPayClient.post("payouts/" + payoutId + "/notifications", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             JsonNode rootNode = mapper.readTree(jsonResponse);

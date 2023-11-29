@@ -100,7 +100,8 @@ public class SettlementClient implements ResourceClient {
 
         List<Settlement> settlements = null;
 
-        String jsonResponse = this.bitPayClient.get("settlements", params);
+        HttpResponse response = this.bitPayClient.get("settlements", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             settlements =
@@ -132,11 +133,12 @@ public class SettlementClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", token);
 
-        String response = this.bitPayClient.get("settlements/" + settlementId, params);
+        HttpResponse response = this.bitPayClient.get("settlements/" + settlementId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             settlement =
-                objectMapper.readValue(response, Settlement.class);
+                objectMapper.readValue(jsonResponse, Settlement.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Settlement", e.getMessage());
         }
@@ -166,7 +168,8 @@ public class SettlementClient implements ResourceClient {
 
         Settlement reconciliationReport = null;
 
-        String jsonResponse = this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
+        HttpResponse response = this.bitPayClient.get("settlements/" + settlementId + "/reconciliationreport", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             reconciliationReport = JsonMapperFactory.create()

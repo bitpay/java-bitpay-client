@@ -56,7 +56,8 @@ public class WalletClient implements ResourceClient {
     public List<Wallet> getSupportedWallets() throws BitPayApiException, BitPayGenericException {
         List<Wallet> wallets = null;
 
-        String jsonResponse = this.bitPayClient.get("supportedwallets");
+        HttpResponse response = this.bitPayClient.get("supportedwallets");
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             wallets = Arrays.asList(
