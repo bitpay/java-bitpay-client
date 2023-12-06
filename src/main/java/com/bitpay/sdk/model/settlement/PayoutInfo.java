@@ -29,7 +29,7 @@ public class PayoutInfo {
     private String city;
     private String postal;
     private String sort;
-    private String wire;
+    private boolean wire;
     private String bankName;
     private String bankAddress;
     private String bankAddress2;
@@ -309,7 +309,7 @@ public class PayoutInfo {
      * @return the wire
      */
     @JsonIgnore
-    public String getWire() {
+    public boolean getWire() {
         return this.wire;
     }
 
@@ -322,7 +322,7 @@ public class PayoutInfo {
      * @param wire the wire
      */
     @JsonProperty("wire")
-    public void setWire(String wire) {
+    public void setWire(boolean wire) {
         this.wire = wire;
     }
 

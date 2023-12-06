@@ -73,7 +73,9 @@ public class AuthorizationClient {
                 "Failed to serialize Token object : " + e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("tokens", json);
+        HttpResponse response = this.bitPayClient.post("tokens", json);
+
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         List<Token> tokens = null;
 
@@ -117,12 +119,14 @@ public class AuthorizationClient {
             BitPayExceptionProvider.throwSerializeResourceException("Token", e.getMessage());
         }
 
-        String response = this.bitPayClient.post("tokens", json);
+        HttpResponse response = this.bitPayClient.post("tokens", json);
+
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         List<Token> tokens = null;
 
         try {
-            tokens = Arrays.asList(mapper.readValue(response, Token[].class));
+            tokens = Arrays.asList(mapper.readValue(jsonResponse, Token[].class));
 
             // Expecting a single token resource.
             if (tokens.size() != 1) {

@@ -95,7 +95,8 @@ public class BillClient implements ResourceClient {
             BitPayExceptionProvider.throwSerializeResourceException("Bill", e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("bills", json, signRequest);
+        HttpResponse response = this.bitPayClient.post("bills", json, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             bill = mapper.readerForUpdating(bill).readValue(jsonResponse);
@@ -130,7 +131,9 @@ public class BillClient implements ResourceClient {
         ParameterAdder.execute(params, "token", token);
 
         Bill bill = null;
-        String jsonResponse = this.bitPayClient.get("bills/" + billId, params, signRequest);
+
+        HttpResponse response = this.bitPayClient.get("bills/" + billId, params, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             bill = JsonMapperFactory.create().readValue(jsonResponse, Bill.class);
@@ -157,7 +160,9 @@ public class BillClient implements ResourceClient {
         List<Bill> bills = null;
 
         try {
-            String jsonResponse = this.bitPayClient.get("bills", params);
+            HttpResponse response = this.bitPayClient.get("bills", params);
+            String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
             bills = Arrays.asList(
                 JsonMapperFactory.create().readValue(jsonResponse, Bill[].class));
         } catch (JsonProcessingException e) {
@@ -179,7 +184,8 @@ public class BillClient implements ResourceClient {
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
         List<Bill> bills = null;
-        String jsonResponse = this.bitPayClient.get("bills", params);
+        HttpResponse response = this.bitPayClient.get("bills", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             bills = Arrays.asList(
@@ -218,7 +224,8 @@ public class BillClient implements ResourceClient {
             BitPayExceptionProvider.throwSerializeResourceException("Bill", e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.update("bills/" + billId, json);
+        HttpResponse response = this.bitPayClient.update("bills/" + billId, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             bill = mapper.readerForUpdating(bill).readValue(jsonResponse);
@@ -260,7 +267,9 @@ public class BillClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String response = this.bitPayClient.post("bills/" + billId + "/deliveries", json, signRequest);
-        return response.replace("\"", "");
+        HttpResponse response = this.bitPayClient.post("bills/" + billId + "/deliveries", json, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
+        return jsonResponse.replace("\"", "");
     }
 }

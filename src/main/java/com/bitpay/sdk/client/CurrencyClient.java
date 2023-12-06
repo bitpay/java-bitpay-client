@@ -22,20 +22,20 @@ import java.util.Objects;
 public class CurrencyClient implements ResourceClient {
 
     private static CurrencyClient instance;
-    private final BitPayClient client;
+    private final BitPayClient bitPayClient;
     private List<Map<String, String>> currenciesInfo;
 
     /**
      * Instantiates a new Currency client.
      *
-     * @param client the client
+     * @param bitPayClient the client
      * @throws BitPayGenericException BitPayGenericException class
      */
-    private CurrencyClient(BitPayClient client) throws BitPayGenericException {
-        if (Objects.isNull(client)) {
+    private CurrencyClient(BitPayClient bitPayClient) throws BitPayGenericException {
+        if (Objects.isNull(bitPayClient)) {
             BitPayExceptionProvider.throwGenericExceptionWithMessage("Failed init Currency Client");
         }
-        this.client = client;
+        this.bitPayClient = bitPayClient;
     }
 
     /**
@@ -84,19 +84,20 @@ public class CurrencyClient implements ResourceClient {
      */
     private void loadCurrencies() {
         try {
-            String jsonString = this.client.get("currencies");
+            HttpResponse response = this.bitPayClient.get("currencies");
+            String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
             JsonMapper mapper = JsonMapperFactory.create();
 
-            JsonNode rootNode = mapper.readTree(jsonString);
+            JsonNode rootNode = mapper.readTree(jsonResponse);
             JsonNode node = rootNode.get("data");
 
             if (node != null) {
-                jsonString = node.toString();
+                jsonResponse = node.toString();
             }
 
             this.currenciesInfo = new ArrayList(Arrays.asList(
-                JsonMapperFactory.create().readValue(jsonString, Map[].class))
+                JsonMapperFactory.create().readValue(jsonResponse, Map[].class))
             );
 
         } catch (Exception e) {

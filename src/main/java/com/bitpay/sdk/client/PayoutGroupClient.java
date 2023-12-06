@@ -86,7 +86,8 @@ public class PayoutGroupClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("payouts/group", json, true);
+        HttpResponse response = this.bitPayClient.post("payouts/group", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             result = JsonMapperFactory.create()
@@ -117,7 +118,8 @@ public class PayoutGroupClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.PAYOUT));
 
-        String jsonResponse = this.bitPayClient.delete("payouts/group/" + groupId, params);
+        HttpResponse response = this.bitPayClient.delete("payouts/group/" + groupId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             result = JsonMapperFactory.create()

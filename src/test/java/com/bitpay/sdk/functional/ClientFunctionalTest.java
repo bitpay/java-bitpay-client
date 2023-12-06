@@ -9,10 +9,9 @@ import com.bitpay.sdk.ConfigFilePath;
 import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
+import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.bill.Item;
-import com.bitpay.sdk.model.Currency;
-import com.bitpay.sdk.model.payout.PayoutGroup;
 import com.bitpay.sdk.model.invoice.Buyer;
 import com.bitpay.sdk.model.invoice.Invoice;
 import com.bitpay.sdk.model.invoice.InvoiceEventToken;
@@ -20,6 +19,7 @@ import com.bitpay.sdk.model.invoice.Refund;
 import com.bitpay.sdk.model.ledger.Ledger;
 import com.bitpay.sdk.model.ledger.LedgerEntry;
 import com.bitpay.sdk.model.payout.Payout;
+import com.bitpay.sdk.model.payout.PayoutGroup;
 import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
 import com.bitpay.sdk.model.rate.Rate;
@@ -78,6 +78,16 @@ public class ClientFunctionalTest {
 
         Rates rateUsd = this.client.getRates(Currency.BTC);
         Assertions.assertTrue(rateUsd.getRate(Currency.BCH) != 0);
+    }
+
+    /**
+     *     Tested wallet requests:
+     *     - GetSupportedWallets()
+     */
+    @Test
+    public void it_should_test_wallet_requests() throws BitPayException {
+        List<Wallet> supportedWallets = this.client.getSupportedWallets();
+        Assertions.assertFalse(supportedWallets.isEmpty());
     }
 
     /**
@@ -406,17 +416,6 @@ public class ClientFunctionalTest {
 
         String deliverBill = this.client.deliverBill(billId, createBill.getToken());
         Assertions.assertEquals("Success", deliverBill);
-    }
-
-    /**
-     *     Tested wallet requests:
-     *
-     *     - GetSupportedWallets()
-     */
-    @Test
-    public void it_should_test_wallet_requests() throws BitPayException {
-        List<Wallet> supportedWallets = this.client.getSupportedWallets();
-        Assertions.assertFalse(supportedWallets.isEmpty());
     }
 
     private Invoice getExampledInvoice() throws BitPayException {
