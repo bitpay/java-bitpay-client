@@ -24,7 +24,7 @@ public class HttpResponseProviderTest {
 
         HttpResponse httpResponse = HttpResponseProvider.fromApacheHttpResponse(apacheResponse);
 
-        Assertions.assertEquals(20, httpResponse.getCode());
+        Assertions.assertEquals(200, httpResponse.getCode());
         Assertions.assertEquals("{\n" +
             "  \"userId\": 1,\n" +
             "  \"id\": 1,\n" +
