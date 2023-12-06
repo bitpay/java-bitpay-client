@@ -98,7 +98,8 @@ public class RefundClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        final String jsonResponse = this.bitPayClient.post("refunds/", json, true);
+        final HttpResponse response = this.bitPayClient.post("refunds/", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             result = JsonMapperFactory.create()
@@ -126,7 +127,8 @@ public class RefundClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        final String jsonResponse = this.bitPayClient.get("refunds/" + refundId, params, true);
+        final HttpResponse response = this.bitPayClient.get("refunds/" + refundId, params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()
@@ -153,7 +155,8 @@ public class RefundClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        final String jsonResponse = this.bitPayClient.get("refunds/guid/" + guid, params, true);
+        final HttpResponse response = this.bitPayClient.get("refunds/guid/" + guid, params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()
@@ -182,7 +185,8 @@ public class RefundClient implements ResourceClient {
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
         ParameterAdder.execute(params, "invoiceId", invoiceId);
 
-        String jsonResponse = this.bitPayClient.get("refunds/", params, true);
+        HttpResponse response = this.bitPayClient.get("refunds/", params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refunds = Arrays.asList(
@@ -216,7 +220,8 @@ public class RefundClient implements ResourceClient {
         final String json = getUpdateRefundJson(status);
         Refund refund = null;
 
-        final String jsonResponse = this.bitPayClient.update("refunds/" + refundId, json);
+        final HttpResponse response = this.bitPayClient.update("refunds/" + refundId, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()
@@ -250,7 +255,8 @@ public class RefundClient implements ResourceClient {
         final String json = getUpdateRefundJson(status);
         Refund refund = null;
 
-        String jsonResponse = this.bitPayClient.update("refunds/guid/" + guid, json);
+        HttpResponse response = this.bitPayClient.update("refunds/guid/" + guid, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()
@@ -288,7 +294,8 @@ public class RefundClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("refunds/" + refundId + "/notifications", json, true);
+        HttpResponse response = this.bitPayClient.post("refunds/" + refundId + "/notifications", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             final JsonNode rootNode = mapper.readTree(jsonResponse);
@@ -319,7 +326,8 @@ public class RefundClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        String jsonResponse = this.bitPayClient.delete("refunds/" + refundId, params);
+        HttpResponse response = this.bitPayClient.delete("refunds/" + refundId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()
@@ -350,7 +358,8 @@ public class RefundClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        String jsonResponse = this.bitPayClient.delete("refunds/guid/" + guid, params);
+        HttpResponse response = this.bitPayClient.delete("refunds/guid/" + guid, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             refund = JsonMapperFactory.create()

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.ZonedDateTime;
 
 /**
  * The type Ledger entry.
@@ -20,11 +21,11 @@ public class LedgerEntry {
 
     private String type;
     private String amount;
-    private String code;
+    private Integer code;
     private String description;
-    private String timestamp;
+    private ZonedDateTime timestamp;
     private String txType;
-    private String scale;
+    private Integer scale;
     private String invoiceId;
     private Buyer buyer;
     private Double invoiceAmount;
@@ -99,7 +100,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonIgnore
-    public String getCode() {
+    public Integer getCode() {
         return this.code;
     }
 
@@ -112,7 +113,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("code")
-    public void setCode(final String code) {
+    public void setCode(final Integer code) {
         this.code = code;
     }
 
@@ -148,7 +149,7 @@ public class LedgerEntry {
      * @return the timestamp
      */
     @JsonIgnore
-    public String getTimestamp() {
+    public ZonedDateTime getTimestamp() {
         return this.timestamp;
     }
 
@@ -158,7 +159,7 @@ public class LedgerEntry {
      * @param timestamp the timestamp
      */
     @JsonProperty("timestamp")
-    public void setTimestamp(final String timestamp) {
+    public void setTimestamp(final ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -191,7 +192,7 @@ public class LedgerEntry {
      * @return the scale
      */
     @JsonIgnore
-    public String getScale() {
+    public Integer getScale() {
         return this.scale;
     }
 
@@ -201,7 +202,7 @@ public class LedgerEntry {
      * @param scale the scale
      */
     @JsonProperty("scale")
-    public void setScale(final String scale) {
+    public void setScale(final Integer scale) {
         this.scale = scale;
     }
 

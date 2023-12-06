@@ -63,7 +63,8 @@ public class RateClient implements ResourceClient {
         String baseCurrency,
         String currency
     ) throws BitPayGenericException, BitPayApiException {
-        String jsonResponse = this.bitPayClient.get("rates/" + baseCurrency + "/" + currency);
+        HttpResponse response = this.bitPayClient.get("rates/" + baseCurrency + "/" + currency);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         Rate rate = null;
 
@@ -87,10 +88,12 @@ public class RateClient implements ResourceClient {
     public Rates getRates() throws BitPayGenericException, BitPayApiException {
         List<Rate> rates = null;
 
-        String response = this.bitPayClient.get("rates");
+        HttpResponse response = this.bitPayClient.get("rates");
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
         try {
             rates = Arrays.asList(
-                JsonMapperFactory.create().readValue(response, Rate[].class)
+                JsonMapperFactory.create().readValue(jsonResponse, Rate[].class)
             );
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Rates", e.getMessage());
@@ -113,10 +116,12 @@ public class RateClient implements ResourceClient {
     public Rates getRates(String baseCurrency) throws BitPayGenericException, BitPayApiException {
         List<Rate> rates = null;
 
-        String response = this.bitPayClient.get("rates/" + baseCurrency);
+        HttpResponse response = this.bitPayClient.get("rates/" + baseCurrency);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
         try {
             rates = Arrays.asList(
-                JsonMapperFactory.create().readValue(response, Rate[].class)
+                JsonMapperFactory.create().readValue(jsonResponse, Rate[].class)
             );
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Rates", e.getMessage());

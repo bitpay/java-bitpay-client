@@ -29,6 +29,15 @@ public class SupportedTransactionCurrencies {
     private SupportedTransactionCurrency ltc = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency wbtc = new SupportedTransactionCurrency();
     private SupportedTransactionCurrency dai = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency euroc = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency matic = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency maticE = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency ethM = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency usdcM = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency busdM = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency daiM = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency wbtcM = new SupportedTransactionCurrency();
+    private SupportedTransactionCurrency shibM = new SupportedTransactionCurrency();
 
     /**
      * Instantiates a new Supported transaction currencies.
@@ -274,5 +283,183 @@ public class SupportedTransactionCurrencies {
     @JsonProperty("WBTC")
     public void setWbtc(final SupportedTransactionCurrency wbtc) {
         this.wbtc = wbtc;
+    }
+
+    /**
+     * Gets EUROC.
+     *
+     * @return EUROC
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getEuroc() {
+        return this.euroc;
+    }
+
+    /**
+     * Sets EUROC.
+     *
+     * @param euroc EUROC
+     */
+    @JsonProperty("EUROC")
+    public void setEuroc(SupportedTransactionCurrency euroc) {
+        this.euroc = euroc;
+    }
+
+    /**
+     * Gets MATIC.
+     *
+     * @return MATIC
+     */
+    public SupportedTransactionCurrency getMatic() {
+        return this.matic;
+    }
+
+    /**
+     * Sets MATIC.
+     *
+     * @param matic MATIC
+     */
+    @JsonProperty("MATIC")
+    public void setMatic(SupportedTransactionCurrency matic) {
+        this.matic = matic;
+    }
+
+    /**
+     * Gets MATIC_e.
+     *
+     * @return MATIC_e
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getMaticE() {
+        return this.maticE;
+    }
+
+    /**
+     * Sets MATIC_e.
+     *
+     * @param maticE MATIC_e
+     */
+    @JsonProperty("MATIC_e")
+    public void setMaticE(SupportedTransactionCurrency maticE) {
+        this.maticE = maticE;
+    }
+
+    /**
+     * Gets ETH_m.
+     *
+     * @return Gets ETH_m.
+     */
+    public SupportedTransactionCurrency getEthM() {
+        return this.ethM;
+    }
+
+    /**
+     * Sets Gets ETH_m.
+     *
+     * @param ethM Gets ETH_m
+     */
+    @JsonProperty("ETH_m")
+    public void setEthM(SupportedTransactionCurrency ethM) {
+        this.ethM = ethM;
+    }
+
+    /**
+     * Gets USDC_m.
+     *
+     * @return USDC_m
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getUsdcM() {
+        return this.usdcM;
+    }
+
+    /**
+     * Sets USDC_m.
+     *
+     * @param usdcM USDC_m
+     */
+    @JsonProperty("USDC_m")
+    public void setUsdcM(SupportedTransactionCurrency usdcM) {
+        this.usdcM = usdcM;
+    }
+
+    /**
+     * Gets BUSD_m.
+     *
+     * @return BUSD_m
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getBusdM() {
+        return this.busdM;
+    }
+
+    /**
+     * Sets BUSD_m.
+     *
+     * @param busdM BUSD_m
+     */
+    @JsonProperty("BUSD_m")
+    public void setBusdM(SupportedTransactionCurrency busdM) {
+        this.busdM = busdM;
+    }
+
+    /**
+     * Gets DAI_m.
+     *
+     * @return DAI_m
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getDaiM() {
+        return this.daiM;
+    }
+
+    /**
+     * Sets DAI_m.
+     *
+     * @param daiM DAI_m
+     */
+    @JsonProperty("DAI_m")
+    public void setDaiM(SupportedTransactionCurrency daiM) {
+        this.daiM = daiM;
+    }
+
+    /**
+     * Gets WBTC_m.
+     *
+     * @return WBTC_m
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getWbtcM() {
+        return this.wbtcM;
+    }
+
+    /**
+     * Sets WBTC_m.
+     *
+     * @param wbtcM WBTC_m
+     */
+    @JsonProperty("WBTC_m")
+    public void setWbtcM(SupportedTransactionCurrency wbtcM) {
+        this.wbtcM = wbtcM;
+    }
+
+    /**
+     * Gets SHIB_m.
+     *
+     * @return SHIB_m
+     */
+    @JsonIgnore
+    public SupportedTransactionCurrency getShibM() {
+        return shibM;
+    }
+
+    /**
+     * Sets SHIB_m.
+     *
+     * @param shibM SHIB_m
+     */
+    @JsonProperty("SHIB_m")
+    public void setShibM(SupportedTransactionCurrency shibM) {
+        this.shibM = shibM;
     }
 }

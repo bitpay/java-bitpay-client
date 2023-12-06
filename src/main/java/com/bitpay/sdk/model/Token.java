@@ -22,14 +22,14 @@ public class Token {
     private String guid;
     private String id;
     private String pairingCode;
-    private long pairingExpiration;
+    private Long pairingExpiration;
     private String facade;
     private String label;
-    private int count = 0;
+    private Integer count = 0;
     private List<Policy> policies;
     private String resource;
     private String value;
-    private long dateCreated;
+    private Long dateCreated;
 
     /**
      * Instantiates a new Token.
@@ -163,7 +163,7 @@ public class Token {
      */
     @JsonProperty("count")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public int getCount() {
+    public Integer getCount() {
         return this.count;
     }
 
@@ -173,7 +173,7 @@ public class Token {
      * @param count the count
      */
     @JsonProperty("count")
-    public void setCount(int count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -186,7 +186,7 @@ public class Token {
      * @return the pairing expiration
      */
     @JsonIgnore
-    public long getPairingExpiration() {
+    public Long getPairingExpiration() {
         return this.pairingExpiration;
     }
 
@@ -196,7 +196,7 @@ public class Token {
      * @param pairingExpiration the pairing expiration
      */
     @JsonProperty("pairingExpiration")
-    public void setPairingExpiration(long pairingExpiration) {
+    public void setPairingExpiration(Long pairingExpiration) {
         this.pairingExpiration = pairingExpiration;
     }
 
@@ -266,7 +266,7 @@ public class Token {
      * @return the date created
      */
     @JsonIgnore
-    public long getDateCreated() {
+    public Long getDateCreated() {
         return this.dateCreated;
     }
 
@@ -276,7 +276,7 @@ public class Token {
      * @param dateCreated the date created
      */
     @JsonProperty("dateCreated")
-    public void setDateCreated(long dateCreated) {
+    public void setDateCreated(Long dateCreated) {
         this.dateCreated = dateCreated;
     }
 

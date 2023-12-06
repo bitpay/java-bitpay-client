@@ -20,7 +20,7 @@ public class MinerFeesItem {
 
     private BigDecimal satoshisPerByte;
     private BigDecimal totalFee;
-    private double fiatAmount;
+    private Double fiatAmount;
 
     /**
      * Instantiates a new Miner fees item.
@@ -74,7 +74,7 @@ public class MinerFeesItem {
      * @return the fiat amount
      */
     @JsonIgnore
-    public double getFiatAmount() {
+    public Double getFiatAmount() {
         return this.fiatAmount;
     }
 
@@ -84,7 +84,7 @@ public class MinerFeesItem {
      * @param fiatAmount the fiat amount
      */
     @JsonProperty("fiatAmount")
-    public void setFiatAmount(double fiatAmount) {
+    public void setFiatAmount(Double fiatAmount) {
         this.fiatAmount = fiatAmount;
     }
 }

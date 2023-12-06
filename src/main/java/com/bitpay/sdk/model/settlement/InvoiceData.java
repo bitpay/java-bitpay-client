@@ -5,13 +5,10 @@
 
 package com.bitpay.sdk.model.settlement;
 
-import com.bitpay.sdk.util.DateDeserializer;
-import com.bitpay.sdk.util.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 /**
@@ -22,7 +19,7 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {
     private String orderId;
-    private Long date;
+    private ZonedDateTime date;
     private Float price;
     private String currency;
     private String transactionCurrency;
@@ -62,8 +59,7 @@ public class InvoiceData {
      * @return the date
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getDate() {
+    public ZonedDateTime getDate() {
         return this.date;
     }
 
@@ -73,8 +69,7 @@ public class InvoiceData {
      * @param date the date
      */
     @JsonProperty("date")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setDate(Long date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
     }
 

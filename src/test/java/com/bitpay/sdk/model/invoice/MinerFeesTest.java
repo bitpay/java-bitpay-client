@@ -101,6 +101,32 @@ public class MinerFeesTest {
         Assertions.assertSame(expected, testedClass.getXrp());
     }
 
+    @Test
+    public void it_should_manipulate_matic() {
+        // given
+        MinerFees testedClass = this.getTestedClass();
+        MinerFeesItem expected = Mockito.mock(MinerFeesItem.class);
+
+        // when
+        testedClass.setMatic(expected);
+
+        // then
+            Assertions.assertSame(expected, testedClass.getMatic());
+    }
+
+    @Test
+    public void it_should_manipulate_usdcm() {
+        // given
+        MinerFees testedClass = this.getTestedClass();
+        MinerFeesItem expected = Mockito.mock(MinerFeesItem.class);
+
+        // when
+        testedClass.setUsdcM(expected);
+
+        // then
+        Assertions.assertSame(expected, testedClass.getUsdcM());
+    }
+
     private MinerFees getTestedClass() {
         return new MinerFees();
     }

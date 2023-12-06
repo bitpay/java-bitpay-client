@@ -100,7 +100,8 @@ public class PayoutRecipientsClient implements ResourceClient {
 
         List<PayoutRecipient> recipientsList = null;
 
-        String jsonResponse = this.bitPayClient.post("recipients", json, true);
+        HttpResponse response = this.bitPayClient.post("recipients", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             recipientsList = Arrays
@@ -139,7 +140,8 @@ public class PayoutRecipientsClient implements ResourceClient {
 
         List<PayoutRecipient> recipientsList = null;
 
-        String jsonResponse = this.bitPayClient.get("recipients", params, true);
+        HttpResponse response = this.bitPayClient.get("recipients", params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             recipientsList = Arrays
@@ -172,7 +174,8 @@ public class PayoutRecipientsClient implements ResourceClient {
 
         PayoutRecipient recipient = null;
 
-        String jsonResponse = this.bitPayClient.get("recipients/" + recipientId, params, true);
+        HttpResponse response = this.bitPayClient.get("recipients/" + recipientId, params, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             recipient = JsonMapperFactory.create()
@@ -213,11 +216,12 @@ public class PayoutRecipientsClient implements ResourceClient {
 
         PayoutRecipient updateRecipient = null;
 
-        String response = this.bitPayClient.update("recipients/" + recipientId, json);
+        HttpResponse response = this.bitPayClient.update("recipients/" + recipientId, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             updateRecipient = JsonMapperFactory.create()
-                .readValue(response, PayoutRecipient.class);
+                .readValue(jsonResponse, PayoutRecipient.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Payout Recipient", e.getMessage());
         }
@@ -243,7 +247,8 @@ public class PayoutRecipientsClient implements ResourceClient {
 
         JsonMapper mapper = JsonMapperFactory.create();
         Boolean result = null;
-        String jsonResponse = this.bitPayClient.delete("recipients/" + recipientId, params);
+        HttpResponse response = this.bitPayClient.delete("recipients/" + recipientId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             JsonNode rootNode = mapper.readTree(jsonResponse);
@@ -282,7 +287,8 @@ public class PayoutRecipientsClient implements ResourceClient {
             BitPayExceptionProvider.throwSerializeParamsException(e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("recipients/" + recipientId + "/notifications", json, true);
+        HttpResponse response = this.bitPayClient.post("recipients/" + recipientId + "/notifications", json, true);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         JsonNode rootNode = null;
         try {

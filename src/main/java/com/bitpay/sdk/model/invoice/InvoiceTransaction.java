@@ -25,7 +25,7 @@ import java.util.Map;
 public class InvoiceTransaction {
 
     private BigDecimal amount;
-    private int confirmations;
+    private Integer confirmations;
     private Date time;
     private Date receivedTime;
     private String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
@@ -64,7 +64,7 @@ public class InvoiceTransaction {
      * @return the confirmations
      */
     @JsonIgnore
-    public int getConfirmations() {
+    public Integer getConfirmations() {
         return this.confirmations;
     }
 
@@ -74,7 +74,7 @@ public class InvoiceTransaction {
      * @param confirmations the confirmations
      */
     @JsonProperty("confirmations")
-    public void setConfirmations(final int confirmations) {
+    public void setConfirmations(final Integer confirmations) {
         this.confirmations = confirmations;
     }
 

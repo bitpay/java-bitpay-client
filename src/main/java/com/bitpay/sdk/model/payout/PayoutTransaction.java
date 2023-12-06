@@ -5,13 +5,10 @@
 
 package com.bitpay.sdk.model.payout;
 
-import com.bitpay.sdk.util.DateDeserializer;
-import com.bitpay.sdk.util.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 
 /**
  * The type Payout instruction transaction.
@@ -23,7 +20,7 @@ public class PayoutTransaction {
 
     private String txid;
     private Double amount;
-    private Long date;
+    private ZonedDateTime date;
     private String confirmations;
 
     /**
@@ -79,8 +76,7 @@ public class PayoutTransaction {
      * @return the date
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getDate() {
+    public ZonedDateTime getDate() {
         return this.date;
     }
 
@@ -91,8 +87,7 @@ public class PayoutTransaction {
      * @param date the date
      */
     @JsonProperty("date")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setDate(final Long date) {
+    public void setDate(final ZonedDateTime date) {
         this.date = date;
     }
 

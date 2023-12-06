@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.payout;
 
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ public class PayoutInstructionTransactionTest {
     @Test
     public void it_should_change_date() {
         // given
-        Long expected = 12L;
+        ZonedDateTime expected = ZonedDateTime.now();
         PayoutTransaction testedClass = this.getTestedClass();
 
         // when

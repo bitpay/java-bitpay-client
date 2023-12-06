@@ -8,6 +8,7 @@ package com.bitpay.sdk.util;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
  * The type Json mapper factory.
@@ -22,6 +23,7 @@ public class JsonMapperFactory {
     public static JsonMapper create() {
         return JsonMapper
             .builder()
+            .addModule(new JavaTimeModule())
             .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .build();

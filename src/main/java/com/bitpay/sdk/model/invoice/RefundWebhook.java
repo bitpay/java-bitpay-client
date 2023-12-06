@@ -27,8 +27,8 @@ public class RefundWebhook {
     private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Date lastRefundNotification;
     private Double refundFee;
-    private boolean immediate;
-    private boolean buyerPaysRefundFee;
+    private Boolean immediate;
+    private Boolean buyerPaysRefundFee;
     private Date requestDate;
 
     /**
@@ -215,7 +215,7 @@ public class RefundWebhook {
      */
     @JsonProperty("immediate")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getImmediate() {
+    public Boolean getImmediate() {
         return this.immediate;
     }
 
@@ -226,7 +226,7 @@ public class RefundWebhook {
      * @param immediate the immediate
      */
     @JsonProperty("immediate")
-    public void setImmediate(boolean immediate) {
+    public void setImmediate(Boolean immediate) {
         this.immediate = immediate;
     }
 
@@ -237,7 +237,7 @@ public class RefundWebhook {
      */
     @JsonProperty("buyerPaysRefundFee")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getBuyerPaysRefundFee() {
+    public Boolean getBuyerPaysRefundFee() {
         return this.buyerPaysRefundFee;
     }
 
@@ -247,7 +247,7 @@ public class RefundWebhook {
      * @param buyerPaysRefundFee the buyer pays refund fee
      */
     @JsonProperty("buyerPaysRefundFee")
-    public void setBuyerPaysRefundFee(boolean buyerPaysRefundFee) {
+    public void setBuyerPaysRefundFee(Boolean buyerPaysRefundFee) {
         this.buyerPaysRefundFee = buyerPaysRefundFee;
     }
 

@@ -33,7 +33,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals(10.0, result.getAmount());
         Assertions.assertEquals("USD", result.getCurrency());
         Assertions.assertNull(result.getDateExecuted());
-        Assertions.assertEquals(1622106000000L, result.getEffectiveDate());
+        Assertions.assertEquals("2021-05-27T09:00Z", result.getEffectiveDate().toString());
         Assertions.assertEquals("john@doe.com", result.getEmail());
         Assertions.assertNull(result.getExchangeRates());
         Assertions.assertEquals("JMwv8wQCXANoU2ZZQ9a9GH", result.getId());
@@ -44,7 +44,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
         Assertions.assertEquals("payout_20210527", result.getReference());
-        Assertions.assertEquals(1622112457834L, result.getRequestDate());
+        Assertions.assertEquals("2021-05-27T10:47:37.834Z", result.getRequestDate().toString());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.getShopperId());
         Assertions.assertEquals("new", result.getStatus());
         Assertions.assertEquals("6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL", result.getToken());
@@ -69,8 +69,8 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("SJcWZCFq344DL8QnXpdBNM", result.getAccountId());
         Assertions.assertEquals(10.0, result.getAmount());
         Assertions.assertEquals("USD", result.getCurrency());
-        Assertions.assertEquals(1622106000000L, result.getDateExecuted());
-        Assertions.assertEquals(1622106000000L, result.getEffectiveDate());
+        Assertions.assertEquals("2021-05-27T09:00Z", result.getDateExecuted().toString());
+        Assertions.assertEquals("2021-05-27T09:00Z", result.getEffectiveDate().toString());
         Assertions.assertEquals("john@doe.com", result.getEmail());
         Assertions.assertEquals(27883.962246420004, result.getExchangeRates().get("BTC").get("GBP"));
         Assertions.assertEquals("JMwv8wQCXANoU2ZZQ9a9GH", result.getId());
@@ -81,7 +81,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.getRecipientId());
         Assertions.assertEquals("payout_20210527", result.getReference());
-        Assertions.assertEquals(1622112457834L, result.getRequestDate());
+        Assertions.assertEquals("2021-05-27T10:47:37.834Z", result.getRequestDate().toString());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.getShopperId());
         Assertions.assertEquals("complete", result.getStatus());
         Assertions.assertEquals("6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL", result.getToken());
@@ -134,7 +134,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals(10.0, result.get(0).getAmount());
         Assertions.assertEquals("USD", result.get(0).getCurrency());
         Assertions.assertNull(result.get(0).getDateExecuted());
-        Assertions.assertEquals(1622106000000L, result.get(0).getEffectiveDate());
+        Assertions.assertEquals("2021-05-27T09:00Z", result.get(0).getEffectiveDate().toString());
         Assertions.assertEquals("john@doe.com", result.get(0).getEmail());
         Assertions.assertEquals("JMwv8wQCXANoU2ZZQ9a9GH", result.get(0).getId());
         Assertions.assertEquals("John Doe", result.get(0).getLabel());
@@ -144,7 +144,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(0).getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(0).getRecipientId());
         Assertions.assertEquals("payout_20210527", result.get(0).getReference());
-        Assertions.assertEquals(1622112457834L, result.get(0).getRequestDate());
+        Assertions.assertEquals("2021-05-27T10:47:37.834Z", result.get(0).getRequestDate().toString());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(0).getShopperId());
         Assertions.assertEquals("complete", result.get(0).getStatus());
         Assertions.assertEquals("9pVLfvdjt59q1JiY2JEsf2uzeeEpSqDwwfRAzuFr9CcrxZX25rTnP6HdRhsMBGLArz", result.get(0).getToken());
@@ -154,7 +154,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals(10.0, result.get(1).getAmount());
         Assertions.assertEquals("USD", result.get(1).getCurrency());
         Assertions.assertNull(result.get(1).getDateExecuted());
-        Assertions.assertEquals(1622192400000L, result.get(1).getEffectiveDate());
+        Assertions.assertEquals("2021-05-28T09:00Z", result.get(1).getEffectiveDate().toString());
         Assertions.assertEquals("jane@doe.com", result.get(1).getEmail());
         Assertions.assertEquals("KMXZeQigXG6T5abzCJmTcH", result.get(1).getId());
         Assertions.assertEquals("Jane Doe", result.get(1).getLabel());
@@ -164,7 +164,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("https://yournotiticationURL.com/wed3sa0wx1rz5bg0bv97851eqx", result.get(1).getNotificationUrl());
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", result.get(1).getRecipientId());
         Assertions.assertEquals("payout_20210528", result.get(1).getReference());
-        Assertions.assertEquals(1622197423765L, result.get(1).getRequestDate());
+        Assertions.assertEquals("2021-05-28T10:23:43.765Z", result.get(1).getRequestDate().toString());
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", result.get(1).getShopperId());
         Assertions.assertEquals("cancelled", result.get(1).getStatus());
         Assertions.assertEquals("9pVLfvdjt59q1JiY2JEsf2hr5FsjimfY4qRLFi85tMiXSCkJ9mQ2oSQqYKVangKaro", result.get(1).getToken());

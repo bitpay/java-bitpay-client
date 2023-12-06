@@ -168,7 +168,7 @@ public class PayoutInfoTest {
     @Test
     public void it_should_change_wire() {
         // given
-        String expected = "expectedString";
+        boolean expected = false;
         PayoutInfo testedClass = this.getTestedClass();
 
         // when

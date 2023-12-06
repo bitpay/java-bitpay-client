@@ -86,7 +86,8 @@ public class LedgerClient implements ResourceClient {
         ParameterAdder.execute(params, "startDate", dateStart);
         ParameterAdder.execute(params, "endDate", dateEnd);
 
-        String jsonResponse = this.bitPayClient.get("ledgers/" + currency, params);
+        HttpResponse response = this.bitPayClient.get("ledgers/" + currency, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         List<LedgerEntry> entries = null;
 
@@ -114,7 +115,8 @@ public class LedgerClient implements ResourceClient {
 
         List<Ledger> ledgers = null;
 
-        String jsonResponse = this.bitPayClient.get("ledgers", params);
+        HttpResponse response = this.bitPayClient.get("ledgers", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             ledgers = Arrays

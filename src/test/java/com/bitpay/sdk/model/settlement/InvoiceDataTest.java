@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.settlement;
 
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +29,7 @@ public class InvoiceDataTest {
     @Test
     public void it_should_change_date() {
         // given
-        Long expected = 12L;
+        ZonedDateTime expected = ZonedDateTime.now();
         InvoiceData testedClass = this.getTestedClass();
 
         // when

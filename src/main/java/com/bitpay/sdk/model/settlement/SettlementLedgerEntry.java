@@ -5,13 +5,10 @@
 
 package com.bitpay.sdk.model.settlement;
 
-import com.bitpay.sdk.util.DateDeserializer;
-import com.bitpay.sdk.util.DateSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 
 /**
  * The type Settlement ledger entry.
@@ -24,7 +21,7 @@ public class SettlementLedgerEntry {
     private Integer code;
     private String invoiceId;
     private Float amount;
-    private Long timestamp;
+    private ZonedDateTime timestamp;
     private String description;
     private String reference;
     private InvoiceData invoiceData;
@@ -101,8 +98,7 @@ public class SettlementLedgerEntry {
      * @return the timestamp
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getTimestamp() {
+    public ZonedDateTime getTimestamp() {
         return this.timestamp;
     }
 
@@ -112,8 +108,7 @@ public class SettlementLedgerEntry {
      * @param timestamp the timestamp
      */
     @JsonProperty("timestamp")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -55,10 +55,10 @@ public class LedgerClientTest extends AbstractClientTest {
 
         // then
         Assertions.assertEquals(3, result.size());
-        Assertions.assertEquals("1023", secondEntry.getCode());
+        Assertions.assertEquals(1023, secondEntry.getCode());
         Assertions.assertEquals("-8000000", secondEntry.getAmount());
         Assertions.assertEquals("Invoice Fee", secondEntry.getDescription());
-        Assertions.assertEquals("2021-05-10T20:08:52.919Z", secondEntry.getTimestamp());
+        Assertions.assertEquals("2021-05-10T20:08:52.919Z", secondEntry.getTimestamp().toString());
         Assertions.assertEquals("Hpqc63wvE1ZjzeeH4kEycF", secondEntry.getInvoiceId());
         Assertions.assertEquals("2630 Hegal Place", secondEntry.getBuyer().getAddress1());
         Assertions.assertEquals(10, secondEntry.getInvoiceAmount());

@@ -32,6 +32,8 @@ public class MinerFees {
     private MinerFeesItem ltc = new MinerFeesItem();
     private MinerFeesItem dai = new MinerFeesItem();
     private MinerFeesItem wbtc = new MinerFeesItem();
+    private MinerFeesItem matic = new MinerFeesItem();
+    private MinerFeesItem usdcM = new MinerFeesItem();
 
     /**
      * Instantiates a new Miner fees.
@@ -277,5 +279,45 @@ public class MinerFees {
     @JsonProperty("WBTC")
     public void setWbtc(MinerFeesItem wbtc) {
         this.wbtc = wbtc;
+    }
+
+    /**
+     * Gets MATIC.
+     *
+     * @return MATIC
+     */
+    @JsonIgnore
+    public MinerFeesItem getMatic() {
+        return matic;
+    }
+
+    /**
+     * Sets MATIC.
+     *
+     * @param matic MATIC
+     */
+    @JsonProperty("MATIC")
+    public void setMatic(MinerFeesItem matic) {
+        this.matic = matic;
+    }
+
+    /**
+     * Gets USDC_m.
+     *
+     * @return USDC_m
+     */
+    @JsonIgnore
+    public MinerFeesItem getUsdcM() {
+        return usdcM;
+    }
+
+    /**
+     * Sets USDC_m.
+     *
+     * @param usdcM USDC_m
+     */
+    @JsonProperty("USDC_m")
+    public void setUsdcM(MinerFeesItem usdcM) {
+        this.usdcM = usdcM;
     }
 }

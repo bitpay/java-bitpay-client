@@ -5,6 +5,7 @@
 package com.bitpay.sdk.model.bill;
 
 import com.bitpay.sdk.exceptions.BitPayException;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -164,7 +165,7 @@ public class BillTest {
         final boolean passProcessingFee = true;
         Bill testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getPassProcessingFee());
+        Assertions.assertSame(null, testedClass.getPassProcessingFee());
         testedClass.setPassProcessingFee(passProcessingFee);
         Assertions.assertSame(passProcessingFee, testedClass.getPassProcessingFee());
     }
@@ -189,7 +190,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_createDate() {
-        final String createDate = "2021-05-21T09:51:04.126Z";
+        final ZonedDateTime createDate = ZonedDateTime.now();
         Bill testedClass = this.getTestedClass();
 
         testedClass.setCreatedDate(createDate);

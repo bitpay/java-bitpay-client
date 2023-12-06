@@ -105,7 +105,8 @@ public class InvoiceClient implements ResourceClient {
             BitPayExceptionProvider.throwSerializeResourceException("Invoice", e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("invoices", json, signRequest);
+        HttpResponse response = this.bitPayClient.post("invoices", json, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice = mapper.readerForUpdating(invoice).readValue(jsonResponse);
@@ -139,7 +140,8 @@ public class InvoiceClient implements ResourceClient {
 
         Invoice invoice = null;
 
-        String jsonResponse = this.bitPayClient.get("invoices/" + invoiceId, params, signRequest);
+        HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId, params, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice = JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
@@ -175,7 +177,8 @@ public class InvoiceClient implements ResourceClient {
         Invoice invoice = null;
 
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(facade));
-        String jsonResponse = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
+        HttpResponse response = this.bitPayClient.get("invoices/guid/" + guid, params, signRequest);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice = JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
@@ -225,7 +228,8 @@ public class InvoiceClient implements ResourceClient {
         }
 
         List<Invoice> invoices = null;
-        String jsonResponse = this.bitPayClient.get("invoices", params);
+        HttpResponse response = this.bitPayClient.get("invoices", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoices = Arrays.asList(JsonMapperFactory.create().readValue(jsonResponse, Invoice[].class));
@@ -248,7 +252,8 @@ public class InvoiceClient implements ResourceClient {
         final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
         ParameterAdder.execute(params, "token", this.accessTokens.getAccessToken(Facade.MERCHANT));
 
-        String jsonResponse = this.bitPayClient.get("invoices/" + invoiceId + "/events", params);
+        HttpResponse response = this.bitPayClient.get("invoices/" + invoiceId + "/events", params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
         InvoiceEventToken result = null;
 
         try {
@@ -312,11 +317,12 @@ public class InvoiceClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String response = this.bitPayClient.update("invoices/" + invoiceId, json);
+        HttpResponse response = this.bitPayClient.update("invoices/" + invoiceId, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice =
-                JsonMapperFactory.create().readValue(response, Invoice.class);
+                JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Invoice", e.getMessage());
         }
@@ -352,10 +358,12 @@ public class InvoiceClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String response = this.bitPayClient.update("invoices/pay/" + invoiceId, json);
+        HttpResponse response = this.bitPayClient.update("invoices/pay/" + invoiceId, json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
         try {
             invoice =
-                JsonMapperFactory.create().readValue(response, Invoice.class);
+                JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Invoice", e.getMessage());
         }
@@ -395,11 +403,12 @@ public class InvoiceClient implements ResourceClient {
         }
         Invoice invoice = null;
 
-        String response = this.bitPayClient.delete("invoices/" + invoiceId, params);
+        HttpResponse response = this.bitPayClient.delete("invoices/" + invoiceId, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice =
-                JsonMapperFactory.create().readValue(response, Invoice.class);
+                JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Invoice", e.getMessage());
         }
@@ -428,11 +437,12 @@ public class InvoiceClient implements ResourceClient {
         }
         Invoice invoice = null;
 
-        String response = this.bitPayClient.delete("invoices/guid/" + guid, params);
+        HttpResponse response = this.bitPayClient.delete("invoices/guid/" + guid, params);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
 
         try {
             invoice =
-                JsonMapperFactory.create().readValue(response, Invoice.class);
+                JsonMapperFactory.create().readValue(jsonResponse, Invoice.class);
         } catch (JsonProcessingException e) {
             BitPayExceptionProvider.throwDeserializeResourceException("Invoice", e.getMessage());
         }
@@ -461,7 +471,9 @@ public class InvoiceClient implements ResourceClient {
             BitPayExceptionProvider.throwEncodeException(e.getMessage());
         }
 
-        String jsonResponse = this.bitPayClient.post("invoices/" + invoiceId + "/notifications", json);
+        HttpResponse response = this.bitPayClient.post("invoices/" + invoiceId + "/notifications", json);
+        String jsonResponse = ResponseParser.getJsonDataFromJsonResponse(response.getBody());
+
         return jsonResponse.replace("\"", "").toLowerCase(Locale.ROOT).equals("success");
     }
 

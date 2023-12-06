@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.ledger;
 
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,7 +40,7 @@ public class LedgerEntryTest {
     @Test
     public void it_should_change_code() {
         // given
-        String expected = "expectedString";
+        Integer expected = 123;
         LedgerEntry testedClass = this.getTestedClass();
 
         // when
@@ -65,7 +66,7 @@ public class LedgerEntryTest {
     @Test
     public void it_should_change_timestamp() {
         // given
-        String expected = "expectedString";
+        ZonedDateTime expected = ZonedDateTime.now();
         LedgerEntry testedClass = this.getTestedClass();
 
         // when
@@ -92,7 +93,7 @@ public class LedgerEntryTest {
     @Test
     public void it_should_change_scale() {
         // given
-        String expected = "expectedString";
+        Integer expected = 13;
         LedgerEntry testedClass = this.getTestedClass();
 
         // when
