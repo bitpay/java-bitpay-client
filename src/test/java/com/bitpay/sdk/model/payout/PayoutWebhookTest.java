@@ -104,9 +104,9 @@ class PayoutWebhookTest {
     public void testManipulateNotificationURL() {
         PayoutWebhook testedClass = this.getTestedClass();
         String expected = "someValue";
-        testedClass.setNotificationURL(expected);
+        testedClass.setNotificationUrl(expected);
 
-        Assertions.assertSame(expected, testedClass.getNotificationURL());
+        Assertions.assertSame(expected, testedClass.getNotificationUrl());
     }
 
     @Test

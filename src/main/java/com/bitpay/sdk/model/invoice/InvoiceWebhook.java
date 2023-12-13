@@ -11,6 +11,8 @@ import java.math.BigInteger;
 import java.util.Hashtable;
 
 /**
+ * Invoice Webhook.
+ *
  * @see <a href="https://developer.bitpay.com/reference/notifications-invoices">Invoice Webhook</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -106,7 +108,7 @@ class InvoiceWebhook {
     }
 
     public BuyerFields getBuyerFields() {
-        return buyerFields;
+        return this.buyerFields;
     }
 
     public void setBuyerFields(BuyerFields buyerFields) {
@@ -114,7 +116,7 @@ class InvoiceWebhook {
     }
 
     public Hashtable<String, BigInteger> getPaymentSubtotals() {
-        return paymentSubtotals;
+        return this.paymentSubtotals;
     }
 
     public void setPaymentSubtotals(Hashtable<String, BigInteger> paymentSubtotals) {

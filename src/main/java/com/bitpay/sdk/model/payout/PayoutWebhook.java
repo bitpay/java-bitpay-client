@@ -5,6 +5,7 @@
 
 package com.bitpay.sdk.model.payout;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Hashtable;
@@ -27,7 +28,7 @@ class PayoutWebhook {
     protected String email;
     protected String reference;
     protected String label;
-    protected String notificationURL;
+    protected String notificationUrl;
     protected String notificationEmail;
     protected ZonedDateTime effectiveDate;
     protected ZonedDateTime requestDate;
@@ -115,16 +116,17 @@ class PayoutWebhook {
         this.label = label;
     }
 
-    public String getNotificationURL() {
-        return this.notificationURL;
+    public String getNotificationUrl() {
+        return this.notificationUrl;
     }
 
-    public void setNotificationURL(String notificationURL) {
-        this.notificationURL = notificationURL;
+    @JsonSetter("notificationURL")
+    public void setNotificationUrl(String notificationUrl) {
+        this.notificationUrl = notificationUrl;
     }
 
     public String getNotificationEmail() {
-        return notificationEmail;
+        return this.notificationEmail;
     }
 
     public void setNotificationEmail(String notificationEmail) {
@@ -132,7 +134,7 @@ class PayoutWebhook {
     }
 
     public ZonedDateTime getEffectiveDate() {
-        return effectiveDate;
+        return this.effectiveDate;
     }
 
     public void setEffectiveDate(ZonedDateTime effectiveDate) {
@@ -140,7 +142,7 @@ class PayoutWebhook {
     }
 
     public ZonedDateTime getRequestDate() {
-        return requestDate;
+        return this.requestDate;
     }
 
     public void setRequestDate(ZonedDateTime requestDate) {
@@ -148,7 +150,7 @@ class PayoutWebhook {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -156,7 +158,7 @@ class PayoutWebhook {
     }
 
     public List<PayoutTransaction> getTransactions() {
-        return transactions;
+        return this.transactions;
     }
 
     public void setTransactions(List<PayoutTransaction> transactions) {

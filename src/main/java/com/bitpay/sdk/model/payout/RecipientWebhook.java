@@ -22,7 +22,7 @@ class RecipientWebhook {
     protected String shopperId;
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public void setEmail(String email) {
@@ -30,7 +30,7 @@ class RecipientWebhook {
     }
 
     public String getLabel() {
-        return label;
+        return this.label;
     }
 
     public void setLabel(String label) {
@@ -38,7 +38,7 @@ class RecipientWebhook {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(String status) {
@@ -46,7 +46,7 @@ class RecipientWebhook {
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {
@@ -54,7 +54,7 @@ class RecipientWebhook {
     }
 
     public String getShopperId() {
-        return shopperId;
+        return this.shopperId;
     }
 
     public void setShopperId(String shopperId) {

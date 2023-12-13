@@ -288,7 +288,7 @@ public class MinerFees {
      */
     @JsonIgnore
     public MinerFeesItem getMatic() {
-        return matic;
+        return this.matic;
     }
 
     /**
@@ -308,7 +308,7 @@ public class MinerFees {
      */
     @JsonIgnore
     public MinerFeesItem getUsdcM() {
-        return usdcM;
+        return this.usdcM;
     }
 
     /**

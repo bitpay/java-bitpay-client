@@ -450,7 +450,7 @@ public class SupportedTransactionCurrencies {
      */
     @JsonIgnore
     public SupportedTransactionCurrency getShibM() {
-        return shibM;
+        return this.shibM;
     }
 
     /**

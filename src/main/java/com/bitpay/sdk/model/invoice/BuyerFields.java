@@ -8,6 +8,8 @@ package com.bitpay.sdk.model.invoice;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
+ * Buyer Fields.
+ *
  * @see <a href="https://developer.bitpay.com/reference/notifications-invoices">Invoice Webhook</a>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
