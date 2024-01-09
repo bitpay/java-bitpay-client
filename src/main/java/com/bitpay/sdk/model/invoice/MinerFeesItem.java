@@ -8,7 +8,6 @@ package com.bitpay.sdk.model.invoice;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.math.BigDecimal;
 
 /**
  * The type Miner fees item.
@@ -18,8 +17,8 @@ import java.math.BigDecimal;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFeesItem {
 
-    private BigDecimal satoshisPerByte;
-    private BigDecimal totalFee;
+    private Integer satoshisPerByte;
+    private Integer totalFee;
     private Double fiatAmount;
 
     /**
@@ -34,7 +33,7 @@ public class MinerFeesItem {
      * @return the satoshis per byte
      */
     @JsonIgnore
-    public BigDecimal getSatoshisPerByte() {
+    public Integer getSatoshisPerByte() {
         return this.satoshisPerByte;
     }
 
@@ -44,7 +43,7 @@ public class MinerFeesItem {
      * @param satoshisPerByte the satoshis per byte
      */
     @JsonProperty("satoshisPerByte")
-    public void setSatoshisPerByte(BigDecimal satoshisPerByte) {
+    public void setSatoshisPerByte(Integer satoshisPerByte) {
         this.satoshisPerByte = satoshisPerByte;
     }
 
@@ -54,7 +53,7 @@ public class MinerFeesItem {
      * @return the total fee
      */
     @JsonIgnore
-    public BigDecimal getTotalFee() {
+    public Integer getTotalFee() {
         return this.totalFee;
     }
 
@@ -64,7 +63,7 @@ public class MinerFeesItem {
      * @param totalFee the total fee
      */
     @JsonProperty("totalFee")
-    public void setTotalFee(BigDecimal totalFee) {
+    public void setTotalFee(Integer totalFee) {
         this.totalFee = totalFee;
     }
 

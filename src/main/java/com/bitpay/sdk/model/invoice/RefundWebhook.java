@@ -6,10 +6,14 @@
 package com.bitpay.sdk.model.invoice;
 
 import com.bitpay.sdk.model.ModelConfiguration;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 
 /**
  * The type Refund webhook.
@@ -25,11 +29,11 @@ public class RefundWebhook {
     private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Double amount;
     private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Date lastRefundNotification;
+    private ZonedDateTime lastRefundNotification;
     private Double refundFee;
     private Boolean immediate;
     private Boolean buyerPaysRefundFee;
-    private Date requestDate;
+    private ZonedDateTime requestDate;
 
     /**
      * Instantiates a new Refund webhook.
@@ -172,7 +176,8 @@ public class RefundWebhook {
      */
     @JsonProperty("lastRefundNotification")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public Date getLastRefundNotification() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getLastRefundNotification() {
         return this.lastRefundNotification;
     }
 
@@ -182,7 +187,8 @@ public class RefundWebhook {
      * @param lastRefundNotification the last refund notification
      */
     @JsonProperty("lastRefundNotification")
-    public void setLastRefundNotification(Date lastRefundNotification) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setLastRefundNotification(ZonedDateTime lastRefundNotification) {
         this.lastRefundNotification = lastRefundNotification;
     }
 
@@ -258,7 +264,8 @@ public class RefundWebhook {
      */
     @JsonProperty("requestDate")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public Date getRequestDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getRequestDate() {
         return this.requestDate;
     }
 
@@ -268,7 +275,8 @@ public class RefundWebhook {
      * @param requestDate the request date
      */
     @JsonProperty("requestDate")
-    public void setRequestDate(Date requestDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setRequestDate(ZonedDateTime requestDate) {
         this.requestDate = requestDate;
     }
 

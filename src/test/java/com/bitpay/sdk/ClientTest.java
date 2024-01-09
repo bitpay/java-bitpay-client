@@ -34,7 +34,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,7 +68,6 @@ public class ClientTest {
         "2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXcejgPXVmZ4Ae3oGaCGBFKQf";
     protected static final String PAYOUT_TOKEN = "3tDEActqHSjbc3Hn5MoLH7XTn4hMdGSp6YbmvNDXTr5Y";
     protected static final String PAYOUT_ID = "JMwv8wQCXANoU2ZZQ9a9GH";
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Mock
     private BitPayClient bitPayClient;
@@ -1986,6 +1986,8 @@ public class ClientTest {
         items.add(item2);
 
         final Bill bill = new Bill();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2021-05-21T09:48:02.373Z", formatter);
         bill.setToken(merchantToken);
         bill.setNumber("bill1234-ABCD");
         bill.setCurrency("USD");
@@ -1999,7 +2001,7 @@ public class ClientTest {
         bill.setEmail("23242");
         bill.setCc(cc);
         bill.setPhone("555-123-456");
-        bill.setDueDate("2021-5-31");
+        bill.setDueDate(zonedDateTime);
         bill.setPassProcessingFee(true);
         bill.setItems(items);
         bill.setToken(merchantToken);

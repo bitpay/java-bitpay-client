@@ -153,7 +153,7 @@ public class BillTest {
 
     @Test
     public void it_should_manipulate_dueDate() {
-        final String dueDate = "2021-05-21T09:51:04.126Z";
+        final ZonedDateTime dueDate = ZonedDateTime.now();
         Bill testedClass = this.getTestedClass();
 
         testedClass.setDueDate(dueDate);

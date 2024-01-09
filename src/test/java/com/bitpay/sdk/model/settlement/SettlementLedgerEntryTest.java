@@ -77,19 +77,6 @@ public class SettlementLedgerEntryTest {
     }
 
     @Test
-    public void it_should_change_reference() {
-        // given
-        String expected = "expectedString";
-        SettlementLedgerEntry testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setReference(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getReference());
-    }
-
-    @Test
     public void it_should_change_invoiceData() {
         // given
         InvoiceData expected = Mockito.mock(InvoiceData.class);

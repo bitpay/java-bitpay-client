@@ -5,9 +5,13 @@
 
 package com.bitpay.sdk.model.settlement;
 
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -23,7 +27,7 @@ public class InvoiceData {
     private Float price;
     private String currency;
     private String transactionCurrency;
-    private Float overPaidAmount;
+    private Float overpaidAmount;
     private Map<String, Double> payoutPercentage;
     private RefundInfo refundInfo;
 
@@ -59,6 +63,7 @@ public class InvoiceData {
      * @return the date
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getDate() {
         return this.date;
     }
@@ -69,6 +74,7 @@ public class InvoiceData {
      * @param date the date
      */
     @JsonProperty("date")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setDate(ZonedDateTime date) {
         this.date = date;
     }
@@ -145,8 +151,8 @@ public class InvoiceData {
      * @return the over paid amount
      */
     @JsonIgnore
-    public Float getOverPaidAmount() {
-        return this.overPaidAmount;
+    public Float getOverpaidAmount() {
+        return this.overpaidAmount;
     }
 
     /**
@@ -154,9 +160,9 @@ public class InvoiceData {
      *
      * @param overPaidAmount the over paid amount
      */
-    @JsonProperty("overPaidAmount")
-    public void setOverPaidAmount(Float overPaidAmount) {
-        this.overPaidAmount = overPaidAmount;
+    @JsonProperty("overpaidAmount")
+    public void setOverpaidAmount(Float overPaidAmount) {
+        this.overpaidAmount = overPaidAmount;
     }
 
     /**
@@ -185,7 +191,7 @@ public class InvoiceData {
      * @return the amount
      */
     @JsonIgnore
-    public RefundInfo getAmount() {
+    public RefundInfo getRefundInfo() {
         return this.refundInfo;
     }
 
@@ -195,7 +201,7 @@ public class InvoiceData {
      * @param refundInfo the refund info
      */
     @JsonProperty("refundInfo")
-    public void setAmount(RefundInfo refundInfo) {
+    public void setRefundInfo(RefundInfo refundInfo) {
         this.refundInfo = refundInfo;
     }
 }

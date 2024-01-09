@@ -5,9 +5,13 @@
 
 package com.bitpay.sdk.model.settlement;
 
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -155,6 +159,7 @@ public class Settlement {
      * @return the date created
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getDateCreated() {
         return this.dateCreated;
     }
@@ -165,6 +170,7 @@ public class Settlement {
      * @param dateCreated the date created
      */
     @JsonProperty("dateCreated")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setDateCreated(ZonedDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
@@ -175,6 +181,7 @@ public class Settlement {
      * @return the date executed
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getDateExecuted() {
         return this.dateExecuted;
     }
@@ -185,6 +192,7 @@ public class Settlement {
      * @param dateExecuted the date executed
      */
     @JsonProperty("dateExecuted")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setDateExecuted(ZonedDateTime dateExecuted) {
         this.dateExecuted = dateExecuted;
     }
@@ -195,6 +203,7 @@ public class Settlement {
      * @return the date completed
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getDateCompleted() {
         return this.dateCompleted;
     }
@@ -205,6 +214,7 @@ public class Settlement {
      * @param dateCompleted the date completed
      */
     @JsonProperty("dateCompleted")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setDateCompleted(ZonedDateTime dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
@@ -217,6 +227,7 @@ public class Settlement {
      * @return the opening date
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getOpeningDate() {
         return this.openingDate;
     }
@@ -229,6 +240,7 @@ public class Settlement {
      * @param openingDate the opening date
      */
     @JsonProperty("openingDate")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setOpeningDate(ZonedDateTime openingDate) {
         this.openingDate = openingDate;
     }
@@ -239,6 +251,7 @@ public class Settlement {
      * @return the closing date
      */
     @JsonIgnore
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getClosingDate() {
         return this.closingDate;
     }
@@ -249,6 +262,7 @@ public class Settlement {
      * @param closingDate the closing date
      */
     @JsonProperty("closingDate")
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setClosingDate(ZonedDateTime closingDate) {
         this.closingDate = closingDate;
     }

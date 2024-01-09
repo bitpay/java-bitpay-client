@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.ledger;
 
+import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ public class LedgerEntryTest {
     @Test
     public void it_should_change_amount() {
         // given
-        String expected = "expectedString";
+        BigInteger expected = BigInteger.valueOf(123);
         LedgerEntry testedClass = this.getTestedClass();
 
         // when
@@ -93,7 +94,7 @@ public class LedgerEntryTest {
     @Test
     public void it_should_change_scale() {
         // given
-        Integer expected = 13;
+        BigInteger expected = BigInteger.valueOf(13);
         LedgerEntry testedClass = this.getTestedClass();
 
         // when

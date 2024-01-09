@@ -13,7 +13,7 @@ public class MinerFeesItemTest {
     @Test
     public void it_should_manipulate_satoshisPerByte() {
         // given
-        BigDecimal expected = BigDecimal.TEN;
+        Integer expected = 765;
         MinerFeesItem testedClass = this.getTestedClass();
 
         // when
@@ -26,7 +26,7 @@ public class MinerFeesItemTest {
     @Test
     public void it_should_manipulate_totalFee() {
         // given
-        BigDecimal expected = BigDecimal.TEN;
+        Integer expected = 654;
         MinerFeesItem testedClass = this.getTestedClass();
 
         // when

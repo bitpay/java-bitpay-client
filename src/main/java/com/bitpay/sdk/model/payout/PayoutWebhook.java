@@ -5,7 +5,11 @@
 
 package com.bitpay.sdk.model.payout;
 
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Hashtable;
@@ -133,18 +137,22 @@ class PayoutWebhook {
         this.notificationEmail = notificationEmail;
     }
 
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getEffectiveDate() {
         return this.effectiveDate;
     }
 
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setEffectiveDate(ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
     public ZonedDateTime getRequestDate() {
         return this.requestDate;
     }
 
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
     public void setRequestDate(ZonedDateTime requestDate) {
         this.requestDate = requestDate;
     }

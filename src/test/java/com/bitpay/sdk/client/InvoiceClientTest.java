@@ -55,6 +55,7 @@ public class InvoiceClientTest extends AbstractClientTest {
         Assertions.assertEquals("false", result.getExceptionStatus());
         Assertions.assertEquals(6, result.getTargetConfirmations());
         Assertions.assertEquals(1, result.getTransactions().size());
+        Assertions.assertEquals("2021-05-11T11:54:32.978Z", result.getTransactions().get(0).getReceivedTime().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.024436520994387978), result.getTransactions().get(0).getExRates().get("WBTC"));
         Assertions.assertEquals(BigDecimal.valueOf(739100), result.getTransactions().get(0).getAmount());
         Assertions.assertEquals("medium", result.getTransactionSpeed());

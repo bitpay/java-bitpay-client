@@ -7,8 +7,6 @@ package com.bitpay.sdk.client;
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.invoice.Refund;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -43,12 +41,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("created", result.getStatus());
     }
 
@@ -75,12 +73,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("created", result.getStatus());
     }
 
@@ -107,12 +105,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("created", result.getStatus());
     }
 
@@ -140,12 +138,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.get(0).getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.get(0).getReference());
         Assertions.assertEquals(0.02, result.get(0).getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630190973368L).getTime()), result.get(0).getLastRefundNotification());
+        Assertions.assertEquals("2021-08-28T22:49:33.368Z", result.get(0).getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000297), result.get(0).getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000010), result.get(0).getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.get(0).getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.get(0).getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630190973000L).getTime()), result.get(0).getRequestDate());
+        Assertions.assertEquals("2021-08-28T22:49:33Z", result.get(0).getRequestDate().toString());
         Assertions.assertEquals("canceled", result.get(0).getStatus());
 
         Assertions.assertEquals(10, result.get(1).getAmount());
@@ -156,12 +154,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.get(1).getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund 2", result.get(1).getReference());
         Assertions.assertEquals(0.04, result.get(1).getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.get(1).getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.get(1).getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.get(1).getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.get(1).getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.get(1).getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.get(1).getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.get(1).getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.get(1).getRequestDate().toString());
         Assertions.assertEquals("created", result.get(1).getStatus());
     }
 
@@ -187,12 +185,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("created", result.getStatus());
     }
 
@@ -218,12 +216,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("created", result.getStatus());
     }
 
@@ -266,12 +264,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("cancelled", result.getStatus());
     }
 
@@ -297,12 +295,12 @@ public class RefundClientTest extends AbstractClientTest {
         Assertions.assertEquals(false, result.getBuyerPaysRefundFee());
         Assertions.assertEquals("Test refund", result.getReference());
         Assertions.assertEquals(0.04, result.getRefundFee());
-        Assertions.assertEquals(new Date(new Timestamp(1630269935368L).getTime()), result.getLastRefundNotification());
+        Assertions.assertEquals("2021-08-29T20:45:35.368Z", result.getLastRefundNotification().toString());
         Assertions.assertEquals(BigDecimal.valueOf(0.000594), result.getTransactionAmount());
         Assertions.assertEquals(BigDecimal.valueOf(0.0000020), result.getTransactionRefundFee());
         Assertions.assertEquals("BTC", result.getTransactionCurrency());
         Assertions.assertEquals("WoE46gSLkJQS48RJEiNw3L", result.getId());
-        Assertions.assertEquals(new Date(new Timestamp(1630269934000L).getTime()), result.getRequestDate());
+        Assertions.assertEquals("2021-08-29T20:45:34Z", result.getRequestDate().toString());
         Assertions.assertEquals("cancelled", result.getStatus());
     }
 

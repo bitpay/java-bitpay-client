@@ -6,11 +6,15 @@
 package com.bitpay.sdk.model.invoice;
 
 import com.bitpay.sdk.model.ModelConfiguration;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 /**
@@ -26,8 +30,8 @@ public class InvoiceTransaction {
 
     private BigDecimal amount;
     private Integer confirmations;
-    private Date time;
-    private Date receivedTime;
+    private ZonedDateTime time;
+    private ZonedDateTime receivedTime;
     private String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Map<String, BigDecimal> exRates;
     private Integer outputIndex;
@@ -84,7 +88,8 @@ public class InvoiceTransaction {
      * @return the received time
      */
     @JsonIgnore
-    public Date getReceivedTime() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getReceivedTime() {
         return this.receivedTime;
     }
 
@@ -94,7 +99,8 @@ public class InvoiceTransaction {
      * @param receivedTime the received time
      */
     @JsonProperty("receivedTime")
-    public void setReceivedTime(final Date receivedTime) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setReceivedTime(final ZonedDateTime receivedTime) {
         this.receivedTime = receivedTime;
     }
 
@@ -124,7 +130,8 @@ public class InvoiceTransaction {
      * @return the time
      */
     @JsonIgnore
-    public Date getTime() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getTime() {
         return this.time;
     }
 
@@ -134,7 +141,8 @@ public class InvoiceTransaction {
      * @param time the time
      */
     @JsonProperty("time")
-    public void setTime(final Date time) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setTime(final ZonedDateTime time) {
         this.time = time;
     }
 
