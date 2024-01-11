@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2019 BitPay.
+ * All rights reserved.
+ */
+
 package com.bitpay.sdk.util.serializer;
 
 import com.fasterxml.jackson.core.JsonParser;
