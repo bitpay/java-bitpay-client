@@ -1,4 +1,4 @@
-package com.bitpay.sdk.t.General;
+package com.bitpay.sdk.examples.General;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.BitPayApiException;
@@ -6,7 +6,7 @@ import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.logger.BitPayLogger;
 import com.bitpay.sdk.logger.LoggerProvider;
 import com.bitpay.sdk.model.invoice.Invoice;
-import com.bitpay.sdk.t.ClientProvider;
+import com.bitpay.sdk.examples.ClientProvider;
 
 final public class UseLogger {
 

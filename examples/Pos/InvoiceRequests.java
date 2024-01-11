@@ -1,11 +1,11 @@
-package com.bitpay.sdk.t.Pos;
+package com.bitpay.sdk.examples.Pos;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.invoice.Buyer;
 import com.bitpay.sdk.model.invoice.Invoice;
-import com.bitpay.sdk.t.ClientProvider;
+import com.bitpay.sdk.examples.ClientProvider;
 
 public class InvoiceRequests {
 

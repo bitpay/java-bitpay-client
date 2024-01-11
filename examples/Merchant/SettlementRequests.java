@@ -1,10 +1,10 @@
-package com.bitpay.sdk.t.Merchant;
+package com.bitpay.sdk.examples.Merchant;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.settlement.Settlement;
-import com.bitpay.sdk.t.ClientProvider;
+import com.bitpay.sdk.examples.ClientProvider;
 import java.util.List;
 
 public class SettlementRequests {

@@ -1,10 +1,10 @@
-package com.bitpay.sdk.t.Public;
+package com.bitpay.sdk.examples.Public;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.wallet.Wallet;
-import com.bitpay.sdk.t.ClientProvider;
+import com.bitpay.sdk.examples.ClientProvider;
 import java.util.List;
 
 public class WalletRequests {

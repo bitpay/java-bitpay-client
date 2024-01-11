@@ -1,11 +1,11 @@
-package com.bitpay.sdk.t.Payout;
+package com.bitpay.sdk.examples.Payout;
 
 import com.bitpay.sdk.Client;
 import com.bitpay.sdk.exceptions.BitPayApiException;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.payout.PayoutRecipient;
 import com.bitpay.sdk.model.payout.PayoutRecipients;
-import com.bitpay.sdk.t.ClientProvider;
+import com.bitpay.sdk.examples.ClientProvider;
 import java.util.ArrayList;
 import java.util.List;
 
