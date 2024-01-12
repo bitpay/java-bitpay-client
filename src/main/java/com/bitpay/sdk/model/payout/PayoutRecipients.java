@@ -8,7 +8,6 @@ package com.bitpay.sdk.model.payout;
 import com.bitpay.sdk.model.ModelConfiguration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class PayoutRecipients {
     private String guid;
-    private List<PayoutRecipient> recipients = Collections.emptyList();
+    private List<PayoutRecipient> recipients;
     private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**

@@ -9,10 +9,15 @@ import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.ModelConfiguration;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -38,11 +43,11 @@ public class Bill {
     private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private List<String> cc;
     private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String dueDate = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private boolean passProcessingFee;
+    private ZonedDateTime dueDate;
+    private Boolean passProcessingFee;
     private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String createdDate = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    private ZonedDateTime createdDate;
     private String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String merchant = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
@@ -394,7 +399,8 @@ public class Bill {
      */
     @JsonProperty("dueDate")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getDueDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getDueDate() {
         return this.dueDate;
     }
 
@@ -404,7 +410,8 @@ public class Bill {
      * @param dueDate the due date
      */
     @JsonProperty("dueDate")
-    public void setDueDate(final String dueDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setDueDate(final ZonedDateTime dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -415,7 +422,7 @@ public class Bill {
      */
     @JsonProperty("passProcessingFee")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getPassProcessingFee() {
+    public Boolean getPassProcessingFee() {
         return this.passProcessingFee;
     }
 
@@ -425,7 +432,7 @@ public class Bill {
      * @param passProcessingFee the pass processing fee
      */
     @JsonProperty("passProcessingFee")
-    public void setPassProcessingFee(final boolean passProcessingFee) {
+    public void setPassProcessingFee(final Boolean passProcessingFee) {
         this.passProcessingFee = passProcessingFee;
     }
 
@@ -479,7 +486,8 @@ public class Bill {
      */
     @JsonIgnore
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public String getCreatedDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getCreatedDate() {
         return this.createdDate;
     }
 
@@ -489,7 +497,8 @@ public class Bill {
      * @param createdDate the create date
      */
     @JsonProperty("createdDate")
-    public void setCreatedDate(final String createdDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setCreatedDate(final ZonedDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

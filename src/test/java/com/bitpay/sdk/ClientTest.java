@@ -31,8 +31,11 @@ import com.bitpay.sdk.util.GuidGenerator;
 import com.bitpay.sdk.util.TokenContainer;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,7 +68,6 @@ public class ClientTest {
         "2LVBntm7z92rnuVjVX5ZVaDoUEaoY4LxhZMMzPAMGyXcejgPXVmZ4Ae3oGaCGBFKQf";
     protected static final String PAYOUT_TOKEN = "3tDEActqHSjbc3Hn5MoLH7XTn4hMdGSp6YbmvNDXTr5Y";
     protected static final String PAYOUT_ID = "JMwv8wQCXANoU2ZZQ9a9GH";
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     @Mock
     private BitPayClient bitPayClient;
@@ -307,6 +309,8 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1))
             .get(ArgumentMatchers.eq("invoices/" + id), ArgumentMatchers.eq(params), ArgumentMatchers.eq(true));
         Assertions.assertEquals("chc9kj52-04g0-4b6f-941d-3a844e352758", result.getGuid());
+        Assertions.assertEquals(new BigInteger("12502605000000000000"), result.getPaymentSubTotals().get("MATIC"));
+        Assertions.assertEquals(new BigDecimal("0.000058414627022606464"), result.getExchangeRates().get("GUSD").get("BTC"));
     }
 
     @Test
@@ -1645,8 +1649,8 @@ public class ClientTest {
         Assertions.assertEquals("USD", firstPayout.getCurrency());
         Assertions.assertNull(firstPayout.getDateExecuted());
         Assertions.assertEquals(
-            dateFormatter.parse("2021-05-27T09:00:00.000Z").toInstant().toEpochMilli(),
-            firstPayout.getEffectiveDate()
+            "2021-05-27T09:00Z",
+            firstPayout.getEffectiveDate().toString()
         );
         Assertions.assertEquals("john@doe.com", firstPayout.getEmail());
         Assertions.assertNull(firstPayout.getExchangeRates());
@@ -1662,8 +1666,8 @@ public class ClientTest {
         Assertions.assertEquals("LDxRZCGq174SF8AnQpdBPB", firstPayout.getRecipientId());
         Assertions.assertEquals("payout_20210527", firstPayout.getReference());
         Assertions.assertEquals(
-            dateFormatter.parse("2021-05-27T10:47:37.834Z").toInstant().toEpochMilli(),
-            firstPayout.getRequestDate()
+            "2021-05-27T10:47:37.834Z",
+            firstPayout.getRequestDate().toString()
         );
         Assertions.assertEquals("7qohDf2zZnQK5Qanj8oyC2", firstPayout.getShopperId());
         Assertions.assertEquals("new", firstPayout.getStatus());
@@ -1854,6 +1858,8 @@ public class ClientTest {
         Mockito.verify(this.bitPayClient, Mockito.times(1)).get("settlements", params);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals("KBkdURgmE3Lsy9VTnavZHX", result.get(0).getId());
+        Assertions.assertEquals("2021-05-10T09:05:00.176Z", result.get(0).getDateCreated().toString());
+        Assertions.assertEquals("Z", result.get(0).getDateCreated().getZone().toString());
     }
 
     @Test
@@ -1980,6 +1986,8 @@ public class ClientTest {
         items.add(item2);
 
         final Bill bill = new Bill();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2021-05-21T09:48:02.373Z", formatter);
         bill.setToken(merchantToken);
         bill.setNumber("bill1234-ABCD");
         bill.setCurrency("USD");
@@ -1993,7 +2001,7 @@ public class ClientTest {
         bill.setEmail("23242");
         bill.setCc(cc);
         bill.setPhone("555-123-456");
-        bill.setDueDate("2021-5-31");
+        bill.setDueDate(zonedDateTime);
         bill.setPassProcessingFee(true);
         bill.setItems(items);
         bill.setToken(merchantToken);

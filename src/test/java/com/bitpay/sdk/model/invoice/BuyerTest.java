@@ -95,7 +95,7 @@ public class BuyerTest {
         final boolean expected = true;
         Buyer testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getNotify());
+        Assertions.assertSame(null, testedClass.getNotify());
         testedClass.setNotify(expected);
         Assertions.assertSame(expected, testedClass.getNotify());
     }

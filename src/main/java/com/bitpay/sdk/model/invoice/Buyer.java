@@ -27,7 +27,7 @@ public class Buyer {
     private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private boolean notify;
+    private Boolean notify;
 
     /**
      * Instantiates a new Buyer.
@@ -234,7 +234,7 @@ public class Buyer {
      */
     @JsonProperty("notify")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getNotify() {
+    public Boolean getNotify() {
         return this.notify;
     }
 
@@ -245,7 +245,7 @@ public class Buyer {
      * @param notify the notify
      */
     @JsonProperty("notify")
-    public void setNotify(boolean notify) {
+    public void setNotify(Boolean notify) {
         this.notify = notify;
     }
 

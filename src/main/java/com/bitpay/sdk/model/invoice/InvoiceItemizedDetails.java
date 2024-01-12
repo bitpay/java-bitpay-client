@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceItemizedDetails {
-    private double amount;
+    private Double amount;
     private String description = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Boolean isFee;
 
@@ -33,7 +33,7 @@ public class InvoiceItemizedDetails {
      * @return the amount
      */
     @JsonIgnore
-    public double getAmount() {
+    public Double getAmount() {
         return this.amount;
     }
 
@@ -43,7 +43,7 @@ public class InvoiceItemizedDetails {
      * @param amount the amount
      */
     @JsonProperty("amount")
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

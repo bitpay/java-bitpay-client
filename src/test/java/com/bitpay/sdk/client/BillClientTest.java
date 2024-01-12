@@ -5,10 +5,12 @@
 package com.bitpay.sdk.client;
 
 import com.bitpay.sdk.exceptions.BitPayException;
+import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.model.bill.Bill;
 import com.bitpay.sdk.model.bill.Item;
-import com.bitpay.sdk.model.Facade;
 import com.bitpay.sdk.util.TokenContainer;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +47,7 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("23242", result.getZip());
         Assertions.assertEquals("jane@doe.com", result.getCc().get(0));
         Assertions.assertEquals("555-123-456", result.getPhone());
-        Assertions.assertEquals("2021-05-31T00:00:00.000Z", result.getDueDate());
+        Assertions.assertEquals("2021-05-31T00:00Z", result.getDueDate().toString());
         Assertions.assertTrue(result.getPassProcessingFee());
         Assertions.assertEquals("draft", result.getStatus());
         Assertions.assertEquals("https://bitpay.com/bill?id=3Zpmji8bRKxWJo2NJbWX5H&resource=bills", result.getUrl());
@@ -89,7 +91,7 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("23242", result.getZip());
         Assertions.assertEquals("jane@doe.com", result.getCc().get(0));
         Assertions.assertEquals("555-123-456", result.getPhone());
-        Assertions.assertEquals("2021-05-31T00:00:00.000Z", result.getDueDate());
+        Assertions.assertEquals("2021-05-31T00:00Z", result.getDueDate().toString());
         Assertions.assertTrue(result.getPassProcessingFee());
         Assertions.assertEquals("draft", result.getStatus());
         Assertions.assertEquals("https://bitpay.com/bill?id=3Zpmji8bRKxWJo2NJbWX5H&resource=bills", result.getUrl());
@@ -133,7 +135,7 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("23242", result.get(0).getZip());
         Assertions.assertEquals("jane@doe.com", result.get(0).getCc().get(0));
         Assertions.assertEquals("555-123-456", result.get(0).getPhone());
-        Assertions.assertEquals("2021-05-31T00:00:00.000Z", result.get(0).getDueDate());
+        Assertions.assertEquals("2021-05-31T00:00Z", result.get(0).getDueDate().toString());
         Assertions.assertTrue(result.get(0).getPassProcessingFee());
         Assertions.assertEquals("draft", result.get(0).getStatus());
         Assertions.assertEquals("https://bitpay.com/bill?id=X6KJbe9RxAGWNReCwd1xRw&resource=bills", result.get(0).getUrl());
@@ -178,7 +180,7 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("23242", result.get(0).getZip());
         Assertions.assertEquals("jane@doe.com", result.get(0).getCc().get(0));
         Assertions.assertEquals("555-123-456", result.get(0).getPhone());
-        Assertions.assertEquals("2021-05-31T00:00:00.000Z", result.get(0).getDueDate());
+        Assertions.assertEquals("2021-05-31T00:00Z", result.get(0).getDueDate().toString());
         Assertions.assertTrue(result.get(0).getPassProcessingFee());
         Assertions.assertEquals("draft", result.get(0).getStatus());
         Assertions.assertEquals("https://bitpay.com/bill?id=X6KJbe9RxAGWNReCwd1xRw&resource=bills", result.get(0).getUrl());
@@ -233,7 +235,7 @@ public class BillClientTest extends AbstractClientTest {
         Assertions.assertEquals("23242", result.getZip());
         Assertions.assertEquals("jane@doe.com", result.getCc().get(0));
         Assertions.assertEquals("555-123-456", result.getPhone());
-        Assertions.assertEquals("2021-05-31T00:00:00.000Z", result.getDueDate());
+        Assertions.assertEquals("2021-05-31T00:00Z", result.getDueDate().toString());
         Assertions.assertTrue(result.getPassProcessingFee());
         Assertions.assertEquals("draft", result.getStatus());
         Assertions.assertEquals("https://bitpay.com/bill?id=3Zpmji8bRKxWJo2NJbWX5H&resource=bills", result.getUrl());
@@ -282,7 +284,7 @@ public class BillClientTest extends AbstractClientTest {
     }
 
     private Bill getBill() {
-        List<String> cc = new ArrayList<String>();
+        List<String> cc = new ArrayList<>();
         cc.add("jane@doe.com");
 
         List<Item> items = new ArrayList<>();
@@ -298,6 +300,9 @@ public class BillClientTest extends AbstractClientTest {
         items.add(item2);
 
         final Bill bill = new Bill();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse("2021-05-21T09:48:02.373Z", formatter);
+
         bill.setToken(AbstractClientTest.MERCHANT_TOKEN);
         bill.setNumber("bill1234-ABCD");
         try {
@@ -315,7 +320,7 @@ public class BillClientTest extends AbstractClientTest {
         bill.setEmail("23242");
         bill.setCc(cc);
         bill.setPhone("555-123-456");
-        bill.setDueDate("2021-5-31");
+        bill.setDueDate(zonedDateTime);
         bill.setPassProcessingFee(true);
         bill.setItems(items);
 

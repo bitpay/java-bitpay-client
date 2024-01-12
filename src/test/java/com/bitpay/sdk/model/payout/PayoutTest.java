@@ -6,10 +6,11 @@ package com.bitpay.sdk.model.payout;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import com.bitpay.sdk.model.ModelConfiguration;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -80,7 +81,7 @@ public class PayoutTest {
     @Test
     public void it_should_change_effectiveDate() {
         // given
-        Long expected = 123L;
+        ZonedDateTime expected = ZonedDateTime.now();
         Payout testedClass = this.getTestedClass();
 
         // when
@@ -275,7 +276,7 @@ public class PayoutTest {
     @Test
     public void it_should_change_requestDate() {
         // given
-        long expected = 1234L;
+        ZonedDateTime expected = ZonedDateTime.now();
         Payout testedClass = this.getTestedClass();
 
         // when
@@ -288,7 +289,7 @@ public class PayoutTest {
     @Test
     public void it_should_change_dateExecuted() {
         // given
-        long expected = 1234L;
+        ZonedDateTime expected = ZonedDateTime.now();
         Payout testedClass = this.getTestedClass();
 
         // when

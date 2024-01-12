@@ -5,7 +5,7 @@
 package com.bitpay.sdk.model.invoice;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +42,7 @@ public class InvoiceTransactionTest {
     @Test
     public void it_should_manipulate_time() {
         // given
-        Date expected = new Date();
+        ZonedDateTime expected = ZonedDateTime.now();
         InvoiceTransaction testedClass = this.getTestedClass();
 
         // when
@@ -55,7 +55,7 @@ public class InvoiceTransactionTest {
     @Test
     public void it_should_manipulate_receivedTime() {
         // given
-        Date expected = new Date();
+        ZonedDateTime expected = ZonedDateTime.now();
         InvoiceTransaction testedClass = this.getTestedClass();
 
         // when

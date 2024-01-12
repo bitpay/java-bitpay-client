@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.settlement;
 
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -52,7 +53,7 @@ public class SettlementLedgerEntryTest {
     @Test
     public void it_should_change_timestamp() {
         // given
-        Long expected = 12L;
+        ZonedDateTime expected = ZonedDateTime.now();
         SettlementLedgerEntry testedClass = this.getTestedClass();
 
         // when
@@ -73,19 +74,6 @@ public class SettlementLedgerEntryTest {
 
         // then
         Assertions.assertEquals(expected, testedClass.getDescription());
-    }
-
-    @Test
-    public void it_should_change_reference() {
-        // given
-        String expected = "expectedString";
-        SettlementLedgerEntry testedClass = this.getTestedClass();
-
-        // when
-        testedClass.setReference(expected);
-
-        // then
-        Assertions.assertEquals(expected, testedClass.getReference());
     }
 
     @Test

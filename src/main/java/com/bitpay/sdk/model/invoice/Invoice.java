@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -35,16 +36,16 @@ public class Invoice {
     private String posData;
     private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String transactionSpeed = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private boolean fullNotifications = false;
+    private Boolean fullNotifications;
     private String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String redirectUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String closeUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String orderId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String itemDesc = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String itemCode = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private boolean physical = false;
+    private Boolean physical;
     private List<String> paymentCurrencies;
-    private long acceptanceWindow;
+    private Integer acceptanceWindow;
     private Buyer buyer;
     private String buyerSms = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String merchantName = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
@@ -52,41 +53,41 @@ public class Invoice {
     private String forcedBuyerSelectedWallet = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private InvoiceUniversalCodes universalCodes;
     private List<InvoiceItemizedDetails> itemizedDetails;
-    private boolean autoRedirect = false;
+    private Boolean autoRedirect;
 
     private String id;
     private String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private boolean lowFeeDetected;
-    private long invoiceTime;
-    private long expirationTime;
-    private long currentTime;
+    private Boolean lowFeeDetected;
+    private Long invoiceTime;
+    private Long expirationTime;
+    private Long currentTime;
     private String exceptionStatus = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private long targetConfirmations;
+    private Integer targetConfirmations;
     private List<InvoiceTransaction> transactions;
     private ArrayList refundAddresses;
-    private boolean refundAddressRequestPending;
+    private Boolean refundAddressRequestPending;
     private String buyerProvidedEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo = new InvoiceBuyerProvidedInfo();
-    private SupportedTransactionCurrencies supportedTransactionCurrencies = new SupportedTransactionCurrencies();
-    private MinerFees minerFees = new MinerFees();
-    private Shopper shopper = new Shopper();
+    private InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo;
+    private SupportedTransactionCurrencies supportedTransactionCurrencies;
+    private MinerFees minerFees;
+    private Shopper shopper;
     private String billId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private ArrayList<RefundInfo> refundInfo;
-    private boolean extendedNotifications = false;
+    private Boolean extendedNotifications;
     private String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String forcedBuyerSelectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private BigDecimal amountPaid;
-    private BigDecimal displayAmountPaid;
-    private Hashtable<String, Hashtable<String, String>> exchangeRates;
-    private boolean isCancelled = false;
-    private boolean bitpayIdRequired = false;
-    private Hashtable<String, String> paymentSubtotals;
-    private Hashtable<String, String> paymentTotals;
+    private String displayAmountPaid;
+    private Hashtable<String, Hashtable<String, BigDecimal>> exchangeRates;
+    private Boolean isCancelled;
+    private Boolean bitpayIdRequired;
+    private Hashtable<String, BigInteger> paymentSubtotals;
+    private Hashtable<String, BigInteger> paymentTotals;
     private Hashtable<String, String> paymentDisplayTotals;
     private Hashtable<String, String> paymentDisplaySubTotals;
-    private boolean nonPayProPaymentReceived;
-    private boolean jsonPayProRequired = false;
+    private Boolean nonPayProPaymentReceived;
+    private Boolean jsonPayProRequired;
     private BigDecimal underpaidAmount;
     private BigDecimal overpaidAmount;
     private Hashtable<String, Hashtable<String, String>> paymentCodes;
@@ -413,7 +414,7 @@ public class Invoice {
      */
     @JsonProperty("fullNotifications")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getFullNotifications() {
+    public Boolean getFullNotifications() {
         return this.fullNotifications;
     }
 
@@ -427,7 +428,7 @@ public class Invoice {
      * @param fullNotifications the full notifications
      */
     @JsonProperty("fullNotifications")
-    public void setFullNotifications(final boolean fullNotifications) {
+    public void setFullNotifications(final Boolean fullNotifications) {
         this.fullNotifications = fullNotifications;
     }
 
@@ -442,7 +443,7 @@ public class Invoice {
      */
     @JsonProperty("extendedNotifications")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getExtendedNotifications() {
+    public Boolean getExtendedNotifications() {
         return this.extendedNotifications;
     }
 
@@ -456,7 +457,7 @@ public class Invoice {
      * @param extendedNotifications the extended notifications
      */
     @JsonProperty("extendedNotifications")
-    public void setExtendedNotifications(final boolean extendedNotifications) {
+    public void setExtendedNotifications(final Boolean extendedNotifications) {
         this.extendedNotifications = extendedNotifications;
     }
 
@@ -540,7 +541,7 @@ public class Invoice {
      */
     @JsonProperty("physical")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getPhysical() {
+    public Boolean getPhysical() {
         return this.physical;
     }
 
@@ -550,7 +551,7 @@ public class Invoice {
      * @param physical the physical
      */
     @JsonProperty("physical")
-    public void setPhysical(final boolean physical) {
+    public void setPhysical(final Boolean physical) {
         this.physical = physical;
     }
 
@@ -594,7 +595,7 @@ public class Invoice {
      */
     @JsonProperty("acceptanceWindow")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public long getAcceptanceWindow() {
+    public Integer getAcceptanceWindow() {
         return this.acceptanceWindow;
     }
 
@@ -606,7 +607,7 @@ public class Invoice {
      * @param acceptanceWindow the acceptance window
      */
     @JsonProperty("acceptanceWindow")
-    public void setAcceptanceWindow(final long acceptanceWindow) {
+    public void setAcceptanceWindow(final Integer acceptanceWindow) {
         this.acceptanceWindow = acceptanceWindow;
     }
 
@@ -738,7 +739,7 @@ public class Invoice {
      * @return the auto redirect
      */
     @JsonProperty("autoRedirect")
-    public boolean getAutoRedirect() {
+    public Boolean getAutoRedirect() {
         return this.autoRedirect;
     }
 
@@ -756,7 +757,7 @@ public class Invoice {
      * @param autoRedirect the auto redirect
      */
     @JsonProperty("autoRedirect")
-    public void setAutoRedirect(final boolean autoRedirect) {
+    public void setAutoRedirect(final Boolean autoRedirect) {
         this.autoRedirect = autoRedirect;
     }
 
@@ -769,7 +770,7 @@ public class Invoice {
      */
     @JsonProperty("bitpayIdRequired")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean getBitpayIdRequired() {
+    public Boolean getBitpayIdRequired() {
         return this.bitpayIdRequired;
     }
 
@@ -781,7 +782,7 @@ public class Invoice {
      * @param bitpayIdRequired the bitpay id required
      */
     @JsonProperty("bitpayIdRequired")
-    public void setBitpayIdRequired(final boolean bitpayIdRequired) {
+    public void setBitpayIdRequired(final Boolean bitpayIdRequired) {
         this.bitpayIdRequired = bitpayIdRequired;
     }
 
@@ -999,7 +1000,7 @@ public class Invoice {
      * @return the low fee detected
      */
     @JsonIgnore
-    public boolean getLowFeeDetected() {
+    public Boolean getLowFeeDetected() {
         return this.lowFeeDetected;
     }
 
@@ -1010,7 +1011,7 @@ public class Invoice {
      * @param lowFeeDetected the low fee detected
      */
     @JsonProperty("lowFeeDetected")
-    public void setLowFeeDetected(final boolean lowFeeDetected) {
+    public void setLowFeeDetected(final Boolean lowFeeDetected) {
         this.lowFeeDetected = lowFeeDetected;
     }
 
@@ -1020,7 +1021,7 @@ public class Invoice {
      * @return the invoice time
      */
     @JsonIgnore
-    public long getInvoiceTime() {
+    public Long getInvoiceTime() {
         return this.invoiceTime;
     }
 
@@ -1030,7 +1031,7 @@ public class Invoice {
      * @param invoiceTime the invoice time
      */
     @JsonProperty("invoiceTime")
-    public void setInvoiceTime(final long invoiceTime) {
+    public void setInvoiceTime(final Long invoiceTime) {
         this.invoiceTime = invoiceTime;
     }
 
@@ -1040,7 +1041,7 @@ public class Invoice {
      * @return the expiration time
      */
     @JsonIgnore
-    public long getExpirationTime() {
+    public Long getExpirationTime() {
         return this.expirationTime;
     }
 
@@ -1050,7 +1051,7 @@ public class Invoice {
      * @param expirationTime the expiration time
      */
     @JsonProperty("expirationTime")
-    public void setExpirationTime(final long expirationTime) {
+    public void setExpirationTime(final Long expirationTime) {
         this.expirationTime = expirationTime;
     }
 
@@ -1060,7 +1061,7 @@ public class Invoice {
      * @return the current time
      */
     @JsonIgnore
-    public long getCurrentTime() {
+    public Long getCurrentTime() {
         return this.currentTime;
     }
 
@@ -1070,7 +1071,7 @@ public class Invoice {
      * @param currentTime the current time
      */
     @JsonProperty("currentTime")
-    public void setCurrentTime(final long currentTime) {
+    public void setCurrentTime(final Long currentTime) {
         this.currentTime = currentTime;
     }
 
@@ -1142,7 +1143,7 @@ public class Invoice {
      * @return the target confirmations
      */
     @JsonIgnore
-    public long getTargetConfirmations() {
+    public Integer getTargetConfirmations() {
         return this.targetConfirmations;
     }
 
@@ -1155,7 +1156,7 @@ public class Invoice {
      * @param targetConfirmations the target confirmations
      */
     @JsonProperty("targetConfirmations")
-    public void setTargetConfirmations(final long targetConfirmations) {
+    public void setTargetConfirmations(final Integer targetConfirmations) {
         this.targetConfirmations = targetConfirmations;
     }
 
@@ -1191,7 +1192,7 @@ public class Invoice {
      * @return the refund address request pending
      */
     @JsonIgnore
-    public boolean getRefundAddressRequestPending() {
+    public Boolean getRefundAddressRequestPending() {
         return this.refundAddressRequestPending;
     }
 
@@ -1204,7 +1205,7 @@ public class Invoice {
      * @param refundAddressRequestPending the refund address request pending
      */
     @JsonProperty("refundAddressRequestPending")
-    public void setRefundAddressRequestPending(final boolean refundAddressRequestPending) {
+    public void setRefundAddressRequestPending(final Boolean refundAddressRequestPending) {
         this.refundAddressRequestPending = refundAddressRequestPending;
     }
 
@@ -1432,7 +1433,7 @@ public class Invoice {
      * @return the display amount paid
      */
     @JsonIgnore
-    public BigDecimal getDisplayAmountPaid() {
+    public String getDisplayAmountPaid() {
         return this.displayAmountPaid;
     }
 
@@ -1443,7 +1444,7 @@ public class Invoice {
      * @param displayAmountPaid the display amount paid
      */
     @JsonProperty("displayAmountPaid")
-    public void setDisplayAmountPaid(final BigDecimal displayAmountPaid) {
+    public void setDisplayAmountPaid(final String displayAmountPaid) {
         this.displayAmountPaid = displayAmountPaid;
     }
 
@@ -1453,7 +1454,7 @@ public class Invoice {
      * @return the exchange rates
      */
     @JsonIgnore
-    public Hashtable<String, Hashtable<String, String>> getExchangeRates() {
+    public Hashtable<String, Hashtable<String, BigDecimal>> getExchangeRates() {
         return this.exchangeRates;
     }
 
@@ -1463,7 +1464,7 @@ public class Invoice {
      * @param exchangeRates the exchange rates
      */
     @JsonProperty("exchangeRates")
-    public void setExchangeRates(final Hashtable<String, Hashtable<String, String>> exchangeRates) {
+    public void setExchangeRates(final Hashtable<String, Hashtable<String, BigDecimal>> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
@@ -1473,7 +1474,7 @@ public class Invoice {
      * @return the is cancelled
      */
     @JsonIgnore
-    public boolean getIsCancelled() {
+    public Boolean getIsCancelled() {
         return this.isCancelled;
     }
 
@@ -1483,7 +1484,7 @@ public class Invoice {
      * @param isCancelled the is cancelled
      */
     @JsonProperty("isCancelled")
-    public void setIsCancelled(final boolean isCancelled) {
+    public void setIsCancelled(final Boolean isCancelled) {
         this.isCancelled = isCancelled;
     }
 
@@ -1493,7 +1494,7 @@ public class Invoice {
      * @return the payment sub totals
      */
     @JsonIgnore
-    public Hashtable<String, String> getPaymentSubTotals() {
+    public Hashtable<String, BigInteger> getPaymentSubTotals() {
         return this.paymentSubtotals;
     }
 
@@ -1503,7 +1504,7 @@ public class Invoice {
      * @param paymentSubtotals the payment subtotals
      */
     @JsonProperty("paymentSubtotals")
-    public void setPaymentSubTotals(final Hashtable<String, String> paymentSubtotals) {
+    public void setPaymentSubTotals(final Hashtable<String, BigInteger> paymentSubtotals) {
         this.paymentSubtotals = paymentSubtotals;
     }
 
@@ -1513,7 +1514,7 @@ public class Invoice {
      * @return the payment totals
      */
     @JsonIgnore
-    public Hashtable<String, String> getPaymentTotals() {
+    public Hashtable<String, BigInteger> getPaymentTotals() {
         return this.paymentTotals;
     }
 
@@ -1523,7 +1524,7 @@ public class Invoice {
      * @param paymentTotals the payment totals
      */
     @JsonProperty("paymentTotals")
-    public void setPaymentTotals(final Hashtable<String, String> paymentTotals) {
+    public void setPaymentTotals(final Hashtable<String, BigInteger> paymentTotals) {
         this.paymentTotals = paymentTotals;
     }
 
@@ -1585,7 +1586,7 @@ public class Invoice {
      * @return the non pay pro payment received
      */
     @JsonIgnore
-    public boolean getNonPayProPaymentReceived() {
+    public Boolean getNonPayProPaymentReceived() {
         return this.nonPayProPaymentReceived;
     }
 
@@ -1597,7 +1598,7 @@ public class Invoice {
      * @param nonPayProPaymentReceived the non pay pro payment received
      */
     @JsonProperty("nonPayProPaymentReceived")
-    public void setNonPayProPaymentReceived(final boolean nonPayProPaymentReceived) {
+    public void setNonPayProPaymentReceived(final Boolean nonPayProPaymentReceived) {
         this.nonPayProPaymentReceived = nonPayProPaymentReceived;
     }
 
@@ -1610,7 +1611,7 @@ public class Invoice {
      * @see <a href="https://bitpay.com/docs/payment-protocol">BitPay JSON Payment Protocol</a>
      */
     @JsonIgnore
-    public boolean getJsonPayProRequired() {
+    public Boolean getJsonPayProRequired() {
         return this.jsonPayProRequired;
     }
 
@@ -1622,7 +1623,7 @@ public class Invoice {
      * @see <a href="https://bitpay.com/docs/payment-protocol">BitPay JSON Payment Protocol</a>
      */
     @JsonProperty("jsonPayProRequired")
-    public void setJsonPayProRequired(final boolean jsonPayProRequired) {
+    public void setJsonPayProRequired(final Boolean jsonPayProRequired) {
         this.jsonPayProRequired = jsonPayProRequired;
     }
 

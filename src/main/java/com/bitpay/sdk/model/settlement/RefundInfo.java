@@ -21,7 +21,6 @@ public class RefundInfo {
     private String supportRequest;
     private String currency;
     private Hashtable<String, Double> amounts;
-    private String refundRequestEid;
 
     /**
      * Instantiates a new Refund info.
@@ -91,24 +90,5 @@ public class RefundInfo {
     @JsonProperty("amounts")
     public void setAmount(Hashtable<String, Double> amounts) {
         this.amounts = amounts;
-    }
-
-    /**
-     * Gets Refund Request Eid.
-     *
-     * @return Refund Request Eid
-     */
-    public String getRefundRequestEid() {
-        return this.refundRequestEid;
-    }
-
-    /**
-     * Sets Refund Request Eid.
-     *
-     * @param refundRequestEid Refund Request Eid
-     */
-    @JsonProperty("refundRequestEid")
-    public void setRefundRequestEid(String refundRequestEid) {
-        this.refundRequestEid = refundRequestEid;
     }
 }

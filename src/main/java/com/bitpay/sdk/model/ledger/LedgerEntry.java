@@ -5,10 +5,16 @@
 
 package com.bitpay.sdk.model.ledger;
 
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.math.BigInteger;
+import java.time.ZonedDateTime;
 
 /**
  * The type Ledger entry.
@@ -19,12 +25,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class LedgerEntry {
 
     private String type;
-    private String amount;
-    private String code;
+    private BigInteger amount;
+    private Integer code;
     private String description;
-    private String timestamp;
+    private ZonedDateTime timestamp;
     private String txType;
-    private String scale;
+    private BigInteger scale;
     private String invoiceId;
     private Buyer buyer;
     private Double invoiceAmount;
@@ -72,7 +78,7 @@ public class LedgerEntry {
      * @return the amount
      */
     @JsonIgnore
-    public String getAmount() {
+    public BigInteger getAmount() {
         return this.amount;
     }
 
@@ -86,7 +92,7 @@ public class LedgerEntry {
      *
      */
     @JsonProperty("amount")
-    public void setAmount(final String amount) {
+    public void setAmount(final BigInteger amount) {
         this.amount = amount;
     }
 
@@ -99,7 +105,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonIgnore
-    public String getCode() {
+    public Integer getCode() {
         return this.code;
     }
 
@@ -112,7 +118,7 @@ public class LedgerEntry {
      * @see <a href="https://bitpay.readme.io/reference/ledger-entry-codes">Ledger entry codes</a>
      */
     @JsonProperty("code")
-    public void setCode(final String code) {
+    public void setCode(final Integer code) {
         this.code = code;
     }
 
@@ -148,7 +154,8 @@ public class LedgerEntry {
      * @return the timestamp
      */
     @JsonIgnore
-    public String getTimestamp() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getTimestamp() {
         return this.timestamp;
     }
 
@@ -158,7 +165,8 @@ public class LedgerEntry {
      * @param timestamp the timestamp
      */
     @JsonProperty("timestamp")
-    public void setTimestamp(final String timestamp) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setTimestamp(final ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -191,7 +199,7 @@ public class LedgerEntry {
      * @return the scale
      */
     @JsonIgnore
-    public String getScale() {
+    public BigInteger getScale() {
         return this.scale;
     }
 
@@ -201,7 +209,7 @@ public class LedgerEntry {
      * @param scale the scale
      */
     @JsonProperty("scale")
-    public void setScale(final String scale) {
+    public void setScale(final BigInteger scale) {
         this.scale = scale;
     }
 

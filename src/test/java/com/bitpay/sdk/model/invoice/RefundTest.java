@@ -5,7 +5,7 @@
 package com.bitpay.sdk.model.invoice;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -131,7 +131,7 @@ public class RefundTest {
     @Test
     public void it_should_manipulate_lastRefundNotification() {
         // given
-        Date expected = new Date();
+        ZonedDateTime expected = ZonedDateTime.now();
         Refund testedClass = this.getTestedClass();
 
         // when
@@ -196,7 +196,7 @@ public class RefundTest {
     @Test
     public void it_should_manipulate_requestDate() {
         // given
-        Date expected = new Date();
+        ZonedDateTime expected = ZonedDateTime.now();
         Refund testedClass = this.getTestedClass();
 
         // when

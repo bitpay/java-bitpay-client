@@ -9,14 +9,15 @@ import com.bitpay.sdk.exceptions.BitPayExceptionProvider;
 import com.bitpay.sdk.exceptions.BitPayGenericException;
 import com.bitpay.sdk.model.Currency;
 import com.bitpay.sdk.model.ModelConfiguration;
-import com.bitpay.sdk.util.DateDeserializer;
-import com.bitpay.sdk.util.DateSerializer;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,9 @@ public class Payout {
 
     private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
-    private Double amount = 0.0;
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Long effectiveDate;
+    private Double amount;
+    private String currency;
+    private ZonedDateTime effectiveDate;
 
     private String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
@@ -54,11 +55,11 @@ public class Payout {
     private String label;
     private String status;
     private String message;
-    private Long requestDate;
-    private Long dateExecuted;
+    private ZonedDateTime requestDate;
+    private ZonedDateTime dateExecuted;
     private Integer code;
     private List<PayoutTransaction> transactions = Collections.emptyList();
-    public boolean ignoreEmails = false;
+    public Boolean ignoreEmails;
 
     /**
      * Constructor, create an empty Payout object.
@@ -235,9 +236,9 @@ public class Payout {
      * @return the effective date
      */
     @JsonProperty("effectiveDate")
-    @JsonSerialize(using = DateSerializer.class)
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public Long getEffectiveDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getEffectiveDate() {
         return this.effectiveDate;
     }
 
@@ -248,8 +249,8 @@ public class Payout {
      * @param effectiveDate the effective date
      */
     @JsonProperty("effectiveDate")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setEffectiveDate(final Long effectiveDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setEffectiveDate(final ZonedDateTime effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
@@ -602,8 +603,8 @@ public class Payout {
      * @return the request date
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getRequestDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getRequestDate() {
         return this.requestDate;
     }
 
@@ -613,8 +614,8 @@ public class Payout {
      * @param requestDate the request date
      */
     @JsonProperty("requestDate")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setRequestDate(final Long requestDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setRequestDate(final ZonedDateTime requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -624,8 +625,8 @@ public class Payout {
      * @return the date executed
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getDateExecuted() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getDateExecuted() {
         return this.dateExecuted;
     }
 
@@ -635,8 +636,8 @@ public class Payout {
      * @param dateExecuted the date executed
      */
     @JsonProperty("dateExecuted")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setDateExecuted(final Long dateExecuted) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setDateExecuted(final ZonedDateTime dateExecuted) {
         this.dateExecuted = dateExecuted;
     }
 
@@ -661,11 +662,11 @@ public class Payout {
 
     @JsonProperty("ignoreEmails")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public boolean isIgnoreEmails() {
+    public Boolean isIgnoreEmails() {
         return this.ignoreEmails;
     }
 
-    public void setIgnoreEmails(final boolean ignoreEmails) {
+    public void setIgnoreEmails(final Boolean ignoreEmails) {
         this.ignoreEmails = ignoreEmails;
     }
 }

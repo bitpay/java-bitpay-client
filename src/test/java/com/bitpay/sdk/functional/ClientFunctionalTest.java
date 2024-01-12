@@ -28,6 +28,7 @@ import com.bitpay.sdk.model.wallet.Wallet;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
@@ -387,7 +388,7 @@ public class ClientFunctionalTest {
         requestedBill.setZip("23242");
         requestedBill.setCountry("US");
         requestedBill.setPhone("555-123-456");
-        requestedBill.setDueDate("2021-5-31");
+        requestedBill.setDueDate(ZonedDateTime.now());
         requestedBill.setPassProcessingFee(true);
         requestedBill.setItems(items);
 

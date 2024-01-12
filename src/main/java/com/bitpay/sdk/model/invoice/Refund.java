@@ -6,12 +6,16 @@
 package com.bitpay.sdk.model.invoice;
 
 import com.bitpay.sdk.model.ModelConfiguration;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 /**
  * Fully paid invoices can be refunded via the merchant's authorization to issue a refund,
@@ -32,31 +36,17 @@ public class Refund {
     private Boolean buyerPaysRefundFee;
     private String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private Double refundFee;
-    private Date lastRefundNotification;
+    private ZonedDateTime requestDate;
+    private ZonedDateTime lastRefundNotification;
     private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String refundAddress = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     private String type = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-
-    /**
-     * Amount to be refunded in terms of the transaction currency.
-     */
     private BigDecimal transactionAmount;
-
-    /**
-     * The refund fee expressed in terms of transaction currency.
-     */
     private BigDecimal transactionRefundFee;
-
-    /**
-     * The currency used for the invoice transaction.
-     */
     private String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-
-
     private String id;
-    private Date requestDate;
     private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
 
@@ -278,7 +268,8 @@ public class Refund {
      */
     @JsonIgnore
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public Date getRequestDate() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getRequestDate() {
         return this.requestDate;
     }
 
@@ -288,7 +279,8 @@ public class Refund {
      * @param requestDate the request date
      */
     @JsonProperty("requestDate")
-    public void setRequestDate(final Date requestDate) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setRequestDate(final ZonedDateTime requestDate) {
         this.requestDate = requestDate;
     }
 
@@ -394,7 +386,8 @@ public class Refund {
      */
     @JsonIgnore
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    public Date getLastRefundNotification() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getLastRefundNotification() {
         return this.lastRefundNotification;
     }
 
@@ -404,7 +397,8 @@ public class Refund {
      * @param lastRefundNotification the last refund notification
      */
     @JsonProperty("lastRefundNotification")
-    public void setLastRefundNotification(final Date lastRefundNotification) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setLastRefundNotification(final ZonedDateTime lastRefundNotification) {
         this.lastRefundNotification = lastRefundNotification;
     }
 

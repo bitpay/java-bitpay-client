@@ -6,6 +6,7 @@ package com.bitpay.sdk.model.invoice;
 
 import com.bitpay.sdk.exceptions.BitPayException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -95,7 +96,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getFullNotifications());
+        Assertions.assertSame(null, testedClass.getFullNotifications());
         testedClass.setFullNotifications(expected);
         Assertions.assertSame(expected, testedClass.getFullNotifications());
     }
@@ -159,7 +160,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getPhysical());
+        Assertions.assertSame(null, testedClass.getPhysical());
         testedClass.setPhysical(expected);
         Assertions.assertSame(expected, testedClass.getPhysical());
     }
@@ -175,7 +176,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_acceptanceWindow() {
-        long expected = 10L;
+        Integer expected = 10;
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setAcceptanceWindow(expected);
@@ -250,7 +251,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getAutoRedirect());
+        Assertions.assertSame(null, testedClass.getAutoRedirect());
         testedClass.setAutoRedirect(expected);
         Assertions.assertSame(expected, testedClass.getAutoRedirect());
     }
@@ -287,7 +288,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getLowFeeDetected());
+        Assertions.assertSame(null, testedClass.getLowFeeDetected());
         testedClass.setLowFeeDetected(expected);
         Assertions.assertSame(expected, testedClass.getLowFeeDetected());
     }
@@ -330,7 +331,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_targetConfirmations() {
-        long expected = 6L;
+        Integer expected = 6;
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setTargetConfirmations(expected);
@@ -360,7 +361,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getRefundAddressRequestPending());
+        Assertions.assertSame(null, testedClass.getRefundAddressRequestPending());
         testedClass.setRefundAddressRequestPending(expected);
         Assertions.assertSame(expected, testedClass.getRefundAddressRequestPending());
     }
@@ -434,7 +435,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getExtendedNotifications());
+        Assertions.assertSame(null, testedClass.getExtendedNotifications());
         testedClass.setExtendedNotifications(expected);
         Assertions.assertSame(expected, testedClass.getExtendedNotifications());
     }
@@ -468,7 +469,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_displayAmountPaid() {
-        BigDecimal expected = BigDecimal.valueOf(20);
+        String expected = "20";
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setDisplayAmountPaid(expected);
@@ -477,7 +478,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_exchangeRates() {
-        Hashtable<String, Hashtable<String, String>> expected = new Hashtable<>();
+        Hashtable<String, Hashtable<String, BigDecimal>> expected = new Hashtable<>();
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setExchangeRates(expected);
@@ -489,7 +490,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getIsCancelled());
+        Assertions.assertSame(null, testedClass.getIsCancelled());
         testedClass.setIsCancelled(expected);
         Assertions.assertSame(expected, testedClass.getIsCancelled());
     }
@@ -499,14 +500,14 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getBitpayIdRequired());
+        Assertions.assertSame(null, testedClass.getBitpayIdRequired());
         testedClass.setBitpayIdRequired(expected);
         Assertions.assertSame(expected, testedClass.getBitpayIdRequired());
     }
 
     @Test
     public void it_should_manipulate_paymentSubtotals() {
-        Hashtable<String, String> expected = new Hashtable<>();
+        Hashtable<String, BigInteger> expected = new Hashtable<>();
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setPaymentSubTotals(expected);
@@ -515,7 +516,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_paymentTotals() {
-        Hashtable<String, String> expected = new Hashtable<>();
+        Hashtable<String, BigInteger> expected = new Hashtable<>();
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setPaymentTotals(expected);
@@ -545,7 +546,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getNonPayProPaymentReceived());
+        Assertions.assertSame(null, testedClass.getNonPayProPaymentReceived());
         testedClass.setNonPayProPaymentReceived(expected);
         Assertions.assertSame(expected, testedClass.getNonPayProPaymentReceived());
     }
@@ -555,7 +556,7 @@ public class InvoiceTest {
         boolean expected = true;
         Invoice testedClass = this.getTestedClass();
 
-        Assertions.assertSame(false, testedClass.getJsonPayProRequired());
+        Assertions.assertSame(null, testedClass.getJsonPayProRequired());
         testedClass.setJsonPayProRequired(expected);
         Assertions.assertSame(expected, testedClass.getJsonPayProRequired());
     }

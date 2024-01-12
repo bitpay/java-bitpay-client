@@ -11,31 +11,31 @@ public class RefundStatusTest {
 
     @Test
     public void it_should_return_preview_status() {
-        Assertions.assertSame("preview", RefundStatus.Preview);
+        Assertions.assertSame("preview", RefundStatus.PREVIEW);
     }
 
     @Test
     public void it_should_return_created_status() {
-        Assertions.assertSame("created", RefundStatus.Created);
+        Assertions.assertSame("created", RefundStatus.CREATED);
     }
 
     @Test
     public void it_should_return_pending_status() {
-        Assertions.assertSame("pending", RefundStatus.Pending);
+        Assertions.assertSame("pending", RefundStatus.PENDING);
     }
 
     @Test
     public void it_should_return_canceled_status() {
-        Assertions.assertSame("canceled", RefundStatus.Canceled);
+        Assertions.assertSame("canceled", RefundStatus.CANCELED);
     }
 
     @Test
     public void it_should_return_success_status() {
-        Assertions.assertSame("success", RefundStatus.Success);
+        Assertions.assertSame("success", RefundStatus.SUCCESS);
     }
 
     @Test
     public void it_should_return_failure_status() {
-        Assertions.assertSame("failure", RefundStatus.Failure);
+        Assertions.assertSame("failure", RefundStatus.FAILURE);
     }
 }

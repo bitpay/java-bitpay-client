@@ -5,13 +5,14 @@
 
 package com.bitpay.sdk.model.settlement;
 
-import com.bitpay.sdk.util.DateDeserializer;
-import com.bitpay.sdk.util.DateSerializer;
+import com.bitpay.sdk.util.serializer.Iso8601ToZonedDateTimeDeserializer;
+import com.bitpay.sdk.util.serializer.ZonedDateTimeToIso8601Serializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.ZonedDateTime;
 
 /**
  * The type Settlement ledger entry.
@@ -20,13 +21,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SettlementLedgerEntry {
-
     private Integer code;
     private String invoiceId;
     private Float amount;
-    private Long timestamp;
+    private ZonedDateTime timestamp;
     private String description;
-    private String reference;
     private InvoiceData invoiceData;
 
     /**
@@ -101,8 +100,8 @@ public class SettlementLedgerEntry {
      * @return the timestamp
      */
     @JsonIgnore
-    @JsonSerialize(using = DateSerializer.class)
-    public Long getTimestamp() {
+    @JsonSerialize(using = ZonedDateTimeToIso8601Serializer.class)
+    public ZonedDateTime getTimestamp() {
         return this.timestamp;
     }
 
@@ -112,8 +111,8 @@ public class SettlementLedgerEntry {
      * @param timestamp the timestamp
      */
     @JsonProperty("timestamp")
-    @JsonDeserialize(using = DateDeserializer.class)
-    public void setTimestamp(Long timestamp) {
+    @JsonDeserialize(using = Iso8601ToZonedDateTimeDeserializer.class)
+    public void setTimestamp(ZonedDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -135,26 +134,6 @@ public class SettlementLedgerEntry {
     @JsonProperty("description")
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Gets reference.
-     *
-     * @return the reference
-     */
-    @JsonIgnore
-    public String getReference() {
-        return this.reference;
-    }
-
-    /**
-     * Sets reference.
-     *
-     * @param reference the reference
-     */
-    @JsonProperty("reference")
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 
     /**
