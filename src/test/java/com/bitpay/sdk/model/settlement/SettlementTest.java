@@ -4,6 +4,7 @@
 
 package com.bitpay.sdk.model.settlement;
 
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -76,84 +77,84 @@ public class SettlementTest {
         // then
         Assertions.assertEquals(expected, testedClass.getStatus());
     }
-//
-//    @Test
-//    public void it_should_change_dateCreated() {
-//        // given
-//        Long expected = 12L;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setDateCreated(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getDateCreated());
-//    }
-//
-//    @Test
-//    public void it_should_change_dateExecuted() {
-//        // given
-//        Long expected = 12L;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setDateExecuted(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getDateExecuted());
-//    }
-//
-//    @Test
-//    public void it_should_change_dateCompleted() {
-//        // given
-//        Long expected = 12L;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setDateCompleted(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getDateCompleted());
-//    }
-//
-//    @Test
-//    public void it_should_change_openingDate() {
-//        // given
-//        Long expected = 12L;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setOpeningDate(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getOpeningDate());
-//    }
-//
-//    @Test
-//    public void it_should_change_closingDate() {
-//        // given
-//        Long expected = 12L;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setClosingDate(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getClosingDate());
-//    }
-//
-//    @Test
-//    public void it_should_change_openingBalance() {
-//        // given
-//        Float expected = 12.34F;
-//        Settlement testedClass = this.getTestedClass();
-//
-//        // when
-//        testedClass.setOpeningBalance(expected);
-//
-//        // then
-//        Assertions.assertEquals(expected, testedClass.getOpeningBalance());
-//    }
+
+    @Test
+    public void it_should_change_dateCreated() {
+        // given
+        ZonedDateTime expected = ZonedDateTime.now();
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setDateCreated(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getDateCreated());
+    }
+
+    @Test
+    public void it_should_change_dateExecuted() {
+        // given
+        ZonedDateTime expected = ZonedDateTime.now();
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setDateExecuted(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getDateExecuted());
+    }
+
+    @Test
+    public void it_should_change_dateCompleted() {
+        // given
+        ZonedDateTime expected = ZonedDateTime.now();
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setDateCompleted(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getDateCompleted());
+    }
+
+    @Test
+    public void it_should_change_openingDate() {
+        // given
+        ZonedDateTime expected = ZonedDateTime.now();
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setOpeningDate(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getOpeningDate());
+    }
+
+    @Test
+    public void it_should_change_closingDate() {
+        // given
+        ZonedDateTime expected = ZonedDateTime.now();
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setClosingDate(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getClosingDate());
+    }
+
+    @Test
+    public void it_should_change_openingBalance() {
+        // given
+        Float expected = 12.34F;
+        Settlement testedClass = this.getTestedClass();
+
+        // when
+        testedClass.setOpeningBalance(expected);
+
+        // then
+        Assertions.assertEquals(expected, testedClass.getOpeningBalance());
+    }
 
     @Test
     public void it_should_change_ledgerEntriesSum() {
