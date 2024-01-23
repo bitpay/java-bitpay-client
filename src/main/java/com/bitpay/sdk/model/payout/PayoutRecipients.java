@@ -16,9 +16,9 @@ import java.util.List;
  * @see <a href="https://bitpay.readme.io/reference/payouts">REST API Payouts</a>
  */
 public class PayoutRecipients {
-    private String guid;
-    private List<PayoutRecipient> recipients;
-    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String guid;
+    protected List<PayoutRecipient> recipients;
+    protected String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an recipient-full request PayoutBatch object.

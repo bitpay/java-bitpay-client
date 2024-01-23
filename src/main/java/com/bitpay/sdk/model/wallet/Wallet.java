@@ -17,12 +17,12 @@ import java.util.ArrayList;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Wallet {
-    private String key;
-    private String displayName;
-    private String avatar;
-    private Boolean payPro;
-    private ArrayList<Currencies> currencies;
-    private String image;
+    protected String key;
+    protected String displayName;
+    protected String avatar;
+    protected Boolean payPro;
+    protected ArrayList<Currencies> currencies;
+    protected String image;
 
     /**
      * Instantiates a new Wallet.

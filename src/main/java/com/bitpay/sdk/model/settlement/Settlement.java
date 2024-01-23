@@ -23,23 +23,23 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Settlement {
 
-    private String id;
-    private String accountId;
-    private String currency;
-    private PayoutInfo payoutInfo;
-    private String status;
-    private ZonedDateTime dateCreated;
-    private ZonedDateTime dateExecuted;
-    private ZonedDateTime dateCompleted;
-    private ZonedDateTime openingDate;
-    private ZonedDateTime closingDate;
-    private Float openingBalance;
-    private Float ledgerEntriesSum;
-    private List<WithHoldings> withHoldings;
-    private Float withHoldingsSum;
-    private Float totalAmount;
-    private List<SettlementLedgerEntry> ledgerEntries;
-    private String token;
+    protected String id;
+    protected String accountId;
+    protected String currency;
+    protected PayoutInfo payoutInfo;
+    protected String status;
+    protected ZonedDateTime dateCreated;
+    protected ZonedDateTime dateExecuted;
+    protected ZonedDateTime dateCompleted;
+    protected ZonedDateTime openingDate;
+    protected ZonedDateTime closingDate;
+    protected Float openingBalance;
+    protected Float ledgerEntriesSum;
+    protected List<WithHoldings> withHoldings;
+    protected Float withHoldingsSum;
+    protected Float totalAmount;
+    protected List<SettlementLedgerEntry> ledgerEntries;
+    protected String token;
 
     /**
      * Instantiates a new Settlement.

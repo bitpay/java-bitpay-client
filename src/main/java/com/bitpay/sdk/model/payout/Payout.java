@@ -35,30 +35,30 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Payout {
 
-    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
-    private Double amount;
-    private String currency;
-    private ZonedDateTime effectiveDate;
+    protected Double amount;
+    protected String currency;
+    protected ZonedDateTime effectiveDate;
 
-    private String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String ledgerCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String groupId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String id;
-    private String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String recipientId;
-    private Map<String, Map<String, Double>> exchangeRates;
-    private String accountId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String email;
-    private String label;
-    private String status;
-    private String message;
-    private ZonedDateTime requestDate;
-    private ZonedDateTime dateExecuted;
-    private Integer code;
-    private List<PayoutTransaction> transactions = Collections.emptyList();
+    protected String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String ledgerCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String groupId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String id;
+    protected String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String recipientId;
+    protected Map<String, Map<String, Double>> exchangeRates;
+    protected String accountId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String email;
+    protected String label;
+    protected String status;
+    protected String message;
+    protected ZonedDateTime requestDate;
+    protected ZonedDateTime dateExecuted;
+    protected Integer code;
+    protected List<PayoutTransaction> transactions = Collections.emptyList();
     public Boolean ignoreEmails;
 
     /**

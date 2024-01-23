@@ -18,9 +18,9 @@ import java.util.Hashtable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
-    private String supportRequest;
-    private String currency;
-    private Hashtable<String, Double> amounts;
+    protected String supportRequest;
+    protected String currency;
+    protected Hashtable<String, Double> amounts;
 
     /**
      * Instantiates a new Refund info.

@@ -19,7 +19,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Rates {
 
-    private List<Rate> rates;
+    protected List<Rate> rates;
 
     /**
      * Instantiates a new Rates.

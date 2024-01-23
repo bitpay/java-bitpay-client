@@ -36,7 +36,7 @@ public enum Facade {
      */
     POS("pos");
 
-    private final String value;
+    protected final String value;
 
     Facade(String value) {
         this.value = value;

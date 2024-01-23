@@ -17,27 +17,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SupportedTransactionCurrencies {
 
-    private SupportedTransactionCurrency btc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency bch = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency eth = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency usdc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency gusd = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency pax = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency xrp = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency busd = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency doge = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency ltc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency wbtc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency dai = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency euroc = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency matic = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency maticE = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency ethM = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency usdcM = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency busdM = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency daiM = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency wbtcM = new SupportedTransactionCurrency();
-    private SupportedTransactionCurrency shibM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency btc = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency bch = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency eth = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency usdc = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency gusd = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency pax = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency xrp = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency busd = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency doge = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency ltc = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency wbtc = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency dai = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency euroc = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency matic = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency maticE = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency ethM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency usdcM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency busdM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency daiM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency wbtcM = new SupportedTransactionCurrency();
+    protected SupportedTransactionCurrency shibM = new SupportedTransactionCurrency();
 
     /**
      * Instantiates a new Supported transaction currencies.

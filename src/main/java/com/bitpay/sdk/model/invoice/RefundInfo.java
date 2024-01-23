@@ -23,9 +23,9 @@ import java.util.Hashtable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundInfo {
 
-    private String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Hashtable<String, Double> amounts;
+    protected String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Hashtable<String, Double> amounts;
 
     /**
      * Instantiates a new Refund info.

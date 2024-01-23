@@ -28,13 +28,13 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceTransaction {
 
-    private BigDecimal amount;
-    private Integer confirmations;
-    private ZonedDateTime time;
-    private ZonedDateTime receivedTime;
-    private String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Map<String, BigDecimal> exRates;
-    private Integer outputIndex;
+    protected BigDecimal amount;
+    protected Integer confirmations;
+    protected ZonedDateTime time;
+    protected ZonedDateTime receivedTime;
+    protected String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Map<String, BigDecimal> exRates;
+    protected Integer outputIndex;
 
     /**
      * Instantiates a new Invoice transaction.

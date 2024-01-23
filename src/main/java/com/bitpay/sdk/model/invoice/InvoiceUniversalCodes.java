@@ -18,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceUniversalCodes {
 
-    private String paymentString = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String verificationLink = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String paymentString = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String verificationLink = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Invoice universal codes.

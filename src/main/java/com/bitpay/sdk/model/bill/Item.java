@@ -19,10 +19,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
 
-    private String id;
-    private String description = DEFAULT_NON_SENT_VALUE;
-    private Double price;
-    private Integer quantity;
+    protected String id;
+    protected String description = DEFAULT_NON_SENT_VALUE;
+    protected Double price;
+    protected Integer quantity;
 
     /**
      * Instantiates a new Item.

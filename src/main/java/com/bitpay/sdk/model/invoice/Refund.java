@@ -27,27 +27,27 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Refund {
 
-    private String guid;
-    private Double amount;
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String invoice = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean preview;
-    private Boolean immediate;
-    private Boolean buyerPaysRefundFee;
-    private String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Double refundFee;
-    private ZonedDateTime requestDate;
-    private ZonedDateTime lastRefundNotification;
-    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String refundAddress = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String type = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private BigDecimal transactionAmount;
-    private BigDecimal transactionRefundFee;
-    private String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String id;
-    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String guid;
+    protected Double amount;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String invoice = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean preview;
+    protected Boolean immediate;
+    protected Boolean buyerPaysRefundFee;
+    protected String reference = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Double refundFee;
+    protected ZonedDateTime requestDate;
+    protected ZonedDateTime lastRefundNotification;
+    protected String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String refundAddress = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String txid = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String type = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected BigDecimal transactionAmount;
+    protected BigDecimal transactionRefundFee;
+    protected String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String id;
+    protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
 
     /**

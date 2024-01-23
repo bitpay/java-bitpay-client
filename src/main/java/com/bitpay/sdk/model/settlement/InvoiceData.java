@@ -22,14 +22,14 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceData {
-    private String orderId;
-    private ZonedDateTime date;
-    private Float price;
-    private String currency;
-    private String transactionCurrency;
-    private Float overpaidAmount;
-    private Map<String, Double> payoutPercentage;
-    private RefundInfo refundInfo;
+    protected String orderId;
+    protected ZonedDateTime date;
+    protected Float price;
+    protected String currency;
+    protected String transactionCurrency;
+    protected Float overpaidAmount;
+    protected Map<String, Double> payoutPercentage;
+    protected RefundInfo refundInfo;
 
     /**
      * Instantiates a new Invoice data.

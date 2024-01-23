@@ -34,6 +34,8 @@ class InvoiceWebhook {
     protected Double amountPaid;
     protected String orderId;
     protected String transactionCurrency;
+    protected String inInvoiceId;
+    protected String inPaymentRequest;
 
     public String getId() {
         return this.id;
@@ -162,5 +164,21 @@ class InvoiceWebhook {
 
     public void setTransactionCurrency(String transactionCurrency) {
         this.transactionCurrency = transactionCurrency;
+    }
+
+    public String getInInvoiceId() {
+        return this.inInvoiceId;
+    }
+
+    public void setInInvoiceId(String inInvoiceId) {
+        this.inInvoiceId = inInvoiceId;
+    }
+
+    public String getInPaymentRequest() {
+        return this.inPaymentRequest;
+    }
+
+    public void setInPaymentRequest(String inPaymentRequest) {
+        this.inPaymentRequest = inPaymentRequest;
     }
 }

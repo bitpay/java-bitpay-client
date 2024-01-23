@@ -37,14 +37,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutRecipient {
-    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String guid;
-    private String label = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String guid;
+    protected String label = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String shopperId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create a minimal Recipient object.

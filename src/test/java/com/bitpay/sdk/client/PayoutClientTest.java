@@ -86,7 +86,7 @@ public class PayoutClientTest extends AbstractClientTest {
         Assertions.assertEquals("complete", result.getStatus());
         Assertions.assertEquals("6RZSTPtnzEaroAe2X4YijenRiqteRDNvzbT8NjtcHjUVd9FUFwa7dsX8RFgRDDC5SL", result.getToken());
         Assertions.assertEquals("db53d7e2bf3385a31257ce09396202d9c2823370a5ca186db315c45e24594057", result.getTransactions().get(0).getTxid());
-        Assertions.assertEquals("6", result.getTransactions().get(0).getConfirmations());
+        Assertions.assertEquals(6, result.getTransactions().get(0).getConfirmations());
     }
 
     @Test

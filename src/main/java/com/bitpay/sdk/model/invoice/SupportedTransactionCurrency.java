@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SupportedTransactionCurrency {
 
-    private Boolean enabled;
-    private String reason = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean enabled;
+    protected String reason = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Supported transaction currency.

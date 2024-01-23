@@ -19,16 +19,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Buyer {
 
-    private String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean notify;
-    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean notify;
+    protected String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Buyer.

@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceBuyerProvidedInfo {
 
-    private String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String phoneNumber = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String selectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String emailAddress = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String selectedWallet = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String sms = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean smsVerified;
+    protected String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String phoneNumber = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String selectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String emailAddress = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String selectedWallet = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String sms = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean smsVerified;
 
     /**
      * Instantiates a new Invoice buyer provided info.

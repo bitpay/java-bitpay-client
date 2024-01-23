@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shopper {
 
-    private String user = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String user = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Instantiates a new Shopper.

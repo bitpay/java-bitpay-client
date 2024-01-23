@@ -19,17 +19,17 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
 
-    private String guid;
-    private String id;
-    private String pairingCode;
-    private Long pairingExpiration;
-    private String facade;
-    private String label;
-    private Integer count = 0;
-    private List<Policy> policies;
-    private String resource;
-    private String value;
-    private Long dateCreated;
+    protected String guid;
+    protected String id;
+    protected String pairingCode;
+    protected Long pairingExpiration;
+    protected String facade;
+    protected String label;
+    protected Integer count = 0;
+    protected List<Policy> policies;
+    protected String resource;
+    protected String value;
+    protected Long dateCreated;
 
     /**
      * Instantiates a new Token.

@@ -18,6 +18,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Invoice.
@@ -27,70 +28,70 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Invoice {
 
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
-    private String guid;
-    private String token;
+    protected String guid;
+    protected String token;
 
-    private Double price;
-    private String posData;
-    private String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String transactionSpeed = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean fullNotifications;
-    private String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String redirectUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String closeUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String orderId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String itemDesc = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String itemCode = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean physical;
-    private List<String> paymentCurrencies;
-    private Integer acceptanceWindow;
-    private Buyer buyer;
-    private String buyerSms = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String merchantName = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String selectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String forcedBuyerSelectedWallet = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private InvoiceUniversalCodes universalCodes;
-    private List<InvoiceItemizedDetails> itemizedDetails;
-    private Boolean autoRedirect;
+    protected Double price;
+    protected String posData;
+    protected String notificationUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String transactionSpeed = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean fullNotifications;
+    protected String notificationEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String redirectUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String closeUrl = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String orderId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String itemDesc = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String itemCode = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean physical;
+    protected List<String> paymentCurrencies;
+    protected Integer acceptanceWindow;
+    protected Buyer buyer;
+    protected String buyerSms = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String merchantName = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String selectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String forcedBuyerSelectedWallet = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected InvoiceUniversalCodes universalCodes;
+    protected List<InvoiceItemizedDetails> itemizedDetails;
+    protected Boolean autoRedirect;
 
-    private String id;
-    private String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean lowFeeDetected;
-    private Long invoiceTime;
-    private Long expirationTime;
-    private Long currentTime;
-    private String exceptionStatus = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Integer targetConfirmations;
-    private List<InvoiceTransaction> transactions;
-    private ArrayList refundAddresses;
-    private Boolean refundAddressRequestPending;
-    private String buyerProvidedEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo;
-    private SupportedTransactionCurrencies supportedTransactionCurrencies;
-    private MinerFees minerFees;
-    private Shopper shopper;
-    private String billId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private ArrayList<RefundInfo> refundInfo;
-    private Boolean extendedNotifications;
-    private String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String forcedBuyerSelectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private BigDecimal amountPaid;
-    private String displayAmountPaid;
-    private Hashtable<String, Hashtable<String, BigDecimal>> exchangeRates;
-    private Boolean isCancelled;
-    private Boolean bitpayIdRequired;
-    private Hashtable<String, BigInteger> paymentSubtotals;
-    private Hashtable<String, BigInteger> paymentTotals;
-    private Hashtable<String, String> paymentDisplayTotals;
-    private Hashtable<String, String> paymentDisplaySubTotals;
-    private Boolean nonPayProPaymentReceived;
-    private Boolean jsonPayProRequired;
-    private BigDecimal underpaidAmount;
-    private BigDecimal overpaidAmount;
-    private Hashtable<String, Hashtable<String, String>> paymentCodes;
+    protected String id;
+    protected String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean lowFeeDetected;
+    protected Long invoiceTime;
+    protected Long expirationTime;
+    protected Long currentTime;
+    protected String exceptionStatus = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Integer targetConfirmations;
+    protected List<InvoiceTransaction> transactions;
+    protected List<Map<String, InvoiceRefundAddresses>> refundAddresses;
+    protected Boolean refundAddressRequestPending;
+    protected String buyerProvidedEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo;
+    protected SupportedTransactionCurrencies supportedTransactionCurrencies;
+    protected MinerFees minerFees;
+    protected Shopper shopper;
+    protected String billId = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected ArrayList<RefundInfo> refundInfo;
+    protected Boolean extendedNotifications;
+    protected String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String forcedBuyerSelectedTransactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected BigDecimal amountPaid;
+    protected String displayAmountPaid;
+    protected Hashtable<String, Hashtable<String, BigDecimal>> exchangeRates;
+    protected Boolean isCancelled;
+    protected Boolean bitpayIdRequired;
+    protected Hashtable<String, BigInteger> paymentSubtotals;
+    protected Hashtable<String, BigInteger> paymentTotals;
+    protected Hashtable<String, String> paymentDisplayTotals;
+    protected Hashtable<String, String> paymentDisplaySubTotals;
+    protected Boolean nonPayProPaymentReceived;
+    protected Boolean jsonPayProRequired;
+    protected BigDecimal underpaidAmount;
+    protected BigDecimal overpaidAmount;
+    protected Hashtable<String, Hashtable<String, String>> paymentCodes;
 
     /**
      * Constructor, create an empty Invoice object.
@@ -1168,7 +1169,7 @@ public class Invoice {
      * @return the refund addresses
      */
     @JsonIgnore
-    public ArrayList getRefundAddresses() {
+    public List<Map<String, InvoiceRefundAddresses>> getRefundAddresses() {
         return this.refundAddresses;
     }
 
@@ -1179,7 +1180,7 @@ public class Invoice {
      * @param refundAddresses the refund addresses
      */
     @JsonProperty("refundAddresses")
-    public void setRefundAddresses(final ArrayList refundAddresses) {
+    public void setRefundAddresses(final List<Map<String, InvoiceRefundAddresses>> refundAddresses) {
         this.refundAddresses = refundAddresses;
     }
 
