@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFeesItem {
 
-    private Integer satoshisPerByte;
-    private Integer totalFee;
-    private Double fiatAmount;
+    protected Integer satoshisPerByte;
+    protected Integer totalFee;
+    protected Double fiatAmount;
 
     /**
      * Instantiates a new Miner fees item.

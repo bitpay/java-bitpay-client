@@ -20,8 +20,8 @@ public class PayoutGroup {
 
     @JsonProperty("created")
     @JsonAlias("cancelled")
-    private List<Payout> payouts = Collections.emptyList();
-    private List<PayoutGroupFailed> failed = Collections.emptyList();
+    protected List<Payout> payouts = Collections.emptyList();
+    protected List<PayoutGroupFailed> failed = Collections.emptyList();
 
     public PayoutGroup() {
     }

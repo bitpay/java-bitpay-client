@@ -31,7 +31,15 @@
     "notify": true
   },
   "autoRedirect": true,
-  "refundAddresses": [],
+  "refundAddresses": [
+    {
+      "n2MDYgEhxCAnuoVd1JpPmvxZShE6rQA6zv": {
+        "type": "buyerSupplied",
+        "date": "2024-01-08T23:50:56.556Z",
+        "email": "email@email.com"
+      }
+    }
+  ],
   "refundAddressRequestPending": false,
   "buyerProvidedEmail": "m.warzybok@sumoheavy.com",
   "buyerProvidedInfo": {

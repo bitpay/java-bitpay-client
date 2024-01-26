@@ -16,12 +16,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WithHoldings {
-    private Float amount;
-    private String code;
-    private String description;
-    private String notes;
-    private String label;
-    private String bankCountry;
+    protected Float amount;
+    protected String code;
+    protected String description;
+    protected String notes;
+    protected String label;
+    protected String bankCountry;
 
     /**
      * Instantiates a new With holdings.

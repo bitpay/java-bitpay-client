@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceItemizedDetails {
-    private Double amount;
-    private String description = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Boolean isFee;
+    protected Double amount;
+    protected String description = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Boolean isFee;
 
     /**
      * Instantiates a new Invoice itemized details.

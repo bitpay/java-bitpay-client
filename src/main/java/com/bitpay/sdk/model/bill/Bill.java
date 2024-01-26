@@ -29,27 +29,27 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {
 
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private List<Item> items;
-    private String number = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private List<String> cc;
-    private String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private ZonedDateTime dueDate;
-    private Boolean passProcessingFee;
-    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private ZonedDateTime createdDate;
-    private String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String merchant = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String email = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected List<Item> items;
+    protected String number = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String name = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String address1 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String address2 = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String city = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String state = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String zip = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String country = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected List<String> cc;
+    protected String phone = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected ZonedDateTime dueDate;
+    protected Boolean passProcessingFee;
+    protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String url = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected ZonedDateTime createdDate;
+    protected String id = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String merchant = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
 
     /**
      * Constructor, create an empty Bill object.

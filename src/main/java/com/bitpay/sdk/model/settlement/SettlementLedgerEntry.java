@@ -21,12 +21,12 @@ import java.time.ZonedDateTime;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SettlementLedgerEntry {
-    private Integer code;
-    private String invoiceId;
-    private Float amount;
-    private ZonedDateTime timestamp;
-    private String description;
-    private InvoiceData invoiceData;
+    protected Integer code;
+    protected String invoiceId;
+    protected Float amount;
+    protected ZonedDateTime timestamp;
+    protected String description;
+    protected InvoiceData invoiceData;
 
     /**
      * Instantiates a new Settlement ledger entry.

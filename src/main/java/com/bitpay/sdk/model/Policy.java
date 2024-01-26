@@ -18,9 +18,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Policy {
 
-    private String policy;
-    private String method;
-    private List<String> params;
+    protected String policy;
+    protected String method;
+    protected List<String> params;
 
     /**
      * Instantiates a new Policy.

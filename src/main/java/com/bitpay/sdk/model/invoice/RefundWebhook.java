@@ -23,17 +23,25 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RefundWebhook {
 
-    private String id;
-    private String invoice = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Double amount;
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private ZonedDateTime lastRefundNotification;
-    private Double refundFee;
-    private Boolean immediate;
-    private Boolean buyerPaysRefundFee;
-    private ZonedDateTime requestDate;
+    protected String id;
+    protected String invoice = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String supportRequest = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Double amount;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected ZonedDateTime lastRefundNotification;
+    protected Double refundFee;
+    protected Boolean immediate;
+    protected Boolean buyerPaysRefundFee;
+    protected ZonedDateTime requestDate;
+    protected String reference;
+    protected String guid;
+    protected String refundAddress;
+    protected String type;
+    protected String txid;
+    protected String transactionCurrency;
+    protected Double transactionAmount;
+    protected Double transactionRefundFee;
 
     /**
      * Instantiates a new Refund webhook.
@@ -280,4 +288,163 @@ public class RefundWebhook {
         this.requestDate = requestDate;
     }
 
+    /**
+     * Gets reference.
+     *
+     * @return String
+     */
+    @JsonProperty("reference")
+    public String getReference() {
+        return this.reference;
+    }
+
+    /**
+     * Sets reference.
+     *
+     * @param reference string
+     */
+    @JsonProperty("reference")
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    /**
+     * Gets guid.
+     *
+     * @return string
+     */
+    @JsonProperty("guid")
+    public String getGuid() {
+        return this.guid;
+    }
+
+    /**
+     * Sets guid.
+     *
+     * @param guid string
+     */
+    @JsonProperty("guid")
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    /**
+     * Gets refund address.
+     *
+     * @return string
+     */
+    @JsonProperty("refundAddress")
+    public String getRefundAddress() {
+        return this.refundAddress;
+    }
+
+    /**
+     * Sets refund address.
+     *
+     * @param refundAddress string
+     */
+    @JsonProperty("refundAddress")
+    public void setRefundAddress(String refundAddress) {
+        this.refundAddress = refundAddress;
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return string
+     */
+    @JsonProperty("type")
+    public String getType() {
+        return this.type;
+    }
+
+    /**
+     * Sets type.
+     *
+     * @param type string
+     */
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Gets txid.
+     *
+     * @return string
+     */
+    @JsonProperty("txid")
+    public String getTxid() {
+        return this.txid;
+    }
+
+    /**
+     * Sets txid.
+     *
+     * @param txid string
+     */
+    @JsonProperty("txid")
+    public void setTxid(String txid) {
+        this.txid = txid;
+    }
+
+    /**
+     * Gets transaction currency.
+     *
+     * @return string
+     */
+    @JsonProperty("transactionCurrency")
+    public String getTransactionCurrency() {
+        return this.transactionCurrency;
+    }
+
+    /**
+     * Sets transaction currency.
+     *
+     * @param transactionCurrency string
+     */
+    @JsonProperty("transactionCurrency")
+    public void setTransactionCurrency(String transactionCurrency) {
+        this.transactionCurrency = transactionCurrency;
+    }
+
+    /**
+     * Gets transaction amount.
+     *
+     * @return double
+     */
+    @JsonProperty("transactionAmount")
+    public Double getTransactionAmount() {
+        return this.transactionAmount;
+    }
+
+    /**
+     * Sets transaction amount.
+     *
+     * @param transactionAmount double
+     */
+    @JsonProperty("transactionAmount")
+    public void setTransactionAmount(Double transactionAmount) {
+        this.transactionAmount = transactionAmount;
+    }
+
+    /**
+     * Gets transaction refund fee.
+     *
+     * @return double
+     */
+    @JsonProperty("transactionRefundFee")
+    public Double getTransactionRefundFee() {
+        return this.transactionRefundFee;
+    }
+
+    /**
+     * Sets transaction refund fee.
+     *
+     * @param transactionRefundFee double
+     */
+    @JsonProperty("transactionRefundFee")
+    public void setTransactionRefundFee(Double transactionRefundFee) {
+        this.transactionRefundFee = transactionRefundFee;
+    }
 }

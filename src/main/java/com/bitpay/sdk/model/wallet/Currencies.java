@@ -17,14 +17,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Currencies {
-    private String code;
-    private Boolean p2p;
-    private Boolean dappBrowser;
-    private Boolean payPro;
-    private CurrencyQr qr;
-    private String image;
-    private String withdrawalFee;
-    private Boolean walletConnect;
+    protected String code;
+    protected Boolean p2p;
+    protected Boolean dappBrowser;
+    protected Boolean payPro;
+    protected CurrencyQr qr;
+    protected String image;
+    protected String withdrawalFee;
+    protected Boolean walletConnect;
 
     /**
      * Instantiates a new Currencies.

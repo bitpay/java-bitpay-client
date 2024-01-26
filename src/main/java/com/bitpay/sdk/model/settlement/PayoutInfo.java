@@ -17,30 +17,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutInfo {
-    private String name;
-    private String account;
-    private String routing;
-    private String merchantEin;
-    private String label;
-    private String bankCountry;
-    private String bank;
-    private String swift;
-    private String address;
-    private String city;
-    private String postal;
-    private String sort;
-    private Boolean wire;
-    private String bankName;
-    private String bankAddress;
-    private String bankAddress2;
-    private String iban;
-    private String additionalInformation;
-    private String accountHolderName;
-    private String accountHolderAddress;
-    private String accountHolderAddress2;
-    private String accountHolderPostalCode;
-    private String accountHolderCity;
-    private String accountHolderCountry;
+    protected String name;
+    protected String account;
+    protected String routing;
+    protected String merchantEin;
+    protected String label;
+    protected String bankCountry;
+    protected String bank;
+    protected String swift;
+    protected String address;
+    protected String city;
+    protected String postal;
+    protected String sort;
+    protected Boolean wire;
+    protected String bankName;
+    protected String bankAddress;
+    protected String bankAddress2;
+    protected String iban;
+    protected String additionalInformation;
+    protected String accountHolderName;
+    protected String accountHolderAddress;
+    protected String accountHolderAddress2;
+    protected String accountHolderPostalCode;
+    protected String accountHolderCity;
+    protected String accountHolderCountry;
 
     /**
      * Instantiates a new Payout info.

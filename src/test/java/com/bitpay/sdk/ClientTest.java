@@ -255,6 +255,7 @@ public class ClientTest {
                 "4qS4CzeRlGRu9VvUfVvuESfQXWTAQuFLjhj6osrGexKWZoadBPe1eiScsvTX99dkYi"
             );
         Assertions.assertEquals("UZjwcYkWAKfTMn9J1yyfs4", result.getId());
+        Assertions.assertEquals("2024-01-08T23:50:56.556Z", result.getRefundAddresses().get(0).get("n2MDYgEhxCAnuoVd1JpPmvxZShE6rQA6zv").getDate().toString());
     }
 
     @Test

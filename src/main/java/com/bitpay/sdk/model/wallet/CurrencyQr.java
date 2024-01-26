@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyQr {
-    private String type;
-    private Boolean collapsed;
+    protected String type;
+    protected Boolean collapsed;
 
     /**
      * Instantiates a new Currency qr.

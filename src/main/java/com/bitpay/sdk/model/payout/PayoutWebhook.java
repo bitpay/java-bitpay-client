@@ -38,6 +38,9 @@ class PayoutWebhook {
     protected ZonedDateTime requestDate;
     protected String status;
     protected List<PayoutTransaction> transactions;
+    protected String accountId;
+    protected ZonedDateTime dateExecuted;
+    protected String groupId;
 
     public String getId() {
         return this.id;
@@ -171,5 +174,29 @@ class PayoutWebhook {
 
     public void setTransactions(List<PayoutTransaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public String getAccountId() {
+        return this.accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public ZonedDateTime getDateExecuted() {
+        return this.dateExecuted;
+    }
+
+    public void setDateExecuted(ZonedDateTime dateExecuted) {
+        this.dateExecuted = dateExecuted;
+    }
+
+    public String getGroupId() {
+        return this.groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 }

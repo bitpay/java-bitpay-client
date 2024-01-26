@@ -40,7 +40,7 @@ public class Rate {
      * for a list of ISO 4217 currency codes.
      *
      */
-    private String code;
+    protected String code;
 
     /**
      * The name of the currency or cryptocurrency.
@@ -48,13 +48,13 @@ public class Rate {
      * Refer to <a href="https://www.iso.org/iso-4217-currency-codes.html">ISO Standards</a>
      * for a list of ISO 4217 currency codes.
      */
-    private String name;
+    protected String name;
 
     /**
      * The value of the rate, returned in the JSON as "rate" and to a precision
      * of two decimal places.
      */
-    private Double value;
+    protected Double value;
 
     /**
      * Class constructor.

@@ -24,21 +24,21 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LedgerEntry {
 
-    private String type;
-    private BigInteger amount;
-    private Integer code;
-    private String description;
-    private ZonedDateTime timestamp;
-    private String txType;
-    private BigInteger scale;
-    private String invoiceId;
-    private Buyer buyer;
-    private Double invoiceAmount;
-    private String invoiceCurrency;
-    private String transactionCurrency;
-    private String id;
-    private String supportRequest;
-    private String currency;
+    protected String type;
+    protected BigInteger amount;
+    protected Integer code;
+    protected String description;
+    protected ZonedDateTime timestamp;
+    protected String txType;
+    protected BigInteger scale;
+    protected String invoiceId;
+    protected Buyer buyer;
+    protected Double invoiceAmount;
+    protected String invoiceCurrency;
+    protected String transactionCurrency;
+    protected String id;
+    protected String supportRequest;
+    protected String currency;
 
     /**
      * Instantiates a new Ledger entry.

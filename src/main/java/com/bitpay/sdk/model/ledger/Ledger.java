@@ -19,8 +19,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Ledger {
 
-    private String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private Double balance;
+    protected String currency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected Double balance;
 
     /**
      * Instantiates a new Ledger.

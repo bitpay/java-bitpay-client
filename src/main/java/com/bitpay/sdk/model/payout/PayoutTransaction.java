@@ -22,10 +22,10 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PayoutTransaction {
 
-    private String txid;
-    private Double amount;
-    private ZonedDateTime date;
-    private String confirmations;
+    protected String txid;
+    protected Double amount;
+    protected ZonedDateTime date;
+    protected Integer confirmations;
 
     /**
      * Instantiates a new Payout instruction transaction.
@@ -103,7 +103,7 @@ public class PayoutTransaction {
      * @return confirmations
      */
     @JsonIgnore
-    public String getConfirmations() {
+    public Integer getConfirmations() {
         return this.confirmations;
     }
 
@@ -113,7 +113,7 @@ public class PayoutTransaction {
      * @param confirmations confirmations
      */
     @JsonProperty("confirmations")
-    public void setConfirmations(final String confirmations) {
+    public void setConfirmations(final Integer confirmations) {
         this.confirmations = confirmations;
     }
 }

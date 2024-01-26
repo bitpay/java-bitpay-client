@@ -152,6 +152,24 @@ class InvoiceWebhookTest {
         Assertions.assertSame(expected, testedClass.getTransactionCurrency());
     }
 
+    @Test
+    public void testManipulateInInvoiceId() {
+        InvoiceWebhook testedClass = this.getTestedClass();
+        String expected = "someValue";
+        testedClass.setInInvoiceId(expected);
+
+        Assertions.assertSame(expected, testedClass.getInInvoiceId());
+    }
+
+    @Test
+    public void testManipulateInPaymentRequest() {
+        InvoiceWebhook testedClass = this.getTestedClass();
+        String expected = "someValue";
+        testedClass.setInPaymentRequest(expected);
+
+        Assertions.assertSame(expected, testedClass.getInPaymentRequest());
+    }
+
     private InvoiceWebhook getTestedClass() {
         return new InvoiceWebhook();
     }

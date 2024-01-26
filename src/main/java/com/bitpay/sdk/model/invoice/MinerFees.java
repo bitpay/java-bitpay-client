@@ -20,20 +20,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MinerFees {
 
-    private MinerFeesItem btc = new MinerFeesItem();
-    private MinerFeesItem bch = new MinerFeesItem();
-    private MinerFeesItem eth = new MinerFeesItem();
-    private MinerFeesItem usdc = new MinerFeesItem();
-    private MinerFeesItem gusd = new MinerFeesItem();
-    private MinerFeesItem pax = new MinerFeesItem();
-    private MinerFeesItem busd = new MinerFeesItem();
-    private MinerFeesItem xrp = new MinerFeesItem();
-    private MinerFeesItem doge = new MinerFeesItem();
-    private MinerFeesItem ltc = new MinerFeesItem();
-    private MinerFeesItem dai = new MinerFeesItem();
-    private MinerFeesItem wbtc = new MinerFeesItem();
-    private MinerFeesItem matic = new MinerFeesItem();
-    private MinerFeesItem usdcM = new MinerFeesItem();
+    protected MinerFeesItem btc = new MinerFeesItem();
+    protected MinerFeesItem bch = new MinerFeesItem();
+    protected MinerFeesItem eth = new MinerFeesItem();
+    protected MinerFeesItem usdc = new MinerFeesItem();
+    protected MinerFeesItem gusd = new MinerFeesItem();
+    protected MinerFeesItem pax = new MinerFeesItem();
+    protected MinerFeesItem busd = new MinerFeesItem();
+    protected MinerFeesItem xrp = new MinerFeesItem();
+    protected MinerFeesItem doge = new MinerFeesItem();
+    protected MinerFeesItem ltc = new MinerFeesItem();
+    protected MinerFeesItem dai = new MinerFeesItem();
+    protected MinerFeesItem wbtc = new MinerFeesItem();
+    protected MinerFeesItem matic = new MinerFeesItem();
+    protected MinerFeesItem usdcM = new MinerFeesItem();
 
     /**
      * Instantiates a new Miner fees.

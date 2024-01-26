@@ -16,9 +16,9 @@ import java.util.Objects;
  */
 public class InvoiceEventToken {
 
-    private String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
-    private List<String> events;
-    private List<String> actions;
+    protected String token = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected List<String> events;
+    protected List<String> actions;
 
     /**
      * Instantiates a new Invoice event token.
