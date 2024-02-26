@@ -72,7 +72,7 @@ class ResponseParserTest {
             BitPayApiException.class,
             () -> {
                 // given
-                final String responseContent = "{\"code\":\"500\",\"status\":\"error\",\"data\":{},\"message\":\"Error message text\"}";
+                final String responseContent = "{\"errors\":[{\"error\":\"Missing required parameter.\",\"param\":\"price\"},{\"error\":\"Missing required parameter.\",\"param\":\"currency\"}]}";
 
                 // when
                 String result = ResponseParser.getJsonDataFromJsonResponse(responseContent);
@@ -81,6 +81,6 @@ class ResponseParserTest {
                 Assertions.assertEquals(responseContent, result);
             }
         );
-        Assertions.assertEquals("Error message text", exception.getMessage());
+        Assertions.assertEquals("Missing required parameter price. Missing required parameter currency.", exception.getMessage());
     }
 }
