@@ -2,6 +2,7 @@
 com.bitpay.sdk
 com.bitpay.sdk.client
 com.bitpay.sdk.exceptions
+com.bitpay.sdk.logger
 com.bitpay.sdk.model
 com.bitpay.sdk.model.bill
 com.bitpay.sdk.model.invoice
@@ -11,3 +12,4 @@ com.bitpay.sdk.model.rate
 com.bitpay.sdk.model.settlement
 com.bitpay.sdk.model.wallet
 com.bitpay.sdk.util
+com.bitpay.sdk.util.serializer
