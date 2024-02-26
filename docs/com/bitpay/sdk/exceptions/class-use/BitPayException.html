@@ -616,27 +616,27 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/invoice/Invoice.html" title="class in com.bitpay.sdk.model.invoice">Invoice</a></code></td>
-<td class="colLast"><span class="typeNameLabel">InvoiceClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/InvoiceClient.html#cancel-java.lang.String-">cancel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;invoiceId)</code>
-<div class="block">Delete a previously created BitPay invoice.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/invoice/Refund.html" title="class in com.bitpay.sdk.model.invoice">Refund</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RefundClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/RefundClient.html#cancel-java.lang.String-">cancel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refundId)</code>
 <div class="block">Cancel a previously submitted refund request on a BitPay invoice.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PayoutClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutClient.html#cancel-java.lang.String-">cancel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;payoutId)</code>
 <div class="block">Cancel a BitPay Payout.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/payout/PayoutGroup.html" title="class in com.bitpay.sdk.model.payout">PayoutGroup</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PayoutGroupClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutGroupClient.html#cancel-java.lang.String-">cancel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;groupId)</code>
 <div class="block">Cancel a BitPay Payouts.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/invoice/Invoice.html" title="class in com.bitpay.sdk.model.invoice">Invoice</a></code></td>
+<td class="colLast"><span class="typeNameLabel">InvoiceClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/InvoiceClient.html#cancel-java.lang.String-">cancel</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;invoiceId)</code>
+<div class="block">Delete a previously created BitPay invoice.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -693,15 +693,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/settlement/Settlement.html" title="class in com.bitpay.sdk.model.settlement">Settlement</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SettlementClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/SettlementClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;settlementId)</code>
-<div class="block">Retrieves a summary of the specified settlement.</div>
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/payout/PayoutRecipient.html" title="class in com.bitpay.sdk.model.payout">PayoutRecipient</a></code></td>
+<td class="colLast"><span class="typeNameLabel">PayoutRecipientsClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutRecipientsClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;recipientId)</code>
+<div class="block">Retrieve a BitPay payout recipient by batch id using.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>org.apache.http.HttpResponse</code></td>
-<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</code>
-<div class="block">Send GET request.</div>
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/settlement/Settlement.html" title="class in com.bitpay.sdk.model.settlement">Settlement</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SettlementClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/SettlementClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;settlementId)</code>
+<div class="block">Retrieves a summary of the specified settlement.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -711,9 +711,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/payout/PayoutRecipient.html" title="class in com.bitpay.sdk.model.payout">PayoutRecipient</a></code></td>
-<td class="colLast"><span class="typeNameLabel">PayoutRecipientsClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutRecipientsClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;recipientId)</code>
-<div class="block">Retrieve a BitPay payout recipient by batch id using.</div>
+<td class="colFirst"><code>org.apache.http.HttpResponse</code></td>
+<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</code>
+<div class="block">Send GET request.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -885,14 +885,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
-<td class="colLast"><span class="typeNameLabel">PayoutClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutClient.html#requestNotification-java.lang.String-">requestNotification</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;payoutId)</code>
-<div class="block">Request a payout notification.</div>
+<td class="colLast"><span class="typeNameLabel">PayoutRecipientsClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutRecipientsClient.html#requestNotification-java.lang.String-">requestNotification</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;recipientId)</code>
+<div class="block">Request a payout recipient notification.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
-<td class="colLast"><span class="typeNameLabel">PayoutRecipientsClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutRecipientsClient.html#requestNotification-java.lang.String-">requestNotification</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;recipientId)</code>
-<div class="block">Request a payout recipient notification.</div>
+<td class="colLast"><span class="typeNameLabel">PayoutClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/PayoutClient.html#requestNotification-java.lang.String-">requestNotification</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;payoutId)</code>
+<div class="block">Request a payout notification.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1446,6 +1446,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2023 <a href="https://bitpay.com">BitPay</a>. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2024 <a href="https://bitpay.com">BitPay</a>. All rights reserved.</small></p>
 </body>
 </html>
