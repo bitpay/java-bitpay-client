@@ -41,6 +41,23 @@ public class ResponseParser {
                     );
                 }
 
+                node = rootNode.get("errors");
+                if (node != null) {
+                    String message = "";
+
+                    if (node.isArray()) {
+                        for (final JsonNode errorNode : node) {
+                            message += "\n" + errorNode.asText();
+                        }
+
+                        BitPayExceptionProvider.throwApiExceptionWithMessage(
+                            rootNode.get("message").textValue(),
+                            getCode(rootNode)
+                        );
+                    }
+                }
+
+
                 if ("success".equals(status)) {
                     node = rootNode.get("data");
 
@@ -50,7 +67,7 @@ public class ResponseParser {
                 }
             }
 
-            handleError(rootNode);
+            handleErrors(rootNode);
 
             node = rootNode.get("data");
             if (node != null) {
@@ -63,6 +80,43 @@ public class ResponseParser {
         }
 
         return jsonString;
+    }
+
+    private static void handleErrors(JsonNode rootNode) throws BitPayApiException {
+
+        handleError(rootNode);
+
+        JsonNode errors = rootNode.get("errors");
+        if (errors == null) {
+            return;
+        }
+
+        StringBuilder finalMessage = new StringBuilder();
+
+        for (JsonNode errorNode : errors) {
+            String errorValue = errorNode.has("error") ? errorNode.get("error").textValue() : "";
+            String paramValue = errorNode.has("param") ? errorNode.get("param").textValue() : "";
+
+            if (errorValue != null && errorValue.endsWith(".")) {
+                errorValue = errorValue.substring(0, errorValue.length() - 1);
+            }
+
+            String message;
+            message = errorValue + " " + paramValue;
+            message = message.trim();
+
+            if (!message.endsWith(".")) {
+                message += ".";
+            }
+
+            if (!finalMessage.toString().equals("")) {
+                message = " " + message;
+            }
+
+            finalMessage.append(message);
+        }
+
+        BitPayExceptionProvider.throwApiExceptionWithMessage(finalMessage.toString(), getCode(rootNode));
     }
 
     private static void handleError(JsonNode rootNode) throws BitPayApiException {
