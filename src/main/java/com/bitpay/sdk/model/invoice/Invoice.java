@@ -66,7 +66,7 @@ public class Invoice {
     protected String exceptionStatus = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     protected Integer targetConfirmations;
     protected List<InvoiceTransaction> transactions;
-    protected List<Map<String, InvoiceRefundAddresses>> refundAddresses;
+    protected List<Map<String, InvoiceRefundAddress>> refundAddresses;
     protected Boolean refundAddressRequestPending;
     protected String buyerProvidedEmail = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     protected InvoiceBuyerProvidedInfo invoiceBuyerProvidedInfo;
@@ -1169,7 +1169,7 @@ public class Invoice {
      * @return the refund addresses
      */
     @JsonIgnore
-    public List<Map<String, InvoiceRefundAddresses>> getRefundAddresses() {
+    public List<Map<String, InvoiceRefundAddress>> getRefundAddresses() {
         return this.refundAddresses;
     }
 
@@ -1180,7 +1180,7 @@ public class Invoice {
      * @param refundAddresses the refund addresses
      */
     @JsonProperty("refundAddresses")
-    public void setRefundAddresses(final List<Map<String, InvoiceRefundAddresses>> refundAddresses) {
+    public void setRefundAddresses(final List<Map<String, InvoiceRefundAddress>> refundAddresses) {
         this.refundAddresses = refundAddresses;
     }
 
