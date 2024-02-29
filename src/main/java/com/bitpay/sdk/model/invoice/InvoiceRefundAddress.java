@@ -7,7 +7,7 @@ package com.bitpay.sdk.model.invoice;
 
 import java.time.ZonedDateTime;
 
-public class InvoiceRefundAddresses {
+public class InvoiceRefundAddress {
 
     protected String type;
     protected ZonedDateTime date;

@@ -350,7 +350,7 @@ public class InvoiceTest {
 
     @Test
     public void it_should_manipulate_refundAddresses() {
-        List<Map<String, InvoiceRefundAddresses>> expected =  new ArrayList<Map<String, InvoiceRefundAddresses>>();
+        List<Map<String, InvoiceRefundAddress>> expected =  new ArrayList<Map<String, InvoiceRefundAddress>>();
         Invoice testedClass = this.getTestedClass();
 
         testedClass.setRefundAddresses(expected);
