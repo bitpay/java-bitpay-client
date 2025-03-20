@@ -453,14 +453,19 @@ public class InvoiceClient implements ResourceClient {
     /**
      * Request an Invoice Webhook to be Resent.
      *
-     * @param invoiceId Invoice ID
+     * @param invoiceId    Invoice ID
+     * @param invoiceToken The resource token for the invoiceId.
+     *                     This token can be retrieved from the Bitpay's invoice object.
      * @return Boolean
      * @throws BitPayApiException BitPayApiException class
      * @throws BitPayGenericException BitPayGenericException class
      */
-    public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayApiException, BitPayGenericException {
+    public Boolean requestInvoiceWebhookToBeResent(
+        String invoiceId,
+        String invoiceToken
+    ) throws BitPayApiException, BitPayGenericException {
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        params.put("token", invoiceToken);
 
         JsonMapper mapper = JsonMapperFactory.create();
         String json = null;

@@ -636,21 +636,19 @@ public class ClientTest {
     @Test
     public void it_should_request_invoice_webhook_to_be_resent() throws BitPayApiException, BitPayGenericException {
         // given
-        final String merchantToken = "merchantToken";
         final String invoiceId = "UZjwcYkWAKfTMn9J1yyfs4";
-        final String requestJson = "{\"token\":\"merchantToken\"}";
+        final String invoiceToken = "cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT";
+        final String requestJson = String.format("{\"token\":\"%s\"}", invoiceToken);
 
         Mockito.when(this.bitPayClient.post(
             ArgumentMatchers.eq("invoices/" + invoiceId + "/notifications"), ArgumentMatchers.eq(requestJson))
         ).thenReturn(this.getHttpResponseWithSpecificBody("{\"data\": \"Success\"}"));
-        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
         // when
-        Boolean result = testedClass.requestInvoiceWebhookToBeResent(invoiceId);
+        Boolean result = testedClass.requestInvoiceWebhookToBeResent(invoiceId, invoiceToken);
 
         // then
-        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post("invoices/" + invoiceId + "/notifications", requestJson);
         Assertions.assertTrue(result);
     }
@@ -791,7 +789,7 @@ public class ClientTest {
                 )).thenThrow(new BitPayApiException("error message", "500"));
 
                 // when
-                testedClass.sendRefundNotification("1");
+                testedClass.sendRefundNotification("1", "cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT");
             }
         );
 
@@ -1046,27 +1044,23 @@ public class ClientTest {
     @Test
     public void it_should_test_sendRefundNotification() throws BitPayApiException, BitPayGenericException {
         // given
-        final String merchantToken = "merchantToken";
         final String refundId = "WoE46gSLkJQS48RJEiNw3L";
+        final String refundToken = "cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT";
         final String getRefundsJsonConvertedResponse = getPreparedJsonDataFromFile("refundNotificationResponse.json");
 
-        final List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-        params.add(new BasicNameValuePair("token", merchantToken));
-        final String requestedJson = "{\"token\":\"merchantToken\"}";
+        final String requestedJson = String.format("{\"token\":\"%s\"}", refundToken);
 
         Mockito.when(this.bitPayClient.post(
             "refunds/" + refundId + "/notifications",
             requestedJson,
             true
         )).thenReturn(this.getHttpResponseWithSpecificBody(getRefundsJsonConvertedResponse));
-        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
         Client testedClass = this.getTestedClass();
 
         // when
-        Boolean result = testedClass.sendRefundNotification(refundId);
+        Boolean result = testedClass.sendRefundNotification(refundId, refundToken);
 
         // then
-        Mockito.verify(this.accessTokens, Mockito.times(1)).getAccessToken(Facade.MERCHANT);
         Mockito.verify(this.bitPayClient, Mockito.times(1)).post(
             "refunds/" + refundId + "/notifications",
             requestedJson,

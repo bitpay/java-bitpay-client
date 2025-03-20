@@ -735,14 +735,19 @@ public class Client {
      * The intent of this call is to address issues when BitPay sends a webhook but the client doesn't receive it,
      * so the client can request that BitPay resend it.
      *
-     * @param invoiceId The id of the invoice for which you want the last webhook to be resent.
+     * @param invoiceId    The id of the invoice for which you want the last webhook to be resent.
+     * @param invoiceToken The resource token for the invoiceId.
+     *                     This token can be retrieved from the Bitpay's invoice object.
      * @return Boolean status of request
      * @throws BitPayApiException BitPayApiException class
      * @throws BitPayGenericException BitPayGenericException class
      * @see <a href="https://developer.bitpay.com/reference/request-an-invoice-webhook-to-be-resent">Request an Invoice Webhook to be Resent</a>
      */
-    public Boolean requestInvoiceWebhookToBeResent(String invoiceId) throws BitPayApiException, BitPayGenericException {
-        return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId);
+    public Boolean requestInvoiceWebhookToBeResent(
+        String invoiceId,
+        String invoiceToken
+    ) throws BitPayApiException, BitPayGenericException {
+        return this.getInvoiceClient().requestInvoiceWebhookToBeResent(invoiceId, invoiceToken);
     }
 
     /**
@@ -907,14 +912,19 @@ public class Client {
     /**
      * Send a refund notification.
      *
-     * @param refundId A BitPay refund ID.
+     * @param refundId    A BitPay refund ID.
+     * @param refundToken The resource token for the refundId.
+     *                    This token can be retrieved from the Bitpay's refund object.
      * @return An updated Refund Object
      * @throws BitPayGenericException BitPayGenericException class
      * @throws BitPayApiException BitPayApiException class
      * @see <a href="https://developer.bitpay.com/reference/request-a-refund-notification-to-be-resent">Request a Refund Notification to be Resent</a>
      */
-    public Boolean sendRefundNotification(String refundId) throws BitPayGenericException, BitPayApiException {
-        return this.getRefundClient().sendRefundNotification(refundId);
+    public Boolean sendRefundNotification(
+        String refundId,
+        String refundToken
+    ) throws BitPayGenericException, BitPayApiException {
+        return this.getRefundClient().sendRefundNotification(refundId, refundToken);
     }
 
     /**

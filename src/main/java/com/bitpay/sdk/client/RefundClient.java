@@ -272,18 +272,23 @@ public class RefundClient implements ResourceClient {
     /**
      * Send a refund notification.
      *
-     * @param refundId A BitPay refund ID.
+     * @param refundId    A BitPay refund ID.
+     * @param refundToken The resource token for the refundId.
+     *                    This token can be retrieved from the Bitpay's refund object.
      * @return An updated Refund Object
      * @throws BitPayGenericException BitPayGenericException class
      * @throws BitPayApiException         BitPayApiException class
      */
-    public Boolean sendRefundNotification(final String refundId) throws BitPayApiException, BitPayGenericException {
+    public Boolean sendRefundNotification(
+        final String refundId,
+        final String refundToken
+    ) throws BitPayApiException, BitPayGenericException {
         if (Objects.isNull(refundId)) {
             BitPayExceptionProvider.throwMissingParameterException();
         }
 
         final Map<String, String> params = new HashMap<>();
-        params.put("token", this.accessTokens.getAccessToken(Facade.MERCHANT));
+        params.put("token", refundToken);
 
         final JsonMapper mapper = JsonMapperFactory.create();
         String json = null;

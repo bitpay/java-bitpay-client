@@ -48,6 +48,7 @@ public class Refund {
     protected String transactionCurrency = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
     protected String id;
     protected String status = ModelConfiguration.DEFAULT_NON_SENT_VALUE;
+    protected String token;
 
 
     /**
@@ -542,5 +543,30 @@ public class Refund {
     @JsonProperty("type")
     public void setType(final String type) {
         this.type = type;
+    }
+
+    /**
+     * Gets refund resource token.
+     * This token is derived from the API token initially used to create the refund and is tied
+     * to the specific resource id created.
+     *
+     * @return the token
+     */
+    @JsonProperty("token")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public String getToken() {
+        return this.token;
+    }
+
+    /**
+     * Sets refund resource token.
+     * This token is derived from the API token initially used to create the refund and is tied
+     * to the specific resource id created.
+     *
+     * @param token the token
+     */
+    @JsonProperty("token")
+    public void setToken(final String token) {
+        this.token = token;
     }
 }

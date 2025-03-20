@@ -180,6 +180,7 @@ public class ClientFunctionalTest {
         refundToCreateRequest.setAmount(10.0);
         Refund refund = this.client.createRefund(refundToCreateRequest);
         String refundId = refund.getId();
+        String refundToken = refund.getToken();
 
         Refund retrieveRefund = this.client.getRefund(refundId);
         Assertions.assertEquals(refundId, retrieveRefund.getId());
@@ -192,7 +193,7 @@ public class ClientFunctionalTest {
         Assertions.assertFalse(retrieveRefundByInvoiceId.isEmpty());
         Assertions.assertTrue(retrieveRefundByInvoiceId.stream().anyMatch(i -> i.getInvoice().equals(invoiceId)));
 
-        Boolean refundNotification = this.client.sendRefundNotification(refundId);
+        Boolean refundNotification = this.client.sendRefundNotification(refundId, refundToken);
         Assertions.assertTrue(refundNotification);
 
         Refund cancelRefund = this.client.cancelRefund(refundId);

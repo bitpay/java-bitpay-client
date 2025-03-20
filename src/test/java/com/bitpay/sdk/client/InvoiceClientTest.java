@@ -436,12 +436,12 @@ public class InvoiceClientTest extends AbstractClientTest {
         this.addServerJsonResponse(
             "/invoices/Hpqc63wvE1ZjzeeH4kEycF/notifications",
             "POST",
-            "{\"token\":\"someMerchantToken\"}",
+            "{\"token\":\"cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT\"}",
             getPreparedJsonDataFromFile("invoiceWebhookResponse.json")
         );
 
         // when
-        Boolean result = this.getTestedClass(accessTokens).requestInvoiceWebhookToBeResent("Hpqc63wvE1ZjzeeH4kEycF");
+        Boolean result = this.getTestedClass(accessTokens).requestInvoiceWebhookToBeResent("Hpqc63wvE1ZjzeeH4kEycF", "cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT");
         Assertions.assertTrue(result);
     }
 

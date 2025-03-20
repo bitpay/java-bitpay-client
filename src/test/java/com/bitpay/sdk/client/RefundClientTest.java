@@ -236,7 +236,7 @@ public class RefundClientTest extends AbstractClientTest {
         );
 
         // when
-        Boolean result = this.getTestedClass().sendRefundNotification("WoE46gSLkJQS48RJEiNw3L");
+        Boolean result = this.getTestedClass().sendRefundNotification("WoE46gSLkJQS48RJEiNw3L", "cM78LHk17Q8fktDE6QLBBFfvH1QKBhRkHibTLcxhgzsu3VDRvSyu3CGi17DuwYxhT");
 
         // then
         Assertions.assertTrue(result);
