@@ -456,7 +456,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </tr>
 <tr id="i30" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/bitpay/sdk/Client.html#deriveIdentity-org.bitcoinj.core.ECKey-">deriveIdentity</a></span>(org.bitcoinj.core.ECKey&nbsp;ecKey)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../com/bitpay/sdk/Client.html#deriveIdentity-org.bitcoinj.crypto.ECKey-">deriveIdentity</a></span>(org.bitcoinj.crypto.ECKey&nbsp;ecKey)</code>
 <div class="block">Derive identity.</div>
 </td>
 </tr>
@@ -517,13 +517,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i40" class="altColor">
-<td class="colFirst"><code>protected org.bitcoinj.core.ECKey</code></td>
+<td class="colFirst"><code>protected org.bitcoinj.crypto.ECKey</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/bitpay/sdk/Client.html#getEcKey-com.bitpay.sdk.Config-">getEcKey</a></span>(<a href="../../../com/bitpay/sdk/Config.html" title="class in com.bitpay.sdk">Config</a>&nbsp;config)</code>
 <div class="block">Initialize the public/private key pair by either loading the existing one or by creating a new one.</div>
 </td>
 </tr>
 <tr id="i41" class="rowColor">
-<td class="colFirst"><code>protected org.bitcoinj.core.ECKey</code></td>
+<td class="colFirst"><code>protected org.bitcoinj.crypto.ECKey</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../com/bitpay/sdk/Client.html#getEcKey-com.bitpay.sdk.PrivateKey-">getEcKey</a></span>(<a href="../../../com/bitpay/sdk/PrivateKey.html" title="class in com.bitpay.sdk">PrivateKey</a>&nbsp;privateKey)</code>
 <div class="block">Gets ECKey.</div>
 </td>
@@ -2891,8 +2891,8 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getEcKey</h4>
-<pre>protected&nbsp;org.bitcoinj.core.ECKey&nbsp;getEcKey(<a href="../../../com/bitpay/sdk/PrivateKey.html" title="class in com.bitpay.sdk">PrivateKey</a>&nbsp;privateKey)
-                                    throws <a href="../../../com/bitpay/sdk/exceptions/BitPayGenericException.html" title="class in com.bitpay.sdk.exceptions">BitPayGenericException</a></pre>
+<pre>protected&nbsp;org.bitcoinj.crypto.ECKey&nbsp;getEcKey(<a href="../../../com/bitpay/sdk/PrivateKey.html" title="class in com.bitpay.sdk">PrivateKey</a>&nbsp;privateKey)
+                                      throws <a href="../../../com/bitpay/sdk/exceptions/BitPayGenericException.html" title="class in com.bitpay.sdk.exceptions">BitPayGenericException</a></pre>
 <div class="block">Gets ECKey.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2910,8 +2910,8 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getEcKey</h4>
-<pre>protected&nbsp;org.bitcoinj.core.ECKey&nbsp;getEcKey(<a href="../../../com/bitpay/sdk/Config.html" title="class in com.bitpay.sdk">Config</a>&nbsp;config)
-                                    throws <a href="../../../com/bitpay/sdk/exceptions/BitPayGenericException.html" title="class in com.bitpay.sdk.exceptions">BitPayGenericException</a></pre>
+<pre>protected&nbsp;org.bitcoinj.crypto.ECKey&nbsp;getEcKey(<a href="../../../com/bitpay/sdk/Config.html" title="class in com.bitpay.sdk">Config</a>&nbsp;config)
+                                      throws <a href="../../../com/bitpay/sdk/exceptions/BitPayGenericException.html" title="class in com.bitpay.sdk.exceptions">BitPayGenericException</a></pre>
 <div class="block">Initialize the public/private key pair by either loading the existing one or by creating a new one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2923,13 +2923,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="deriveIdentity-org.bitcoinj.core.ECKey-">
+<a name="deriveIdentity-org.bitcoinj.crypto.ECKey-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>deriveIdentity</h4>
-<pre>protected&nbsp;void&nbsp;deriveIdentity(org.bitcoinj.core.ECKey&nbsp;ecKey)
+<pre>protected&nbsp;void&nbsp;deriveIdentity(org.bitcoinj.crypto.ECKey&nbsp;ecKey)
                        throws <a href="../../../com/bitpay/sdk/exceptions/BitPayGenericException.html" title="class in com.bitpay.sdk.exceptions">BitPayGenericException</a></pre>
 <div class="block">Derive identity.</div>
 <dl>
