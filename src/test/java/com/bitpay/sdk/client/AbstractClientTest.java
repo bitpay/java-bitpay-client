@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.crypto.ECKey;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 import com.bitpay.sdk.exceptions.BitPayGenericException;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.crypto.ECKey;
 import org.junit.jupiter.api.Test;
 
 public class KeyUtilsTest {
