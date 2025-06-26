@@ -18,10 +18,10 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.ECKey.ECDSASignature;
-import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.base.Base58;
+import org.bitcoinj.base.Sha256Hash;
+import org.bitcoinj.crypto.ECKey;
+import org.bitcoinj.crypto.ECKey.ECDSASignature;
 import org.bitcoinj.crypto.KeyCrypterException;
 
 /**

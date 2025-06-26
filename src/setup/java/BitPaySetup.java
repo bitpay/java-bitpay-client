@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
-import org.bitcoinj.core.ECKey;
+import org.bitcoinj.crypto.ECKey;
 
 public class BitPaySetup {
     public static void main(final String[] args) {
