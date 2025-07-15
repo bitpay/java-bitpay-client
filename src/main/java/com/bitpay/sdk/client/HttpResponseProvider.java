@@ -17,19 +17,21 @@ import org.apache.http.util.EntityUtils;
 public class HttpResponseProvider {
 
     public static HttpResponse fromApacheHttpResponse(org.apache.http.HttpResponse apacheHttpResponse)
-        throws BitPayApiException {
+            throws BitPayApiException {
         try {
             final HttpEntity entity = apacheHttpResponse.getEntity();
             String body = EntityUtils.toString(entity, "UTF-8");
 
             return new HttpResponse(
-                apacheHttpResponse.getStatusLine().getStatusCode(),
-                body,
-                Arrays.stream(apacheHttpResponse.getAllHeaders())
-                    .collect(Collectors.toMap(Header::getName, Header::getValue)),
-                apacheHttpResponse.getLocale().toString(),
-                apacheHttpResponse.getStatusLine().getProtocolVersion().toString()
-            );
+                    apacheHttpResponse.getStatusLine().getStatusCode(),
+                    body,
+                    Arrays.stream(apacheHttpResponse.getAllHeaders())
+                            .collect(Collectors.toMap(
+                                    Header::getName,
+                                    Header::getValue,
+                                    (v1, v2) -> v1 + "," + v2)),
+                    apacheHttpResponse.getLocale().toString(),
+                    apacheHttpResponse.getStatusLine().getProtocolVersion().toString());
 
         } catch (IOException e) {
             BitPayExceptionProvider.throwApiExceptionWithMessage(e.getMessage());
