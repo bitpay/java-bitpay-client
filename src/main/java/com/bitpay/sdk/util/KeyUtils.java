@@ -48,6 +48,11 @@ public class KeyUtils {
     public static boolean privateKeyExists(String privateKeyFile) {
         PrivateKeyFile = privateKeyFile;
 
+        // if the private key file is null or empty, return false
+        if (privateKeyFile == null || privateKeyFile.isEmpty()) {
+            return false;
+        }
+
         return new File(privateKeyFile).exists();
     }
 
