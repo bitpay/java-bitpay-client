@@ -655,9 +655,9 @@
 <td class="colLast"><span class="typeNameLabel">HttpResponseProvider.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/HttpResponseProvider.html#fromApacheHttpResponse-org.apache.http.HttpResponse-">fromApacheHttpResponse</a></span>(org.apache.http.HttpResponse&nbsp;apacheHttpResponse)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/client/HttpResponse.html" title="class in com.bitpay.sdk.client">HttpResponse</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</code>
-<div class="block">Send GET request.</div>
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/settlement/Settlement.html" title="class in com.bitpay.sdk.model.settlement">Settlement</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SettlementClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/SettlementClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;settlementId)</code>
+<div class="block">Retrieves a summary of the specified settlement.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -673,9 +673,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/settlement/Settlement.html" title="class in com.bitpay.sdk.model.settlement">Settlement</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SettlementClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/SettlementClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;settlementId)</code>
-<div class="block">Retrieves a summary of the specified settlement.</div>
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/client/HttpResponse.html" title="class in com.bitpay.sdk.client">HttpResponse</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#get-java.lang.String-">get</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri)</code>
+<div class="block">Send GET request.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -928,17 +928,17 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/client/HttpResponse.html" title="class in com.bitpay.sdk.client">HttpResponse</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#update-java.lang.String-java.lang.String-">update</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri,
-      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;json)</code>
-<div class="block">Send PUT request.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/model/invoice/Refund.html" title="class in com.bitpay.sdk.model.invoice">Refund</a></code></td>
 <td class="colLast"><span class="typeNameLabel">RefundClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/RefundClient.html#update-java.lang.String-java.lang.String-">update</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;refundId,
       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;status)</code>
 <div class="block">Update the status of a BitPay invoice.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../com/bitpay/sdk/client/HttpResponse.html" title="class in com.bitpay.sdk.client">HttpResponse</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BitPayClient.</span><code><span class="memberNameLink"><a href="../../../../../com/bitpay/sdk/client/BitPayClient.html#update-java.lang.String-java.lang.String-">update</a></span>(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;uri,
+      <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;json)</code>
+<div class="block">Send PUT request.</div>
 </td>
 </tr>
 <tr class="rowColor">
