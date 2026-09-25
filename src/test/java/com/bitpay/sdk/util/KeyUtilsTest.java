@@ -6,6 +6,7 @@ package com.bitpay.sdk.util;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 import com.bitpay.sdk.exceptions.BitPayGenericException;
@@ -44,6 +45,11 @@ public class KeyUtilsTest {
     byte[] actualBytes = KeyUtils.hexToBytes(hex);
     
     assertArrayEquals(expectedBytes, actualBytes);
+  }
+
+  @Test
+  public void it_should_reject_a_non_hex_key_digit() {
+    assertThrows(BitPayGenericException.class, () -> KeyUtils.hexToBytes("0G"));
   }
 
   @Test
