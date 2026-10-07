@@ -16,9 +16,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import org.bitcoinj.crypto.ECKey;
 
@@ -125,9 +131,9 @@ public class BitPaySetup {
             final String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(configurationFile);
 
             final ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
-            writer.writeValue(
+            writeOwnerOnlyFile(
                 new File(Paths.get(".").toAbsolutePath().normalize() + "/output/BitPay.config.json"),
-                configurationFile);
+                writer.writeValueAsBytes(configurationFile));
 
             System.out.println("In location:");
             System.out.println(Paths.get(".").toAbsolutePath().normalize() + "/output/BitPay.config.json");
@@ -158,5 +164,39 @@ public class BitPaySetup {
             "Make sure you store this key in a secure location and update the PrivateKeyPath"
                 + "in the generated config file."
         );
+    }
+
+    /**
+     * Writes the config file so only its owner can read and write it, because it holds the API tokens.
+     *
+     * <p>On file systems with POSIX permissions, the file is created with mode 0600 (or set to 0600
+     * if it already exists) before it is written. On other file systems, such as Windows, the file
+     * keeps the default permissions.</p>
+     *
+     * @param file    the file to write
+     * @param content the file content
+     * @throws IOException the io exception
+     */
+    private static void writeOwnerOnlyFile(
+        final File file,
+        final byte[] content
+    ) throws IOException {
+        final Path path = file.toPath();
+        final boolean isPosix = path.getFileSystem().supportedFileAttributeViews().contains("posix");
+        final Set<PosixFilePermission> ownerOnly = PosixFilePermissions.fromString("rw-------");
+
+        if (isPosix) {
+            if (Files.exists(path)) {
+                Files.setPosixFilePermissions(path, ownerOnly);
+            } else {
+                Files.createFile(path, PosixFilePermissions.asFileAttribute(ownerOnly));
+            }
+        }
+
+        Files.write(path, content);
+
+        if (isPosix) {
+            Files.setPosixFilePermissions(path, ownerOnly);
+        }
     }
 }
