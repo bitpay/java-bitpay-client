@@ -6,11 +6,20 @@ package com.bitpay.sdk.util;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
 import com.bitpay.sdk.exceptions.BitPayGenericException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import org.bitcoinj.crypto.ECKey;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class KeyUtilsTest {
 
@@ -54,5 +63,56 @@ public class KeyUtilsTest {
     String actualHex = KeyUtils.bytesToHex(bytes);
     
     assertEquals(expectedHex, actualHex);
+  }
+
+  @Test
+  public void it_should_save_the_key_file_readable_only_by_its_owner(@TempDir Path dir) throws IOException {
+    assumePosix();
+    File file = dir.resolve("bitpay_private_test.key").toFile();
+    ECKey key = KeyUtils.createEcKey();
+
+    KeyUtils.privateKeyExists(file.getPath());
+    KeyUtils.saveEcKey(key);
+
+    assertEquals("rw-------", permissionsOf(file));
+    assertEquals(key.getPrivateKeyAsHex(), KeyUtils.loadEcKey().getPrivateKeyAsHex());
+  }
+
+  @Test
+  public void it_should_tighten_an_existing_key_file(@TempDir Path dir) throws IOException {
+    assumePosix();
+    File file = dir.resolve("bitpay_private_test.key").toFile();
+    Files.write(file.toPath(), "old key".getBytes(StandardCharsets.UTF_8));
+    Files.setPosixFilePermissions(file.toPath(), PosixFilePermissions.fromString("rw-r--r--"));
+
+    KeyUtils.privateKeyExists(file.getPath());
+    KeyUtils.saveEcKey(KeyUtils.createEcKey());
+
+    assertEquals("rw-------", permissionsOf(file));
+  }
+
+  @Test
+  public void it_should_save_the_hex_key_file_readable_only_by_its_owner(@TempDir Path dir) throws IOException {
+    assumePosix();
+    File file = dir.resolve("bitpay_private_test.txt").toFile();
+    ECKey key = KeyUtils.createEcKey();
+
+    KeyUtils.privateKeyExists(file.getPath());
+    KeyUtils.saveEcKeyAsHex(key);
+
+    assertEquals("rw-------", permissionsOf(file));
+    assertEquals(
+        KeyUtils.loadEcKeyAsHex(key) + System.lineSeparator(),
+        new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8)
+    );
+  }
+
+  // POSIX permissions do not apply on Windows.
+  private static void assumePosix() {
+    assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"));
+  }
+
+  private static String permissionsOf(File file) throws IOException {
+    return PosixFilePermissions.toString(Files.getPosixFilePermissions(file.toPath()));
   }
 }
