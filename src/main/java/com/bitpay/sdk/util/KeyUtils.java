@@ -297,6 +297,12 @@ public class KeyUtils {
         return result;
     }
 
+    private static boolean isHexDigit(char hex) {
+        return (hex >= '0' && hex <= '9')
+            || (hex >= 'A' && hex <= 'F')
+            || (hex >= 'a' && hex <= 'f');
+    }
+
     private static int getHexVal(char hex) {
         int val = hex;
         return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
@@ -320,7 +326,13 @@ public class KeyUtils {
         byte[] arr = new byte[hex.length() >> 1];
 
         for (int i = 0; i < hex.length() >> 1; ++i) {
-            arr[i] = (byte) ((getHexVal(hexArray[i << 1]) << 4) + (getHexVal(hexArray[(i << 1) + 1])));
+            char high = hexArray[i << 1];
+            char low = hexArray[(i << 1) + 1];
+            if (!isHexDigit(high) || !isHexDigit(low)) {
+                BitPayExceptionProvider.throwGenericExceptionWithMessage(
+                    "Error: The binary key contains a non-hex digit");
+            }
+            arr[i] = (byte) ((getHexVal(high) << 4) + (getHexVal(low)));
         }
 
         return arr;
