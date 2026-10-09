@@ -10,14 +10,17 @@ import com.bitpay.sdk.exceptions.BitPayGenericException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.Set;
 import org.bitcoinj.base.Base58;
 import org.bitcoinj.base.Sha256Hash;
 import org.bitcoinj.crypto.ECKey;
@@ -174,10 +177,7 @@ public class KeyUtils {
             file = new File(KeyUtils.privateKey);
         }
 
-        FileOutputStream output = new FileOutputStream(file);
-
-        output.write(bytes);
-        output.close();
+        writeOwnerOnlyFile(file, bytes);
     }
 
     /**
@@ -210,17 +210,16 @@ public class KeyUtils {
      */
     public static void saveEcKeyAsHex(ECKey ecKey) throws IOException {
         byte[] bytes = ecKey.toASN1();
-        PrintWriter file;
+        File file;
 
         if (KeyUtils.privateKey == null) {
-            file = new PrintWriter(PrivateKeyFile);
+            file = new File(PrivateKeyFile);
         } else {
-            file = new PrintWriter(String.valueOf(KeyUtils.privateKey));
+            file = new File(String.valueOf(KeyUtils.privateKey));
         }
 
         String keyHex = bytesToHex(bytes);
-        file.println(keyHex);
-        file.close();
+        writeOwnerOnlyFile(file, (keyHex + System.lineSeparator()).getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -356,5 +355,39 @@ public class KeyUtils {
         }
 
         return new String(hexChars);
+    }
+
+    /**
+     * Writes a private key file so only its owner can read and write it.
+     *
+     * <p>On file systems with POSIX permissions, the file is created with mode 0600 (or set to 0600
+     * if it already exists) before the key is written. On other file systems, such as Windows,
+     * the file keeps the default permissions.</p>
+     *
+     * @param file    the file to write
+     * @param content the file content
+     * @throws IOException the io exception
+     */
+    private static void writeOwnerOnlyFile(
+        File file,
+        byte[] content
+    ) throws IOException {
+        Path path = file.toPath();
+        boolean isPosix = path.getFileSystem().supportedFileAttributeViews().contains("posix");
+        Set<PosixFilePermission> ownerOnly = PosixFilePermissions.fromString("rw-------");
+
+        if (isPosix) {
+            if (Files.exists(path)) {
+                Files.setPosixFilePermissions(path, ownerOnly);
+            } else {
+                Files.createFile(path, PosixFilePermissions.asFileAttribute(ownerOnly));
+            }
+        }
+
+        Files.write(path, content);
+
+        if (isPosix) {
+            Files.setPosixFilePermissions(path, ownerOnly);
+        }
     }
 }
