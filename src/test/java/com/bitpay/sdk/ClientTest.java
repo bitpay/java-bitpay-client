@@ -663,8 +663,7 @@ public class ClientTest {
         Mockito.when(this.bitPayClient.post("refunds/", createRefundJsonRequest, true))
             .thenReturn(
                 this.getHttpResponseWithSpecificBody(getPreparedJsonDataFromFile("createRefundResponse.json")));
-        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
-        Mockito.when(this.accessTokens.getAccessToken(Facade.MERCHANT)).thenReturn(merchantToken);
+        this.stubGuidAndAccessToken(Facade.MERCHANT, merchantToken);
         Client testedClass = this.getTestedClass();
 
         // when
@@ -1556,8 +1555,7 @@ public class ClientTest {
         payoutRecipient.setLabel(label);
         payoutRecipient.setToken(PAYOUT_ACCESS_TOKEN);
 
-        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
-        Mockito.when(this.accessTokens.getAccessToken(Facade.PAYOUT)).thenReturn(PAYOUT_ACCESS_TOKEN);
+        this.stubGuidAndAccessToken(Facade.PAYOUT, PAYOUT_ACCESS_TOKEN);
         Mockito.when(this.bitPayClient.update(
             "recipients/" + RECIPIENT_ID,
             getPreparedJsonDataFromFile("updatePayoutRecipientRequest.json")
@@ -2103,5 +2101,13 @@ public class ClientTest {
             this.accessTokens,
             this.guidGenerator
         );
+    }
+
+    private void stubGuidAndAccessToken(
+        Facade facade,
+        String accessToken
+    ) throws BitPayGenericException {
+        Mockito.when(this.guidGenerator.execute()).thenReturn(EXAMPLE_UUID);
+        Mockito.when(this.accessTokens.getAccessToken(facade)).thenReturn(accessToken);
     }
 }
